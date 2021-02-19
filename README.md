@@ -15,9 +15,9 @@ A brief description of your project, what it is used for.
 |  Max Torres    |    mtorre28@jhu.edu       |   maxrtorres              |
 |  Elizabeth Aguirre |  eaguirr3@jhu.edu     |   elizaguirre      |
 | Matthew Ost     | most1@jhu.edu | most21 |
-|   Noah Johnson   |           |                 |
-|   Ramachandran Muthukumar   |           |                 |
-|   Stefano Tusa Lavieri   |           |                 |
+|   Noah Johnson   |  njohns81@jhu.edu         |       nkjohnson16          |
+|   Ramachandran Muthukumar   |   rmuthuk1@jhu.edu        |    ramcha24             |
+|   Stefano Tusa Lavieri   |    stusa2@jhu.edu       |    stefanotusa             |
 
 ## Installing / Getting started
 
