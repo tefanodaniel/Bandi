@@ -70,7 +70,8 @@ Admin
 
 ## Software Architecture & Technology Stack
 We feel that a web-application is best for this design. We will use the
-client-server model. We want to create a backend in {TODO: Java/Python}, and Heroku
-PostgreSQL for a relational database.
-
-TODO: Heroku for production db, but what about a dev db? 
+client-server model. We want to create a backend API in JAVA using the Sparkjava framework, and Heroku
+PostgreSQL for a relational database. We may need to use AWS for audio/video file hosting if Heroku doesn't support this.
+For our frontend, we will use React to design the web application for a smooth user experience. Optionally, and if we have enough time, we will use Cordova
+or Electron to extend our web app to a mobile app.
+In addition, we will integrate a music streaming API, such as Spotify's, to implement listening history insights on user profiles.
