@@ -13,7 +13,7 @@ A brief description of your project, what it is used for.
 | Name | JHU Email | GitHub Username |
 | ---- | --------- | --------------- |
 |  Max Torres    |    mtorre28@jhu.edu       |   maxrtorres              |
-|  Elizabeth Aguirre    |           |                 |
+|  Elizabeth Aguirre |  eaguirr3@jhu.edu     |   elizaguirre      |
 | Matthew Ost     |           |                 |
 |   Noah Johnson   |           |                 |
 |   Ramachandran Muthukumar   |           |                 |
