@@ -1,9 +1,9 @@
-package backend;
-
 import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
+import spark.ModelAndView;
+import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class HelloWorld {
     private static int getHerokuAssignedPort() {
@@ -35,6 +35,7 @@ public class HelloWorld {
 
     public static void main(String[] args) throws SQLException {
         port(getHerokuAssignedPort());
+        staticFiles.location("/public");
 
         try (Connection conn = getConnection()) {
             // simply testing if I can connect to the database.
@@ -46,15 +47,17 @@ public class HelloWorld {
             Statement st = conn.createStatement();
             st.execute(sql);
 
-            sql = "INSERT INTO artists (name, instrument)"
-                    + "VALUES ('Kenny G', 'Sexy Saxophone');";
-            st.execute(sql);
+            //sql = "INSERT INTO artists (name, instrument)"
+            //        + "VALUES ('Kenny G', 'Sexy Saxophone');";
+            //st.execute(sql);
 
         } catch (URISyntaxException | SQLException e) {
             e.printStackTrace();
         }
 
 
-        get("/", (req, res) -> "Welcome to Group 10's project");
+        get("/", (req, res) -> {
+            return new ModelAndView(null, "index.hbs");
+        }, new HandlebarsTemplateEngine());
     }
 }
