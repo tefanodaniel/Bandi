@@ -3,6 +3,10 @@
 .idea/*
 .gradle/*
 node_modules/*
+
+# ignore gradle/wrapper
+gradle
+
 ### Java template
 # Compiled class file
 *.class
@@ -120,7 +124,7 @@ fabric.properties
 
 ### macOS template
 # General
-.DS_Store
+# .DS_Store
 .AppleDouble
 .LSOverride
 
