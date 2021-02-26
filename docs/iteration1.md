@@ -7,6 +7,7 @@ Team Lead - Ramchandran Muthukumar
 ![](assets/image.png)
 
 # Wireframe & Use-case
+![](assets/wireframe.png)
 
 # Iteration Backlog
 - As a user, I would like to be able to use my Spotify account for single sign-on so I can display portions of my listening history on my profile.
