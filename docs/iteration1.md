@@ -1,7 +1,7 @@
 # Teamwork
 Team Lead - Ramchandran Muthukumar
 
-[Please fill this link](https://www.when2meet.com/?11153087-BLSdS)
+[Team Availability](https://www.when2meet.com/?11153087-BLSdS)
 
 # OO Design
 ![](assets/image.png)
