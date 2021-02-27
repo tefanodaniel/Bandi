@@ -37,6 +37,9 @@ public class HelloWorld {
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
 
+        // Client Secret for Spotify API
+        final String SECRET = System.getenv("client_secret");
+
         try (Connection conn = getConnection()) {
             // simply testing if I can connect to the database.
 
@@ -55,9 +58,17 @@ public class HelloWorld {
             e.printStackTrace();
         }
 
-
         get("/", (req, res) -> {
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
+
+        // Spotify
+        get("/login", (req, res) -> {
+            String scopes = "user-read-private";
+            res.redirect("https://accounts.spotify.com/authorize"
+                + "?response_type=code" + "&client_id=f0bfba57fdbc4e6fadba79b09f419f5b"
+                    + "&scope=" + scopes + "&redirect_uri=" + "https://group10-oose.herokuapp.com/");
+            return null;
+        });
     }
 }
