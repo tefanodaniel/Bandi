@@ -2,17 +2,25 @@ import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
+import java.util.concurrent.atomic.AtomicReference;
+
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class HelloWorld {
+
+    // uri for redirecting purposes, either heroku or localhost
+    static String uri;
+
     private static int getHerokuAssignedPort() {
         // Heroku stores port number as an environment variable
         String herokuPort = System.getenv("PORT");
         if (herokuPort != null) {
+            uri = "https://group10-oose.herokuapp.com";
             return Integer.parseInt(herokuPort);
         }
         //return default port if heroku-port isn't set (i.e. on localhost)
+        uri = "http://localhost:4567";
         return 4567;
     }
 
@@ -37,7 +45,7 @@ public class HelloWorld {
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
 
-        // Client Secret for Spotify API
+        // Client Secret for using Spotify API (should never be stored to GitHub)
         final String SECRET = System.getenv("client_secret");
 
         try (Connection conn = getConnection()) {
@@ -62,13 +70,19 @@ public class HelloWorld {
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        // Spotify
+        // Spotify first get request
         get("/login", (req, res) -> {
-            String scopes = "user-read-private";
+            String scopes = "user-read-private%20user-read-email";
             res.redirect("https://accounts.spotify.com/authorize"
                 + "?response_type=code" + "&client_id=f0bfba57fdbc4e6fadba79b09f419f5b"
-                    + "&scope=" + scopes + "&redirect_uri=" + "https://group10-oose.herokuapp.com/");
+                    + "&scope=" + scopes + "&redirect_uri=" + uri + "/profile"
+                + "&show_dialog=true");
+            System.out.println(req.queryParams("code"));
             return null;
         });
+
+        get("/profile", (req, res) -> {
+            return new ModelAndView(null, "profile.hbs");
+        }, new HandlebarsTemplateEngine());
     }
 }
