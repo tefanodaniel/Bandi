@@ -2,7 +2,6 @@ import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -70,19 +69,30 @@ public class HelloWorld {
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        // Spotify first get request
+        // Spotify GET
         get("/login", (req, res) -> {
             String scopes = "user-read-private%20user-read-email";
             res.redirect("https://accounts.spotify.com/authorize"
                 + "?response_type=code" + "&client_id=f0bfba57fdbc4e6fadba79b09f419f5b"
                     + "&scope=" + scopes + "&redirect_uri=" + uri + "/profile"
                 + "&show_dialog=true");
-            System.out.println(req.queryParams("code"));
             return null;
         });
 
+        // Go to Profile page
         get("/profile", (req, res) -> {
+            String code = req.queryParams("code");
             return new ModelAndView(null, "profile.hbs");
         }, new HandlebarsTemplateEngine());
+
+        // Spotify POST
+        post("/profile", (req, res) -> {
+            String endpoint = "https://accounts.spotify.com/api/token";
+            String params = "?grant_type=authorization_code" +
+                    "&code=" + "?" + "&redirect_uri=" + uri + "/profile";
+            // Header parameter Authorization must be in the form:
+            // "Authorization: Basic *<base64 encoded client_id:client_secret>*"
+            return null;
+        });
     }
 }
