@@ -1,6 +1,6 @@
-# Name of the project 
+# Bandi 
 
-A brief description of your project, what it is used for.
+A social networking application for musicians to meet other musicians, start a band, or look at local music groups in their area.
 
 **Advisors** 
 
