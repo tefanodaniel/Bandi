@@ -22,6 +22,8 @@ dependencies {
     implementation 'org.sql2o:sql2o:1.6.0'
     implementation 'com.sparkjava:spark-template-mustache:2.7.1'
     implementation 'com.sparkjava:spark-template-handlebars:2.7.1'
+
+    compile 'se.michaelthelin.spotify:spotify-web-api-java:6.5.2'
 }
 
 test {

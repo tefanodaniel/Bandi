@@ -1,25 +1,56 @@
 import static spark.Spark.*;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.sql.*;
 
+import com.wrapper.spotify.SpotifyApi;
+import com.wrapper.spotify.SpotifyHttpManager;
+import com.wrapper.spotify.exceptions.SpotifyWebApiException;
+import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.specification.Artist;
+import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
+import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
+import org.apache.hc.core5.http.ParseException;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class HelloWorld {
+    // client id for Spotify
+    private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
+    // Client Secret for using Spotify API (should never be stored to GitHub)
+    private static final String client_secret = System.getenv("client_secret");
+    // redirect_uri
+    private static final URI redirect_uri =
+            SpotifyHttpManager.makeUri("http://localhost:4567/profile");
+    private static String code = "";
+    private static AuthorizationCodeRequest auth_code_req;
+    private static AuthorizationCodeCredentials auth_code_creds;
 
-    // uri for redirecting purposes, either heroku or localhost
-    static String uri;
+    // Spotify API variable
+    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
+            .setClientId(client_id)
+            .setClientSecret(client_secret)
+            .setRedirectUri(redirect_uri)
+            .build();
+
+    // uri request
+    private static final AuthorizationCodeUriRequest auth_code_uri_req =
+            spotifyApi.authorizationCodeUri()
+                    .scope("user-read-email,user-read-private,user-top-read")
+                    .show_dialog(true)
+                    .build();
 
     private static int getHerokuAssignedPort() {
         // Heroku stores port number as an environment variable
         String herokuPort = System.getenv("PORT");
         if (herokuPort != null) {
-            uri = "https://group10-oose.herokuapp.com";
             return Integer.parseInt(herokuPort);
         }
         //return default port if heroku-port isn't set (i.e. on localhost)
-        uri = "http://localhost:4567";
         return 4567;
     }
 
@@ -44,9 +75,6 @@ public class HelloWorld {
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
 
-        // Client Secret for using Spotify API (should never be stored to GitHub)
-        final String SECRET = System.getenv("client_secret");
-
         try (Connection conn = getConnection()) {
             // simply testing if I can connect to the database.
 
@@ -57,42 +85,40 @@ public class HelloWorld {
             Statement st = conn.createStatement();
             st.execute(sql);
 
-            //sql = "INSERT INTO artists (name, instrument)"
-            //        + "VALUES ('Kenny G', 'Sexy Saxophone');";
-            //st.execute(sql);
-
         } catch (URISyntaxException | SQLException e) {
             e.printStackTrace();
         }
 
+        // index.hbs
         get("/", (req, res) -> {
+            URI uri_for_code = auth_code_uri_req.execute();
+            res.redirect(uri_for_code.toString());
+
             return new ModelAndView(null, "index.hbs");
         }, new HandlebarsTemplateEngine());
 
-        // Spotify GET
-        get("/login", (req, res) -> {
-            String scopes = "user-read-private%20user-read-email";
-            res.redirect("https://accounts.spotify.com/authorize"
-                + "?response_type=code" + "&client_id=f0bfba57fdbc4e6fadba79b09f419f5b"
-                    + "&scope=" + scopes + "&redirect_uri=" + uri + "/profile"
-                + "&show_dialog=true");
-            return null;
-        });
-
-        // Go to Profile page
+        // profile.hbs
         get("/profile", (req, res) -> {
-            String code = req.queryParams("code");
+            code = req.queryParams("code");
+            auth_code_req = spotifyApi.authorizationCode(code).build();
+            auth_code_creds = auth_code_req.execute();
+
+            spotifyApi.setAccessToken(auth_code_creds.getAccessToken());
+            spotifyApi.setRefreshToken(auth_code_creds.getRefreshToken());
+
+            GetUsersTopArtistsRequest getUsersTopArtistsRequest =
+                    spotifyApi.getUsersTopArtists()
+                    .limit(10)
+                    .offset(0)
+                    .time_range("medium_term")
+                    .build();
+            final Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
+            Artist [] artists = artistPaging.getItems();
+            for (Artist artist : artists) {
+                System.out.println(artist.getName());
+            }
+
             return new ModelAndView(null, "profile.hbs");
         }, new HandlebarsTemplateEngine());
-
-        // Spotify POST
-        post("/profile", (req, res) -> {
-            String endpoint = "https://accounts.spotify.com/api/token";
-            String params = "?grant_type=authorization_code" +
-                    "&code=" + "?" + "&redirect_uri=" + uri + "/profile";
-            // Header parameter Authorization must be in the form:
-            // "Authorization: Basic *<base64 encoded client_id:client_secret>*"
-            return null;
-        });
     }
 }
