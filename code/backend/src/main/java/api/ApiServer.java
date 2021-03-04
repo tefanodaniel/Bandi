@@ -1,3 +1,5 @@
+package api;
+
 import static spark.Spark.*;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ import org.apache.hc.core5.http.ParseException;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
-public class HelloWorld {
+public class ApiServer {
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
     // Client Secret for using Spotify API (should never be stored to GitHub)
@@ -78,9 +80,10 @@ public class HelloWorld {
         try (Connection conn = getConnection()) {
             // simply testing if I can connect to the database.
 
-            String sql = "CREATE TABLE IF NOT EXISTS artists("
-                    + "name VARCHAR(30) NOT NULL PRIMARY KEY,"
-                    + "instrument VARCHAR(30) NOT NULL"
+            String sql = "CREATE TABLE IF NOT EXISTS Musicians("
+                    + "id INT PRIMARY KEY,"
+                    + "name VARCHAR(30) NOT NULL,"
+                    + "genre VARCHAR(30) NOT NULL"
                     + ");";
             Statement st = conn.createStatement();
             st.execute(sql);

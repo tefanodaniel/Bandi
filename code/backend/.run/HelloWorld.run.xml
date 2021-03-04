@@ -1,0 +1,14 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="ApiServer" type="Application" factoryName="Application" nameIsGenerated="true">
+    <envs>
+      <env name="client_secret" value="4d67641c80234c748b74e6b1609e1466" />
+      <env name="DATABASE_URL" value="postgres://xllnqbtyuwcyck:5a3f1fe58762f945b107ee12626f6e13dad030d7fd22eda6a20b81350e7240ca@ec2-54-198-73-79.compute-1.amazonaws.com:5432/d3qjn800ukruh2" />
+      <env name="TEST_DATABASE_URL" value="DATABASE_URL=postgres://xllnqbtyuwcyck:5a3f1fe58762f945b107ee12626f6e13dad030d7fd22eda6a20b81350e7240ca@ec2-54-198-73-79.compute-1.amazonaws.com:5432/d3qjn800ukruh2" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="api.ApiServer" />
+    <module name="project-g10.main" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
