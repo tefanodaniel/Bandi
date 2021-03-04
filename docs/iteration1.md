@@ -7,7 +7,6 @@ Team Lead - Ramchandran Muthukumar
 ![](assets/image.png)
 
 # Wireframe & Use-case
-<img src="assets/homepage.PNG" width="600" height="400" />
 <img src="assets/login.PNG" width="600" height="400" />
 <img src="assets/create_profile.PNG" width="600" height="400" />
 <img src="assets/advanced_search.PNG" width="600" height="400" />
