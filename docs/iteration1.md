@@ -7,7 +7,10 @@ Team Lead - Ramchandran Muthukumar
 ![](assets/image.png)
 
 # Wireframe & Use-case
-![](assets/wireframe.png)
+<img src="assets/homepage.PNG" width="600" height="400" />
+<img src="assets/login.PNG" width="600" height="400" />
+<img src="assets/create_profile.PNG" width="600" height="400" />
+<img src="assets/advanced_search.PNG" width="600" height="400" />
 
 Use Case: Browse on Homepage
 1. The user visits our web application using a web browser.
