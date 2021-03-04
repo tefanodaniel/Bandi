@@ -66,8 +66,11 @@ public interface BandDao {
      * Remove a Musician from a band, given the Band ID and Musician ID
      *
      * @param id the unique identifier for each Band object
-     * @param
+     * @param member the Musician to be removed
+     * @param musID the unique identifier for each musician object
+     * @throws DaoException, a generic exception for CRUD operations
      */
+    Band remove(int id, Musician member, int musID) throws DaoException;
 
     /**
      * Delete a Band, given its offeringName
