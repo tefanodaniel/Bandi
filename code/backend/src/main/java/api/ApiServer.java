@@ -1,11 +1,19 @@
 package api;
 
+import dao.MusicianDao;
+
 import static spark.Spark.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.*;
+
+import dao.MusicianDao;
+import dao.Sql2oMusicianDao;
+import model.Musician;
+import org.sql2o.Sql2o;
+import org.sql2o.Connection;
+import org.sql2o.Sql2oException;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
@@ -56,7 +64,7 @@ public class ApiServer {
         return 4567;
     }
 
-    private static Connection getConnection() throws URISyntaxException, SQLException {
+    private static Connection getConnection() throws URISyntaxException, Sql2oException {
         // converting heroku database_url -> jdbc uri
         String databaseUrl = System.getenv("DATABASE_URL");
         if (databaseUrl == null) {
@@ -70,12 +78,14 @@ public class ApiServer {
         String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
                 + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
 
-        return DriverManager.getConnection(dbUrl, username, password);
+        Sql2o sql2o = new Sql2o(dbUrl, username, password);
+        return sql2o.open();
     }
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws URISyntaxException{
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
+        MusicianDao musicianDao = getMusicianDao();
 
         try (Connection conn = getConnection()) {
             // simply testing if I can connect to the database.
@@ -85,10 +95,12 @@ public class ApiServer {
                     + "name VARCHAR(30) NOT NULL,"
                     + "genre VARCHAR(30) NOT NULL"
                     + ");";
-            Statement st = conn.createStatement();
-            st.execute(sql);
+            conn.createQuery(sql).executeUpdate();
 
-        } catch (URISyntaxException | SQLException e) {
+            // sql = "INSERT INTO Musicians(id, name, genre) VALUES(1, 'Frank Ocean', 'r&b');";
+            // conn.createQuery(sql).executeUpdate();
+
+        } catch (URISyntaxException | Sql2oException e) {
             e.printStackTrace();
         }
 
@@ -123,5 +135,19 @@ public class ApiServer {
 
             return new ModelAndView(null, "profile.hbs");
         }, new HandlebarsTemplateEngine());
+    }
+
+    private static MusicianDao getMusicianDao() throws URISyntaxException{
+        String databaseUrl = System.getenv("DATABASE_URL");
+
+        URI dbUri = new URI(databaseUrl);
+
+        String username = dbUri.getUserInfo().split(":")[0];
+        String password = dbUri.getUserInfo().split(":")[1];
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
+                + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
+
+        Sql2o sql2o = new Sql2o(dbUrl, username, password);
+        return new Sql2oMusicianDao(sql2o);
     }
 }
