@@ -37,6 +37,7 @@ List main libraries, frameworks used including versions (React, Angular etc...)
 ### Prerequisites
 What is needed to set up the dev environment. For instance, global dependencies or any other tools. include download links.
 
+<a href="https://nodejs.org/en/download/">NodeJS</a>, <a href="https://yarnpkg.com/getting-started/install">Yarn</a>
 
 ### Setting up Dev
 
@@ -44,9 +45,10 @@ Here's a brief intro about what a developer must do in order to start developing
 the project further:
 
 ```shell
-git clone https://github.com/your/your-project.git
-cd your-project/
-packagemanager install
+git clone https://github.com/cs421sp21-homework/project-g10.git
+cd project-g10/
+yarn install
+yarn start
 ```
 
 And state what happens step-by-step. If there is any virtual environment, local server or database feeder needed, explain here.
