@@ -138,10 +138,32 @@ public class ApiServer {
                 if (musician.getId() != Integer.parseInt(id)) {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
-                musician = musicianDao.update(musician.getId(), musician.getName());
+
+                /** Update specific fields */
+                boolean flag = false;
+                if (musician.getName() != null) {
+                    flag = true;
+                    musician = musicianDao.updateName(musician.getId(), musician.getName());
+                } if (musician.getInstrument() != null) {
+                    flag = true;
+                    musician = musicianDao.updateInstrument(musician.getId(), musician.getInstrument());
+                } if (musician.getGenre() != null) {
+                    flag = true;
+                    musician = musicianDao.updateGenre(musician.getId(), musician.getGenre());
+                } if (musician.getExperience() != null) {
+                    flag = true;
+                    musician = musicianDao.updateExperience(musician.getId(), musician.getExperience());
+                } if (musician.getLocation() != null) {
+                    flag = true;
+                    musician = musicianDao.updateLocation(musician.getId(), musician.getLocation());
+                } if (flag==false) {
+                    throw new ApiError("Nothing to update", 400);
+                }
+
                 if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
+
                 return gson.toJson(musician);
             } catch (DaoException | JsonSyntaxException ex) {
                 throw new ApiError(ex.getMessage(), 500);

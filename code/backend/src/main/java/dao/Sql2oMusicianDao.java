@@ -25,10 +25,10 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician create(int id, String name, String genre, String instrument, String experience) throws DaoException {
+    public Musician create(int id, String name, String genre, String instrument, String experience, String location) throws DaoException {
         String sql = "WITH inserted AS ("
-                + "INSERT INTO Musicians(id, name, genre, instrument, experience) " +
-                "VALUES(:id, :name, :genre, :instrument, :experience) RETURNING *"
+                + "INSERT INTO Musicians(id, name, genre, instrument, experience, location) " +
+                "VALUES(:id, :name, :genre, :instrument, :experience, :location) RETURNING *"
                 + ") SELECT * FROM inserted;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
@@ -37,6 +37,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .addParameter("genre", genre)
                     .addParameter("instrument", instrument)
                     .addParameter("experience", experience)
+                    .addParameter("location", location)
                     .executeAndFetchFirst(Musician.class);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
@@ -75,9 +76,8 @@ public class Sql2oMusicianDao implements MusicianDao {
         return null; // stub
     }
 
-    /** TODO: Create more update methods to update different attributes */
     @Override
-    public Musician update(int id, String name) throws DaoException {
+    public Musician updateName(int id, String name) throws DaoException {
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET name = :name WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -88,6 +88,66 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .executeAndFetchFirst(Musician.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician name", ex);
+        }
+    }
+
+    @Override
+    public Musician updateGenre(int id, String genre) throws DaoException {
+        String sql = "WITH updated AS ("
+                + "UPDATE Musicians SET genre = :genre WHERE id = :id RETURNING *"
+                + ") SELECT * FROM updated;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("genre", genre)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician genre", ex);
+        }
+    }
+
+    @Override
+    public Musician updateInstrument(int id, String instrument) throws DaoException {
+        String sql = "WITH updated AS ("
+                + "UPDATE Musicians SET instrument = :instrument WHERE id = :id RETURNING *"
+                + ") SELECT * FROM updated;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("instrument", instrument)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician instrument", ex);
+        }
+    }
+
+    @Override
+    public Musician updateExperience(int id, String experience) throws DaoException {
+        String sql = "WITH updated AS ("
+                + "UPDATE Musicians SET experience = :experience WHERE id = :id RETURNING *"
+                + ") SELECT * FROM updated;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("experience", experience)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician experience", ex);
+        }
+    }
+
+    @Override
+    public Musician updateLocation(int id, String location) throws DaoException {
+        String sql = "WITH updated AS ("
+                + "UPDATE Musicians SET location = :location WHERE id = :id RETURNING *"
+                + ") SELECT * FROM updated;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("location", location)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician location", ex);
         }
     }
 

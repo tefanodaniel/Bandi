@@ -16,10 +16,11 @@ public interface MusicianDao {
      * @param genre The associated genre of music.
      * @param instrument The associated type of instrument
      * @param experience Self-declared level of expertise
+     * @param location The location of a musician.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(int id, String name, String genre, String instrument, String experience) throws DaoException;
+    Musician create(int id, String name, String genre, String instrument, String experience, String location) throws DaoException;
 
     /**
      * Create a Musician.
@@ -68,9 +69,15 @@ public interface MusicianDao {
      * @return The updated Musician object.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician update(int id, String name) throws DaoException;
-    // Need either multiple update functions for diff fields or
-    // a single update function where everything not provided is set to null.
+    Musician updateName(int id, String name) throws DaoException;\
+
+    Musician updateGenre(int id, String name) throws DaoException;
+
+    Musician updateInstrument(int id, String name) throws DaoException;
+
+    Musician updateExperience(int id, String name) throws DaoException;
+
+    Musician updateLocation(int id, String name) throws DaoException;
 
     /**
      * Delete a Musician provided its offeringName.
@@ -80,4 +87,6 @@ public interface MusicianDao {
      * @throws DaoException A generic exception for CRUD operations.
      */
     Musician delete(int id) throws DaoException;
+
+
 }
