@@ -3,8 +3,7 @@ plugins {
     id "com.heroku.sdk.heroku-gradle" version "2.0.0"
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -41,7 +40,7 @@ jar {
 
 heroku {
     jdkVersion = 11
-    processTypes(web: "java -jar build/libs/backend-1.0-SNAPSHOT.jar")
+    processTypes(web: "java -jar build/libs/backend-1.0.jar")
 }
 
 task stage(dependsOn: ['build', 'clean'])
