@@ -1,9 +1,8 @@
 package model;
 
 import java.util.List;
-import BandDao;
 
-public class Band extends Client {
+public class Band extends Client implements BandDao {
 
     //all of these should be serialized I think.
     private String name;
@@ -26,4 +25,6 @@ public class Band extends Client {
         this.capacity = capacity;
         this.members = members;
     }
+
+    public void
 }
