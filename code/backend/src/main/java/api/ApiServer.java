@@ -49,7 +49,7 @@ public class ApiServer {
 
     // redirect_uri
     private static final URI redirect_uri =
-            SpotifyHttpManager.makeUri("http://localhost:3000/profile");
+            SpotifyHttpManager.makeUri("http://localhost:4567/profile");
 
     // authorization code
     private static String code = "";
@@ -77,7 +77,7 @@ public class ApiServer {
             return Integer.parseInt(herokuPort);
         }
         //return default port if heroku-port isn't set (i.e. on localhost)
-        return 3000;
+        return 4567;
     }
 
     public static void main(String[] args) throws URISyntaxException{
