@@ -46,10 +46,11 @@ public class ApiServer {
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
     // Client Secret for using Spotify API (should never be stored to GitHub)
     private static final String client_secret = System.getenv("client_secret");
+    private static final String frontend_url = "http://localhost:3000";
 
     // redirect_uri
     private static final URI redirect_uri =
-            SpotifyHttpManager.makeUri("http://localhost:4567/profile");
+            SpotifyHttpManager.makeUri("http://localhost:4567/callback");
 
     // authorization code
     private static String code = "";
@@ -99,11 +100,13 @@ public class ApiServer {
         get("/login", (req, res) -> {
             URI uri_for_code = auth_code_uri_req.execute();
             String uriString = uri_for_code.toString();
-            return new JSONObject("{\"link\": \""+uriString+"\"}");
+            res.redirect(uriString);
+            return null;
+            //return new JSONObject("{\"link\": \""+uriString+"\"}");
         });
 
         // Return client's name and email from Spotify as json
-        get("/profile", (req, res) -> {
+        get("/callback", (req, res) -> {
             // Use authorization code to get access token and refresh token
             code = req.queryParams("code");
             auth_code_req = spotifyApi.authorizationCode(code).build();
@@ -119,7 +122,11 @@ public class ApiServer {
             String name = user.getDisplayName();
             String email = user.getEmail();
 
-            return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
+            res.redirect(frontend_url +  "/?code=" + code
+                + "&name=" + name + "&email=" + email);
+
+            return null;
+            //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
         });
 
         // post musicians
