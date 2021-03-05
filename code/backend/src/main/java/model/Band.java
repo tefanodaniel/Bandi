@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import BandDao;
 
 public class Band extends Client {
 
@@ -9,7 +10,7 @@ public class Band extends Client {
     private String genre;
     private int size;
     private int capacity;
-    // should contain List<Musicians>
+    private List<Musicians>
 
     public Band(String name, String genre) {
         super();
