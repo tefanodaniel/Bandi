@@ -75,9 +75,20 @@ public class Sql2oMusicianDao implements MusicianDao {
         return null; // stub
     }
 
+    /** TODO: Create more update methods to update different attributes */
     @Override
     public Musician update(int id, String name) throws DaoException {
-        return null; // stub
+        String sql = "WITH updated AS ("
+                + "UPDATE Musicians SET name = :name WHERE id = :id RETURNING *"
+                + ") SELECT * FROM updated;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician name", ex);
+        }
     }
 
     @Override

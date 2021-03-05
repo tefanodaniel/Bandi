@@ -1,5 +1,6 @@
 package api;
 
+import com.google.gson.JsonSyntaxException;
 import dao.MusicianDao;
 import exceptions.ApiError;
 import exceptions.DaoException;
@@ -126,6 +127,23 @@ public class ApiServer {
                 return gson.toJson(musician);
             } catch (DaoException ex) {
                 // eventually, we want to process the error messages and make custom messages
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        put("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = gson.fromJson(req.body(), Musician.class);
+                if (musician.getId() != Integer.parseInt(id)) {
+                    throw new ApiError("musician ID does not match the resource identifier", 400);
+                }
+                musician = musicianDao.update(musician.getId(), musician.getName());
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+                return gson.toJson(musician);
+            } catch (DaoException | JsonSyntaxException ex) {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
