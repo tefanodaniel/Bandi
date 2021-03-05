@@ -69,7 +69,7 @@ public interface MusicianDao {
      * @return The updated Musician object.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician updateName(int id, String name) throws DaoException;\
+    Musician updateName(int id, String name) throws DaoException;
 
     Musician updateGenre(int id, String name) throws DaoException;
 
