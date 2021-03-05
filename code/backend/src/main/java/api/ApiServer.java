@@ -1,8 +1,12 @@
 package api;
 
+import com.google.gson.JsonParser;
+import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
+import com.wrapper.spotify.requests.data.users_profile.GetUsersProfileRequest;
 import dao.MusicianDao;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import kong.unirest.json.JSONObject;
 import util.Database;
 
 import com.google.gson.Gson;
@@ -14,6 +18,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import com.wrapper.spotify.model_objects.specification.User;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
@@ -36,13 +41,17 @@ import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
 
 public class ApiServer {
+
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
     // Client Secret for using Spotify API (should never be stored to GitHub)
     private static final String client_secret = System.getenv("client_secret");
+
     // redirect_uri
     private static final URI redirect_uri =
-            SpotifyHttpManager.makeUri("http://localhost:4567/profile");
+            SpotifyHttpManager.makeUri("http://localhost:3000/profile");
+
+    // authorization code
     private static String code = "";
     private static AuthorizationCodeRequest auth_code_req;
     private static AuthorizationCodeCredentials auth_code_creds;
@@ -54,7 +63,7 @@ public class ApiServer {
             .setRedirectUri(redirect_uri)
             .build();
 
-    // uri request
+    // authorization code uri request
     private static final AuthorizationCodeUriRequest auth_code_uri_req =
             spotifyApi.authorizationCodeUri()
                     .scope("user-read-email,user-read-private,user-top-read")
@@ -68,7 +77,7 @@ public class ApiServer {
             return Integer.parseInt(herokuPort);
         }
         //return default port if heroku-port isn't set (i.e. on localhost)
-        return 4567;
+        return 3000;
     }
 
     public static void main(String[] args) throws URISyntaxException{
@@ -86,38 +95,34 @@ public class ApiServer {
             res.type("application/json");
         });
 
-        // index.hbs
-        get("/", (req, res) -> {
+        // Return uri for Spotify login as json
+        get("/login", (req, res) -> {
             URI uri_for_code = auth_code_uri_req.execute();
-            res.redirect(uri_for_code.toString());
+            String uriString = uri_for_code.toString();
+            return new JSONObject("{\"link\": \""+uriString+"\"}");
+        });
 
-            return new ModelAndView(null, "index.hbs");
-        }, new HandlebarsTemplateEngine());
-
-        // profile.hbs
+        // Return client's name and email from Spotify as json
         get("/profile", (req, res) -> {
+            // Use authorization code to get access token and refresh token
             code = req.queryParams("code");
             auth_code_req = spotifyApi.authorizationCode(code).build();
             auth_code_creds = auth_code_req.execute();
-
             spotifyApi.setAccessToken(auth_code_creds.getAccessToken());
             spotifyApi.setRefreshToken(auth_code_creds.getRefreshToken());
 
-            GetUsersTopArtistsRequest getUsersTopArtistsRequest =
-                    spotifyApi.getUsersTopArtists()
-                    .limit(10)
-                    .offset(0)
-                    .time_range("medium_term")
+            // get name and email
+            final GetCurrentUsersProfileRequest getCurrentUser =
+                    spotifyApi.getCurrentUsersProfile()
                     .build();
-            final Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
-            Artist [] artists = artistPaging.getItems();
-            for (Artist artist : artists) {
-                System.out.println(artist.getName());
-            }
+            final User user = getCurrentUser.execute();
+            String name = user.getDisplayName();
+            String email = user.getEmail();
 
-            return new ModelAndView(null, "profile.hbs");
-        }, new HandlebarsTemplateEngine());
+            return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
+        });
 
+        // post musicians
         post("/musicians", (req, res) -> {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
