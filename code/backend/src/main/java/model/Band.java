@@ -10,7 +10,7 @@ public class Band extends Client {
     private String genre;
     private int size;
     private int capacity;
-    private List<Musicians>
+    private List<Musicians> members;
 
     public Band(String name, String genre) {
         super();
@@ -18,11 +18,12 @@ public class Band extends Client {
         this.genre = genre;
     }
 
-    public Band(String name, String genre, int size, int capacity) {
+    public Band(String name, String genre, int size, int capacity, List<Musicians>) {
         super();
         this.name = name;
         this.genre = genre;
         this.size = size;
         this.capacity = capacity;
+        this.members = members;
     }
 }
