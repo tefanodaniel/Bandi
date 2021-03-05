@@ -32,7 +32,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'ApiServer'
+        attributes 'Main-Class' : 'api.ApiServer'
     }
     from {
         configurations.compileClasspath.collect{it.isDirectory() ? it : zipTree(it)}
@@ -41,7 +41,9 @@ jar {
 
 heroku {
     jdkVersion = 11
-    processTypes(web: "java -jar build/libs/project-g10-1.0-SNAPSHOT.jar")
+    processTypes(web: "java -jar build/libs/backend-1.0-SNAPSHOT.jar")
 }
 
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
 
