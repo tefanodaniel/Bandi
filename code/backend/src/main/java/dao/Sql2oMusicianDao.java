@@ -18,24 +18,42 @@ public class Sql2oMusicianDao implements MusicianDao {
      *
      * @param sql2o A Sql2o object is injected as a dependency;
      *   it is assumed sql2o is connected to a database that  contains a table called
-     *   "courses" with two columns: "offeringName" and "title".
+     *   "Musicians" with columns: "id", "name", and "genre".
      */
     public Sql2oMusicianDao(Sql2o sql2o) {
         this.sql2o = sql2o;
     }
 
     @Override
-    public Musician create(String name, String genre, String instrument, String experience) throws DaoException {
+    public Musician create(int id, String name, String genre, String instrument, String experience) throws DaoException {
         String sql = "WITH inserted AS ("
-                + "INSERT INTO Musicians(name, genre, instrument, experience) " +
-                "VALUES(:name, :genre, :instrument, :experience) RETURNING *"
+                + "INSERT INTO Musicians(id, name, genre, instrument, experience) " +
+                "VALUES(:id, :name, :genre, :instrument, :experience) RETURNING *"
                 + ") SELECT * FROM inserted;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
+                    .addParameter("id", id)
                     .addParameter("name", name)
                     .addParameter("genre", genre)
                     .addParameter("instrument", instrument)
                     .addParameter("experience", experience)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public Musician create(int id, String name, String genre) throws DaoException {
+        String sql = "WITH inserted AS ("
+                + "INSERT INTO Musicians(id, name, genre) " +
+                "VALUES(:id, :name, :genre) RETURNING *"
+                + ") SELECT * FROM inserted;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .addParameter("genre", genre)
                     .executeAndFetchFirst(Musician.class);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);

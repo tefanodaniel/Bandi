@@ -2,6 +2,7 @@ package api;
 
 import dao.MusicianDao;
 import exceptions.ApiError;
+import exceptions.DaoException;
 import util.Database;
 
 import com.google.gson.Gson;
@@ -116,6 +117,20 @@ public class ApiServer {
 
             return new ModelAndView(null, "profile.hbs");
         }, new HandlebarsTemplateEngine());
+
+        post("/musicians", (req, res) -> {
+            try {
+                Musician musician = gson.fromJson(req.body(), Musician.class);
+                musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
+                res.status(201);
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                // eventually, we want to process the error messages and make custom messages
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        after((req, res) -> res.type("application/json"));
     }
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{

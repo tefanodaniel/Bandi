@@ -11,6 +11,7 @@ public interface MusicianDao {
     /**
      * Create a Musician.
      *
+     * @param id The musician id.
      * @param name The musician name.
      * @param genre The associated genre of music.
      * @param instrument The associated type of instrument
@@ -18,7 +19,18 @@ public interface MusicianDao {
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String name, String genre, String instrument, String experience) throws DaoException;
+    Musician create(int id, String name, String genre, String instrument, String experience) throws DaoException;
+
+    /**
+     * Create a Musician.
+     *
+     * @param id The musician id.
+     * @param name The musician name.
+     * @param genre The associated genre of music.
+     * @return The client object created.
+     * @throws DaoException A generic exception for CRUD operations.
+     */
+    Musician create(int id, String name, String genre) throws DaoException;
 
     /**
      * Read a Musician provided its offeringName.
