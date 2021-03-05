@@ -32,7 +32,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'HelloWorld'
+        attributes 'Main-Class' : 'ApiServer'
     }
     from {
         configurations.compileClasspath.collect{it.isDirectory() ? it : zipTree(it)}
