@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Band extends Client implements BandDao {
 
@@ -9,7 +10,9 @@ public class Band extends Client implements BandDao {
     private String genre;
     private int size;
     private int capacity;
-    private List<Musicians> members;
+    private List<Musician> members;
+    private UUID id;
+
 
     public Band(String name, String genre) {
         super();
@@ -17,14 +20,70 @@ public class Band extends Client implements BandDao {
         this.genre = genre;
     }
 
-    public Band(String name, String genre, int size, int capacity, List<Musicians>) {
+    public Band(String name, String genre, int size, int capacity, List<Musician> members) {
         super();
         this.name = name;
         this.genre = genre;
         this.size = size;
         this.capacity = capacity;
         this.members = members;
+        this.id = new UUID();
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public List<Musician> getMembers () {
+        return members;
+    }
+
+    public void setMembers (Musician member) {
+        if (size != capacity) {
+            members.add(member);
+        }
+    }
+
+    @Override
+    public boolean equals (Object o) {
+
+    }
+
+    @Override
+    public String toString () {
+        return "Band {" + "name =' "
+                + name
+                + '\'' + ", genre = '" + genre
+                + '\'' + ", size = '" + size + '\''
+                + ", capacity = '" + capacity + '\'' +
+                ", members = '" + members + '\'' + '}';
+    }
 }
