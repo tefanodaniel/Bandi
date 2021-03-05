@@ -1,6 +1,7 @@
 package api;
 
 import dao.MusicianDao;
+import util.Database;
 
 import static spark.Spark.*;
 
@@ -64,45 +65,10 @@ public class ApiServer {
         return 4567;
     }
 
-    private static Connection getConnection() throws URISyntaxException, Sql2oException {
-        // converting heroku database_url -> jdbc uri
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (databaseUrl == null) {
-            throw new URISyntaxException(databaseUrl, "DATABASE_URL is not set");
-        }
-
-        URI dbUri = new URI(databaseUrl);
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-                + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-
-        Sql2o sql2o = new Sql2o(dbUrl, username, password);
-        return sql2o.open();
-    }
-
     public static void main(String[] args) throws URISyntaxException{
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
         MusicianDao musicianDao = getMusicianDao();
-
-        try (Connection conn = getConnection()) {
-            // simply testing if I can connect to the database.
-
-            String sql = "CREATE TABLE IF NOT EXISTS Musicians("
-                    + "id INT PRIMARY KEY,"
-                    + "name VARCHAR(30) NOT NULL,"
-                    + "genre VARCHAR(30) NOT NULL"
-                    + ");";
-            conn.createQuery(sql).executeUpdate();
-
-            // sql = "INSERT INTO Musicians(id, name, genre) VALUES(1, 'Frank Ocean', 'r&b');";
-            // conn.createQuery(sql).executeUpdate();
-
-        } catch (URISyntaxException | Sql2oException e) {
-            e.printStackTrace();
-        }
 
         // index.hbs
         get("/", (req, res) -> {
@@ -138,16 +104,7 @@ public class ApiServer {
     }
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
-        String databaseUrl = System.getenv("DATABASE_URL");
-
-        URI dbUri = new URI(databaseUrl);
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-                + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-
-        Sql2o sql2o = new Sql2o(dbUrl, username, password);
+        Sql2o sql2o = Database.getSql2o();
         return new Sql2oMusicianDao(sql2o);
     }
 }
