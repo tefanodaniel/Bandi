@@ -135,6 +135,10 @@ public class ApiServer {
             try {
                 String id = req.params("id");
                 Musician musician = gson.fromJson(req.body(), Musician.class);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
                 if (musician.getId() != Integer.parseInt(id)) {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
