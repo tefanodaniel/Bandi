@@ -26,5 +26,5 @@ public class Band extends Client implements BandDao {
         this.members = members;
     }
 
-    public void
+
 }
