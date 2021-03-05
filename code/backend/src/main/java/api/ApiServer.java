@@ -47,10 +47,11 @@ public class ApiServer {
     // Client Secret for using Spotify API (should never be stored to GitHub)
     private static final String client_secret = System.getenv("client_secret");
     private static final String frontend_url = "http://localhost:3000";
+    private static final String backend_url = "http://localhost:4567";
 
     // redirect_uri
     private static final URI redirect_uri =
-            SpotifyHttpManager.makeUri("http://localhost:4567/callback");
+            SpotifyHttpManager.makeUri(backend_url + "/callback");
 
     // authorization code
     private static String code = "";
@@ -122,8 +123,7 @@ public class ApiServer {
             String name = user.getDisplayName();
             String email = user.getEmail();
 
-            res.redirect(frontend_url +  "/?code=" + code
-                + "&name=" + name + "&email=" + email);
+            res.redirect(frontend_url + "/?name=" + name + "&email=" + email);
 
             return null;
             //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
