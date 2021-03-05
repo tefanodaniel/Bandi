@@ -1,13 +1,13 @@
 package api;
 
-import com.google.gson.JsonParser;
-import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
-import com.wrapper.spotify.requests.data.users_profile.GetUsersProfileRequest;
 import dao.MusicianDao;
 import exceptions.ApiError;
 import exceptions.DaoException;
 import kong.unirest.json.JSONObject;
 import util.Database;
+
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -18,7 +18,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
-import com.wrapper.spotify.model_objects.specification.User;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
@@ -33,9 +32,13 @@ import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
 import com.wrapper.spotify.model_objects.specification.Artist;
 import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
+import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
+import com.wrapper.spotify.requests.data.users_profile.GetUsersProfileRequest;
+
 import org.apache.hc.core5.http.ParseException;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -138,6 +141,45 @@ public class ApiServer {
                 return gson.toJson(musician);
             } catch (DaoException ex) {
                 // eventually, we want to process the error messages and make custom messages
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        put("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = gson.fromJson(req.body(), Musician.class);
+                if (musician.getId() != Integer.parseInt(id)) {
+                    throw new ApiError("musician ID does not match the resource identifier", 400);
+                }
+
+                /** Update specific fields */
+                boolean flag = false;
+                if (musician.getName() != null) {
+                    flag = true;
+                    musician = musicianDao.updateName(musician.getId(), musician.getName());
+                } if (musician.getInstrument() != null) {
+                    flag = true;
+                    musician = musicianDao.updateInstrument(musician.getId(), musician.getInstrument());
+                } if (musician.getGenre() != null) {
+                    flag = true;
+                    musician = musicianDao.updateGenre(musician.getId(), musician.getGenre());
+                } if (musician.getExperience() != null) {
+                    flag = true;
+                    musician = musicianDao.updateExperience(musician.getId(), musician.getExperience());
+                } if (musician.getLocation() != null) {
+                    flag = true;
+                    musician = musicianDao.updateLocation(musician.getId(), musician.getLocation());
+                } if (flag==false) {
+                    throw new ApiError("Nothing to update", 400);
+                }
+
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                return gson.toJson(musician);
+            } catch (DaoException | JsonSyntaxException ex) {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
