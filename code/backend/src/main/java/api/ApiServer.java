@@ -1,13 +1,18 @@
 package api;
 
 import dao.MusicianDao;
+import exceptions.ApiError;
 import util.Database;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import static spark.Spark.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
@@ -69,6 +74,16 @@ public class ApiServer {
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
         MusicianDao musicianDao = getMusicianDao();
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        exception(ApiError.class, (ex, req, res) -> {
+            // Handle the exception here
+            Map<String, String> map = Map.of("status", ex.getStatus() + "",
+                    "error", ex.getMessage());
+            res.body(gson.toJson(map));
+            res.status(ex.getStatus());
+            res.type("application/json");
+        });
 
         // index.hbs
         get("/", (req, res) -> {
