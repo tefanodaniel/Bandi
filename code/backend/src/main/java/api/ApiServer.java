@@ -1,11 +1,20 @@
 package api;
 
+import dao.MusicianDao;
+import util.Database;
+
 import static spark.Spark.*;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.*;
+
+import dao.MusicianDao;
+import dao.Sql2oMusicianDao;
+import model.Musician;
+import org.sql2o.Sql2o;
+import org.sql2o.Connection;
+import org.sql2o.Sql2oException;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
@@ -56,41 +65,10 @@ public class ApiServer {
         return 4567;
     }
 
-    private static Connection getConnection() throws URISyntaxException, SQLException {
-        // converting heroku database_url -> jdbc uri
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (databaseUrl == null) {
-            throw new URISyntaxException(databaseUrl, "DATABASE_URL is not set");
-        }
-
-        URI dbUri = new URI(databaseUrl);
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-                + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-
-        return DriverManager.getConnection(dbUrl, username, password);
-    }
-
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws URISyntaxException{
         port(getHerokuAssignedPort());
         staticFiles.location("/public");
-
-        try (Connection conn = getConnection()) {
-            // simply testing if I can connect to the database.
-
-            String sql = "CREATE TABLE IF NOT EXISTS Musicians("
-                    + "id INT PRIMARY KEY,"
-                    + "name VARCHAR(30) NOT NULL,"
-                    + "genre VARCHAR(30) NOT NULL"
-                    + ");";
-            Statement st = conn.createStatement();
-            st.execute(sql);
-
-        } catch (URISyntaxException | SQLException e) {
-            e.printStackTrace();
-        }
+        MusicianDao musicianDao = getMusicianDao();
 
         // index.hbs
         get("/", (req, res) -> {
@@ -123,5 +101,10 @@ public class ApiServer {
 
             return new ModelAndView(null, "profile.hbs");
         }, new HandlebarsTemplateEngine());
+    }
+
+    private static MusicianDao getMusicianDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oMusicianDao(sql2o);
     }
 }
