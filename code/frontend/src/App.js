@@ -2,21 +2,20 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Route, HashRouter, Switch } from 'react-router-dom';
 
+import Signin from './components/Signin';
 import Discover from './components/Discover';
-
-
-// <Route path="/discover" exact component={Discover} />
 
 
 function App() {
   return (
-    <HashRouter>
-
-      <Switch>
-        <Route component={Discover} />
-      </Switch>
-
-    </HashRouter>
+    <div>
+      <HashRouter>
+        <Switch>
+          <Route exact path="/" component={Discover} />
+          <Route exact path="/signin" component={Signin} />
+        </Switch>
+      </HashRouter>
+    </div>
   );
 }
 
