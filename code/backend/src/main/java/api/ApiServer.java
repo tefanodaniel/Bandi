@@ -141,6 +141,32 @@ public class ApiServer {
             //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
         });
 
+        // Get musicians given the id
+        get("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = musicianDao.read(id);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // Get all musicians
+        get("/musicians", (req, res) -> {
+            // TODO: update to accept search terms as query parameters:
+            try {
+                List<Musician> musicians = musicianDao.readAll();
+                return gson.toJson(musicians);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // post musicians
         post("/musicians", (req, res) -> {
             try {
