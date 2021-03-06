@@ -58,12 +58,14 @@ public class ApiServer {
         });
 
         // Set frontend and backend urls
-        String frontend_url = "http://localhost:3000";
+        String frontend_url;
         String backend_url;
         if (myPort == 4567) {
+            frontend_url = "http://localhost:3000";
             backend_url = "http://localhost:4567";
         }
         else {
+            frontend_url = "http://bandiscover.herokuapp.com";
             backend_url = "http://bandiscover-api.herokuapp.com";
         }
 
