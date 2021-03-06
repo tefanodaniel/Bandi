@@ -23,15 +23,35 @@ A social networking application for musicians to meet other musicians, start a b
 If you are a project member or instructor, please visit [here](https://docs.google.com/document/d/1hD0D15o0scDjNEAtohE44THiiPuuUH_Sy34Ze_uUl9M/edit?usp=sharing)
 to get details on how to set environment variables locally for testing. 
 
-## Installing / Getting started
+## Install + Quick Run 
 
-A quick introduction of the minimal setup you need to get the app up & running.
-
+- Clone the repository
 ```shell
-commands here
+git clone https://github.com/cs421sp21-homework/project-g10.git
+cd project-g10/
 ```
 
-Here you should say what actually happens when you execute the code above.
+- Set relevant environment variables
+```shell
+sudo -H gedit /etc/environment
+```
+
+Add the following lines (from authorization google doc shared above) - 
+```
+DATABASE_URL=value of production database connection url
+TEST_DATABASE_URL=value of development database connection url
+client_secret=value of spotify client_secret
+```
+
+- Start the ApiServer
+```shell
+java -jar code/backend/build/libs/backend-{{version}}.jar 
+```
+
+- Start the ReactApp (in separate terminal)
+```shell
+yarn start
+```
 
 ## Developing
 
