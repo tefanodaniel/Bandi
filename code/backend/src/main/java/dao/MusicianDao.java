@@ -20,7 +20,7 @@ public interface MusicianDao {
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(int id, String name, String genre, String instrument, String experience, String location) throws DaoException;
+    Musician create(String id, String name, String genre, String instrument, String experience, String location) throws DaoException;
 
     /**
      * Create a Musician.
@@ -31,7 +31,7 @@ public interface MusicianDao {
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(int id, String name, String genre) throws DaoException;
+    Musician create(String id, String name, String genre) throws DaoException;
 
     /**
      * Read a Musician provided its offeringName.
@@ -40,7 +40,7 @@ public interface MusicianDao {
      * @return The Musician object read from the data source.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician read(int id) throws DaoException;
+    Musician read(String id) throws DaoException;
 
     /**
      * Read all Musicians from the database.
@@ -69,15 +69,15 @@ public interface MusicianDao {
      * @return The updated Musician object.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician updateName(int id, String name) throws DaoException;
+    Musician updateName(String id, String name) throws DaoException;
 
-    Musician updateGenre(int id, String name) throws DaoException;
+    Musician updateGenre(String id, String name) throws DaoException;
 
-    Musician updateInstrument(int id, String name) throws DaoException;
+    Musician updateInstrument(String id, String name) throws DaoException;
 
-    Musician updateExperience(int id, String name) throws DaoException;
+    Musician updateExperience(String id, String name) throws DaoException;
 
-    Musician updateLocation(int id, String name) throws DaoException;
+    Musician updateLocation(String id, String name) throws DaoException;
 
     /**
      * Delete a Musician provided its offeringName.
@@ -86,7 +86,7 @@ public interface MusicianDao {
      * @return The Musician object deleted from the data source.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician delete(int id) throws DaoException;
+    Musician delete(String id) throws DaoException;
 
 
 }

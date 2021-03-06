@@ -12,14 +12,15 @@ public class Musician extends Client {
     private String experience;
     private String location;
 
-    public Musician(String name, String genre) {
-        super();
+    public Musician(String id, String name, String genre) {
+        super(id);
         this.name = name;
         this.genre = genre;
     }
 
-    public Musician(String name, String genre, String instrument, String experience, String location) {
-        super();
+    public Musician(String id, String name, String genre,
+                    String instrument, String experience, String location) {
+        super(id);
         this.name = name;
         this.genre = genre;
         this.instrument = instrument;

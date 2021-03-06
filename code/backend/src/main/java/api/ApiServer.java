@@ -118,15 +118,22 @@ public class ApiServer {
             spotifyApi.setAccessToken(auth_code_creds.getAccessToken());
             spotifyApi.setRefreshToken(auth_code_creds.getRefreshToken());
 
-            // get name and email
+            // get current user info
             final GetCurrentUsersProfileRequest getCurrentUser =
                     spotifyApi.getCurrentUsersProfile()
                     .build();
             final User user = getCurrentUser.execute();
             String name = user.getDisplayName();
             String email = user.getEmail();
+            String id = user.getId();
 
-            res.redirect(frontend_url + "/?name=" + name + "&email=" + email);
+            res.redirect(frontend_url + "/?name=" + name + "&email=" + email + "&id=" + id);
+
+            // Create user in database if not already existent
+            Musician musician = musicianDao.read(id);
+            if (id == null) { // user has not been added to database yet
+                musicianDao.create(id, name, "unknown genre");
+            }
 
             return null;
             //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
@@ -153,7 +160,7 @@ public class ApiServer {
                     throw new ApiError("Resource not found", 404);
                 }
 
-                if (musician.getId() != Integer.parseInt(id)) {
+                if (! (musician.getId()).equals(id)) {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
 
