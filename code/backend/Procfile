@@ -1,1 +1,1 @@
-web: java -jar ./code/backend/build/libs/backend-1.0.jar
+web: java $JAVA_OPTS -jar build/libs/backend-1.0.jar
