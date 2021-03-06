@@ -25,7 +25,8 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician create(int id, String name, String genre, String instrument, String experience, String location) throws DaoException {
+    public Musician create(String id, String name, String genre, String instrument,
+                           String experience, String location) throws DaoException {
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Musicians(id, name, genre, instrument, experience, location) " +
                 "VALUES(:id, :name, :genre, :instrument, :experience, :location) RETURNING *"
@@ -45,7 +46,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician create(int id, String name, String genre) throws DaoException {
+    public Musician create(String id, String name, String genre) throws DaoException {
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Musicians(id, name, genre) " +
                 "VALUES(:id, :name, :genre) RETURNING *"
@@ -62,7 +63,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician read(int id) throws DaoException {
+    public Musician read(String id) throws DaoException {
         return null; // stub
     }
 
@@ -77,7 +78,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateName(int id, String name) throws DaoException {
+    public Musician updateName(String id, String name) throws DaoException {
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET name = :name WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -92,7 +93,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateGenre(int id, String genre) throws DaoException {
+    public Musician updateGenre(String id, String genre) throws DaoException {
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET genre = :genre WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -107,7 +108,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateInstrument(int id, String instrument) throws DaoException {
+    public Musician updateInstrument(String id, String instrument) throws DaoException {
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET instrument = :instrument WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -122,7 +123,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateExperience(int id, String experience) throws DaoException {
+    public Musician updateExperience(String id, String experience) throws DaoException {
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET experience = :experience WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -137,7 +138,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateLocation(int id, String location) throws DaoException {
+    public Musician updateLocation(String id, String location) throws DaoException {
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET location = :location WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -152,7 +153,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician delete(int id) throws DaoException {
+    public Musician delete(String id) throws DaoException {
         return null; // stub
     }
 }
