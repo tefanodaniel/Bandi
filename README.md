@@ -23,15 +23,35 @@ A social networking application for musicians to meet other musicians, start a b
 If you are a project member or instructor, please visit [here](https://docs.google.com/document/d/1hD0D15o0scDjNEAtohE44THiiPuuUH_Sy34Ze_uUl9M/edit?usp=sharing)
 to get details on how to set environment variables locally for testing. 
 
-## Installing / Getting started
+## Install + Quick Run 
 
-A quick introduction of the minimal setup you need to get the app up & running.
-
+- Clone the repository
 ```shell
-commands here
+git clone https://github.com/cs421sp21-homework/project-g10.git
+cd project-g10/
 ```
 
-Here you should say what actually happens when you execute the code above.
+- Set relevant environment variables
+```shell
+sudo -H gedit /etc/environment
+```
+
+Add the following lines (from authorization google doc shared above) - 
+```
+DATABASE_URL=value of production database connection url
+TEST_DATABASE_URL=value of development database connection url
+client_secret=value of spotify client_secret
+```
+
+- Start the ApiServer
+```shell
+java -jar code/backend/build/libs/backend-{{version}}.jar 
+```
+
+- Start the ReactApp (in separate terminal)
+```shell
+yarn start
+```
 
 ## Developing
 
@@ -57,8 +77,9 @@ Development Database instance is provided by [elephantsql](https://www.elephants
 Production Database instance is provided by [heroku-postgres](https://www.heroku.com/postgres)
 
 Development Database : [Download Backup : 2021-03-06](https://elephantsql-backups-us-east-1.s3.amazonaws.com/ziggy/jflfxstq.2021-03-06T19%3A46%3A40%2B00%3A00.sql.lzo?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA2M5CQHIEWQ6JP3W2%2F20210306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210306T194733Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=30afdd955ea8a82b58a56886624697b0a740416e7f42aaa838aa53bdf683a7a6) 
+
 Production Database : [Download Backup :: 2021-03-06](https://data.heroku.com/datastores/a88e0937-9a2f-4f5a-84ad-2330719b1361#durability)
-Explaining what database (and version) has been used. Provide download links.
+
 
 
 ### Setting up Dev
