@@ -43,6 +43,11 @@ heroku {
     processTypes(web: "java -jar build/libs/backend-1.0.jar")
 }
 
-task stage(dependsOn: ['build', 'clean'])
-build.mustRunAfter clean
-
+task stage(type: Copy, dependsOn: ['clean', 'build']) {
+    from jar.archivePath
+    into project.rootDir
+    rename {
+        'backend-1.0.jar'
+    }
+}
+stage.mustRunAfter(clean)
