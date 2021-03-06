@@ -74,7 +74,19 @@ public class Band extends Client implements BandDao {
 
     @Override
     public boolean equals (Object o) {
-
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Band band = (Band) o;
+        Collections.sort(members);
+        Collections.sort(band.members);
+        return name.equals(band.name) && genre.equals(band.genre)
+                && size.equals(band.size) && capacity.equals(band.capacity)
+                && members.size() = band.members.size()
+                && members.equals(band.members);
     }
 
     @Override
