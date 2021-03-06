@@ -26,41 +26,41 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     public Band create() throws DaoException {
-
+        return null;
     }
 
     @Override
     Band read(int id) throws DaoException {
-
+        return null;
     }
 
     @Override
     List<Band> readAll() throws DaoException {
-
+        return null;
     }
 
     @Override
     List<Band> readAll(String genreQuery) throws DaoException {
-
+        return null;
     }
 
     @Override
     Band update(int id, String name) throws DaoException{
-
+        return null;
     }
 
     @Override
     Band add(int id, Musician newMem) throws DaoException {
-
+        return null;
     }
 
     @Override
     Band remove(int id, Musician member, int musID) throws DaoException {
-
+        return null;
     }
 
     @Override
     Band delete(int id) throws DaoException {
-
+        return null;
     }
 }
