@@ -53,12 +53,11 @@ public interface MusicianDao {
     /**
      * Read all Musicians from the database with genre containing genreQuery.
      *
-     * @param genreQuery A search term.
+     * @param query A search term.
      * @return All Musicians retrieved.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    List<Musician> readAll(String genreQuery) throws DaoException;
-    // We might eventually want more readAll for appropriate filters. (like location/instrument).
+    List<Musician> readAll(String query) throws DaoException;
 
 
     /**

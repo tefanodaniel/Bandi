@@ -17,7 +17,10 @@ import static spark.Spark.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
@@ -42,6 +45,8 @@ import com.wrapper.spotify.requests.data.users_profile.GetUsersProfileRequest;
 import org.apache.hc.core5.http.ParseException;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
+
+import javax.xml.crypto.Data;
 
 public class ApiServer {
 
@@ -143,11 +148,20 @@ public class ApiServer {
         post("/musicians", (req, res) -> {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
-                musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
+                //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
+                String instrument = musician.getInstrument();
+                String experience = musician.getExperience();
+                String location = musician.getLocation();
+                if (instrument == null) { instrument = "NULL"; }
+                if (experience == null) { experience = "NULL"; }
+                if (location == null) { location = "NULL"; }
+
+                musicianDao.create(musician.getId(), musician.getName(), musician.getGenre(),
+                        instrument, experience, location);
+
                 res.status(201);
                 return gson.toJson(musician);
             } catch (DaoException ex) {
-                // eventually, we want to process the error messages and make custom messages
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
@@ -164,7 +178,7 @@ public class ApiServer {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
 
-                /** Update specific fields */
+                // Update specific fields:
                 boolean flag = false;
                 if (musician.getName() != null) {
                     flag = true;
@@ -181,7 +195,7 @@ public class ApiServer {
                 } if (musician.getLocation() != null) {
                     flag = true;
                     musician = musicianDao.updateLocation(musician.getId(), musician.getLocation());
-                } if (flag==false) {
+                } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
 
@@ -200,6 +214,10 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
+//        Musician musician = new Musician("1", "sample name", "sample genre");
+//        List<Musician> musicians = new ArrayList<>();
+//        musicians.add(musician);
+//        Database.createMusiciansTableWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 }
