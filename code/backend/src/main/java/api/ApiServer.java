@@ -201,23 +201,29 @@ public class ApiServer {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
 
+                String name = musician.getName();
+                String genre = musician.getGenre();
+                String instrument = musician.getInstrument();
+                String experience = musician.getExperience();
+                String location = musician.getLocation();
                 // Update specific fields:
                 boolean flag = false;
-                if (musician.getName() != null) {
+                if (name != null) {
                     flag = true;
-                    musician = musicianDao.updateName(musician.getId(), musician.getName());
-                } if (musician.getInstrument() != null) {
+                    musician = musicianDao.updateName(id, name);
+                    // musician now has instrument = voice, but we wanted vocals
+                } if (instrument != null) {
                     flag = true;
-                    musician = musicianDao.updateInstrument(musician.getId(), musician.getInstrument());
-                } if (musician.getGenre() != null) {
+                    musician = musicianDao.updateInstrument(id, instrument);
+                } if (genre != null) {
                     flag = true;
-                    musician = musicianDao.updateGenre(musician.getId(), musician.getGenre());
-                } if (musician.getExperience() != null) {
+                    musician = musicianDao.updateGenre(id, genre);
+                } if (experience != null) {
                     flag = true;
-                    musician = musicianDao.updateExperience(musician.getId(), musician.getExperience());
-                } if (musician.getLocation() != null) {
+                    musician = musicianDao.updateExperience(id, experience);
+                } if (location != null) {
                     flag = true;
-                    musician = musicianDao.updateLocation(musician.getId(), musician.getLocation());
+                    musician = musicianDao.updateLocation(id, location);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
