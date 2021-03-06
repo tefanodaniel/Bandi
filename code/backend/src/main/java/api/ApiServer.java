@@ -100,12 +100,12 @@ public class ApiServer {
             String code = req.queryParams("code");
             AuthorizationCodeRequest auth_code_req =
                     spotifyApi.authorizationCode(code).build();
-            AuthorizationCodeCredentials auth_code_creds =
+            AuthorizationCodeCredentials auth_code_credentials =
                     auth_code_req.execute();
 
             // Set tokens in Spotify API Object
-            spotifyApi.setAccessToken(auth_code_creds.getAccessToken());
-            spotifyApi.setRefreshToken(auth_code_creds.getRefreshToken());
+            spotifyApi.setAccessToken(auth_code_credentials.getAccessToken());
+            spotifyApi.setRefreshToken(auth_code_credentials.getRefreshToken());
 
             // get current user's info
             final GetCurrentUsersProfileRequest getCurrentUser =
@@ -122,7 +122,7 @@ public class ApiServer {
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
             if (musician == null) { // user has not been added to database yet
-                musician = musicianDao.create(id, name, "unknown genre");
+                musicianDao.create(id, name, "unknown genre");
             }
 
             return null;
@@ -154,7 +154,7 @@ public class ApiServer {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
 
-                /** Update specific fields */
+                // Update specific fields
                 boolean flag = false;
                 if (musician.getName() != null) {
                     flag = true;
@@ -171,7 +171,7 @@ public class ApiServer {
                 } if (musician.getLocation() != null) {
                     flag = true;
                     musician = musicianDao.updateLocation(musician.getId(), musician.getLocation());
-                } if (flag==false) {
+                } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
 
