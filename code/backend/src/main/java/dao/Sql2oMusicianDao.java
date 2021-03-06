@@ -27,6 +27,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name, String genre, String instrument,
                            String experience, String location) throws DaoException {
+
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Musicians(id, name, genre, instrument, experience, location) " +
                 "VALUES(:id, :name, :genre, :instrument, :experience, :location) RETURNING *"
@@ -73,7 +74,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public List<Musician> readAll(String genreQuery) throws DaoException {
+    public List<Musician> readAll(String query) throws DaoException {
         return null; // stub
     }
 
