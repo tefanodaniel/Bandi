@@ -27,7 +27,7 @@ import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileReq
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = true;
+    private static final boolean isLocalTest = false;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
