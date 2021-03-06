@@ -25,8 +25,22 @@ public class Sql2oBandDao implements BandDao {
     }
 
     @Override
-    public Band create() throws DaoException {
-        return null;
+    public Band create(int id, String name, String genre, int size, int capacity) throws DaoException {
+        String sql = "WITH inserted AS ("
+                + "INSERT INTO Bands(id, name, genre, size, capacity)" +
+                "VALUES(:id, :name, :genre, :size, :capacity) RETURNING *"
+                + ") SELECT * FROM inserted;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .addParameter("genre", genre)
+                    .addParameter("size", size)
+                    .addParameter("capacity", capacity)
+                    .executeAndFecthcFirst(Band.class)
+        } catch(Sql2oException ex) {
+            throw new DaoException(ex.getMessage(), ex);
+        }
     }
 
     @Override
