@@ -165,6 +165,15 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician delete(String id) throws DaoException {
-        return null; // stub
+        String sql = "WITH deleted AS ("
+                + "DELETE FROM Musicians WHERE id = :id RETURNING *"
+                + ") SELECT * FROM deleted;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to delete the musician", ex);
+        }
     }
 }
