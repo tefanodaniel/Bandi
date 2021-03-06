@@ -69,7 +69,7 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS Musicians;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
-                    + "id INT PRIMARY KEY,"
+                    + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
                     + "genre VARCHAR(30) NOT NULL"
                     + ");";
