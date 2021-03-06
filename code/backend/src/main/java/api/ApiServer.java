@@ -237,10 +237,10 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-        Musician musician = new Musician("1", "sample name", "sample genre");
-        List<Musician> musicians = new ArrayList<>();
-        musicians.add(musician);
-        Database.createMusiciansTableWithSampleData(sql2o, musicians);
+//        Musician musician = new Musician("1", "sample name", "sample genre");
+//        List<Musician> musicians = new ArrayList<>();
+//        musicians.add(musician);
+//        Database.createMusiciansTableWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 }
