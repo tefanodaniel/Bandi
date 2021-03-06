@@ -61,11 +61,11 @@ public class Musician extends Client {
     }
 
     public String getLocation() {
-        return experience;
+        return location;
     }
 
-    public void setLocation(String experience) {
-        this.experience = experience;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     @Override
