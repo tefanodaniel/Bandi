@@ -39,6 +39,7 @@ jar {
 }
 
 heroku {
+    appName 'bandiscover-api'
     jdkVersion = 11
     processTypes(web: "java -jar build/libs/backend-1.0.jar")
 }
