@@ -22,7 +22,7 @@ public final class DataStore {
      */
     public static List<Musician> sampleMusicians() {
         List<Musician> samples = new ArrayList<>();
-        samples.add(new Musician("Kenny G", "Jazz"));
+        samples.add(new Musician("00000fakeid","Kenny G", "Jazz"));
         return samples;
     }
 
@@ -35,7 +35,7 @@ public final class DataStore {
         List<Musician> sample_musicians = sampleMusicians(); //use this to populate the bands.
 
         List<Band> sample_bands = new ArrayList<>();
-        sample_bands.add(new Band("Pink Floyd", "Rock"));
+        sample_bands.add(new Band("11111fakeid","Pink Floyd", "Rock"));
         return sample_bands;
     }
 }

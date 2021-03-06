@@ -11,14 +11,14 @@ public class Band extends Client {
     private int capacity;
     // should contain List<Musicians>
 
-    public Band(String name, String genre) {
-        super();
+    public Band(String id, String name, String genre) {
+        super(id);
         this.name = name;
         this.genre = genre;
     }
 
-    public Band(String name, String genre, int size, int capacity) {
-        super();
+    public Band(String id, String name, String genre, int size, int capacity) {
+        super(id);
         this.name = name;
         this.genre = genre;
         this.size = size;

@@ -9,11 +9,14 @@ class Signin extends React.Component {
   }
 
   render() {
+    const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+    const url = isDev ? "http://localhost:4567/login" : "https://bandiscover-api.herokuapp.com/login";
+
     return (
       <div>
         <h1>Bandi</h1>
         <h2> Sign in: </h2>
-        <Button onClick={() => window.location="http://localhost:4567/login"}>Log in with Spotify</Button>
+        <Button onClick={() => window.location=url}>Log in with Spotify</Button>
         <Button>Continue as guest (not functional)</Button>
       </div>
     );
