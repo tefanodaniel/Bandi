@@ -131,8 +131,8 @@ public class ApiServer {
 
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
-            if (id == null) { // user has not been added to database yet
-                musicianDao.create(id, name, "unknown genre");
+            if (musician == null) { // user has not been added to database yet
+                musician = musicianDao.create(id, name, "unknown genre");
             }
 
             return null;
