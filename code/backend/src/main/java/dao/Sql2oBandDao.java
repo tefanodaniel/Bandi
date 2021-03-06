@@ -1,5 +1,6 @@
 package dao;
 
+import model.Musician;
 import model.Band;
 import exceptions.DaoException;
 
