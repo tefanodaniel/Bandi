@@ -79,7 +79,7 @@ Production Database instance is provided by [heroku-postgres](https://www.heroku
 Development Database : [Download Backup : 2021-03-06](https://elephantsql-backups-us-east-1.s3.amazonaws.com/ziggy/jflfxstq.2021-03-06T19%3A46%3A40%2B00%3A00.sql.lzo?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIA2M5CQHIEWQ6JP3W2%2F20210306%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20210306T194733Z&X-Amz-Expires=900&X-Amz-SignedHeaders=host&X-Amz-Signature=30afdd955ea8a82b58a56886624697b0a740416e7f42aaa838aa53bdf683a7a6) 
 
 Production Database : [Download Backup :: 2021-03-06](https://data.heroku.com/datastores/a88e0937-9a2f-4f5a-84ad-2330719b1361#durability)
-Explaining what database (and version) has been used. Provide download links.
+
 
 
 ### Setting up Dev
