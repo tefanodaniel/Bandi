@@ -65,12 +65,22 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician read(String id) throws DaoException {
-        return null; // stub
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT * FROM Musicians WHERE id = :id;")
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read a course with id " + id, ex);
+        }
     }
 
     @Override
     public List<Musician> readAll() throws DaoException {
-        return null; // stub
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT * FROM Musicians;").executeAndFetch(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read musicians from the database", ex);
+        }
     }
 
     @Override
