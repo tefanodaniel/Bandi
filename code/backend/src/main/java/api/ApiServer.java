@@ -26,6 +26,9 @@ import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileReq
 
 public class ApiServer {
 
+    // flag for testing locally vs. deploying
+    private static final boolean isLocalTest = true;
+
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
     // Client Secret for using Spotify API (should never push to VCS)
@@ -60,7 +63,7 @@ public class ApiServer {
         // Set frontend and backend urls
         String frontend_url;
         String backend_url;
-        if (myPort == 4567) {
+        if (isLocalTest) {
             frontend_url = "http://localhost:3000";
             backend_url = "http://localhost:4567";
         }
