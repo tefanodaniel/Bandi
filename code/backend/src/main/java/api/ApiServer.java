@@ -232,6 +232,20 @@ public class ApiServer {
             }
         });
 
+        delete("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = musicianDao.delete(id);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         after((req, res) -> res.type("application/json"));
     }
 
