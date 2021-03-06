@@ -19,6 +19,10 @@ A social networking application for musicians to meet other musicians, start a b
 |   Ramachandran Muthukumar   |   rmuthuk1@jhu.edu        |    ramcha24             |
 |   Stefano Tusa Lavieri   |    stusa2@jhu.edu       |    stefanotusa             |
 
+## Authorization 
+If you are a project member or instructor, please visit [here](https://docs.google.com/document/d/1hD0D15o0scDjNEAtohE44THiiPuuUH_Sy34Ze_uUl9M/edit?usp=sharing)
+to get details on how to set environment variables locally for testing. 
+
 ## Installing / Getting started
 
 A quick introduction of the minimal setup you need to get the app up & running.
