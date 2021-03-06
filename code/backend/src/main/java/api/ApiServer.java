@@ -211,7 +211,6 @@ public class ApiServer {
                 if (name != null) {
                     flag = true;
                     musician = musicianDao.updateName(id, name);
-                    // musician now has instrument = voice, but we wanted vocals
                 } if (instrument != null) {
                     flag = true;
                     musician = musicianDao.updateInstrument(id, instrument);
