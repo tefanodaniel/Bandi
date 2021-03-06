@@ -39,7 +39,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .addParameter("genre", genre)
                     .addParameter("instrument", instrument)
                     .addParameter("experience", experience)
-                    .addParameter("location", experience)
+                    .addParameter("location", location)
                     .executeAndFetchFirst(Musician.class);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
