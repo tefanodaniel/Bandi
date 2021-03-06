@@ -71,7 +71,17 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     Band update(int id, String name) throws DaoException{
-        return null;
+        String sql = "WITH updated AS ("
+                + "UPDATE Bands SET name = :name WHERE id = :id RETURNING *"
+                + ") SELECT * FROM updated;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParamter("name", name)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Band.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the band", ex);
+        }
     }
 
     @Override
@@ -86,6 +96,15 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     Band delete(int id) throws DaoException {
-        return null;
+        String sql = "WITH deleted AS("
+                +"DELETE FROM Bands WHERE id = :id RETURNING *"
+                + ") SELECTE * FROM deleted;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(Band.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to delete the Band", ex)
+        }
     }
 }
