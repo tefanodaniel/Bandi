@@ -2,6 +2,8 @@
 
 A social networking application for musicians to meet other musicians, start a band, or look at local music groups in their area.
 
+Try it out! - [Bandi](https://bandiscover.herokuapp.com/)
+
 **Advisors** 
 
 | Name | JHU Email | GitHub Username |
