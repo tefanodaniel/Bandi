@@ -45,12 +45,23 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     Band read(int id) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT * FROM Bands WHERE id = :id;")
+                    .add Parameter("id", id)
+                    .executeAndFetchFirst(Band.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read a course with id " + id, ex);
+        }
         return null;
     }
 
     @Override
     List<Band> readAll() throws DaoException {
-        return null;
+        try(Connection conn = sql2o.open()) {
+            return conn.createQuery("SELECT * FROM Bands;").executeAndFetch(Course.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read bands form the database", ex);
+        }
     }
 
     @Override
