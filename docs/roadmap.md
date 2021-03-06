@@ -35,10 +35,15 @@
 <p>
 - As a user, I want to see where other musicians are located on a geographic map of my city or town so that I have a better idea of who's playing what in my area.
 (isn't this the same as geographical proximity search in Iteration 2)
+  
 - As a user, I want to receive email confirmation of my registration for an event so that I can have email confirmation of my registration for the event.
+
 - As a user, I want the option to receive an email reminder a customizable amount of time before the event so that I can remember to attend.
+
 - As a band member, I would like to be able to create and customize an application portal for virtual tryouts, so that musicians interested in joining my band can submit recordings/videos of themselves playing their instrument.
+
 - As a user, I want to be able to specifically browse for bands with virtual tryouts so I can easily find them and apply.
+
 - As a guest, I want to be able to browse band profiles and use a “contact us” form to ask about their availability for gigs so that I can hire local bands to play events.
 </p>
 </details>
