@@ -3,7 +3,7 @@ package model;
 import java.util.List;
 import java.util.UUID;
 
-public class Band extends Client implements Sql2oBandDao {
+public class Band extends Client {
 
     //all of these should be serialized I think.
     private String name;
