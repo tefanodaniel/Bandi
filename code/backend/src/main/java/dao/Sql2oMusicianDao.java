@@ -7,7 +7,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
-import java.util.List;
+import java.util.*;
 
 public class Sql2oMusicianDao implements MusicianDao {
 
@@ -84,8 +84,27 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public List<Musician> readAll(String query) throws DaoException {
-        return null; // stub
+    public List<Musician> readAll(Map<String, String[]> query) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+            Set<String> keys = query.keySet();
+            Iterator<String> iter = keys.iterator();
+            String key = iter.next();
+            String filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+            if (query.size() > 1) {
+                while (iter.hasNext()) {
+                    String attribute = iter.next();
+                    String filter = query.get(attribute)[0];
+                    filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
+                            filter.toUpperCase() + "%'";
+                }
+            }
+            filterOn = filterOn + ";";
+
+            String sql = "SELECT * FROM Musicians WHERE " + filterOn;
+            return conn.createQuery(sql).executeAndFetch(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read musicians from the database by filters", ex);
+        }
     }
 
     @Override
