@@ -3,6 +3,7 @@ package api;
 import dao.MusicianDao;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import spark.QueryParamsMap;
 import util.Database;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;
@@ -10,10 +11,7 @@ import com.google.gson.GsonBuilder;
 import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
@@ -156,11 +154,17 @@ public class ApiServer {
             }
         });
 
-        // Get all musicians
+        // Get all musicians (with optional query parameters)
         get("/musicians", (req, res) -> {
-            // TODO: update to accept search terms as query parameters:
             try {
-                List<Musician> musicians = musicianDao.readAll();
+                List<Musician> musicians;
+                Map<String, String[]> query = req.queryMap().toMap();
+                if(query.size() > 0) {
+                    musicians = musicianDao.readAll(query);
+                }
+                else {
+                    musicians = musicianDao.readAll();
+                }
                 return gson.toJson(musicians);
             } catch (DaoException ex) {
                 throw new ApiError(ex.getMessage(), 500);

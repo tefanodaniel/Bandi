@@ -1,6 +1,9 @@
 package dao;
 import model.Musician;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import exceptions.DaoException;
 
 /**
@@ -57,7 +60,7 @@ public interface MusicianDao {
      * @return All Musicians retrieved.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    List<Musician> readAll(String query) throws DaoException;
+    List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
 
     /**
