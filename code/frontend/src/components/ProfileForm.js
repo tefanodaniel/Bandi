@@ -40,13 +40,17 @@ class CreateProfile extends React.Component {
       this.setState({
         instruments: newInstrumentList
       });
-      
+
     }
 
     handleSubmit(event) {
       const axios = require('axios')
+
+      const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
+      const url = isDev ? "http://localhost:4567/musicians" : "https://bandiscover-api.herokuapp.com/musicians";
+
       axios
-        .post('https://localhost:3000/musicians', {
+        .post(url, {
           name: this.state.name,
           location: this.state.location,
           instruments: this.state.instruments
