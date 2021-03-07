@@ -49,7 +49,7 @@ class CreateProfile extends React.Component {
         .post('https://localhost:3000/musicians', {
           name: this.state.name,
           location: this.state.location,
-          instruments: this.state.instruments,
+          instruments: this.state.instruments
         })
         .then(res => {
           console.log(`statusCode: ${res.statusCode}`)
