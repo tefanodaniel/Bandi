@@ -3,6 +3,7 @@ package api;
 import dao.MusicianDao;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import spark.QueryParamsMap;
 import util.Database;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;
@@ -10,10 +11,7 @@ import com.google.gson.GsonBuilder;
 import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
@@ -141,6 +139,38 @@ public class ApiServer {
             //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
         });
 
+        // Get musicians given the id
+        get("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = musicianDao.read(id);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // Get all musicians (with optional query parameters)
+        get("/musicians", (req, res) -> {
+            try {
+                List<Musician> musicians;
+                Map<String, String[]> query = req.queryMap().toMap();
+                if(query.size() > 0) {
+                    musicians = musicianDao.readAll(query);
+                }
+                else {
+                    musicians = musicianDao.readAll();
+                }
+                return gson.toJson(musicians);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // post musicians
         post("/musicians", (req, res) -> {
             try {
@@ -175,23 +205,28 @@ public class ApiServer {
                     throw new ApiError("musician ID does not match the resource identifier", 400);
                 }
 
+                String name = musician.getName();
+                String genre = musician.getGenre();
+                String instrument = musician.getInstrument();
+                String experience = musician.getExperience();
+                String location = musician.getLocation();
                 // Update specific fields:
                 boolean flag = false;
-                if (musician.getName() != null) {
+                if (name != null) {
                     flag = true;
-                    musician = musicianDao.updateName(musician.getId(), musician.getName());
-                } if (musician.getInstrument() != null) {
+                    musician = musicianDao.updateName(id, name);
+                } if (instrument != null) {
                     flag = true;
-                    musician = musicianDao.updateInstrument(musician.getId(), musician.getInstrument());
-                } if (musician.getGenre() != null) {
+                    musician = musicianDao.updateInstrument(id, instrument);
+                } if (genre != null) {
                     flag = true;
-                    musician = musicianDao.updateGenre(musician.getId(), musician.getGenre());
-                } if (musician.getExperience() != null) {
+                    musician = musicianDao.updateGenre(id, genre);
+                } if (experience != null) {
                     flag = true;
-                    musician = musicianDao.updateExperience(musician.getId(), musician.getExperience());
-                } if (musician.getLocation() != null) {
+                    musician = musicianDao.updateExperience(id, experience);
+                } if (location != null) {
                     flag = true;
-                    musician = musicianDao.updateLocation(musician.getId(), musician.getLocation());
+                    musician = musicianDao.updateLocation(id, location);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
@@ -202,6 +237,20 @@ public class ApiServer {
 
                 return gson.toJson(musician);
             } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        delete("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = musicianDao.delete(id);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });

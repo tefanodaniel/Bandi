@@ -43,9 +43,13 @@ Use Case: Creating a Profile
 #### What we have done
 1. Object-oriented Analysis and design to support the user-stories listed above (using UML). 
 2. Web Application design to support the user-stories listed above (using Wireframe). 
-3. Created basic API (without unit-testing) to service CRUD operations for `Musician`.  
-4. Created basic react-app that interfaces with API and contains - landing page, user-login, user-profile view. 
+3. Created basic API (without unit-testing) to service CRUD - Create, Read, Update and Delete operations for `Musician`.  
+4. Created basic react-app that interfaces with API and contains - landing page, user-login 
 5. Deployed both apps using Heroku. 
+
+#### In Progress
+Add this to the done list when finished.
+- user-profile view. (add to 4.)
 
 #### What we haven't done
 1. Basic API to service CRUD operations for `Band`.
