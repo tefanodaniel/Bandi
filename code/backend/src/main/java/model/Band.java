@@ -28,6 +28,7 @@ public class Band extends Client {
         this.capacity = capacity;
         this.members = members;
         this.id = new UUID();
+        
     }
 
     public void setName(String name) {
