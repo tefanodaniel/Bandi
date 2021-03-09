@@ -38,7 +38,7 @@ public class Sql2oBandDao implements BandDao {
                     .addParameter("genre", genre)
                     .addParameter("size", size)
                     .addParameter("capacity", capacity)
-                    .executeAndFecthcFirst(Band.class)
+                    .executeAndFetchFirst(Band.class)
         } catch(Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
@@ -87,25 +87,35 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     Band add(int id, Musician newMem) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to add new member", ex);
+        }
         return null;
     }
 
     @Override
     Band remove(int id, Musician member, int musID) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery()
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to remove member", ex);
+        }
         return null;
     }
 
     @Override
     Band delete(int id) throws DaoException {
-        String sql = "WITH deleted AS("
+        String sql = "WITH deleted AS(+"
                 +"DELETE FROM Bands WHERE id = :id RETURNING *"
-                + ") SELECTE * FROM deleted;";
+                + ") SELECTED * FROM deleted;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                     .addParameter("id", id)
                     .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to delete the Band", ex)
+            throw new DaoException("Unable to delete the Band", ex);
         }
     }
 }

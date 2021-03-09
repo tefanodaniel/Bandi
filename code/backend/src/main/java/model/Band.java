@@ -11,23 +11,23 @@ public class Band extends Client {
     private int size;
     private int capacity;
     private List<Musician> members;
-    private UUID id;
+    private String id;
 
 
-    public Band(String name, String genre) {
-        super();
+    public Band(String id, String name, String genre) {
+        super(id);
         this.name = name;
         this.genre = genre;
     }
 
-    public Band(String name, String genre, int size, int capacity, List<Musician> members) {
-        super();
+    public Band(String id, String name, String genre, int size, int capacity, List<Musician> members) {
+        super(id);
         this.name = name;
         this.genre = genre;
         this.size = size;
         this.capacity = capacity;
         this.members = members;
-        this.id = new UUID();
+        this.id = new UUID().toString();
         
     }
 
