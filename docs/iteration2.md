@@ -7,9 +7,7 @@ Team Lead - Stefano Tusa Lavieri
 ![]()
 
 # Wireframe & Use-case
-<img src="" width="600" height="400" />
-<img src="" width="600" height="400" />
-<img src="" width="600" height="400" />
+<img src="" width="10" height="10" />
 
 Use Case: Using Advanced Search 
 1. A user accessing the Bandi homepage lands on the Discover page, where they can see different tiles representing users and bands in a given area.
