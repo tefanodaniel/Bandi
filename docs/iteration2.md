@@ -4,7 +4,7 @@ Team Lead - Stefano Tusa Lavieri
 [Team Availability](https://www.when2meet.com/?11290451-mUIJw)
 
 # OO Design
-![]()
+![](assets/iteration2_UML.png)
 
 # Wireframe & Use-case
 <img src="" width="10" height="10" />
