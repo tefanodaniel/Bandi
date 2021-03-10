@@ -32,7 +32,7 @@ import javax.xml.crypto.Data;
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = false;
+    private static final boolean isLocalTest = true;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
@@ -106,6 +106,12 @@ public class ApiServer {
 
         // Gets user info following login
         get("/callback", (req, res) -> {
+            String error = req.queryParams("error");
+            if (error != null) { // SSO was canceled by user
+                res.redirect(frontend_url);
+                return null;
+            }
+
             // Use authorization code to get access token and refresh token
             String code = req.queryParams("code");
             AuthorizationCodeRequest auth_code_req =
