@@ -88,7 +88,9 @@ public class Sql2oBandDao implements BandDao {
     @Override
     Band add(int id, Musician newMem) throws DaoException {
         try (Connection conn = sql2o.open()) {
-
+            return conn.createQuery()
+                    //FIXME
+                    .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to add new member", ex);
         }
@@ -99,6 +101,8 @@ public class Sql2oBandDao implements BandDao {
     Band remove(int id, Musician member, int musID) throws DaoException {
         try (Connection conn = sql2o.open()) {
             return conn.createQuery()
+                    //FIXME
+                    .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to remove member", ex);
         }
