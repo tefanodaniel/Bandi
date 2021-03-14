@@ -1,4 +1,5 @@
 package dao;
+import model.Musician;
 import model.Band;
 import java.util.List;
 import exceptions.DaoException;
