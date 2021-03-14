@@ -6,7 +6,7 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 
 import queryString from 'query-string';
-import {findCookie, getFrontendURL, getURL} from "../utils/api";
+import {findCookie, getFrontendURL, getURL, logout} from "../utils/api";
 
 class Discover extends React.Component {
   constructor(props) {
@@ -28,6 +28,7 @@ class Discover extends React.Component {
 
             <header></header>
 			<Button onClick={() => { this.props.history.push('/profile');}}>My Profile</Button>
+			<Button onClick={() => { logout(); this.props.history.push('/');}}>Log Out</Button>
 
   			<Jumbotron>
   				<h3>Musicians</h3>

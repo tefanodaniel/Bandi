@@ -33,3 +33,7 @@ export function getBackendURL() {
           : "https://bandiscover-api.herokuapp.com";
   return url;
 }
+
+export function logout() {
+  document.cookie = "id=;expires=0";
+}
