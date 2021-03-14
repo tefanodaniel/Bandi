@@ -8,7 +8,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
-import java.util.list;
+import java.util.List;
 
 public class Sql2oBandDao implements BandDao {
 
@@ -25,8 +25,7 @@ public class Sql2oBandDao implements BandDao {
         this.sql2o = sql2o;
     }
 
-    @Override
-    public Band create(int id, String name, String genre, int size, int capacity) throws DaoException {
+    public Band create(String id, String name, String genre, int size, int capacity) throws DaoException {
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Bands(id, name, genre, size, capacity)" +
                 "VALUES(:id, :name, :genre, :size, :capacity) RETURNING *"
@@ -38,46 +37,68 @@ public class Sql2oBandDao implements BandDao {
                     .addParameter("genre", genre)
                     .addParameter("size", size)
                     .addParameter("capacity", capacity)
-                    .executeAndFetchFirst(Band.class)
+                    .executeAndFetchFirst(Band.class);
         } catch(Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
     }
 
     @Override
-    Band read(int id) throws DaoException {
+    public Band read(String id) throws DaoException {
         try (Connection conn = sql2o.open()) {
             return conn.createQuery("SELECT * FROM Bands WHERE id = :id;")
-                    .add Parameter("id", id)
+                    .addParameter("id", id)
                     .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read a course with id " + id, ex);
         }
-        return null;
     }
 
     @Override
-    List<Band> readAll() throws DaoException {
+    public Band create(String name, String genre, List<Musician> members) throws DaoException {
+        return null;
+    }
+
+    public List<Band> readAll() throws DaoException {
         try(Connection conn = sql2o.open()) {
-            return conn.createQuery("SELECT * FROM Bands;").executeAndFetch(Course.class);
+            return conn.createQuery("SELECT * FROM Bands;").executeAndFetch(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read bands form the database", ex);
         }
     }
 
     @Override
-    List<Band> readAll(String genreQuery) throws DaoException {
+    public List<Band> readAll(String genreQuery) throws DaoException {
         return null;
     }
 
     @Override
+    public Band update(String id, String name) throws DaoException {
+        return null;
+    }
+
+    @Override
+    public Band add(String id, Musician newMem) throws DaoException {
+        return null;
+    }
+
+    @Override
+    public Band remove(String id, Musician member, int musID) throws DaoException {
+        return null;
+    }
+
+    @Override
+    public Band delete(String id) throws DaoException {
+        return null;
+    }
+
     Band update(int id, String name) throws DaoException{
         String sql = "WITH updated AS ("
                 + "UPDATE Bands SET name = :name WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
-                    .addParamter("name", name)
+                    .addParameter("name", name)
                     .addParameter("id", id)
                     .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
@@ -85,31 +106,30 @@ public class Sql2oBandDao implements BandDao {
         }
     }
 
-    @Override
     Band add(int id, Musician newMem) throws DaoException {
+        /*
         try (Connection conn = sql2o.open()) {
             return conn.createQuery()
                     //FIXME
                     .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to add new member", ex);
-        }
+        }*/
         return null;
     }
 
-    @Override
     Band remove(int id, Musician member, int musID) throws DaoException {
+        /*
         try (Connection conn = sql2o.open()) {
             return conn.createQuery()
                     //FIXME
                     .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to remove member", ex);
-        }
+        }*/
         return null;
     }
 
-    @Override
     Band delete(int id) throws DaoException {
         String sql = "WITH deleted AS(+"
                 +"DELETE FROM Bands WHERE id = :id RETURNING *"
