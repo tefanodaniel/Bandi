@@ -1,6 +1,8 @@
 import React from 'react';
 import axios from "axios";
 import {getBackendURL, getFrontendURL} from "../utils/api";
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 class Profile extends React.Component {
     constructor(props) {
@@ -11,8 +13,6 @@ class Profile extends React.Component {
             bands: []
         }
     }
-
-    // get request functions here
 
     render() {
         var bandsURL = getBackendURL() + "/bands";
@@ -27,24 +27,47 @@ class Profile extends React.Component {
                     <h5 className="card-title">{band.name}</h5>
                     <h6 className="card-subtitle">{band.genre}</h6>
                     <p className="card-text"></p>
-                    <a href={frontendURL + "/profiles/" + band.name}>View Profile</a>
+                    <a href="">View Profile</a>
                 </div>
             </div>
         );
 
-        if (this.state.bands) {
+        if (this.state.bands && this.state.bands.length > 0) {
             return (
                 <div>
-                    <h3>Profile</h3>
+                    <h1>Profile</h1>
                     <button onClick={() => {
                         this.props.history.push('/');
                     }}>Back to Discover
                     </button>
-                    {bandsList}
+                    <Tabs>
+                        <TabList>
+                            <Tab>My Profile</Tab>
+                            <Tab>My Bands</Tab>
+                            <Tab>My Friends</Tab>
+                        </TabList>
+
+                        <TabPanel>
+
+                        </TabPanel>
+                        <TabPanel>
+                            {bandsList}
+                        </TabPanel>
+                        <TabPanel>
+
+                        </TabPanel>
+                    </Tabs>
                 </div>
             );
         } else {
-            return (<h1>Loading...</h1>);
+
+            return (
+                <div>
+                    <h1>Profile</h1>
+                    <h3>Loading...</h3>
+                </div>
+
+            );
         }
     }
 
