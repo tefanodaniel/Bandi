@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from 'js-cookie'
 
 export function loginWithSpotify() {
   //Test API call:
@@ -6,6 +7,7 @@ export function loginWithSpotify() {
   return axios.get('http://localhost:4567');
 }
 
+// manual cookie finder
 export function findCookie(cookieTitle) {
   var cookies = document.cookie.split(";");
   for (var j = 0; j < cookies.length; j++) {
@@ -35,5 +37,6 @@ export function getBackendURL() {
 }
 
 export function logout() {
-  document.cookie = "id=;expires=0";
+  //document.cookie = "id=;expires=0";
+  Cookies.remove('id');
 }

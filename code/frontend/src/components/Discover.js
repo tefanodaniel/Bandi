@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
+import Cookies from 'js-cookie'
 
 import queryString from 'query-string';
 import {findCookie, getFrontendURL, getURL, logout} from "../utils/api";
@@ -15,7 +16,8 @@ class Discover extends React.Component {
 
   render() {
     // Use cookie to see if logged in
-	let userID = findCookie("id");
+	//let userID = findCookie("id");
+	  let userID = Cookies.get('id');
 	if (!userID) {
 		return (<Redirect to="/signin"/>);
 	}
