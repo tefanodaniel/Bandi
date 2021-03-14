@@ -24,7 +24,7 @@ public interface BandDao {
      * @return the Band object read from the data source
      * @throws DaoException, a generic exception for CRUD operations
      */
-    Band read(int id) throws DaoException;
+    Band read(String id) throws DaoException;
 
     /**
      * Read all bands from the database.
@@ -51,7 +51,7 @@ public interface BandDao {
      * @return the updated Band object
      * @throws DaoException A generic exception for CRUD operations
      */
-    Band update(int id, String name) throws DaoException;
+    Band update(String id, String name) throws DaoException;
 
     /**
      * Add new Musician to the Band, given its ID.
@@ -61,7 +61,7 @@ public interface BandDao {
      * @return the updated Band object
      * @throws DaoException, A generic exception for CRUD operations
      */
-    Band add(int id, Musician newMem) throws DaoException;
+    Band add(String id, Musician newMem) throws DaoException;
 
     /**
      * Remove a Musician from a band, given the Band ID and Musician ID
@@ -71,7 +71,7 @@ public interface BandDao {
      * @param musID the unique identifier for each musician object
      * @throws DaoException, a generic exception for CRUD operations
      */
-    Band remove(int id, Musician member, int musID) throws DaoException;
+    Band remove(String id, Musician member, int musID) throws DaoException;
 
     /**
      * Delete a Band, given its offeringName
@@ -80,5 +80,5 @@ public interface BandDao {
      * @return the Band object deleted from the data source.
      * @throws DaoException, a generic exception for CRUD operations.
      */
-    Band delete(int id) throws DaoException;
+    Band delete(String id) throws DaoException;
 }
