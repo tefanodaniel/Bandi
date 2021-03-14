@@ -1,8 +1,9 @@
 package api;
 
-import dao.MusicianDao;
+import dao.*;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import model.Band;
 import spark.QueryParamsMap;
 import util.Database;
 import com.google.gson.JsonSyntaxException;
@@ -14,7 +15,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import dao.MusicianDao;
-import dao.Sql2oMusicianDao;
 import model.Musician;
 import org.sql2o.Sql2o;
 
@@ -32,7 +32,7 @@ import javax.xml.crypto.Data;
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = false;
+    private static final boolean isLocalTest = true;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
@@ -54,6 +54,7 @@ public class ApiServer {
         port(myPort);
         staticFiles.location("/public");
         MusicianDao musicianDao = getMusicianDao();
+        BandDao bandDao = getBandDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
@@ -263,6 +264,24 @@ public class ApiServer {
         });
 
         after((req, res) -> res.type("application/json"));
+
+        // Get all bands
+        get("/bands", (req, res) -> {
+            try {
+                List<Band> bands;
+                Map<String, String[]> query = req.queryMap().toMap();
+                if (query.size() > 0) {
+                    //bands = bandDao.readAll(query);
+                    bands = bandDao.readAll();
+                }
+                else {
+                    bands = bandDao.readAll();
+                }
+                return gson.toJson(bands);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
     }
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
@@ -272,5 +291,10 @@ public class ApiServer {
 //        musicians.add(musician);
 //        Database.createMusiciansTableWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
+    }
+
+    private static BandDao getBandDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oBandDao(sql2o);
     }
 }

@@ -36,6 +36,7 @@ public final class DataStore {
 
         List<Band> sample_bands = new ArrayList<>();
         sample_bands.add(new Band("11111fakeid","Pink Floyd", "Rock"));
+        sample_bands.add(new Band("2222222","Imagine Dragons", "Pop"));
         return sample_bands;
     }
 }

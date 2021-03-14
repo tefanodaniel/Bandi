@@ -12,7 +12,6 @@ public class Band extends Client {
     private int size;
     private int capacity;
     private List<Musician> members;
-    private String id;
 
     public Band(String id, String name, String genre) {
         super(id);
