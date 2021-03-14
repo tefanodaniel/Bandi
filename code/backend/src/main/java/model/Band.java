@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +27,6 @@ public class Band extends Client {
         this.size = size;
         this.capacity = capacity;
         this.members = members;
-        this.id = new UUID().toString();
-        
     }
 
     public void setName(String name) {
@@ -46,7 +45,7 @@ public class Band extends Client {
         return genre;
     }
 
-    public void setSize(String size) {
+    public void setSize(int size) {
         this.size = size;
     }
 
@@ -81,11 +80,9 @@ public class Band extends Client {
             return false;
         }
         Band band = (Band) o;
-        Collections.sort(members);
-        Collections.sort(band.members);
         return name.equals(band.name) && genre.equals(band.genre)
-                && size.equals(band.size) && capacity.equals(band.capacity)
-                && members.size() = band.members.size()
+                && (size == band.size) && (capacity== band.capacity)
+                && members.size() == band.members.size()
                 && members.equals(band.members);
     }
 

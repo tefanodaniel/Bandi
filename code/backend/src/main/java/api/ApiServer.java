@@ -132,8 +132,9 @@ public class ApiServer {
             String email = user.getEmail();
             String id = user.getId();
 
-            res.redirect(frontend_url);
+            // Must set cookie before redirect!
             res.cookie("id", id);
+            res.redirect(frontend_url);
 
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
