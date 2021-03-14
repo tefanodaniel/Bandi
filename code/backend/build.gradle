@@ -3,8 +3,7 @@ plugins {
     id "com.heroku.sdk.heroku-gradle" version "2.0.0"
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -32,7 +31,7 @@ test {
 
 jar {
     manifest {
-        attributes 'Main-Class' : 'HelloWorld'
+        attributes 'Main-Class' : 'api.ApiServer'
     }
     from {
         configurations.compileClasspath.collect{it.isDirectory() ? it : zipTree(it)}
@@ -40,8 +39,16 @@ jar {
 }
 
 heroku {
+    appName 'bandiscover-api'
     jdkVersion = 11
-    processTypes(web: "java -jar build/libs/project-g10-1.0-SNAPSHOT.jar")
+    processTypes(web: "java -jar build/libs/backend-1.0.jar")
 }
 
-
+task stage(type: Copy, dependsOn: ['clean', 'build']) {
+    from jar.archivePath
+    into project.rootDir
+    rename {
+        'backend-1.0.jar'
+    }
+}
+stage.mustRunAfter(clean)

@@ -1,6 +1,9 @@
 package dao;
 import model.Musician;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import exceptions.DaoException;
 
 /**
@@ -11,14 +14,27 @@ public interface MusicianDao {
     /**
      * Create a Musician.
      *
+     * @param id The musician id.
      * @param name The musician name.
      * @param genre The associated genre of music.
      * @param instrument The associated type of instrument
      * @param experience Self-declared level of expertise
+     * @param location The location of a musician.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String name, String genre, String instrument, String experience) throws DaoException;
+    Musician create(String id, String name, String genre, String instrument, String experience, String location) throws DaoException;
+
+    /**
+     * Create a Musician.
+     *
+     * @param id The musician id.
+     * @param name The musician name.
+     * @param genre The associated genre of music.
+     * @return The client object created.
+     * @throws DaoException A generic exception for CRUD operations.
+     */
+    Musician create(String id, String name, String genre) throws DaoException;
 
     /**
      * Read a Musician provided its offeringName.
@@ -27,7 +43,7 @@ public interface MusicianDao {
      * @return The Musician object read from the data source.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician read(int id) throws DaoException;
+    Musician read(String id) throws DaoException;
 
     /**
      * Read all Musicians from the database.
@@ -40,12 +56,11 @@ public interface MusicianDao {
     /**
      * Read all Musicians from the database with genre containing genreQuery.
      *
-     * @param genreQuery A search term.
+     * @param query A search term.
      * @return All Musicians retrieved.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    List<Musician> readAll(String genreQuery) throws DaoException;
-    // We might eventually want more readAll for appropriate filters. (like location/instrument).
+    List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
 
     /**
@@ -56,9 +71,15 @@ public interface MusicianDao {
      * @return The updated Musician object.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician update(int id, String name) throws DaoException;
-    // Need either multiple update functions for diff fields or
-    // a single update function where everything not provided is set to null.
+    Musician updateName(String id, String name) throws DaoException;
+
+    Musician updateGenre(String id, String name) throws DaoException;
+
+    Musician updateInstrument(String id, String name) throws DaoException;
+
+    Musician updateExperience(String id, String name) throws DaoException;
+
+    Musician updateLocation(String id, String name) throws DaoException;
 
     /**
      * Delete a Musician provided its offeringName.
@@ -67,5 +88,7 @@ public interface MusicianDao {
      * @return The Musician object deleted from the data source.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician delete(int id) throws DaoException;
+    Musician delete(String id) throws DaoException;
+
+
 }

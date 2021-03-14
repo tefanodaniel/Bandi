@@ -1,50 +1,43 @@
 package api;
 
+import dao.MusicianDao;
+import exceptions.ApiError;
+import exceptions.DaoException;
+import spark.QueryParamsMap;
+import util.Database;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import static spark.Spark.*;
-
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.*;
+import java.util.*;
+
+import dao.MusicianDao;
+import dao.Sql2oMusicianDao;
+import model.Musician;
+import org.sql2o.Sql2o;
 
 import com.wrapper.spotify.SpotifyApi;
 import com.wrapper.spotify.SpotifyHttpManager;
-import com.wrapper.spotify.exceptions.SpotifyWebApiException;
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
-import com.wrapper.spotify.model_objects.specification.Artist;
-import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
-import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopArtistsRequest;
-import org.apache.hc.core5.http.ParseException;
-import spark.ModelAndView;
-import spark.template.handlebars.HandlebarsTemplateEngine;
+import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
+
+
+import javax.xml.crypto.Data;
 
 public class ApiServer {
+
+    // flag for testing locally vs. deploying
+    private static final boolean isLocalTest = true;
+
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
-    // Client Secret for using Spotify API (should never be stored to GitHub)
+    // Client Secret for using Spotify API (should never push to VCS)
     private static final String client_secret = System.getenv("client_secret");
-    // redirect_uri
-    private static final URI redirect_uri =
-            SpotifyHttpManager.makeUri("http://localhost:4567/profile");
-    private static String code = "";
-    private static AuthorizationCodeRequest auth_code_req;
-    private static AuthorizationCodeCredentials auth_code_creds;
-
-    // Spotify API variable
-    private static final SpotifyApi spotifyApi = new SpotifyApi.Builder()
-            .setClientId(client_id)
-            .setClientSecret(client_secret)
-            .setRedirectUri(redirect_uri)
-            .build();
-
-    // uri request
-    private static final AuthorizationCodeUriRequest auth_code_uri_req =
-            spotifyApi.authorizationCodeUri()
-                    .scope("user-read-email,user-read-private,user-top-read")
-                    .show_dialog(true)
-                    .build();
 
     private static int getHerokuAssignedPort() {
         // Heroku stores port number as an environment variable
@@ -56,72 +49,227 @@ public class ApiServer {
         return 4567;
     }
 
-    private static Connection getConnection() throws URISyntaxException, SQLException {
-        // converting heroku database_url -> jdbc uri
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (databaseUrl == null) {
-            throw new URISyntaxException(databaseUrl, "DATABASE_URL is not set");
-        }
-
-        URI dbUri = new URI(databaseUrl);
-
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-                + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-
-        return DriverManager.getConnection(dbUrl, username, password);
-    }
-
-    public static void main(String[] args) throws SQLException {
-        port(getHerokuAssignedPort());
+    public static void main(String[] args) throws URISyntaxException {
+        int myPort = getHerokuAssignedPort();
+        port(myPort);
         staticFiles.location("/public");
+        MusicianDao musicianDao = getMusicianDao();
 
-        try (Connection conn = getConnection()) {
-            // simply testing if I can connect to the database.
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        exception(ApiError.class, (ex, req, res) -> {
+            // Handle the exception here
+            Map<String, String> map = Map.of("status", ex.getStatus() + "",
+                    "error", ex.getMessage());
+            res.body(gson.toJson(map));
+            res.status(ex.getStatus());
+            res.type("application/json");
+        });
 
-            String sql = "CREATE TABLE IF NOT EXISTS Musicians("
-                    + "id INT PRIMARY KEY,"
-                    + "name VARCHAR(30) NOT NULL,"
-                    + "genre VARCHAR(30) NOT NULL"
-                    + ");";
-            Statement st = conn.createStatement();
-            st.execute(sql);
-
-        } catch (URISyntaxException | SQLException e) {
-            e.printStackTrace();
+        // Set frontend and backend urls
+        String frontend_url;
+        String backend_url;
+        if (isLocalTest) {
+            frontend_url = "http://localhost:3000";
+            backend_url = "http://localhost:4567";
+        }
+        else {
+            frontend_url = "http://bandiscover.herokuapp.com";
+            backend_url = "http://bandiscover-api.herokuapp.com";
         }
 
-        // index.hbs
-        get("/", (req, res) -> {
+        // Set the redirect_uri from Spotify dialog
+        final URI redirect_uri =
+                SpotifyHttpManager.makeUri(backend_url + "/callback");
+
+        // Spotify API variable
+        final SpotifyApi spotifyApi = new SpotifyApi.Builder()
+                .setClientId(client_id)
+                .setClientSecret(client_secret)
+                .setRedirectUri(redirect_uri)
+                .build();
+
+        // authorization code uri request
+        final AuthorizationCodeUriRequest auth_code_uri_req =
+                spotifyApi.authorizationCodeUri()
+                        .scope("user-read-email,user-read-private,user-top-read")
+                        .show_dialog(true)
+                        .build();
+
+        // Redirects to Spotify login
+        get("/login", (req, res) -> {
             URI uri_for_code = auth_code_uri_req.execute();
-            res.redirect(uri_for_code.toString());
+            String uriString = uri_for_code.toString();
+            res.redirect(uriString);
+            return null;
+            //return new JSONObject("{\"link\": \""+uriString+"\"}");
+        });
 
-            return new ModelAndView(null, "index.hbs");
-        }, new HandlebarsTemplateEngine());
-
-        // profile.hbs
-        get("/profile", (req, res) -> {
-            code = req.queryParams("code");
-            auth_code_req = spotifyApi.authorizationCode(code).build();
-            auth_code_creds = auth_code_req.execute();
-
-            spotifyApi.setAccessToken(auth_code_creds.getAccessToken());
-            spotifyApi.setRefreshToken(auth_code_creds.getRefreshToken());
-
-            GetUsersTopArtistsRequest getUsersTopArtistsRequest =
-                    spotifyApi.getUsersTopArtists()
-                    .limit(10)
-                    .offset(0)
-                    .time_range("medium_term")
-                    .build();
-            final Paging<Artist> artistPaging = getUsersTopArtistsRequest.execute();
-            Artist [] artists = artistPaging.getItems();
-            for (Artist artist : artists) {
-                System.out.println(artist.getName());
+        // Gets user info following login
+        get("/callback", (req, res) -> {
+            String error = req.queryParams("error");
+            if (error != null) { // SSO was canceled by user
+                res.redirect(frontend_url);
+                return null;
             }
 
-            return new ModelAndView(null, "profile.hbs");
-        }, new HandlebarsTemplateEngine());
+            // Use authorization code to get access token and refresh token
+            String code = req.queryParams("code");
+            AuthorizationCodeRequest auth_code_req =
+                    spotifyApi.authorizationCode(code).build();
+            AuthorizationCodeCredentials auth_code_credentials =
+                    auth_code_req.execute();
+
+            // Set tokens in Spotify API Object
+            spotifyApi.setAccessToken(auth_code_credentials.getAccessToken());
+            spotifyApi.setRefreshToken(auth_code_credentials.getRefreshToken());
+
+            // get current user's info
+            final GetCurrentUsersProfileRequest getCurrentUser =
+                    spotifyApi.getCurrentUsersProfile()
+                    .build();
+            final User user = getCurrentUser.execute();
+            String name = user.getDisplayName();
+            String email = user.getEmail();
+            String id = user.getId();
+
+            res.redirect(frontend_url + "/?name="
+                    + name + "&email=" + email + "&id=" + id);
+
+            // Create user in database if not already existent
+            Musician musician = musicianDao.read(id);
+            if (musician == null) { // user has not been added to database yet
+                musicianDao.create(id, name, "unknown genre");
+            }
+
+            return null;
+            //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
+        });
+
+        // Get musicians given the id
+        get("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = musicianDao.read(id);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // Get all musicians (with optional query parameters)
+        get("/musicians", (req, res) -> {
+            try {
+                List<Musician> musicians;
+                Map<String, String[]> query = req.queryMap().toMap();
+                if(query.size() > 0) {
+                    musicians = musicianDao.readAll(query);
+                }
+                else {
+                    musicians = musicianDao.readAll();
+                }
+                return gson.toJson(musicians);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // post musicians
+        post("/musicians", (req, res) -> {
+            try {
+                Musician musician = gson.fromJson(req.body(), Musician.class);
+                //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
+                String instrument = musician.getInstrument();
+                String experience = musician.getExperience();
+                String location = musician.getLocation();
+                if (instrument == null) { instrument = "NULL"; }
+                if (experience == null) { experience = "NULL"; }
+                if (location == null) { location = "NULL"; }
+
+                musicianDao.create(musician.getId(), musician.getName(), musician.getGenre(),
+                        instrument, experience, location);
+
+                res.status(201);
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        put("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = gson.fromJson(req.body(), Musician.class);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                if (! (musician.getId()).equals(id)) {
+                    throw new ApiError("musician ID does not match the resource identifier", 400);
+                }
+
+                String name = musician.getName();
+                String genre = musician.getGenre();
+                String instrument = musician.getInstrument();
+                String experience = musician.getExperience();
+                String location = musician.getLocation();
+                // Update specific fields:
+                boolean flag = false;
+                if (name != null) {
+                    flag = true;
+                    musician = musicianDao.updateName(id, name);
+                } if (instrument != null) {
+                    flag = true;
+                    musician = musicianDao.updateInstrument(id, instrument);
+                } if (genre != null) {
+                    flag = true;
+                    musician = musicianDao.updateGenre(id, genre);
+                } if (experience != null) {
+                    flag = true;
+                    musician = musicianDao.updateExperience(id, experience);
+                } if (location != null) {
+                    flag = true;
+                    musician = musicianDao.updateLocation(id, location);
+                } if (!flag) {
+                    throw new ApiError("Nothing to update", 400);
+                }
+
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                return gson.toJson(musician);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        delete("/musicians/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Musician musician = musicianDao.delete(id);
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        after((req, res) -> res.type("application/json"));
+    }
+
+    private static MusicianDao getMusicianDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+//        Musician musician = new Musician("1", "sample name", "sample genre");
+//        List<Musician> musicians = new ArrayList<>();
+//        musicians.add(musician);
+//        Database.createMusiciansTableWithSampleData(sql2o, musicians);
+        return new Sql2oMusicianDao(sql2o);
     }
 }

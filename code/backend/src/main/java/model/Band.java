@@ -13,7 +13,6 @@ public class Band extends Client {
     private List<Musician> members;
     private String id;
 
-
     public Band(String id, String name, String genre) {
         super(id);
         this.name = name;
