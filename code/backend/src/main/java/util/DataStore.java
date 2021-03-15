@@ -34,14 +34,12 @@ public final class DataStore {
      */
     public static List<Band> sampleBands() {
         List<String> members = new ArrayList<>();
-        members.add("fakeid1");
-        members.add("fakeid2");
+        members.add("id1");
+        members.add("id2");
 
         List<Band> sample_bands = new ArrayList<>();
-        sample_bands.add(new Band("fake_band_id1","Pink Floyd",
-                "Rock", 2, 2, members));
-        sample_bands.add(new Band("fake_band_id2","Imagine Dragons",
-                "Pop", 2, 2, members));
+        sample_bands.add(new Band("id1","Pink Floyd", "Rock", 2, 2, members));
+        sample_bands.add(new Band("id2","Imagine Dragons","Pop", 2, 2, members));
         return sample_bands;
     }
 }

@@ -32,10 +32,10 @@ public class Band extends Client {
     }
 
     private void setMemberString() {
-        // '{"id1","id2"}'
+        //   Resulting text should be of form: '{\"id1\",\"id2\"}'
         String memberString = "\'{";
         for (String memberID : memberIDs) {
-            memberString += '\"' + memberID + '\"' + ",";
+            memberString += "\\\"" + memberID + "\\\",";
         }
         members = memberString.substring(0,
                 memberString.length() - 1) + "}\'";

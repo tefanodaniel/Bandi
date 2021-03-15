@@ -3,6 +3,7 @@ package util;
 import model.Band;
 import model.Musician;
 import org.sql2o.Connection;
+import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
@@ -36,15 +37,7 @@ public final class Database {
     public static void main(String[] args) throws URISyntaxException {
         Sql2o sql2o = getSql2o();
         createMusiciansTableWithSampleData(sql2o, DataStore.sampleMusicians());
-        //createBandsTableWithSampleData(sql2o, DataStore.sampleBands());
-
-        // Test band toString, create bands not working
-        List<String> members = new ArrayList<>();
-        members.add("fakeid1");
-        members.add("fakeid2");
-        Band band = new Band("fake_band_id1","Pink Floyd",
-                "Rock", 2, 2, members);
-        System.out.println(band.getMemberString());
+        createBandsTableWithSampleData(sql2o, DataStore.sampleBands());
     }
 
     /**
@@ -122,18 +115,21 @@ public final class Database {
             conn.createQuery(sql).executeUpdate();
 
             sql = "INSERT INTO Bands(id, name, genre, size, capacity, members) VALUES(:id, :name, " +
-                    ":genre, :size, :capacity, :members);";
+                    ":genre, :size, :capacity, %s);";
+
             for (Band band : sampleBands) {
-                conn.createQuery(sql)
+                String sql_with_id = String.format(sql, band.getMemberString());
+
+                conn.createQuery(sql_with_id)
                         .addParameter("id", band.getId())
                         .addParameter("name", band.getName())
                         .addParameter("genre", band.getGenre())
                         .addParameter("size", band.getSize())
                         .addParameter("capacity", band.getCapacity())
-                        .addParameter("members", band.getMemberString())
-                        //.executeAndFetchFirst(Band.class);
                         .executeUpdate();
             }
+
+
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
         }
