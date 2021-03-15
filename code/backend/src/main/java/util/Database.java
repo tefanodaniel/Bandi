@@ -105,11 +105,13 @@ public final class Database {
                     + "name VARCHAR(30) NOT NULL,"
                     + "genre VARCHAR(30) NOT NULL,"
                     + "size INTEGER,"
-                    + "capacity INTEGER"
+                    + "capacity INTEGER,"
+                    + "members text[]"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            sql = "INSERT INTO Bands(id, name, genre) VALUES(:id, :name, :genre);";
+            sql = "INSERT INTO Bands(id, name, genre, size, capacity, members) VALUES(:id, :name, " +
+                    ":genre, :size, :capacity, :members);";
             for (Band band : sampleBands) {
                 conn.createQuery(sql).bind(band).executeUpdate();
             }

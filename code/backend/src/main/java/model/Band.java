@@ -11,15 +11,9 @@ public class Band extends Client {
     private String genre;
     private int size;
     private int capacity;
-    private List<Musician> members;
+    private List<String> members;
 
-    public Band(String id, String name, String genre) {
-        super(id);
-        this.name = name;
-        this.genre = genre;
-    }
-
-    public Band(String id, String name, String genre, int size, int capacity, List<Musician> members) {
+    public Band(String id, String name, String genre, int size, int capacity, List<String> members) {
         super(id);
         this.name = name;
         this.genre = genre;
@@ -60,13 +54,13 @@ public class Band extends Client {
         return capacity;
     }
 
-    public List<Musician> getMembers () {
+    public List<String> getMembers () {
         return members;
     }
 
     public void setMembers (Musician member) {
         if (size != capacity) {
-            members.add(member);
+            members.add(member.getId());
         }
     }
 
@@ -87,11 +81,19 @@ public class Band extends Client {
 
     @Override
     public String toString () {
+        // '{"id1","id2"}'
+        String memberString = "\'{";
+        for (String memberID : members) {
+            memberString += memberID + ",";
+        }
+        String memberIDs = memberString.substring(0,
+                memberString.length() - 1) + "}\'";
+
         return "Band {" + "name =' "
                 + name
                 + '\'' + ", genre = '" + genre
                 + '\'' + ", size = '" + size + '\''
                 + ", capacity = '" + capacity + '\'' +
-                ", members = '" + members + '\'' + '}';
+                ", members = " + memberIDs + '}';
     }
 }

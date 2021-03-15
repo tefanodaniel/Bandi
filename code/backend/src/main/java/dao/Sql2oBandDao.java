@@ -8,7 +8,10 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Sql2oBandDao implements BandDao {
 
@@ -25,10 +28,12 @@ public class Sql2oBandDao implements BandDao {
         this.sql2o = sql2o;
     }
 
-    public Band create(String id, String name, String genre, int size, int capacity) throws DaoException {
+    @Override
+    public Band create(String id, String name, String genre,
+                       int size, int capacity, List<String> members) throws DaoException {
         String sql = "WITH inserted AS ("
-                + "INSERT INTO Bands(id, name, genre, size, capacity)" +
-                "VALUES(:id, :name, :genre, :size, :capacity) RETURNING *"
+                + "INSERT INTO Bands(id, name, genre, size, capacity, members)" +
+                "VALUES(:id, :name, :genre, :size, :capacity, :members) RETURNING *"
                 + ") SELECT * FROM inserted;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
@@ -37,6 +42,7 @@ public class Sql2oBandDao implements BandDao {
                     .addParameter("genre", genre)
                     .addParameter("size", size)
                     .addParameter("capacity", capacity)
+                    .addParameter("members", members)
                     .executeAndFetchFirst(Band.class);
         } catch(Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
@@ -54,11 +60,6 @@ public class Sql2oBandDao implements BandDao {
         }
     }
 
-    @Override
-    public Band create(String name, String genre, List<Musician> members) throws DaoException {
-        return null;
-    }
-
     public List<Band> readAll() throws DaoException {
         try(Connection conn = sql2o.open()) {
             return conn.createQuery("SELECT * FROM Bands;").executeAndFetch(Band.class);
@@ -68,31 +69,31 @@ public class Sql2oBandDao implements BandDao {
     }
 
     @Override
-    public List<Band> readAll(String genreQuery) throws DaoException {
-        return null;
+    public List<Band> readAll(Map<String, String[]> query) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+            Set<String> keys = query.keySet();
+            Iterator<String> iter = keys.iterator();
+            String key = iter.next();
+            String filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+            if (query.size() > 1) {
+                while (iter.hasNext()) {
+                    String attribute = iter.next();
+                    String filter = query.get(attribute)[0];
+                    filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
+                            filter.toUpperCase() + "%'";
+                }
+            }
+            filterOn = filterOn + ";";
+
+            String sql = "SELECT * FROM Bands WHERE " + filterOn;
+            return conn.createQuery(sql).executeAndFetch(Band.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read bands from the database by filters", ex);
+        }
     }
 
     @Override
-    public Band update(String id, String name) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public Band add(String id, Musician newMem) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public Band remove(String id, Musician member, int musID) throws DaoException {
-        return null;
-    }
-
-    @Override
-    public Band delete(String id) throws DaoException {
-        return null;
-    }
-
-    Band update(int id, String name) throws DaoException{
+    public Band update(String id, String name) throws DaoException{
         String sql = "WITH updated AS ("
                 + "UPDATE Bands SET name = :name WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -106,7 +107,8 @@ public class Sql2oBandDao implements BandDao {
         }
     }
 
-    Band add(int id, Musician newMem) throws DaoException {
+    @Override
+    public Band add(String id, String musID) throws DaoException {
         /*
         try (Connection conn = sql2o.open()) {
             return conn.createQuery()
@@ -118,7 +120,8 @@ public class Sql2oBandDao implements BandDao {
         return null;
     }
 
-    Band remove(int id, Musician member, int musID) throws DaoException {
+    @Override
+    public Band remove(String id, String musID) throws DaoException {
         /*
         try (Connection conn = sql2o.open()) {
             return conn.createQuery()
@@ -130,7 +133,8 @@ public class Sql2oBandDao implements BandDao {
         return null;
     }
 
-    Band delete(int id) throws DaoException {
+    @Override
+    public Band delete(String id) throws DaoException {
         String sql = "WITH deleted AS(+"
                 +"DELETE FROM Bands WHERE id = :id RETURNING *"
                 + ") SELECTED * FROM deleted;";
