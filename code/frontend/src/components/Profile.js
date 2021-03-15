@@ -3,6 +3,7 @@ import axios from "axios";
 import {getBackendURL, getFrontendURL} from "../utils/api";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import Button from "react-bootstrap/Button";
 
 class Profile extends React.Component {
     constructor(props) {
@@ -27,7 +28,7 @@ class Profile extends React.Component {
                     <h5 className="card-title">{band.name}</h5>
                     <h6 className="card-subtitle">{band.genre}</h6>
                     <p className="card-text"></p>
-                    <a href="">View Profile</a>
+                    <Button onClick={() => { this.props.history.push('/band');}}>View More</Button>
                 </div>
             </div>
         );
@@ -44,17 +45,14 @@ class Profile extends React.Component {
                         <TabList>
                             <Tab>My Profile</Tab>
                             <Tab>My Bands</Tab>
-                            <Tab>My Friends</Tab>
                         </TabList>
 
                         <TabPanel>
 
                         </TabPanel>
+
                         <TabPanel>
                             {bandsList}
-                        </TabPanel>
-                        <TabPanel>
-
                         </TabPanel>
                     </Tabs>
                 </div>

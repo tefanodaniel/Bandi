@@ -33,16 +33,18 @@ public class Sql2oBandDao implements BandDao {
                        int size, int capacity, List<String> members) throws DaoException {
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Bands(id, name, genre, size, capacity, members)" +
-                "VALUES(:id, :name, :genre, :size, :capacity, :members) RETURNING *"
+                "VALUES(:id, :name, :genre, :size, :capacity, %s) RETURNING *"
                 + ") SELECT * FROM inserted;";
         try (Connection conn = sql2o.open()) {
+            Band band = new Band(id, name, genre, size, capacity, members);
+            String sql_with_id = String.format(sql, band.getMemberString());
+
             return conn.createQuery(sql)
                     .addParameter("id", id)
                     .addParameter("name", name)
                     .addParameter("genre", genre)
                     .addParameter("size", size)
                     .addParameter("capacity", capacity)
-                    .addParameter("members", members)
                     .executeAndFetchFirst(Band.class);
         } catch(Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
@@ -52,19 +54,19 @@ public class Sql2oBandDao implements BandDao {
     @Override
     public Band read(String id) throws DaoException {
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery("SELECT * FROM Bands WHERE id = :id;")
+            return conn.createQuery("SELECT id, name, genre, size, capacity FROM Bands WHERE id = :id;")
                     .addParameter("id", id)
                     .executeAndFetchFirst(Band.class);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to read a course with id " + id, ex);
+            throw new DaoException("Unable to read a Band with id " + id, ex);
         }
     }
 
     public List<Band> readAll() throws DaoException {
         try(Connection conn = sql2o.open()) {
-            return conn.createQuery("SELECT * FROM Bands;").executeAndFetch(Band.class);
+            return conn.createQuery("SELECT id, name, genre, size, capacity FROM Bands;").executeAndFetch(Band.class);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to read bands form the database", ex);
+            throw new DaoException("Unable to read bands from the database", ex);
         }
     }
 
@@ -74,18 +76,24 @@ public class Sql2oBandDao implements BandDao {
             Set<String> keys = query.keySet();
             Iterator<String> iter = keys.iterator();
             String key = iter.next();
-            String filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
-            if (query.size() > 1) {
-                while (iter.hasNext()) {
-                    String attribute = iter.next();
-                    String filter = query.get(attribute)[0];
-                    filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
-                            filter.toUpperCase() + "%'";
-                }
+            String filterOn;
+            if (key.equals("members")) {
+                filterOn = "'\"" + query.get(key)[0] + "\"'" + " = ANY (" + key + ");";
             }
-            filterOn = filterOn + ";";
+            else {
+                filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+                if (query.size() > 1) {
+                    while (iter.hasNext()) {
+                        String attribute = iter.next();
+                        String filter = query.get(attribute)[0];
+                        filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
+                                filter.toUpperCase() + "%'";
+                    }
+                }
+                filterOn = filterOn + ";";
+            }
+            String sql = "SELECT id, name, genre, size, capacity FROM Bands WHERE " + filterOn;
 
-            String sql = "SELECT * FROM Bands WHERE " + filterOn;
             return conn.createQuery(sql).executeAndFetch(Band.class);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read bands from the database by filters", ex);

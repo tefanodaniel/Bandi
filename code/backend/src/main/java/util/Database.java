@@ -105,12 +105,13 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS Bands;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Bands("
-                    + "id VARCHAR(30) PRIMARY KEY,"
+                    + "id VARCHAR(30) NOT NULL,"
                     + "name VARCHAR(30) NOT NULL,"
                     + "genre VARCHAR(30) NOT NULL,"
                     + "size INTEGER,"
                     + "capacity INTEGER,"
-                    + "members TEXT []"
+                    + "members TEXT [],"
+                    + "PRIMARY KEY (id)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 

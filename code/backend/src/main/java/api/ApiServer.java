@@ -201,6 +201,7 @@ public class ApiServer {
             }
         });
 
+        // put musicians
         put("/musicians/:id", (req, res) -> {
             try {
                 String id = req.params("id");
@@ -249,6 +250,7 @@ public class ApiServer {
             }
         });
 
+        // delete musicians
         delete("/musicians/:id", (req, res) -> {
             try {
                 String id = req.params("id");
@@ -263,16 +265,14 @@ public class ApiServer {
             }
         });
 
-        after((req, res) -> res.type("application/json"));
-
-        // Get all bands
+        // Get all bands (optional query parameters)
+        // if searching for id, only pass 1 parameter
         get("/bands", (req, res) -> {
             try {
                 List<Band> bands;
                 Map<String, String[]> query = req.queryMap().toMap();
                 if (query.size() > 0) {
-                    //bands = bandDao.readAll(query);
-                    bands = bandDao.readAll();
+                    bands = bandDao.readAll(query);
                 }
                 else {
                     bands = bandDao.readAll();
@@ -282,6 +282,23 @@ public class ApiServer {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
+
+        // Get band given the id
+        get("/bands/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Band band = bandDao.read(id);
+                if (band == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(band);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        after((req, res) -> res.type("application/json"));
     }
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
