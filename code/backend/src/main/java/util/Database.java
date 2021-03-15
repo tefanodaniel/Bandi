@@ -8,6 +8,7 @@ import org.sql2o.Sql2oException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,15 @@ public final class Database {
     public static void main(String[] args) throws URISyntaxException {
         Sql2o sql2o = getSql2o();
         createMusiciansTableWithSampleData(sql2o, DataStore.sampleMusicians());
-        createBandsTableWithSampleData(sql2o, DataStore.sampleBands());
+        //createBandsTableWithSampleData(sql2o, DataStore.sampleBands());
+
+        // Test band toString, create bands not working
+        List<String> members = new ArrayList<>();
+        members.add("fakeid1");
+        members.add("fakeid2");
+        Band band = new Band("fake_band_id1","Pink Floyd",
+                "Rock", 2, 2, members);
+        System.out.println(band.toString());
     }
 
     /**
@@ -106,7 +115,7 @@ public final class Database {
                     + "genre VARCHAR(30) NOT NULL,"
                     + "size INTEGER,"
                     + "capacity INTEGER,"
-                    + "members text[]"
+                    + "members TEXT []"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 

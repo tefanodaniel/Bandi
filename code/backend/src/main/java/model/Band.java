@@ -11,7 +11,9 @@ public class Band extends Client {
     private String genre;
     private int size;
     private int capacity;
-    private List<String> members;
+
+    private List<String> memberIDs;
+    private String members;
 
     public Band(String id, String name, String genre, int size, int capacity, List<String> members) {
         super(id);
@@ -19,7 +21,19 @@ public class Band extends Client {
         this.genre = genre;
         this.size = size;
         this.capacity = capacity;
-        this.members = members;
+
+        this.memberIDs = members;
+        setMemberString();
+    }
+
+    private void setMemberString() {
+        // {"id1","id2"}
+        String memberString = "{";
+        for (String memberID : memberIDs) {
+            memberString += '\"' + memberID + '\"' + ",";
+        }
+        members = memberString.substring(0,
+                memberString.length() - 1) + "}";
     }
 
     public void setName(String name) {
@@ -55,13 +69,14 @@ public class Band extends Client {
     }
 
     public List<String> getMembers () {
-        return members;
+        return memberIDs;
     }
 
     public void setMembers (Musician member) {
         if (size != capacity) {
-            members.add(member.getId());
+            memberIDs.add(member.getId());
         }
+        setMemberString();
     }
 
     @Override
@@ -75,25 +90,18 @@ public class Band extends Client {
         Band band = (Band) o;
         return name.equals(band.name) && genre.equals(band.genre)
                 && (size == band.size) && (capacity== band.capacity)
-                && members.size() == band.members.size()
+                && memberIDs.size() == band.memberIDs.size()
                 && members.equals(band.members);
     }
 
     @Override
     public String toString () {
-        // '{"id1","id2"}'
-        String memberString = "\'{";
-        for (String memberID : members) {
-            memberString += memberID + ",";
-        }
-        String memberIDs = memberString.substring(0,
-                memberString.length() - 1) + "}\'";
 
         return "Band {" + "name =' "
                 + name
                 + '\'' + ", genre = '" + genre
                 + '\'' + ", size = '" + size + '\''
                 + ", capacity = '" + capacity + '\'' +
-                ", members = " + memberIDs + '}';
+                ", members = \'" + members + '\'' + '}';
     }
 }
