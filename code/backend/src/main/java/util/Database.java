@@ -1,13 +1,18 @@
 package util;
 
+import model.Band;
 import model.Musician;
 import org.sql2o.Connection;
+import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 
 /**
  * A utility class with methods to establish JDBC connection, set schemas, etc.
@@ -32,6 +37,7 @@ public final class Database {
     public static void main(String[] args) throws URISyntaxException {
         Sql2o sql2o = getSql2o();
         createMusiciansTableWithSampleData(sql2o, DataStore.sampleMusicians());
+        createBandsTableWithSampleData(sql2o, DataStore.sampleBands());
     }
 
     /**
@@ -45,7 +51,7 @@ public final class Database {
     public static Sql2o getSql2o() throws URISyntaxException, Sql2oException {
         String databaseUrl = System.getenv("DATABASE_URL");
         if (USE_TEST_DATABASE) {
-            databaseUrl = System.getenv("TEST_DATABASE_URL"); // we need a new test_database_url
+            databaseUrl = System.getenv("TEST_DATABASE_URL");
         }
         URI dbUri = new URI(databaseUrl);
 
@@ -82,6 +88,49 @@ public final class Database {
             for (Musician Musician : samples) {
                 conn.createQuery(sql).bind(Musician).executeUpdate();
             }
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+    /**
+     * Create Bands table schema and add sample bands to it.
+     *
+     * @param sql2o a Sql2o object connected to the database to be used in this application.
+     * @param sampleBands a list of sample bands
+     * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
+     */
+    private static void createBandsTableWithSampleData(Sql2o sql2o, List<Band> sampleBands) {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS Bands;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS Bands("
+                    + "id VARCHAR(30) NOT NULL,"
+                    + "name VARCHAR(30) NOT NULL,"
+                    + "genre VARCHAR(30) NOT NULL,"
+                    + "size INTEGER,"
+                    + "capacity INTEGER,"
+                    + "members TEXT [],"
+                    + "PRIMARY KEY (id)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "INSERT INTO Bands(id, name, genre, size, capacity, members) VALUES(:id, :name, " +
+                    ":genre, :size, :capacity, %s);";
+
+            for (Band band : sampleBands) {
+                String sql_with_id = String.format(sql, band.getMemberString());
+
+                conn.createQuery(sql_with_id)
+                        .addParameter("id", band.getId())
+                        .addParameter("name", band.getName())
+                        .addParameter("genre", band.getGenre())
+                        .addParameter("size", band.getSize())
+                        .addParameter("capacity", band.getCapacity())
+                        .executeUpdate();
+            }
+
+
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
         }
