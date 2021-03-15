@@ -11,9 +11,10 @@ public class Band extends Client {
     private String genre;
     private int size;
     private int capacity;
+    private String members;
 
     private List<String> memberIDs;
-    private String members;
+
 
     public Band(String id, String name, String genre, int size, int capacity, List<String> members) {
         super(id);
@@ -26,14 +27,18 @@ public class Band extends Client {
         setMemberString();
     }
 
+    public String getMemberString() {
+        return this.members;
+    }
+
     private void setMemberString() {
-        // {"id1","id2"}
-        String memberString = "{";
+        // '{"id1","id2"}'
+        String memberString = "\'{";
         for (String memberID : memberIDs) {
             memberString += '\"' + memberID + '\"' + ",";
         }
         members = memberString.substring(0,
-                memberString.length() - 1) + "}";
+                memberString.length() - 1) + "}\'";
     }
 
     public void setName(String name) {
@@ -102,6 +107,6 @@ public class Band extends Client {
                 + '\'' + ", genre = '" + genre
                 + '\'' + ", size = '" + size + '\''
                 + ", capacity = '" + capacity + '\'' +
-                ", members = \'" + members + '\'' + '}';
+                ", members = " + members + '}';
     }
 }

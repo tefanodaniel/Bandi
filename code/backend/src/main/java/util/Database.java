@@ -8,8 +8,10 @@ import org.sql2o.Sql2oException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 
 /**
  * A utility class with methods to establish JDBC connection, set schemas, etc.
@@ -42,7 +44,7 @@ public final class Database {
         members.add("fakeid2");
         Band band = new Band("fake_band_id1","Pink Floyd",
                 "Rock", 2, 2, members);
-        System.out.println(band.toString());
+        System.out.println(band.getMemberString());
     }
 
     /**
@@ -122,7 +124,15 @@ public final class Database {
             sql = "INSERT INTO Bands(id, name, genre, size, capacity, members) VALUES(:id, :name, " +
                     ":genre, :size, :capacity, :members);";
             for (Band band : sampleBands) {
-                conn.createQuery(sql).bind(band).executeUpdate();
+                conn.createQuery(sql)
+                        .addParameter("id", band.getId())
+                        .addParameter("name", band.getName())
+                        .addParameter("genre", band.getGenre())
+                        .addParameter("size", band.getSize())
+                        .addParameter("capacity", band.getCapacity())
+                        .addParameter("members", band.getMemberString())
+                        //.executeAndFetchFirst(Band.class);
+                        .executeUpdate();
             }
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
