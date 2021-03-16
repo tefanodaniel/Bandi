@@ -2,6 +2,7 @@
 Team Lead - Stefano Tusa Lavieri
 
 [Team Availability](https://www.when2meet.com/?11290451-mUIJw)
+[Team Availability Week 2](https://www.when2meet.com/?11359694-vE2hQ)
 
 # OO Design
 ![](assets/Iteration2_UML.png)
