@@ -28,7 +28,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
                            String experience, String location) throws DaoException {
-        // TODO: re-implement?
+        // TODO: re-implement? Yes
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Musicians(id, name, experience, location) " +
                 "VALUES(:id, :name, :experience, :location) RETURNING *"
@@ -47,7 +47,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name) throws DaoException {
-        // TODO: re-implement?
+        // TODO: re-implement? I don't think so
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Musicians(id, name) " +
                 "VALUES(:id, :name) RETURNING *"
@@ -123,7 +123,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public List<Musician> readAll(Map<String, String[]> query) throws DaoException {
-        // TODO: re-implement?
+        // TODO: re-implement? Yes
         try (Connection conn = sql2o.open()) {
             Set<String> keys = query.keySet();
             Iterator<String> iter = keys.iterator();
@@ -148,7 +148,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateName(String id, String name) throws DaoException {
-        // TODO: re-implement?
+        // TODO: re-implement? No -- DONE
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET name = :name WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -164,7 +164,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateGenres(String id, Set<String> genres) throws DaoException {
-        // TODO: re-implement
+        // TODO: re-implement? Yes
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET genre = :genre WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -180,7 +180,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateInstruments(String id, Set<String> instruments) throws DaoException {
-        // TODO: re-implement
+        // TODO: re-implement? Yes
         String sql = "WITH updated AS ("
                 + "UPDATE Musicians SET instrument = :instrument WHERE id = :id RETURNING *"
                 + ") SELECT * FROM updated;";
@@ -228,7 +228,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician delete(String id) throws DaoException {
-        // TODO: re-implement?
+        // TODO: re-implement? Possibly. Need to see about cascading deletes
         String sql = "WITH deleted AS ("
                 + "DELETE FROM Musicians WHERE id = :id RETURNING *"
                 + ") SELECT * FROM deleted;";
