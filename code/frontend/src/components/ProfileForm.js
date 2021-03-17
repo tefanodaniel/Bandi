@@ -2,9 +2,9 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
+import Cookies from "js-cookie";
 
-
-class CreateProfile extends React.Component {
+class EditProfile extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -51,6 +51,7 @@ class CreateProfile extends React.Component {
 
       axios
         .post(url, {
+          id : Cookies.get('id'),
           name: this.state.name,
           location: this.state.location,
           instruments: this.state.instruments
@@ -70,7 +71,8 @@ class CreateProfile extends React.Component {
       return (
         <div>
         <div className="profile">
-          <h1>Welcome! Let's get you set up.</h1>
+          <h1>Edit your profile here:</h1>
+
           <Form onSubmit={this.handleSubmit}>
             <Form.Group controlId="profileForm.name">
               <Form.Label>Name</Form.Label>
@@ -92,21 +94,22 @@ class CreateProfile extends React.Component {
               <Form.Check inline name="drums" label="Drums" type="checkbox" onChange={this.handleInstrumentSelection}/>
               <Form.Check inline name="vocals" label="Vocals" type="checkbox" onChange={this.handleInstrumentSelection}/>
             </FormGroup>
-            <Form.Group>
-              <Form.File id="profileForm.profilePicture" label="Upload a profile picture" />
-            </Form.Group>
+
             <Button variant="primary" type="submit">
               Submit
             </Button>
           </Form>
         </div>
-        <h2> Testing block </h2>
+
+        </div>
+      )
+      /*
+              <h2> Testing block </h2>
         <p>{this.state.name}</p>
         <p>{this.state.location}</p>
         <p>{this.state.instruments}</p>
-        </div>
-      )
+       */
     }
   }
 
-  export default CreateProfile;
+  export default EditProfile;
