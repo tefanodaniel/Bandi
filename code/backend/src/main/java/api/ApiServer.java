@@ -5,6 +5,7 @@ import exceptions.ApiError;
 import exceptions.DaoException;
 import spark.QueryParamsMap;
 import util.Database;
+import util.DataStore;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,7 +33,7 @@ import javax.xml.crypto.Data;
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = false;
+    private static final boolean isLocalTest = true;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
@@ -183,12 +184,12 @@ public class ApiServer {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
                 //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
-                List<String> instruments = musician.getInstruments();
-                List<String> genres = musician.getGenres();
+                Set<String> instruments = musician.getInstruments();
+                Set<String> genres = musician.getGenres();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
-                if (instruments == null) { instruments = new ArrayList<>(); }
-                if (genres == null) { genres = new ArrayList<>(); }
+                if (instruments == null) { instruments = new HashSet<String>(); }
+                if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
 
@@ -214,8 +215,8 @@ public class ApiServer {
                 }
 
                 String name = musician.getName();
-                List<String> genres = musician.getGenres();
-                List<String> instruments = musician.getInstruments();
+                Set<String> genres = musician.getGenres();
+                Set<String> instruments = musician.getInstruments();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 // Update specific fields:
@@ -268,10 +269,8 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-//        Musician musician = new Musician("1", "sample name", "sample genre");
-//        List<Musician> musicians = new ArrayList<>();
-//        musicians.add(musician);
-//        Database.createMusiciansTableWithSampleData(sql2o, musicians);
+        List<Musician> musicians = DataStore.sampleMusicians();
+        Database.createMusiciansTableWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 }

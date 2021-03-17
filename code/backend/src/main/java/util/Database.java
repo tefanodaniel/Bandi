@@ -79,13 +79,13 @@ public final class Database {
             conn.createQuery(sql).executeUpdate();
 
             sql = "CREATE TABLE IF NOT EXISTS Instruments("
-                    + "id VARCHAR(30) REFERENCES Musicians,"
+                    + "id VARCHAR(30) REFERENCES Musicians," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
                     + "instrument VARCHAR(50)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
             sql = "CREATE TABLE IF NOT EXISTS Genres("
-                    + "id VARCHAR(30) REFERENCES Musicians,"
+                    + "id VARCHAR(30) REFERENCES Musicians," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
                     + "genre VARCHAR(30)"
                     + ");";
             conn.createQuery(sql).executeUpdate();

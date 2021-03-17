@@ -1,26 +1,23 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Musician extends Client {
 
     private String name;
-    private List<String> genres;
-    private List<String> instruments;
+    private Set<String> genres;
+    private Set<String> instruments;
     private String experience;
     private String location;
 
-    public Musician(String id, String name, List<String> genres) {
+    public Musician(String id, String name, Set<String> genres) {
         super(id);
         this.name = name;
         this.genres = genres;
     }
 
-    public Musician(String id, String name, List<String> genres,
-                    List<String> instruments, String experience, String location) {
+    public Musician(String id, String name, Set<String> genres,
+                    Set<String> instruments, String experience, String location) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -37,7 +34,7 @@ public class Musician extends Client {
         this.name = name;
     }
 
-    public List<String> getGenres() {
+    public Set<String> getGenres() {
         return genres;
     }
 
@@ -45,24 +42,24 @@ public class Musician extends Client {
         this.genres = genres;
     }
 
-    public void addGenres(String genre) {
+    public void addGenre(String genre) {
         if (this.genres == null) {
-            this.genres = new ArrayList<String>();
+            this.genres = new HashSet<String>();
         }
         this.genres.add(genre);
     }
 
-    public List<String> getInstruments() {
+    public Set<String> getInstruments() {
         return instruments;
     }
 
-    public void setInstrument(List<String> instruments) {
+    public void setInstruments(Set<String> instruments) {
         this.instruments = instruments;
     }
 
     public void addInstrument(String instrument) {
         if (this.instruments == null) {
-            this.instruments = new ArrayList<String>();
+            this.instruments = new HashSet<String>();
         }
         this.instruments.add(instrument);
     }

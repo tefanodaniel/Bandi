@@ -23,7 +23,7 @@ public interface MusicianDao {
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String id, String name, List<String> genres, List<String> instruments, String experience, String location) throws DaoException;
+    Musician create(String id, String name, Set<String> genres, Set<String> instruments, String experience, String location) throws DaoException;
 
     /**
      * Create a Musician.
@@ -73,9 +73,9 @@ public interface MusicianDao {
      */
     Musician updateName(String id, String name) throws DaoException;
 
-    Musician updateGenres(String id, List<String> genres) throws DaoException;
+    Musician updateGenres(String id, Set<String> genres) throws DaoException;
 
-    Musician updateInstruments(String id, List<String> instruments) throws DaoException;
+    Musician updateInstruments(String id, Set<String> instruments) throws DaoException;
 
     Musician updateExperience(String id, String name) throws DaoException;
 
