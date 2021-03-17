@@ -13,7 +13,7 @@ import java.util.List;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = false;
+    public static boolean USE_TEST_DATABASE = true;
 
     private Database() {
         // This class should not be instantiated.
@@ -66,21 +66,51 @@ public final class Database {
      */
     public static void createMusiciansTableWithSampleData(Sql2o sql2o, List<Musician> samples) throws Sql2oException {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS Musicians;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Musicians CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Instruments;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Genres;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
                     + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
-                    + "genre VARCHAR(30) NOT NULL,"
-                    + "instrument VARCHAR(50),"
                     + "experience VARCHAR(30),"
                     + "location VARCHAR(30)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            sql = "INSERT INTO Musicians(id, name, genre) VALUES(:id, :name, :genre);";
-            for (Musician Musician : samples) {
-                conn.createQuery(sql).bind(Musician).executeUpdate();
+            sql = "CREATE TABLE IF NOT EXISTS Instruments("
+                    + "id VARCHAR(30) REFERENCES Musicians,"
+                    + "instrument VARCHAR(50)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS Genres("
+                    + "id VARCHAR(30) REFERENCES Musicians,"
+                    + "genre VARCHAR(30)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
+            String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
+            String genre_sql = "INSERT INTO Genres(id, genre) VALUES(:id, :genre);";
+            for (Musician m : samples) {
+                conn.createQuery(musician_sql).bind(m).executeUpdate(); // Does this break if the class has more attributes than there are columns? Nope!
+
+                // Insert all instruments for this musician
+                for (String instrument : m.getInstruments()) {
+                    conn.createQuery(instrument_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("instrument", instrument)
+                            .executeUpdate();
+                }
+
+                // Insert all genres for this musician
+                for (String genre : m.getGenres()) {
+                    conn.createQuery(genre_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("genre", genre)
+                            .executeUpdate();
+                }
             }
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());

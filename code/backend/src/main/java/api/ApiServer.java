@@ -139,7 +139,7 @@ public class ApiServer {
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
             if (musician == null) { // user has not been added to database yet
-                musicianDao.create(id, name, "unknown genre");
+                musicianDao.create(id, name);
             }
 
             return null;
@@ -183,15 +183,16 @@ public class ApiServer {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
                 //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
-                String instrument = musician.getInstrument();
+                List<String> instruments = musician.getInstruments();
+                List<String> genres = musician.getGenres();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
-                if (instrument == null) { instrument = "NULL"; }
+                if (instruments == null) { instruments = new ArrayList<>(); }
+                if (genres == null) { genres = new ArrayList<>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
 
-                musicianDao.create(musician.getId(), musician.getName(), musician.getGenre(),
-                        instrument, experience, location);
+                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location);
 
                 res.status(201);
                 return gson.toJson(musician);
@@ -213,8 +214,8 @@ public class ApiServer {
                 }
 
                 String name = musician.getName();
-                String genre = musician.getGenre();
-                String instrument = musician.getInstrument();
+                List<String> genres = musician.getGenres();
+                List<String> instruments = musician.getInstruments();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 // Update specific fields:
@@ -222,12 +223,12 @@ public class ApiServer {
                 if (name != null) {
                     flag = true;
                     musician = musicianDao.updateName(id, name);
-                } if (instrument != null) {
+                } if (instruments != null) {
                     flag = true;
-                    musician = musicianDao.updateInstrument(id, instrument);
-                } if (genre != null) {
+                    musician = musicianDao.updateInstruments(id, instruments);
+                } if (genres != null) {
                     flag = true;
-                    musician = musicianDao.updateGenre(id, genre);
+                    musician = musicianDao.updateGenres(id, genres);
                 } if (experience != null) {
                     flag = true;
                     musician = musicianDao.updateExperience(id, experience);

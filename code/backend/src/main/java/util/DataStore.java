@@ -4,6 +4,7 @@ import model.Musician;
 import model.Band;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,8 +22,21 @@ public final class DataStore {
      * @return a list of sample musicians.
      */
     public static List<Musician> sampleMusicians() {
+        // Create lists of genres for the test musicians
+        List<String> genres1 = new ArrayList<>(Arrays.asList("Progressive Rock", "Psychedelic Rock"));
+        List<String> genres2 = new ArrayList<>(Arrays.asList("Blues", "Rock", "Classic Rock"));
+        List<String> genres3 = new ArrayList<>(Arrays.asList("Jazz"));
+
+        // Create lists of instruments for the test musicians
+        List<String> instruments1 = new ArrayList<>(Arrays.asList("Guitar"));
+        List<String> instruments2 = new ArrayList<>(Arrays.asList("Guitar", "Vocals"));
+        List<String> instruments3 = new ArrayList<>(Arrays.asList("Saxophone"));
+
         List<Musician> samples = new ArrayList<>();
-        samples.add(new Musician("00000fakeid","Kenny G", "Jazz"));
+        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England"));
+        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England"));
+        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle"));
+
         return samples;
     }
 

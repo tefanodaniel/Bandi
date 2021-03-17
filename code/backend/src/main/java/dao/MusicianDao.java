@@ -16,25 +16,25 @@ public interface MusicianDao {
      *
      * @param id The musician id.
      * @param name The musician name.
-     * @param genre The associated genre of music.
-     * @param instrument The associated type of instrument
+     * @param genres The associated genres of music.
+     * @param instruments The associated instruments
      * @param experience Self-declared level of expertise
      * @param location The location of a musician.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String id, String name, String genre, String instrument, String experience, String location) throws DaoException;
+    Musician create(String id, String name, List<String> genres, List<String> instruments, String experience, String location) throws DaoException;
 
     /**
      * Create a Musician.
      *
+     *
      * @param id The musician id.
      * @param name The musician name.
-     * @param genre The associated genre of music.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String id, String name, String genre) throws DaoException;
+    Musician create(String id, String name) throws DaoException;
 
     /**
      * Read a Musician provided its offeringName.
@@ -73,9 +73,9 @@ public interface MusicianDao {
      */
     Musician updateName(String id, String name) throws DaoException;
 
-    Musician updateGenre(String id, String name) throws DaoException;
+    Musician updateGenres(String id, List<String> genres) throws DaoException;
 
-    Musician updateInstrument(String id, String name) throws DaoException;
+    Musician updateInstruments(String id, List<String> instruments) throws DaoException;
 
     Musician updateExperience(String id, String name) throws DaoException;
 
