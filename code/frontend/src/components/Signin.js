@@ -15,11 +15,9 @@ class Signin extends React.Component {
     return (
       <div>
         <h1>Bandi</h1>
-        <h2> Sign in: </h2>
+        <h2> Get started: </h2>
         <Button onClick={() => window.location=url}>Log in with Spotify</Button>
-        <Button onClick={() => { this.props.history.push('/newprofile');}}>Create profile</Button>
 
-        <Button>Continue as guest (not functional)</Button>
       </div>
     );
   }
