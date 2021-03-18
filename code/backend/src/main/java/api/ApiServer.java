@@ -3,6 +3,7 @@ package api;
 import dao.*;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import kong.unirest.json.JSONObject;
 import model.Band;
 import spark.QueryParamsMap;
 import util.Database;
@@ -38,6 +39,9 @@ public class ApiServer {
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
     // Client Secret for using Spotify API (should never push to VCS)
     private static final String client_secret = System.getenv("client_secret");
+
+    private static String my_id = "LOGGED_OUT";
+
 
     private static int getHerokuAssignedPort() {
         // Heroku stores port number as an environment variable
@@ -107,9 +111,11 @@ public class ApiServer {
 
         // Gets user info following login
         get("/callback", (req, res) -> {
+
             String error = req.queryParams("error");
             if (error != null) { // SSO was canceled by user
-                res.redirect(frontend_url);
+                my_id = "LOGGED_OUT";
+                res.redirect(frontend_url + "/#/signin");
                 return null;
             }
 
@@ -133,9 +139,9 @@ public class ApiServer {
             String email = user.getEmail();
             String id = user.getId();
 
-            // Must set cookie before redirect!
-            res.cookie("id", id);
-            res.redirect(frontend_url);
+            // Store the user's id
+            my_id = id;
+            res.redirect(frontend_url + "/#/callback");
 
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
@@ -144,7 +150,17 @@ public class ApiServer {
             }
 
             return null;
-            //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
+        });
+
+        // get the id
+        get("/id", (req, res) -> {
+            return new JSONObject("{\"id\": \"" + my_id + "\"}");
+        });
+
+        // clear the id
+        get("/logout", (req, res) -> {
+            my_id = "LOGGED_OUT";
+            return null;
         });
 
         // Get musicians given the id

@@ -12,6 +12,9 @@ class Profile extends React.Component {
 
         // Define the state for this component
         this.state = {
+
+            id: '',
+
             bands: [],
 
             name: '',
@@ -24,9 +27,13 @@ class Profile extends React.Component {
 
 
     render() {
-        let id = Cookies.get('id');
+        // get user's id
+        let url = getBackendURL() + "/id";
+        axios.get(url)
+            .then((response) => this.setState({id: response.data.id}));
+
         var bandsURL = getBackendURL() + "/bands";
-        var userURL = getBackendURL() + "/musicians/" + id;
+        var userURL = getBackendURL() + "/musicians/" + this.state.id;
 
         // get bands
         axios.get(bandsURL)

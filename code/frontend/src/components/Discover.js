@@ -1,36 +1,38 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-
-import Header from '../components/Header/Header';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
-import Cookies from 'js-cookie'
-
-import queryString from 'query-string';
-import {findCookie, getFrontendURL, getURL, logout} from "../utils/api";
+import {findCookie, getBackendURL, getFrontendURL, getURL, logout} from "../utils/api";
+import axios from "axios";
 
 class Discover extends React.Component {
   constructor(props) {
     super(props)
+
+	  this.state = {
+		  id: ''
+	  }
   }
 
   render() {
-    // Use cookie to see if logged in
-	//let userID = findCookie("id");
-	  let userID = Cookies.get('id');
-	if (!userID) {
-		return (<Redirect to="/signin"/>);
-	}
 
-	const url = getFrontendURL();
-	const profile_redirect = url + "/profile";
+	  let url = getBackendURL() + "/id";
+	  axios.get(url)
+		  .then((response) => this.setState({id: response.data.id}));
+
+	  if (!this.state.id) {
+		  return (<h1>Loading...</h1>);
+	  }
+	  else if (this.state.id == "LOGGED_OUT") {
+		  return (<Redirect to="/signin"/>);
+	  }
 
   	return (
   		<div>
 
             <header></header>
 			<Button onClick={() => { this.props.history.push('/profile');}}>My Profile</Button>
-			<Button onClick={() => { logout(); this.props.history.push('/');}}>Log Out</Button>
+			<Button onClick={() => { logout(); this.props.history.push('/signin');}}>Log Out</Button>
 
   			<Jumbotron>
   				<h3>Musicians</h3>
