@@ -30,7 +30,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                            String experience, String location) throws DaoException {
         // TODO: re-implement? Yes -- DONE
         String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
-        String genresSQL = "INSERT INTO Genres (id, genre) VALUES (:id, :genre)";
+        String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         try (Connection conn = sql2o.open()) {
             // Insert musician into database
@@ -85,7 +85,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     public Musician read(String id) throws DaoException {
         // TODO: re-implement? Yes -- DONE
         try (Connection conn = sql2o.open()) {
-            String sql = "SELECT * FROM Musicians AS m, Instruments AS i, Genres AS g WHERE m.id=:id AND m.id=i.id AND m.id=g.id";
+            String sql = "SELECT * FROM Musicians AS m, Instruments AS i, MusicianGenres AS g WHERE m.id=:id AND m.id=i.id AND m.id=g.id";
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
             // Extract attributes
@@ -108,8 +108,8 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public List<Musician> readAll() throws DaoException {
         // TODO: re-implement? Yes -- DONE
+        String sql = "SELECT * FROM Musicians AS m, Instruments AS i, MusicianGenres AS g WHERE m.id=i.id AND m.id=g.id;";
         try (Connection conn = sql2o.open()) {
-            String sql = "SELECT * FROM Musicians AS m, Instruments AS i, Genres AS g WHERE m.id=i.id AND m.id=g.id";
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
             return musicians;
         } catch (Sql2oException ex) {
@@ -138,8 +138,8 @@ public class Sql2oMusicianDao implements MusicianDao {
             }
             filterOn = filterOn + ";";
 
-            String filterSQL = "SELECT * FROM Musicians as M, Genres as G, Instruments as I WHERE M.id=G.id AND G.id=I.id AND " + filterOn;
-            String resultSQL = "SELECT * FROM Musicians AS m, Instruments AS i, Genres AS g WHERE m.id=i.id AND m.id=g.id AND m.id IN (";
+            String filterSQL = "SELECT * FROM Musicians as M, MusicianGenres as G, Instruments as I WHERE M.id=G.id AND G.id=I.id AND " + filterOn;
+            String resultSQL = "SELECT * FROM Musicians AS m, Instruments AS i, MusicianGenres AS g WHERE m.id=i.id AND m.id=g.id AND m.id IN (";
             List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn);
             for (int i=0; i < partialMusicians.size(); i++) {
                 if (i == partialMusicians.size() - 1) {
@@ -173,9 +173,9 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician updateGenres(String id, Set<String> newGenres) throws DaoException {
         // TODO: re-implement? Yes -- DONE
-        String getCurrentGenresSQL = "SELECT * FROM Genres WHERE id=:id";
-        String deleteGenreSQL = "DELETE FROM Genres WHERE id=:id AND genre=:genre";
-        String insertGenreSQL = "INSERT INTO Genres (id, genre) VALUES (:id, :genre)";
+        String getCurrentGenresSQL = "SELECT * FROM MusicianGenres WHERE id=:id";
+        String deleteGenreSQL = "DELETE FROM MusicianGenres WHERE id=:id AND genre=:genre";
+        String insertGenreSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         try (Connection conn = sql2o.open()) {
             // Get current genres stored in DB for this musician
             List<Map<String, Object>> rows = conn.createQuery(getCurrentGenresSQL).addParameter("id", id).executeAndFetchTable().asList();
@@ -276,7 +276,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     public Musician delete(String id) throws DaoException {
         // TODO: re-implement? Yes. Need to see about cascading deletes, though See note below
         /* TODO: I'm not worrying about cascading deletes here. We should later though, because this will get a little unwieldy. */
-        String deleteGenresSQL = "DELETE FROM Genres WHERE id=:id;";
+        String deleteGenresSQL = "DELETE FROM MusicianGenres WHERE id=:id;";
         String deleteInstrumentsSQL = "DELETE FROM Instruments WHERE id=:id;";
         String deleteMusicianSQL = "DELETE FROM Musicians WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
