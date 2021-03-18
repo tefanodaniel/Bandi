@@ -28,18 +28,37 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
                            String experience, String location) throws DaoException {
-        // TODO: re-implement? Yes
-        String sql = "WITH inserted AS ("
-                + "INSERT INTO Musicians(id, name, experience, location) " +
-                "VALUES(:id, :name, :experience, :location) RETURNING *"
-                + ") SELECT * FROM inserted;";
+        // TODO: re-implement? Yes -- DONE
+        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
+        String genresSQL = "INSERT INTO Genres (id, genre) VALUES (:id, :genre)";
+        String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
+            // Insert musician into database
+            conn.createQuery(musicianSQL)
                     .addParameter("id", id)
                     .addParameter("name", name)
                     .addParameter("experience", experience)
                     .addParameter("location", location)
-                    .executeAndFetchFirst(Musician.class);
+                    .executeUpdate();
+
+            // Insert corresponding genres into database
+            for (String genre : genres) {
+                conn.createQuery(genresSQL)
+                        .addParameter("id", id)
+                        .addParameter("genre", genre)
+                        .executeUpdate();
+            }
+
+            // Insert corresponding instruments into database
+            for (String instrument : instruments) {
+                conn.createQuery(instrumentsSQL)
+                        .addParameter("id", id)
+                        .addParameter("instrument", instrument)
+                        .executeUpdate();
+            }
+
+            // Return musician
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
@@ -91,31 +110,8 @@ public class Sql2oMusicianDao implements MusicianDao {
         // TODO: re-implement? Yes -- DONE
         try (Connection conn = sql2o.open()) {
             String sql = "SELECT * FROM Musicians AS m, Instruments AS i, Genres AS g WHERE m.id=i.id AND m.id=g.id";
-            List<Map<String, Object>> queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
-
-            HashSet<String> alreadyAdded = new HashSet<String>();
-            Map<String, Musician> musicians = new HashMap<String, Musician>();
-            for (Map row : queryResults) {
-                // Extract data from this row
-                String id = (String) row.get("id");
-                String name = (String) row.get("name");
-                String exp = (String) row.get("experience");
-                String loc = (String) row.get("location");
-                String genre = (String) row.get("genre");
-                String instrument = (String) row.get("instrument");
-
-                // Check if we've seen this musician already. If not, create new Musician object
-                if (!alreadyAdded.contains(id)) {
-                    alreadyAdded.add(id);
-                    musicians.put(id, new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc));
-                }
-                // Add the genre and instrument from this row to the object lists
-                Musician m = musicians.get(id);
-                m.addGenre(genre);
-                m.addInstrument(instrument);
-            }
-            return new ArrayList<Musician>(musicians.values());
-
+            List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
+            return musicians;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from the database", ex);
         }
@@ -123,12 +119,15 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public List<Musician> readAll(Map<String, String[]> query) throws DaoException {
-        // TODO: re-implement? Yes
+        // TODO: re-implement? Yes -- DONE FOR NOW. See comment below.
+        /* TODO Note that this may need work when it comes to handling queries with multiple values for the same query param, for example.
+            We need to loop over query.get(key) around line 132.
+         */
         try (Connection conn = sql2o.open()) {
             Set<String> keys = query.keySet();
             Iterator<String> iter = keys.iterator();
             String key = iter.next();
-            String filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+            String filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'"; // if we always assume 0, we're missing alternate values for the param
             if (query.size() > 1) {
                 while (iter.hasNext()) {
                     String attribute = iter.next();
@@ -139,8 +138,17 @@ public class Sql2oMusicianDao implements MusicianDao {
             }
             filterOn = filterOn + ";";
 
-            String sql = "SELECT * FROM Musicians WHERE " + filterOn;
-            return conn.createQuery(sql).executeAndFetch(Musician.class);
+            String filterSQL = "SELECT * FROM Musicians as M, Genres as G, Instruments as I WHERE M.id=G.id AND G.id=I.id AND " + filterOn;
+            String resultSQL = "SELECT * FROM Musicians AS m, Instruments AS i, Genres AS g WHERE m.id=i.id AND m.id=g.id AND m.id IN (";
+            List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn);
+            for (int i=0; i < partialMusicians.size(); i++) {
+                if (i == partialMusicians.size() - 1) {
+                    resultSQL += "'" + partialMusicians.get(i).getId() + "');";
+                } else {
+                    resultSQL += "'" + partialMusicians.get(i).getId() + "', ";
+                }
+            }
+            return this.extractMusiciansFromDatabase(resultSQL, conn);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from the database by filters", ex);
         }
@@ -277,5 +285,39 @@ public class Sql2oMusicianDao implements MusicianDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to delete the musician", ex);
         }
+    }
+
+    /**
+     * Query the database and parse the results to create a list of musicians such that each one has the proper list attributes.
+     * This is necessary because we store our database in normalized form.
+     * @param sql The SQL query string
+     * @return the list of musicians
+     * @throws Sql2oException if query fails
+     */
+    private List<Musician> extractMusiciansFromDatabase(String sql, Connection conn) throws Sql2oException {
+        List<Map<String, Object>> queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
+
+        HashSet<String> alreadyAdded = new HashSet<String>();
+        Map<String, Musician> musicians = new HashMap<String, Musician>();
+        for (Map row : queryResults) {
+            // Extract data from this row
+            String id = (String) row.get("id");
+            String name = (String) row.get("name");
+            String exp = (String) row.get("experience");
+            String loc = (String) row.get("location");
+            String genre = (String) row.get("genre");
+            String instrument = (String) row.get("instrument");
+
+            // Check if we've seen this musician already. If not, create new Musician object
+            if (!alreadyAdded.contains(id)) {
+                alreadyAdded.add(id);
+                musicians.put(id, new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc));
+            }
+            // Add the genre and instrument from this row to the object lists
+            Musician m = musicians.get(id);
+            m.addGenre(genre);
+            m.addInstrument(instrument);
+        }
+        return new ArrayList<Musician>(musicians.values());
     }
 }
