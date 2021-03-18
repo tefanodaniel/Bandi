@@ -8,6 +8,7 @@ class EditProfile extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        id : '',
         name: '',
         location: '',
         instruments: []
@@ -51,7 +52,7 @@ class EditProfile extends React.Component {
 
       axios
         .post(url, {
-          id : Cookies.get('id'),
+          id : this.state.id,
           name: this.state.name,
           location: this.state.location,
           instruments: this.state.instruments

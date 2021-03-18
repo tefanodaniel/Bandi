@@ -7,6 +7,7 @@ import Discover from './components/Discover';
 import EditProfile from './components/ProfileForm';
 import Profile from './components/Profile'
 import Band from "./components/Band";
+import Callback from "./components/Callback";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route exact path="/editprofile" component={EditProfile} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/band" component={Band} />
+          <Route exact path="/callback" component={Callback} />
         </Switch>
       </HashRouter>
     </div>
