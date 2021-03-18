@@ -163,32 +163,70 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateGenres(String id, Set<String> genres) throws DaoException {
-        // TODO: re-implement? Yes
-        String sql = "WITH updated AS ("
-                + "UPDATE Musicians SET genre = :genre WHERE id = :id RETURNING *"
-                + ") SELECT * FROM updated;";
+    public Musician updateGenres(String id, Set<String> newGenres) throws DaoException {
+        // TODO: re-implement? Yes -- DONE
+        String getCurrentGenresSQL = "SELECT * FROM Genres WHERE id=:id";
+        String deleteGenreSQL = "DELETE FROM Genres WHERE id=:id AND genre=:genre";
+        String insertGenreSQL = "INSERT INTO Genres (id, genre) VALUES (:id, :genre)";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    //.addParameter("genre", genres.pop())
-                    .executeAndFetchFirst(Musician.class);
+            // Get current genres stored in DB for this musician
+            List<Map<String, Object>> rows = conn.createQuery(getCurrentGenresSQL).addParameter("id", id).executeAndFetchTable().asList();
+            HashSet<String> currentGenres = new HashSet<String>();
+            for (Map row : rows) {
+                currentGenres.add((String) row.get("genre"));
+            }
+
+            // Delete any values currently in the database that aren't in the new set of genres to store
+            for (String genre : currentGenres) {
+                if (!newGenres.contains(genre)) {
+                    conn.createQuery(deleteGenreSQL).addParameter("id", id).addParameter("genre", genre).executeUpdate();
+                }
+            }
+
+            // Add new genres to the database, if they aren't already in there
+            for (String genre : newGenres) {
+                if (!currentGenres.contains(genre)) {
+                    conn.createQuery(insertGenreSQL).addParameter("id", id).addParameter("genre", genre).executeUpdate();
+                }
+            }
+
+            // Return Musician object for this particular id
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician genre", ex);
         }
     }
 
     @Override
-    public Musician updateInstruments(String id, Set<String> instruments) throws DaoException {
-        // TODO: re-implement? Yes
-        String sql = "WITH updated AS ("
-                + "UPDATE Musicians SET instrument = :instrument WHERE id = :id RETURNING *"
-                + ") SELECT * FROM updated;";
+    public Musician updateInstruments(String id, Set<String> newInstruments) throws DaoException {
+        // TODO: re-implement? Yes -- DONE
+        String getCurrentInstrumentsSQL = "SELECT * FROM Instruments WHERE id=:id";
+        String deleteInstrumentSQL = "DELETE FROM Instruments WHERE id=:id AND instrument=:instrument";
+        String insertInstrumentSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    .addParameter("instrument", instruments)
-                    .executeAndFetchFirst(Musician.class);
+            // Get current instruments stored in DB for this musician
+            List<Map<String, Object>> rows = conn.createQuery(getCurrentInstrumentsSQL).addParameter("id", id).executeAndFetchTable().asList();
+            HashSet<String> currentInstruments = new HashSet<String>();
+            for (Map row : rows) {
+                currentInstruments.add((String) row.get("instrument"));
+            }
+
+            // Delete any values currently in the database that aren't in the new set of genres to store
+            for (String instrument : currentInstruments) {
+                if (!newInstruments.contains(instrument)) {
+                    conn.createQuery(deleteInstrumentSQL).addParameter("id", id).addParameter("instrument", instrument).executeUpdate();
+                }
+            }
+
+            // Add new genres to the database, if they aren't already in there
+            for (String instrument : newInstruments) {
+                if (!currentInstruments.contains(instrument)) {
+                    conn.createQuery(insertInstrumentSQL).addParameter("id", id).addParameter("instrument", instrument).executeUpdate();
+                }
+            }
+
+            // Return Musician object for this particular id
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician instrument", ex);
         }
