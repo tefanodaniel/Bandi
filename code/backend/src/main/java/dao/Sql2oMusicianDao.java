@@ -274,14 +274,25 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician delete(String id) throws DaoException {
-        // TODO: re-implement? Possibly. Need to see about cascading deletes
-        String sql = "WITH deleted AS ("
-                + "DELETE FROM Musicians WHERE id = :id RETURNING *"
-                + ") SELECT * FROM deleted;";
+        // TODO: re-implement? Yes. Need to see about cascading deletes, though See note below
+        /* TODO: I'm not worrying about cascading deletes here. We should later though, because this will get a little unwieldy. */
+        String deleteGenresSQL = "DELETE FROM Genres WHERE id=:id;";
+        String deleteInstrumentsSQL = "DELETE FROM Instruments WHERE id=:id;";
+        String deleteMusicianSQL = "DELETE FROM Musicians WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    .executeAndFetchFirst(Musician.class);
+            // Get musician to return before we delete
+            Musician musicianToDelete = this.read(id);
+
+            // Delete associated instruments
+            conn.createQuery(deleteInstrumentsSQL).addParameter("id", id).executeUpdate();
+
+            // Delete associated genres
+            conn.createQuery(deleteGenresSQL).addParameter("id", id).executeUpdate();
+
+            // Delete musician
+            conn.createQuery(deleteMusicianSQL).addParameter("id", id).executeUpdate();
+
+            return musicianToDelete;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to delete the musician", ex);
         }
