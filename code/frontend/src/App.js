@@ -4,7 +4,7 @@ import { Route, HashRouter, Switch } from 'react-router-dom';
 
 import Signin from './components/Signin';
 import Discover from './components/Discover';
-import CreateProfile from './components/ProfileForm';
+import EditProfile from './components/ProfileForm';
 import Profile from './components/Profile'
 import Band from "./components/Band";
 
@@ -15,7 +15,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Discover} />
           <Route exact path="/signin" component={Signin} />
-          <Route exact path="/newprofile" component={CreateProfile} />
+          <Route exact path="/editprofile" component={EditProfile} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/band" component={Band} />
         </Switch>
