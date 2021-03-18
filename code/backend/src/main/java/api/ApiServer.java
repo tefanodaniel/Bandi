@@ -314,6 +314,13 @@ public class ApiServer {
             }
         });
 
+        // To allow CORS
+        before((req, res) -> {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "*");
+            res.type("application/json");
+        });
+
         after((req, res) -> res.type("application/json"));
     }
 
