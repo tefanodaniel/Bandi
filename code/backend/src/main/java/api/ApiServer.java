@@ -188,12 +188,14 @@ public class ApiServer {
                 Set<String> genres = musician.getGenres();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                Set<String> profileLinks = musician.getProfileLinks();
                 if (instruments == null) { instruments = new HashSet<String>(); }
                 if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
+                if (profileLinks == null) { profileLinks = new HashSet<String>(); }
 
-                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location);
+                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks);
 
                 res.status(201);
                 return gson.toJson(musician);
@@ -219,6 +221,7 @@ public class ApiServer {
                 Set<String> instruments = musician.getInstruments();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                Set<String> profileLinks = musician.getProfileLinks();
                 // Update specific fields:
                 boolean flag = false;
                 if (name != null) {
@@ -236,6 +239,9 @@ public class ApiServer {
                 } if (location != null) {
                     flag = true;
                     musician = musicianDao.updateLocation(id, location);
+                } if (profileLinks != null) {
+                    flag = true;
+                    musician = musicianDao.updateProfileLinks(id, profileLinks);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }

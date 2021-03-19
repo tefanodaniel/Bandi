@@ -27,11 +27,12 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-                           String experience, String location) throws DaoException {
+                           String experience, String location, Set<String> profileLinks) throws DaoException {
         // TODO: re-implement? Yes -- DONE
         String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
+        String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
         try (Connection conn = sql2o.open()) {
             // Insert musician into database
             conn.createQuery(musicianSQL)
@@ -54,6 +55,14 @@ public class Sql2oMusicianDao implements MusicianDao {
                 conn.createQuery(instrumentsSQL)
                         .addParameter("id", id)
                         .addParameter("instrument", instrument)
+                        .executeUpdate();
+            }
+
+            // Insert corresponding profile audio/video links into database
+            for (String link : profileLinks) {
+                conn.createQuery(profileLinksSQL)
+                        .addParameter("id", id)
+                        .addParameter("link", link)
                         .executeUpdate();
             }
 
@@ -85,7 +94,15 @@ public class Sql2oMusicianDao implements MusicianDao {
     public Musician read(String id) throws DaoException {
         // TODO: re-implement? Yes -- DONE
         try (Connection conn = sql2o.open()) {
-            String sql = "SELECT * FROM Musicians AS m, Instruments AS i, MusicianGenres AS g WHERE m.id=:id AND m.id=i.id AND m.id=g.id";
+            //String sql = "SELECT * " +
+              //      "FROM Musicians AS m, Instruments AS i, MusicianGenres AS g, ProfileAVLinks as l " +
+                //    "WHERE m.id=:id AND m.id=i.id AND m.id=g.id AND m.id=l.id";
+
+            String sql = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                    "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                    "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                    "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
+                    "WHERE R.mid=:id;";
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
             // Extract attributes
@@ -93,22 +110,26 @@ public class Sql2oMusicianDao implements MusicianDao {
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
 
-            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc);
+            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>());
             for (Map row : queryResults) {
                 m.addGenre((String) row.get("genre"));
                 m.addInstrument((String) row.get("instrument"));
+                m.addProfileLink((String) row.get("link"));
             }
 
             return m;
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to read a course with id " + id, ex);
+            throw new DaoException("Unable to read a musician with id " + id, ex);
         }
     }
 
     @Override
     public List<Musician> readAll() throws DaoException {
         // TODO: re-implement? Yes -- DONE
-        String sql = "SELECT * FROM Musicians AS m, Instruments AS i, MusicianGenres AS g WHERE m.id=i.id AND m.id=g.id;";
+        String sql = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                "LEFT JOIN profileavlinks as L ON R.MID=L.id;";
         try (Connection conn = sql2o.open()) {
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
             return musicians;
@@ -138,8 +159,17 @@ public class Sql2oMusicianDao implements MusicianDao {
             }
             filterOn = filterOn + ";";
 
-            String filterSQL = "SELECT * FROM Musicians as M, MusicianGenres as G, Instruments as I WHERE M.id=G.id AND G.id=I.id AND " + filterOn;
-            String resultSQL = "SELECT * FROM Musicians AS m, Instruments AS i, MusicianGenres AS g WHERE m.id=i.id AND m.id=g.id AND m.id IN (";
+            String filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                    "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                    "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                    "WHERE " + filterOn;
+
+            String resultSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                    "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                    "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                    "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
+                    "WHERE R.mid IN (";
+
             List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn);
             for (int i=0; i < partialMusicians.size(); i++) {
                 if (i == partialMusicians.size() - 1) {
@@ -273,11 +303,46 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
+    public Musician updateProfileLinks(String id, Set<String> newLinks) throws DaoException {
+        String getCurrentLinksSQL = "SELECT * FROM ProfileAVLinks WHERE id=:id";
+        String deleteLinkSQL = "DELETE FROM ProfileAVLinks WHERE id=:id AND link=:link";
+        String insertLinkSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
+        try (Connection conn = sql2o.open()) {
+            // Get current instruments stored in DB for this musician
+            List<Map<String, Object>> rows = conn.createQuery(getCurrentLinksSQL).addParameter("id", id).executeAndFetchTable().asList();
+            HashSet<String> currentLinks = new HashSet<String>();
+            for (Map row : rows) {
+                currentLinks.add((String) row.get("link"));
+            }
+
+            // Delete any values currently in the database that aren't in the new set of genres to store
+            for (String link : currentLinks) {
+                if (!newLinks.contains(link)) {
+                    conn.createQuery(deleteLinkSQL).addParameter("id", id).addParameter("link", link).executeUpdate();
+                }
+            }
+
+            // Add new genres to the database, if they aren't already in there
+            for (String link : newLinks) {
+                if (!currentLinks.contains(link)) {
+                    conn.createQuery(insertLinkSQL).addParameter("id", id).addParameter("link", link).executeUpdate();
+                }
+            }
+
+            // Return Musician object for this particular id
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician links", ex);
+        }
+    }
+
+    @Override
     public Musician delete(String id) throws DaoException {
         // TODO: re-implement? Yes. Need to see about cascading deletes, though See note below
         /* TODO: I'm not worrying about cascading deletes here. We should later though, because this will get a little unwieldy. */
         String deleteGenresSQL = "DELETE FROM MusicianGenres WHERE id=:id;";
         String deleteInstrumentsSQL = "DELETE FROM Instruments WHERE id=:id;";
+        String deleteProfileLinksSQL = "DELETE FROM ProfileAVLinks WHERE id=:id;";
         String deleteMusicianSQL = "DELETE FROM Musicians WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
             // Get musician to return before we delete
@@ -285,6 +350,9 @@ public class Sql2oMusicianDao implements MusicianDao {
 
             // Delete associated instruments
             conn.createQuery(deleteInstrumentsSQL).addParameter("id", id).executeUpdate();
+
+            // Delete associated profile links
+            conn.createQuery(deleteProfileLinksSQL).addParameter("id", id).executeUpdate();
 
             // Delete associated genres
             conn.createQuery(deleteGenresSQL).addParameter("id", id).executeUpdate();
@@ -312,22 +380,24 @@ public class Sql2oMusicianDao implements MusicianDao {
         Map<String, Musician> musicians = new HashMap<String, Musician>();
         for (Map row : queryResults) {
             // Extract data from this row
-            String id = (String) row.get("id");
+            String id = (String) row.get("mid");
             String name = (String) row.get("name");
             String exp = (String) row.get("experience");
             String loc = (String) row.get("location");
             String genre = (String) row.get("genre");
             String instrument = (String) row.get("instrument");
+            String link = (String) row.get("link");
 
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
-                musicians.put(id, new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc));
+                musicians.put(id, new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>()));
             }
             // Add the genre and instrument from this row to the object lists
             Musician m = musicians.get(id);
             m.addGenre(genre);
             m.addInstrument(instrument);
+            m.addProfileLink(link);
         }
         return new ArrayList<Musician>(musicians.values());
     }

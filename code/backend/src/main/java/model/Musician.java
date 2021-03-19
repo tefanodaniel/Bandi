@@ -9,6 +9,7 @@ public class Musician extends Client {
     private Set<String> instruments;
     private String experience;
     private String location;
+    private Set<String> profileLinks;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
@@ -17,13 +18,14 @@ public class Musician extends Client {
     }
 
     public Musician(String id, String name, Set<String> genres,
-                    Set<String> instruments, String experience, String location) {
+                    Set<String> instruments, String experience, String location, Set<String> profileLinks) {
         super(id);
         this.name = name;
         this.genres = genres;
         this.instruments = instruments;
         this.experience = experience;
         this.location = location;
+        this.profileLinks = profileLinks;
     }
 
     public String getName() {
@@ -78,6 +80,21 @@ public class Musician extends Client {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public Set<String> getProfileLinks() {
+        return profileLinks;
+    }
+
+    public void setProfileLinks(Set<String> links) {
+        this.profileLinks = links;
+    }
+
+    public void addProfileLink(String link) {
+        if (this.profileLinks == null) {
+            this.profileLinks = new HashSet<String>();
+        }
+        this.profileLinks.add(link);
     }
 
     @Override

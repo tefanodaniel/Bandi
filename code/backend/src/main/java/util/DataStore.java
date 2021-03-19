@@ -29,11 +29,12 @@ public final class DataStore {
         Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
         Set<String> instruments2 = new HashSet<String>(Arrays.asList("Guitar", "Vocals"));
         Set<String> instruments3 = new HashSet<String>(Arrays.asList("Saxophone"));
+        Set<String> profileLinks = new HashSet<String>();
 
         List<Musician> samples = new ArrayList<>();
-        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England"));
-        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England"));
-        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle"));
+        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England", profileLinks));
+        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England", profileLinks));
+        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle", profileLinks));
 
         return samples;
     }
