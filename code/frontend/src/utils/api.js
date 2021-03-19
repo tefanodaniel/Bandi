@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Cookies from "js-cookie";
 
 export function loginWithSpotify() {
   //Test API call:
@@ -23,7 +24,5 @@ export function getBackendURL() {
 }
 
 export function logout() {
-  var url = getBackendURL() + "/logout";
-  axios.get(url)
-      .then((response) => console.log(response.data));
+  Cookies.remove('id');
 }

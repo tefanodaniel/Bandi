@@ -4,28 +4,30 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import {findCookie, getBackendURL, getFrontendURL, getURL, logout} from "../utils/api";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 class Discover extends React.Component {
   constructor(props) {
     super(props)
 
 	  this.state = {
-		  id: ''
+		id : ''
 	  }
   }
 
-  render() {
+	render() {
 
-	  let url = getBackendURL() + "/id";
-	  axios.get(url)
-		  .then((response) => this.setState({id: response.data.id}));
+  	// Get id from search params (not ideal, don't want search params in url)
+  	const params = new URLSearchParams(window.location.search);
+  	let my_id = params.get("id");
+	if (my_id) {
+		Cookies.set('id', my_id);
+	}
 
-	  if (!this.state.id) {
-		  return (<h1>Loading...</h1>);
-	  }
-	  else if (this.state.id == "LOGGED_OUT") {
-		  return (<Redirect to="/signin"/>);
-	  }
+	let cookie_id = Cookies.get('id');
+  	if (!cookie_id) { // not logged in
+  		return(<Redirect to ='/signin'/>);
+	}
 
   	return (
   		<div>

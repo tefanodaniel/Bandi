@@ -40,9 +40,6 @@ public class ApiServer {
     // Client Secret for using Spotify API (should never push to VCS)
     private static final String client_secret = System.getenv("client_secret");
 
-    private static String my_id = "LOGGED_OUT";
-
-
     private static int getHerokuAssignedPort() {
         // Heroku stores port number as an environment variable
         String herokuPort = System.getenv("PORT");
@@ -114,8 +111,7 @@ public class ApiServer {
 
             String error = req.queryParams("error");
             if (error != null) { // SSO was canceled by user
-                my_id = "LOGGED_OUT";
-                res.redirect(frontend_url + "/#/signin");
+                res.redirect(frontend_url + "/signin");
                 return null;
             }
 
@@ -136,12 +132,9 @@ public class ApiServer {
                     .build();
             final User user = getCurrentUser.execute();
             String name = user.getDisplayName();
-            String email = user.getEmail();
             String id = user.getId();
 
-            // Store the user's id
-            my_id = id;
-            res.redirect(frontend_url + "/#/callback");
+            res.redirect(frontend_url + "/?id=" + id);
 
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
@@ -150,17 +143,7 @@ public class ApiServer {
             }
 
             return null;
-        });
-
-        // get the id
-        get("/id", (req, res) -> {
-            return new JSONObject("{\"id\": \"" + my_id + "\"}");
-        });
-
-        // clear the id
-        get("/logout", (req, res) -> {
-            my_id = "LOGGED_OUT";
-            return null;
+            //return new JSONObject("{\"id\": \"" + id + "\"}");
         });
 
         // Get musicians given the id

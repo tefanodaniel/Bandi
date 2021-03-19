@@ -8,15 +8,21 @@ class Callback extends React.Component {
         super(props)
 
         this.state = {
-            id: ''
+
         }
     }
 
+
     render() {
+        /*
         let url = getBackendURL() + "/id";
         axios.get(url)
             .then((response) => this.setState({id: response.data.id}));
+*/
+        return (<h1>callback</h1>);
 
+
+        /*
         if (!this.state.id) {
             return (<h1>Loading...</h1>);
         }
@@ -26,7 +32,7 @@ class Callback extends React.Component {
         else { // some valid user id is present
             this.props.history.push('/');
            return null;
-        }
+        }*/
 
     }
 }

@@ -28,9 +28,7 @@ class Profile extends React.Component {
 
     render() {
         // get user's id
-        let url = getBackendURL() + "/id";
-        axios.get(url)
-            .then((response) => this.setState({id: response.data.id}));
+        this.state.id = Cookies.get('id');
 
         var bandsURL = getBackendURL() + "/bands";
         var userURL = getBackendURL() + "/musicians/" + this.state.id;

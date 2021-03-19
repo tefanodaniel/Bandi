@@ -14,12 +14,12 @@ function App() {
     <div>
       <HashRouter>
         <Switch>
+          <Route exact path="/callback" component={Callback} />
           <Route exact path="/" component={Discover} />
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/editprofile" component={EditProfile} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/band" component={Band} />
-          <Route exact path="/callback" component={Callback} />
         </Switch>
       </HashRouter>
     </div>
