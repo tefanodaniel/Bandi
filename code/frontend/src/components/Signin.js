@@ -1,26 +1,29 @@
 import React from 'react';
 
 import Button from 'react-bootstrap/Button';
+import axios from "axios";
+import {getBackendURL} from "../utils/api";
 
 
 class Signin extends React.Component {
   constructor(props) {
     super(props)
+
+      this.state = {
+          spotifyURL: ''
+      }
   }
 
   render() {
-    const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-    const url = isDev ? "http://localhost:4567/login" : "https://bandiscover-api.herokuapp.com/login";
+    const url = getBackendURL() +"/login";
 
     return (
-      <div>
-        <h1>Bandi</h1>
-        <h2> Sign in: </h2>
-        <Button onClick={() => window.location=url}>Log in with Spotify</Button>
-        <Button onClick={() => { this.props.history.push('/newprofile');}}>Create profile</Button>
+        <div>
+          <h1>Bandi</h1>
+          <h2> Get started: </h2>
+          <Button onClick={() => window.location=url}>Log in with Spotify</Button>
 
-        <Button>Continue as guest (not functional)</Button>
-      </div>
+        </div>
     );
   }
 }

@@ -1,8 +1,10 @@
 package api;
 
-import dao.MusicianDao;
+import dao.*;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import kong.unirest.json.JSONObject;
+import model.Band;
 import spark.QueryParamsMap;
 import util.Database;
 import util.DataStore;
@@ -15,7 +17,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import dao.MusicianDao;
-import dao.Sql2oMusicianDao;
 import model.Musician;
 import org.sql2o.Sql2o;
 
@@ -55,6 +56,7 @@ public class ApiServer {
         port(myPort);
         staticFiles.location("/public");
         MusicianDao musicianDao = getMusicianDao();
+        BandDao bandDao = getBandDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
@@ -107,9 +109,10 @@ public class ApiServer {
 
         // Gets user info following login
         get("/callback", (req, res) -> {
+
             String error = req.queryParams("error");
             if (error != null) { // SSO was canceled by user
-                res.redirect(frontend_url);
+                res.redirect(frontend_url + "/signin");
                 return null;
             }
 
@@ -130,12 +133,9 @@ public class ApiServer {
                     .build();
             final User user = getCurrentUser.execute();
             String name = user.getDisplayName();
-            String email = user.getEmail();
             String id = user.getId();
 
-            // Must set cookie before redirect!
-            res.cookie("id", id);
-            res.redirect(frontend_url);
+            res.redirect(frontend_url + "/?id=" + id);
 
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
@@ -144,7 +144,7 @@ public class ApiServer {
             }
 
             return null;
-            //return new JSONObject("{\"name\": \""+name+"\",\"email\":\""+email+"\"}");
+            //return new JSONObject("{\"id\": \"" + id + "\"}");
         });
 
         // Get musicians given the id
@@ -204,6 +204,7 @@ public class ApiServer {
             }
         });
 
+        // put musicians
         put("/musicians/:id", (req, res) -> {
             try {
                 String id = req.params("id");
@@ -256,6 +257,7 @@ public class ApiServer {
             }
         });
 
+        // delete musicians
         delete("/musicians/:id", (req, res) -> {
             try {
                 String id = req.params("id");
@@ -270,6 +272,46 @@ public class ApiServer {
             }
         });
 
+        // Get all bands (optional query parameters)
+        // if searching for id, only pass 1 parameter
+        get("/bands", (req, res) -> {
+            try {
+                List<Band> bands;
+                Map<String, String[]> query = req.queryMap().toMap();
+                if (query.size() > 0) {
+                    bands = bandDao.readAll(query);
+                }
+                else {
+                    bands = bandDao.readAll();
+                }
+                return gson.toJson(bands);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // Get band given the id
+        get("/bands/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Band band = bandDao.read(id);
+                if (band == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(band);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // To allow CORS
+        before((req, res) -> {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "*");
+            res.type("application/json");
+        });
+
         after((req, res) -> res.type("application/json"));
     }
 
@@ -279,5 +321,10 @@ public class ApiServer {
         Database.createMusicianTablesWithSampleData(sql2o, musicians);
         Database.createBandTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
+    }
+
+    private static BandDao getBandDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oBandDao(sql2o);
     }
 }

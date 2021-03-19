@@ -2,12 +2,21 @@
 Team Lead - Stefano Tusa Lavieri
 
 [Team Availability](https://www.when2meet.com/?11290451-mUIJw)
+[Team Availability Week 2](https://www.when2meet.com/?11359694-vE2hQ)
 
 # OO Design
 ![](assets/Iteration2_UML.png)
 
 # Wireframe & Use-case
 <img src="" width="10" height="10" />
+
+![](assets/i2_wireframe/login.png)
+![](assets/i2_wireframe/createprofile.png)
+![](assets/i2_wireframe/homepage.png)
+![](assets/i2_wireframe/search.png)
+![](assets/i2_wireframe/myprofile.png)
+![](assets/i2_wireframe/mybands.png)
+![](assets/i2_wireframe/mybandsdetails.png)
 
 Use Case: Using Advanced Search 
 1. A user accessing the Bandi homepage lands on the Discover page, where they can see different tiles representing users and bands in a given area.

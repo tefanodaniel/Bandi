@@ -2,6 +2,8 @@ package dao;
 import model.Musician;
 import model.Band;
 import java.util.List;
+import java.util.Map;
+
 import exceptions.DaoException;
 import model.Musician;
 
@@ -16,7 +18,8 @@ public interface BandDao {
      * @return client object created
      * @throws DaoException, a generic exception for CRUD operations
      */
-    Band create(String name, String genre, List<Musician> members) throws DaoException;
+    Band create(String id, String name, String genre,
+                int size, int capacity, List<String> members) throws DaoException;
 
     /**
      * Read a Band given its offeringName
@@ -36,13 +39,13 @@ public interface BandDao {
     List<Band> readAll() throws DaoException;
 
     /**
-     * Read all bands from the database with genre containing genreQuery.
+     * Read all bands from the database with genre containing query map.
      *
-     * @param genreQuery search term containing the genre
+     * @param query map of query parameters
      * @return all Bands retrieved
      * @throws DaoException, a generic exception for CRUD operations.
      */
-    List<Band> readAll(String genreQuery) throws DaoException;
+    List<Band> readAll(Map<String, String[]> query) throws DaoException;
 
     /**
      * Update the name of a Band, given its ID.
@@ -58,21 +61,20 @@ public interface BandDao {
      * Add new Musician to the Band, given its ID.
      *
      * @param id the unique identifier for each Band object
-     * @param newMem the new Musician to be added to the band
+     * @param musID id of the new Musician to be added to the band
      * @return the updated Band object
      * @throws DaoException, A generic exception for CRUD operations
      */
-    Band add(String id, Musician newMem) throws DaoException;
+    Band add(String id, String musID) throws DaoException;
 
     /**
      * Remove a Musician from a band, given the Band ID and Musician ID
      *
      * @param id the unique identifier for each Band object
-     * @param member the Musician to be removed
      * @param musID the unique identifier for each musician object
      * @throws DaoException, a generic exception for CRUD operations
      */
-    Band remove(String id, Musician member, int musID) throws DaoException;
+    Band remove(String id, String musID) throws DaoException;
 
     /**
      * Delete a Band, given its offeringName

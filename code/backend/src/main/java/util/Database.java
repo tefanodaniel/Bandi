@@ -1,13 +1,18 @@
 package util;
 
+import model.Band;
 import model.Musician;
 import org.sql2o.Connection;
+import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.List;
+import java.sql.Statement;
 
 /**
  * A utility class with methods to establish JDBC connection, set schemas, etc.
@@ -33,6 +38,7 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleMusicians());
+
     }
 
     /**
@@ -46,7 +52,7 @@ public final class Database {
     public static Sql2o getSql2o() throws URISyntaxException, Sql2oException {
         String databaseUrl = System.getenv("DATABASE_URL");
         if (USE_TEST_DATABASE) {
-            databaseUrl = System.getenv("TEST_DATABASE_URL"); // we need a new test_database_url
+            databaseUrl = System.getenv("TEST_DATABASE_URL");
         }
         URI dbUri = new URI(databaseUrl);
 
@@ -156,6 +162,7 @@ public final class Database {
                     + "genre VARCHAR(30)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
+
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
         }

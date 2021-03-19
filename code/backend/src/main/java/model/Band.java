@@ -11,22 +11,32 @@ public class Band extends Client {
     private String genre;
     private int size;
     private int capacity;
-    private List<Musician> members;
-    private String id;
 
-    public Band(String id, String name, String genre) {
-        super(id);
-        this.name = name;
-        this.genre = genre;
-    }
+    private List<String> members;
+    private String memberString;
 
-    public Band(String id, String name, String genre, int size, int capacity, List<Musician> members) {
+    public Band(String id, String name, String genre, int size, int capacity, List<String> members) {
         super(id);
         this.name = name;
         this.genre = genre;
         this.size = size;
         this.capacity = capacity;
+
         this.members = members;
+        setMemberString();
+    }
+
+    public String getMemberString() {
+        return this.memberString;
+    }
+
+    private void setMemberString() {
+        //   Resulting text should be of form: '{\"id1\",\"id2\"}'
+        String str = "\'{";
+        for (String memberID : members) {
+            str += "\\\"" + memberID + "\\\",";
+        }
+        memberString = str.substring(0, str.length() - 1) + "}\'";
     }
 
     public void setName(String name) {
@@ -61,14 +71,15 @@ public class Band extends Client {
         return capacity;
     }
 
-    public List<Musician> getMembers () {
-        return members;
+    public List<String> getMembers () {
+        return this.members;
     }
 
     public void setMembers (Musician member) {
         if (size != capacity) {
-            members.add(member);
+            members.add(member.getId());
         }
+        setMemberString();
     }
 
     @Override
@@ -80,19 +91,17 @@ public class Band extends Client {
             return false;
         }
         Band band = (Band) o;
-        return name.equals(band.name) && genre.equals(band.genre)
-                && (size == band.size) && (capacity== band.capacity)
-                && members.size() == band.members.size()
-                && members.equals(band.members);
+        return name.equals(band.name) && this.getId().equals(band.getId());
     }
 
     @Override
     public String toString () {
+
         return "Band {" + "name =' "
                 + name
                 + '\'' + ", genre = '" + genre
                 + '\'' + ", size = '" + size + '\''
                 + ", capacity = '" + capacity + '\'' +
-                ", members = '" + members + '\'' + '}';
+                ", members = " + memberString + '}';
     }
 }
