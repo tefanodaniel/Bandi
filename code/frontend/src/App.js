@@ -7,6 +7,7 @@ import Discover from './components/Discover';
 import EditProfile from './components/EditProfile';
 import MyProfile from './components/MyProfile'
 import Band from "./components/Band";
+import CreateBand from "./components/CreateBand";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/editprofile" component={EditProfile} />
           <Route exact path="/myprofile" component={MyProfile} />
           <Route exact path="/band" component={Band} />
+          <Route exact path="/createband" component={CreateBand} />
         </Switch>
       </HashRouter>
     </div>

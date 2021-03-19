@@ -5,6 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
+import Form from "react-bootstrap/Form";
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class MyProfile extends React.Component {
                     <h5 className="card-title">{band.name}</h5>
                     <h6 className="card-subtitle">{band.genre}</h6>
                     <p className="card-text"></p>
-                    <Button onClick={() => { this.props.history.push('/band');}}>View More</Button>
+                    <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
                 </div>
             </div>
         );
@@ -79,11 +80,12 @@ class MyProfile extends React.Component {
                             <h2>Name: {this.state.name}</h2>
                             <h4>Location: {this.state.location}</h4>
                             <h4>Experience: {this.state.experience}</h4>
-                            <Button onClick={() => { this.props.history.push('/editprofile');}}>Edit Profile</Button>
+                            <Button onClick={() => {; this.props.history.push('/editprofile');}}>Edit Profile</Button>
                         </TabPanel>
 
                         <TabPanel>
                             {bandsList}
+                            <Button onClick={() => {this.props.history.push('/createband')}}>Create Band</Button>
                         </TabPanel>
                     </Tabs>
                 </div>
