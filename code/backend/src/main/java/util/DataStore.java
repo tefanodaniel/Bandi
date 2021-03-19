@@ -3,8 +3,7 @@ package util;
 import model.Musician;
 import model.Band;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A utility class with methods to create sample data.
@@ -21,9 +20,22 @@ public final class DataStore {
      * @return a list of sample musicians.
      */
     public static List<Musician> sampleMusicians() {
+        // Create lists of genres for the test musicians
+        Set<String> genres1 = new HashSet<String>(Arrays.asList("Progressive Rock", "Psychedelic Rock"));
+        Set<String> genres2 = new HashSet<String>(Arrays.asList("Blues", "Rock", "Classic Rock"));
+        Set<String> genres3 = new HashSet<String>(Arrays.asList("Jazz"));
+
+        // Create lists of instruments for the test musicians
+        Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
+        Set<String> instruments2 = new HashSet<String>(Arrays.asList("Guitar", "Vocals"));
+        Set<String> instruments3 = new HashSet<String>(Arrays.asList("Saxophone"));
+        Set<String> profileLinks = new HashSet<String>();
+
         List<Musician> samples = new ArrayList<>();
-        samples.add(new Musician("fakeid1","Kenny G", "Jazz"));
-        samples.add(new Musician("fakeid2","Bruno Mars", "Pop"));
+        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England", profileLinks));
+        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England", profileLinks));
+        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle", profileLinks));
+
         return samples;
     }
 

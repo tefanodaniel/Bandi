@@ -18,7 +18,7 @@ import java.sql.Statement;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = false;
+    public static boolean USE_TEST_DATABASE = true;
 
     private Database() {
         // This class should not be instantiated.
@@ -36,8 +36,9 @@ public final class Database {
      */
     public static void main(String[] args) throws URISyntaxException {
         Sql2o sql2o = getSql2o();
-        createMusiciansTableWithSampleData(sql2o, DataStore.sampleMusicians());
-        createBandsTableWithSampleData(sql2o, DataStore.sampleBands());
+        createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
+        createBandTablesWithSampleData(sql2o, DataStore.sampleMusicians());
+
     }
 
     /**
@@ -70,23 +71,60 @@ public final class Database {
      * @param samples a list of sample CS Musicians.
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
-    public static void createMusiciansTableWithSampleData(Sql2o sql2o, List<Musician> samples) throws Sql2oException {
+    public static void createMusicianTablesWithSampleData(Sql2o sql2o, List<Musician> samples) throws Sql2oException {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS Musicians;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Musicians CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Instruments;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS MusicianGenres;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS ProfileAVLinks;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
                     + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
-                    + "genre VARCHAR(30) NOT NULL,"
-                    + "instrument VARCHAR(50),"
                     + "experience VARCHAR(30),"
                     + "location VARCHAR(30)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            sql = "INSERT INTO Musicians(id, name, genre) VALUES(:id, :name, :genre);";
-            for (Musician Musician : samples) {
-                conn.createQuery(sql).bind(Musician).executeUpdate();
+            sql = "CREATE TABLE IF NOT EXISTS Instruments("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "instrument VARCHAR(50)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS MusicianGenres("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "genre VARCHAR(30)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS ProfileAVLinks("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "link VARCHAR(100)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
+            String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
+            String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
+            for (Musician m : samples) {
+                conn.createQuery(musician_sql).bind(m).executeUpdate(); // Does this break if the class has more attributes than there are columns? Nope!
+
+                // Insert all instruments for this musician
+                for (String instrument : m.getInstruments()) {
+                    conn.createQuery(instrument_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("instrument", instrument)
+                            .executeUpdate();
+                }
+
+                // Insert all genres for this musician
+                for (String genre : m.getGenres()) {
+                    conn.createQuery(genre_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("genre", genre)
+                            .executeUpdate();
+                }
             }
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
@@ -94,42 +132,36 @@ public final class Database {
     }
 
     /**
-     * Create Bands table schema and add sample bands to it.
+     * Create Musicians table schema and add sample CS Musicians to it.
      *
      * @param sql2o a Sql2o object connected to the database to be used in this application.
-     * @param sampleBands a list of sample bands
+     * @param samples a list of sample CS Musicians.
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
-    private static void createBandsTableWithSampleData(Sql2o sql2o, List<Band> sampleBands) {
+    public static void createBandTablesWithSampleData(Sql2o sql2o, List<?> samples) throws Sql2oException {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS Bands;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Bands CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS BandMembers;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS BandGenres;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Bands("
-                    + "id VARCHAR(30) NOT NULL,"
+                    + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
-                    + "genre VARCHAR(30) NOT NULL,"
-                    + "size INTEGER,"
-                    + "capacity INTEGER,"
-                    + "members TEXT [],"
-                    + "PRIMARY KEY (id)"
+                    + "capacity integer CHECK(capacity > 0)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            sql = "INSERT INTO Bands(id, name, genre, size, capacity, members) VALUES(:id, :name, " +
-                    ":genre, :size, :capacity, %s);";
+            sql = "CREATE TABLE IF NOT EXISTS BandMembers("
+                    + "mid VARCHAR(30) REFERENCES Musicians," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "bid VARCHAR(30) REFERENCES Bands"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
 
-            for (Band band : sampleBands) {
-                String sql_with_id = String.format(sql, band.getMemberString());
-
-                conn.createQuery(sql_with_id)
-                        .addParameter("id", band.getId())
-                        .addParameter("name", band.getName())
-                        .addParameter("genre", band.getGenre())
-                        .addParameter("size", band.getSize())
-                        .addParameter("capacity", band.getCapacity())
-                        .executeUpdate();
-            }
-
+            sql = "CREATE TABLE IF NOT EXISTS BandGenres("
+                    + "id VARCHAR(30) REFERENCES Bands," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "genre VARCHAR(30)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
 
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());

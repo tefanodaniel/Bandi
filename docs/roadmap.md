@@ -10,8 +10,6 @@
 - As a user, I want to be able to filter profiles based on a set of similar interests and/or geographic proximity to me so that I can connect with those users.
 - As a band member, I want to be able to link my and my bandmates' personal profiles to the band profile so that prospective musicians can easily learn about the band and its members.
 - As a user and as a band member, I would like to be able to put links to audio/video clips (YouTube, Soundcloud, etc.) on my profiles so I can give prospective collaborators a preview of my playing.
-- As a guest without login credentials, I want to have view-only privileges for the available profiles 
-  so that I can see what kind of musicians and groups are around.
 
 ## Iteration 3
 - As a user, I want to be able to chat with other users that I connect with so that we can discuss our tastes, see if we are a good fit, and arrange to meet in person without having to exchange personal contact information.
@@ -45,5 +43,7 @@
 - As a user, I want to be able to specifically browse for bands with virtual tryouts so I can easily find them and apply.
 
 - As a guest, I want to be able to browse band profiles and use a “contact us” form to ask about their availability for gigs so that I can hire local bands to play events.
+- as a guest without login credentials, I want to have view-only privileges for the available profiles 
+  so that I can see what kind of musicians and groups are around.
 </p>
 </details>
