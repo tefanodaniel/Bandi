@@ -7,6 +7,7 @@ import kong.unirest.json.JSONObject;
 import model.Band;
 import spark.QueryParamsMap;
 import util.Database;
+import util.DataStore;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,7 +34,7 @@ import javax.xml.crypto.Data;
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = false;
+    private static final boolean isLocalTest = true;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
@@ -139,7 +140,7 @@ public class ApiServer {
             // Create user in database if not already existent
             Musician musician = musicianDao.read(id);
             if (musician == null) { // user has not been added to database yet
-                musicianDao.create(id, name, "unknown genre");
+                musicianDao.create(id, name);
             }
 
             return null;
@@ -183,15 +184,18 @@ public class ApiServer {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
                 //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
-                String instrument = musician.getInstrument();
+                Set<String> instruments = musician.getInstruments();
+                Set<String> genres = musician.getGenres();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
-                if (instrument == null) { instrument = "NULL"; }
+                Set<String> profileLinks = musician.getProfileLinks();
+                if (instruments == null) { instruments = new HashSet<String>(); }
+                if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
+                if (profileLinks == null) { profileLinks = new HashSet<String>(); }
 
-                musicianDao.create(musician.getId(), musician.getName(), musician.getGenre(),
-                        instrument, experience, location);
+                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks);
 
                 res.status(201);
                 return gson.toJson(musician);
@@ -214,27 +218,31 @@ public class ApiServer {
                 }
 
                 String name = musician.getName();
-                String genre = musician.getGenre();
-                String instrument = musician.getInstrument();
+                Set<String> genres = musician.getGenres();
+                Set<String> instruments = musician.getInstruments();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                Set<String> profileLinks = musician.getProfileLinks();
                 // Update specific fields:
                 boolean flag = false;
                 if (name != null) {
                     flag = true;
                     musician = musicianDao.updateName(id, name);
-                } if (instrument != null) {
+                } if (instruments != null) {
                     flag = true;
-                    musician = musicianDao.updateInstrument(id, instrument);
-                } if (genre != null) {
+                    musician = musicianDao.updateInstruments(id, instruments);
+                } if (genres != null) {
                     flag = true;
-                    musician = musicianDao.updateGenre(id, genre);
+                    musician = musicianDao.updateGenres(id, genres);
                 } if (experience != null) {
                     flag = true;
                     musician = musicianDao.updateExperience(id, experience);
                 } if (location != null) {
                     flag = true;
                     musician = musicianDao.updateLocation(id, location);
+                } if (profileLinks != null) {
+                    flag = true;
+                    musician = musicianDao.updateProfileLinks(id, profileLinks);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
@@ -309,10 +317,9 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-//        Musician musician = new Musician("1", "sample name", "sample genre");
-//        List<Musician> musicians = new ArrayList<>();
-//        musicians.add(musician);
-//        Database.createMusiciansTableWithSampleData(sql2o, musicians);
+        List<Musician> musicians = DataStore.sampleMusicians();
+        Database.createMusicianTablesWithSampleData(sql2o, musicians);
+        Database.createBandTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 
