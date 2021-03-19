@@ -6,7 +6,7 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 
-class Profile extends React.Component {
+class MyProfile extends React.Component {
     constructor(props) {
         super(props)
 
@@ -19,8 +19,9 @@ class Profile extends React.Component {
 
             name: '',
             location: '',
-            genre: '',
-            instruments: []
+            experience: '',
+            instruments: [],
+            genres: []
         }
     }
 
@@ -37,13 +38,13 @@ class Profile extends React.Component {
         axios.get(bandsURL)
             .then((response) => this.setState({bands: response.data}));
 
-        // get the user info
+        // get the signed-in user's info
         axios.get(userURL)
             .then((response) => this.setState(
                 {name: response.data.name, location: response.data.location,
                 genre: response.data.genre}));
 
-        // Get list of band views
+        // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
             <div className="card">
                 <div className="card-body">
@@ -58,11 +59,16 @@ class Profile extends React.Component {
         if (this.state.bands && this.state.bands.length > 0) {
             return (
                 <div>
-                    <h1>My Profile Page</h1>
-                    <button onClick={() => {
-                        this.props.history.push('/');
-                    }}>Back to Discover
-                    </button>
+                    <header>
+                        <h1>My Profile Page</h1>
+
+                        <Button onClick={() => {
+                            this.props.history.push('/');
+                        }}>Back to Discover
+                        </Button>
+
+                    </header>
+
                     <Tabs>
                         <TabList>
                             <Tab>My Profile</Tab>
@@ -72,7 +78,7 @@ class Profile extends React.Component {
                         <TabPanel>
                             <h2>Name: {this.state.name}</h2>
                             <h4>Location: {this.state.location}</h4>
-                            <h4>Genre: {this.state.genre}</h4>
+                            <h4>Experience: {this.state.experience}</h4>
                             <Button onClick={() => { this.props.history.push('/editprofile');}}>Edit Profile</Button>
                         </TabPanel>
 
@@ -86,7 +92,7 @@ class Profile extends React.Component {
 
             return (
                 <div>
-                    <h1>Profile</h1>
+                    <h1>My Profile Page</h1>
                     <h3>Loading...</h3>
                 </div>
 
@@ -95,4 +101,4 @@ class Profile extends React.Component {
     }
 
 }
-export default Profile;
+export default MyProfile;

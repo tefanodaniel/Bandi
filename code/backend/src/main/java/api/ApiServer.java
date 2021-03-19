@@ -111,7 +111,7 @@ public class ApiServer {
 
             String error = req.queryParams("error");
             if (error != null) { // SSO was canceled by user
-                res.redirect(frontend_url + "/signin");
+                res.redirect(frontend_url);
                 return null;
             }
 
@@ -300,6 +300,7 @@ public class ApiServer {
         // To allow CORS
         before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "*");
             res.header("Access-Control-Allow-Headers", "*");
             res.type("application/json");
         });
