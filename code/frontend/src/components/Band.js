@@ -20,6 +20,8 @@ class Band extends React.Component {
         }
     }
 
+    goBack = () => {this.props.history.goBack()}
+
     render() {
         const params = new URLSearchParams(this.props.location.search);
         let curBandId = params.get("view");
@@ -41,7 +43,7 @@ class Band extends React.Component {
                 <div>
                     <h1>{this.state.bandName}</h1>
                     <h3>{this.state.bandSize} / {this.state.bandCapacity} spots filled</h3>
-                    <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
+                    <Button onClick={() => {this.goBack()}}>Go Back</Button>
                 </div>
             );
         } else {
