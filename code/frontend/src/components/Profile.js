@@ -5,6 +5,8 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
+import Header from "./Header/Header";
+import {Container, Navbar} from "react-bootstrap";
 
 class Profile extends React.Component {
     constructor(props) {
@@ -46,6 +48,12 @@ class Profile extends React.Component {
         if (this.state.name) {
             return (
                 <div>
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Learn more about fellow Musicians!
+                        </Navbar.Brand>
+                    </Navbar>
                     <h2>Name: {this.state.name}</h2>
                     <h4>Location: {this.state.location}</h4>
                     <h4>Experience: {this.state.experience}</h4>
@@ -58,7 +66,6 @@ class Profile extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
-                    <Button onClick={() => {this.goBack()}}>Go Back</Button>
                 </div>
             );
         } else {

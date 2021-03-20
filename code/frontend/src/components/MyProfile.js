@@ -6,6 +6,8 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
+import Header from "./Header/Header";
+import {Container, Navbar} from "react-bootstrap";
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -31,6 +33,7 @@ class MyProfile extends React.Component {
 
     render() {
         // get user's id
+        console.log("am I over here?")
         this.state.id = Cookies.get('id');
 
         var bandsURL = getBackendURL() + "/bands" + "?musicianId=" + this.state.id;
@@ -64,16 +67,12 @@ class MyProfile extends React.Component {
         if (this.state.bands) {
             return (
                 <div>
-                    <header>
-                        <h1>My Profile Page</h1>
-
-                        <Button onClick={() => {
-                            this.props.history.push('/');
-                        }}>Back to Discover
-                        </Button>
-
-                    </header>
-
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Customize your Profile
+                        </Navbar.Brand>
+                    </Navbar>
                     <Tabs>
                         <TabList>
                             <Tab>My Profile</Tab>
@@ -108,12 +107,13 @@ class MyProfile extends React.Component {
 
             return (
                 <div>
-                    <h1>My Profile Page</h1>
-                    <Button onClick={() => {
-                        this.props.history.push('/');
-                    }}>Back to Discover
-                    </Button>
-                    <h3>Loading...</h3>
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Customize your Profile Page
+                        </Navbar.Brand>
+                    </Navbar>
+                    <h3>Coming Soon...</h3>
                 </div>
 
             );

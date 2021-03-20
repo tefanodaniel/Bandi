@@ -30,6 +30,7 @@ const Header = (id) => {
       type: 'user/logout'
     })
   }
+  const goToProfile = () => { this.props.history.push('/myprofile');}
 
   return (
       <div>
@@ -39,7 +40,7 @@ const Header = (id) => {
               Welcome, {user.name}!
           </Navbar.Brand>
             <Nav className="mr-sm-2">
-            <Nav.Link href="/myprofile">My Profile</Nav.Link>
+            <Nav.Link href="/myprofile" onClick={goToProfile}>My Profile</Nav.Link>
             <Nav.Link href="/signin" onClick={handlelogout}>Log Out</Nav.Link>
           </Nav>
         </Navbar>
