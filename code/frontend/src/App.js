@@ -10,6 +10,7 @@ import Band from "./components/Band";
 import CreateBand from "./components/CreateBand";
 import MusicianView from "./components/MusicianView";
 import BandView from "./components/BandView";
+import Profile from "./components/Profile";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route exact path="/createband" component={CreateBand} />
           <Route exact path="/musicianview" component={MusicianView} />
           <Route exact path="/bandview" component={BandView} />
+          <Route exact path="/profile" component={Profile} />
         </Switch>
       </HashRouter>
     </div>

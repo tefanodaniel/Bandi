@@ -22,7 +22,8 @@ class MyProfile extends React.Component {
             location: '',
             experience: '',
             instruments: [],
-            genres: []
+            genres: [],
+            links: []
         }
     }
 
@@ -43,14 +44,17 @@ class MyProfile extends React.Component {
         axios.get(userURL)
             .then((response) => this.setState(
                 {name: response.data.name, location: response.data.location,
-                experience: response.data.experience}));
+                experience: response.data.experience,
+                instruments: response.data.instruments,
+                genres: response.data.genres,
+                links: response.data.profileLinks}));
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
             <div className="card">
                 <div className="card-body">
                     <h5 className="card-title">{band.name}</h5>
-                    <h6 className="card-subtitle"></h6>
+                    <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
                     <p className="card-text"></p>
                     <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
                 </div>
@@ -80,6 +84,15 @@ class MyProfile extends React.Component {
                             <h2>Name: {this.state.name}</h2>
                             <h4>Location: {this.state.location}</h4>
                             <h4>Experience: {this.state.experience}</h4>
+                            <div>
+                                <h4>Instruments: {this.state.instruments.join(", ")}</h4>
+                            </div>
+                            <div>
+                                <h4>Genres: {this.state.genres.join(", ")}</h4>
+                            </div>
+                            <div>
+                                <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
+                            </div>
                             <Button onClick={() => {; this.props.history.push('/editprofile');}}>Edit Profile</Button>
                         </TabPanel>
 
