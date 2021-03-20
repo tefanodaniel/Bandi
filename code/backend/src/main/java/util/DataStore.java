@@ -46,16 +46,16 @@ public final class DataStore {
      */
     public static List<Band> sampleBands() {
         Set<String> members = new HashSet<>();
-        members.add("id1");
-        members.add("id2");
+        members.add("00001fakeid");
+        members.add("00002fakeid");
 
         Set<String> genres = new HashSet<>();
-        members.add("Rock");
-        members.add("Pop");
+        genres.add("Rock");
+        genres.add("Pop");
 
         List<Band> sample_bands = new ArrayList<>();
         sample_bands.add(new Band("Pink Floyd",4, genres, members));
-        sample_bands.add(new Band("Imagine Dragons",4,genres, members));
+        //sample_bands.add(new Band("Imagine Dragons",4,genres, members));
         return sample_bands;
     }
 }

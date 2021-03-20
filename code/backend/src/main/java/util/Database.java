@@ -18,7 +18,7 @@ import java.sql.Statement;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = true;
+    public static boolean USE_TEST_DATABASE = false;
 
     private Database() {
         // This class should not be instantiated.
@@ -107,6 +107,7 @@ public final class Database {
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
+
             for (Musician m : samples) {
                 conn.createQuery(musician_sql).bind(m).executeUpdate();
                 // Does this break if the class has more attributes than there are columns? Nope!
@@ -127,6 +128,7 @@ public final class Database {
                             .executeUpdate();
                 }
             }
+
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
         }
@@ -146,24 +148,26 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS BandGenres;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Bands("
-                    + "id VARCHAR(100) PRIMARY KEY,"
+                    + "id VARCHAR(50) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
             sql = "CREATE TABLE IF NOT EXISTS BandMembers("
                     + "mid VARCHAR(30) REFERENCES Musicians," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "bid VARCHAR(30) REFERENCES Bands"
+                    + "bid VARCHAR(50) REFERENCES Bands"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
             sql = "CREATE TABLE IF NOT EXISTS BandGenres("
-                    + "id VARCHAR(30) REFERENCES Bands," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "id VARCHAR(50) REFERENCES Bands," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
                     + "genre VARCHAR(30)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String band_sql = "INSERT INTO Bands(id, name, capacity) VALUES(:id, :name);";
+
+
+            String band_sql = "INSERT INTO Bands(id, name) VALUES(:id, :name);";
             String bandmembers_sql = "INSERT INTO BandMembers(mid, bid) VALUES(:mid, :bid);";
             String bandgenres_sql = "INSERT INTO BandGenres(id, genre) VALUES(:id, :genre);";
             for (Band b : samples) {
@@ -188,7 +192,11 @@ public final class Database {
                             .addParameter("genre", genre)
                             .executeUpdate();
                 }
+
+
             }
+
+
 
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
