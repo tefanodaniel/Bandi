@@ -34,7 +34,7 @@ import javax.xml.crypto.Data;
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = false;
+    private static final boolean isLocalTest = true;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
@@ -320,7 +320,6 @@ public class ApiServer {
         Sql2o sql2o = Database.getSql2o();
         List<Musician> musicians = DataStore.sampleMusicians();
         Database.createMusicianTablesWithSampleData(sql2o, musicians);
-        Database.createBandTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 

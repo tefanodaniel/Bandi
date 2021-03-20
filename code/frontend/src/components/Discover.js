@@ -36,11 +36,7 @@ class Discover extends React.Component {
 
   	return (
   		<div>
-
-            <header><h1>Discover Page</h1></header>
-			<Button onClick={() => { this.props.history.push('/myprofile');}}>My Profile</Button>
-			<Button onClick={() => { logout(); this.props.history.push('/signin');}}>Log Out</Button>
-
+        <Header></Header>
   			<Jumbotron>
   				<h3>Musicians</h3>
   				<Button>Browse</Button>
