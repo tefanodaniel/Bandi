@@ -3,14 +3,19 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
+import {getBackendURL} from "../utils/api";
 
 class EditProfile extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        id : '',
+
         name: '',
         location: '',
-        instruments: []
+        experience: '',
+        instruments: [],
+        genres: []
       }
 
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -45,16 +50,13 @@ class EditProfile extends React.Component {
 
     handleSubmit(event) {
       const axios = require('axios')
-
-      const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-      const url = isDev ? "http://localhost:4567/musicians" : "https://bandiscover-api.herokuapp.com/musicians";
+      const url = getBackendURL() + "/musicians";
 
       axios
-        .post(url, {
-          id : Cookies.get('id'),
+        .put(url, {
+          id : this.state.id,
           name: this.state.name,
-          location: this.state.location,
-          instruments: this.state.instruments
+          location: this.state.location
         })
         .then(res => {
           console.log(`statusCode: ${res.statusCode}`)
@@ -66,12 +68,33 @@ class EditProfile extends React.Component {
         event.preventDefault();
     }
 
+    submit_form() {
+      const axios = require('axios')
+      const url = getBackendURL() + "/musicians";
+
+      axios
+          .put(url + "/" + this.state.id, {
+            id : this.state.id,
+            name: this.state.name,
+            location: this.state.location
+          })
+          .then(res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(res)
+          })
+          .catch(error => {
+            console.error(error)
+          })
+    }
+
 
     render() {
       return (
         <div>
         <div className="profile">
-          <h1>Edit your profile here:</h1>
+          <header>
+            <h1>Edit Your Profile</h1>
+          </header>
 
           <Form onSubmit={this.handleSubmit}>
             <Form.Group controlId="profileForm.name">
@@ -95,20 +118,19 @@ class EditProfile extends React.Component {
               <Form.Check inline name="vocals" label="Vocals" type="checkbox" onChange={this.handleInstrumentSelection}/>
             </FormGroup>
 
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" onClick={() =>
+            {this.submit_form();
+            /*this.props.history.push('/myprofile');*/}}>
               Submit
             </Button>
+
+            <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
+
           </Form>
         </div>
 
         </div>
       )
-      /*
-              <h2> Testing block </h2>
-        <p>{this.state.name}</p>
-        <p>{this.state.location}</p>
-        <p>{this.state.instruments}</p>
-       */
     }
   }
 

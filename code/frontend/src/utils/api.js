@@ -1,23 +1,10 @@
 import axios from 'axios';
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 export function loginWithSpotify() {
   //Test API call:
   //return axios.get('https://dog.ceo/api/breeds/list/all');
   return axios.get('http://localhost:4567');
-}
-
-// manual cookie finder
-export function findCookie(cookieTitle) {
-  var cookies = document.cookie.split(";");
-  for (var j = 0; j < cookies.length; j++) {
-    var curCookie = cookies[j].split("=");
-    var cookieKey = curCookie[0].trim();
-    if (cookieKey == cookieTitle) {
-      return decodeURIComponent(curCookie[1]);
-    }
-  }
-  return null;
 }
 
 export function getFrontendURL() {
@@ -37,6 +24,5 @@ export function getBackendURL() {
 }
 
 export function logout() {
-  //document.cookie = "id=;expires=0";
   Cookies.remove('id');
 }

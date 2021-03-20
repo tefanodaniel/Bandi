@@ -1,31 +1,31 @@
 package model;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class Musician extends Client {
 
     private String name;
-    private String genre;
-    private String instrument;
+    private Set<String> genres;
+    private Set<String> instruments;
     private String experience;
     private String location;
+    private Set<String> profileLinks;
 
-    public Musician(String id, String name, String genre) {
+    public Musician(String id, String name, Set<String> genres) {
         super(id);
         this.name = name;
-        this.genre = genre;
+        this.genres = genres;
     }
 
-    public Musician(String id, String name, String genre,
-                    String instrument, String experience, String location) {
+    public Musician(String id, String name, Set<String> genres,
+                    Set<String> instruments, String experience, String location, Set<String> profileLinks) {
         super(id);
         this.name = name;
-        this.genre = genre;
-        this.instrument = instrument;
+        this.genres = genres;
+        this.instruments = instruments;
         this.experience = experience;
         this.location = location;
+        this.profileLinks = profileLinks;
     }
 
     public String getName() {
@@ -36,20 +36,34 @@ public class Musician extends Client {
         this.name = name;
     }
 
-    public String getGenre() {
-        return genre;
+    public Set<String> getGenres() {
+        return genres;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setGenres(List<String> genre) {
+        this.genres = genres;
     }
 
-    public String getInstrument() {
-        return instrument;
+    public void addGenre(String genre) {
+        if (this.genres == null) {
+            this.genres = new HashSet<String>();
+        }
+        this.genres.add(genre);
     }
 
-    public void setInstrument(String instrument) {
-        this.instrument = instrument;
+    public Set<String> getInstruments() {
+        return instruments;
+    }
+
+    public void setInstruments(Set<String> instruments) {
+        this.instruments = instruments;
+    }
+
+    public void addInstrument(String instrument) {
+        if (this.instruments == null) {
+            this.instruments = new HashSet<String>();
+        }
+        this.instruments.add(instrument);
     }
 
     public String getExperience() {
@@ -68,29 +82,44 @@ public class Musician extends Client {
         this.location = location;
     }
 
+    public Set<String> getProfileLinks() {
+        return profileLinks;
+    }
+
+    public void setProfileLinks(Set<String> links) {
+        this.profileLinks = links;
+    }
+
+    public void addProfileLink(String link) {
+        if (this.profileLinks == null) {
+            this.profileLinks = new HashSet<String>();
+        }
+        this.profileLinks.add(link);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Musician musician = (Musician) o;
         return name.equals(musician.name) &&
-                genre.equals(musician.genre) &&
-                Objects.equals(instrument, musician.instrument) &&
+                genres.equals(musician.genres) &&
+                Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
                 Objects.equals(location, musician.location);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, genre, instrument, experience, location);
+        return Objects.hash(name, genres, instruments, experience, location);
     }
 
     @Override
     public String toString() {
         return "Musician{" +
                 "name='" + name + '\'' +
-                ", genre='" + genre + '\'' +
-                ", instrument='" + instrument + '\'' +
+                ", genre='" + genres.toString() + '\'' +
+                ", instrument='" + instruments.toString() + '\'' +
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
                 '}';
