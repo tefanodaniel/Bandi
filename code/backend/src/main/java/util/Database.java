@@ -18,7 +18,7 @@ import java.sql.Statement;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = true;
+    public static boolean USE_TEST_DATABASE = false;
 
     private Database() {
         // This class should not be instantiated.

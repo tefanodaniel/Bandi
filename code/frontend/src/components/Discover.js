@@ -5,7 +5,9 @@ import Button from 'react-bootstrap/Button';
 import {findCookie, getBackendURL, getFrontendURL, getURL, logout} from "../utils/api";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 import Header from './Header/Header.js'
+
 class Discover extends React.Component {
   constructor(props) {
     super(props)

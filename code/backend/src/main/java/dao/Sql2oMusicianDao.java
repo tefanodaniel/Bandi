@@ -105,6 +105,10 @@ public class Sql2oMusicianDao implements MusicianDao {
                     "WHERE R.mid=:id;";
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
+            if (queryResults.size() == 0) { // no such musician is present
+                return null;
+            }
+
             // Extract attributes
             String name = (String) queryResults.get(0).get("name");
             String exp = (String) queryResults.get(0).get("experience");

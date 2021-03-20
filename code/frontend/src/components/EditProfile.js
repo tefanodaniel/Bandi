@@ -70,13 +70,12 @@ class EditProfile extends React.Component {
 
     submit_form() {
       const axios = require('axios')
-      const url = getBackendURL() + "/musicians";
+      const url = getBackendURL() + "/musicians" + "/" + Cookies.get("id");
 
       axios
-          .put(url + "/" + this.state.id, {
-            id : this.state.id,
-            name: this.state.name,
-            location: this.state.location
+          .put(url, {
+              id: Cookies.get("id"),
+            name: this.state.name
           })
           .then(res => {
             console.log(`statusCode: ${res.statusCode}`)
@@ -89,6 +88,18 @@ class EditProfile extends React.Component {
 
 
     render() {
+        // get user's id
+        this.state.id = Cookies.get('id');
+        if (!this.state.id) {
+            return(
+                <div>
+                    <h1>Edit Your Profile</h1>
+                    <h3>Loading...</h3>
+                </div>
+            )
+        }
+
+
       return (
         <div>
         <div className="profile">
