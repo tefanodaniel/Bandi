@@ -26,8 +26,6 @@ const MusicianSearch = () => {
     }
 
     const SubmitQuery = () => {
-        console.log('at the time of submit', queryparams);
-        console.log('at the time of submit the length', queryparams.length);
         if(Object.keys(queryparams)===0) {
             dispatch(clearQuery)
         }
@@ -38,27 +36,26 @@ const MusicianSearch = () => {
 
     return (
         <Container>
-            <Row>
+            <Row className="justify-content-md-center">
                 <div className='control' style={{minWidth: "300px", textAlign:"center"}}>
-                    <h6> Name : </h6> <input onChange={e => {addnamequery(e);}} style={{width: "100%"}} placeholder='Search by Name' type='text'/>
+                    Name :  <input onChange={e => {addnamequery(e);}} style={{width: "100%"}} placeholder='Search by Name' type='text'/>
                 </div>
             </Row>
-            <Row>
+            <Row className="justify-content-md-center">
                 <div className='control' style={{minWidth: "300px", textAlign:"center"}}>
                     <h6> Instrument : </h6>
                     <input onChange={e => {addinstrumentquery(e);}} style={{width: "100%"}} placeholder='Search by Instrument' type='text'/>
                 </div>
-                <div> </div>
             </Row>
-            <Row>
+            <Row className="justify-content-md-center">
                 <div className='control' style={{minWidth: "300px", textAlign:"center"}}>
                     <h6> Genre : </h6>
                     <input onChange={e => {addgenrequery(e);}} style={{width: "100%"}} placeholder='Search by Genre' type='text'/>
                 </div>
-                <div> </div>
             </Row>
-            <div> </div>
-            <Button variant="primary" onClick={SubmitQuery}>Submit!</Button>
+            <Row className="justify-content-md-center">
+                <Button variant="primary" onClick={SubmitQuery} >Submit!</Button>
+            </Row>
         </Container>
     )
 }
