@@ -10,20 +10,23 @@ class CreateBand extends React.Component {
         super(props);
 
         this.state = {
-            id : '',
             name: '',
+            capacity: 0,
             genres: [],
             members: []
         }
+
+        this.submit_form = this.submit_form.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     submit_form() {
         const axios = require('axios')
-        const url = getBackendURL() + "/bands";
+        const url = getBackendURL() + "/bands/";
 
         axios
-            .post(url + "/" + this.state.id, {
-                id : this.state.id,
+            .post(url, {
+                id : "foo",
                 name: this.state.name
             })
             .then(res => {
@@ -35,10 +38,33 @@ class CreateBand extends React.Component {
             })
     }
 
+    handleChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        this.setState({
+            [name]: value
+        });
+    }
+
     render() {
         return (
             <div>
             <h1>Create Band</h1>
+
+
+                <Form>
+                    <Form.Group controlId="profileForm.name">
+                        <Form.Label>Name of Band</Form.Label>
+                        <Form.Control name="" type="input"
+                                      placeholder="ex. The Beatles" value={this.state.name} onChange={this.handleChange} />
+                    </Form.Group>
+                </Form>
+
+
+
+            <Button onClick={this.submit_form}>Create</Button>
+
             <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
             </div>
         )
