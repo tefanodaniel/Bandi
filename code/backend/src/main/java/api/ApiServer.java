@@ -307,6 +307,31 @@ public class ApiServer {
             }
         });
 
+        // post band
+        post("/bands", (req, res) -> {
+            try {
+                Band band = gson.fromJson(req.body(), Band.class);
+
+                String id = UUID.randomUUID().toString();
+                Set<String> members = band.getMembers();
+                Set<String> genres = band.getGenres();
+                String name = band.getName();
+                int capacity = band.getCapacity();
+
+                if (members == null) { members = new HashSet<String>(); }
+                if (genres == null) { genres = new HashSet<String>(); }
+                if (name == null) { name = "NULL"; }
+                if (capacity == 0) { capacity = 1; }
+
+                bandDao.create(id, name, capacity, genres, members);
+
+                res.status(201);
+                return gson.toJson(band);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // put new band members
         put("/bands/:bid/:mid", (req, res) -> {
             try {

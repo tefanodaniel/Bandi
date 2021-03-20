@@ -26,28 +26,40 @@ public class Sql2oBandDao implements BandDao {
     }
 
     @Override
-    public Band create(String id, String name, String genre,
-                       int size, int capacity, List<String> members) throws DaoException {
-        /*
-        String sql = "WITH inserted AS ("
-                + "INSERT INTO Bands(id, name, genre, size, capacity, members)" +
-                "VALUES(:id, :name, :genre, :size, :capacity, %s) RETURNING *"
-                + ") SELECT * FROM inserted;";
+    public Band create(String id, String name, int capacity,
+                       Set<String> genres, Set<String> members) throws DaoException {
+        String bandSQL = "INSERT INTO Bands (id, name, capacity) VALUES (:id, :name, :capacity)";
+        String genresSQL = "INSERT INTO BandGenres (id, genre) VALUES (:id, :genre)";
+        String membersSQL = "INSERT INTO BandMembers (member, band) VALUES (:member, :band)";
         try (Connection conn = sql2o.open()) {
-            Band band = new Band(id, name, genre, size, capacity, members);
-            String sql_with_id = String.format(sql, band.getMemberString());
-
-            return conn.createQuery(sql)
+            // Insert band into database
+            conn.createQuery(bandSQL)
                     .addParameter("id", id)
                     .addParameter("name", name)
-                    .addParameter("genre", genre)
-                    .addParameter("size", size)
                     .addParameter("capacity", capacity)
-                    .executeAndFetchFirst(Band.class);
+                    .executeUpdate();
+
+            // Insert corresponding band genres into database
+            for (String genre : genres) {
+                conn.createQuery(genresSQL)
+                        .addParameter("id", id)
+                        .addParameter("genre", genre)
+                        .executeUpdate();
+            }
+
+            // Insert corresponding band members into database
+            for (String member : members) {
+                conn.createQuery(membersSQL)
+                        .addParameter("member", member)
+                        .addParameter("band", id)
+                        .executeUpdate();
+            }
+
+            // Return band
+            return this.read(id);
         } catch(Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
-        }*/
-        return null;
+        }
     }
 
     @Override
