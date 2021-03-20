@@ -162,16 +162,16 @@ public class Sql2oBandDao implements BandDao {
     }
 
     @Override
-    public Band remove(String id, String musID) throws DaoException {
-        /*
+    public Band remove(String bandId, String musicianId) throws DaoException {
+        String sql = "DELETE FROM BandMembers WHERE member=:musicianId;";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery()
-                    //FIXME
-                    .executeAndFetchFirst(Band.class);
+            conn.createQuery(sql)
+                    .addParameter("musicianId", musicianId)
+                    .executeUpdate();
+            return this.read(bandId);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to remove member", ex);
-        }*/
-        return null;
+        }
     }
 
     @Override

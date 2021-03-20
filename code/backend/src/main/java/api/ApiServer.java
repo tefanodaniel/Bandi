@@ -338,6 +338,23 @@ public class ApiServer {
             }
         });
 
+        // remove
+        delete("/bands/:bid/:mid", (req, res) -> {
+            try {
+                String bandId = req.params("bid");
+                String musicianId = req.params("mid");
+                Band band = bandDao.remove(bandId, musicianId);
+                if (band == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                res.type("application/json");
+                return gson.toJson(band);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // To allow CORS
         before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
