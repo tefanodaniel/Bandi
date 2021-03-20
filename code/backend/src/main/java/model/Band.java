@@ -12,8 +12,8 @@ public class Band extends Client {
     private Set<String> members;
     private Set<String> genres;
 
-    public Band(String name, int capacity, Set<String> genres, Set<String> members) {
-        super(UUID.randomUUID().toString());
+    public Band(String id, String name, int capacity, Set<String> genres, Set<String> members) {
+        super(id);
         this.name = name;
         //this.size = size;
         this.capacity = capacity;

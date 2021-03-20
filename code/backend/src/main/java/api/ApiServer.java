@@ -307,6 +307,37 @@ public class ApiServer {
             }
         });
 
+        // put new band members
+        put("/bands/:bid/:mid", (req, res) -> {
+            try {
+                String bandId = req.params("bid");
+                String musicianId = req.params("mid");
+                Band band = bandDao.read(bandId);
+                Musician musician = musicianDao.read(musicianId);
+                if (band == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+                if (musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+                if (!(musician.getId()).equals(musicianId)) {
+                    throw new ApiError("musician ID does not match the resource identifier", 400);
+                }
+                if (!(band.getId()).equals(bandId)) {
+                    throw new ApiError("band ID does not match the resource identifier", 400);
+                }
+
+                Band b = bandDao.add(bandId, musicianId);
+                if (b == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                return gson.toJson(b);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // To allow CORS
         before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");

@@ -60,10 +60,11 @@ public class Sql2oBandDao implements BandDao {
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
             // Extract non-list attributes
+            String bandId = (String) queryResults.get(0).get("id");
             String name = (String) queryResults.get(0).get("name");
             int capacity = (int) queryResults.get(0).get("capacity");
 
-            Band b = new Band(name, capacity, new HashSet<String>(), new HashSet<String>());
+            Band b = new Band(bandId, name, capacity, new HashSet<String>(), new HashSet<String>());
             for (Map row : queryResults) {
                 b.addGenre((String) row.get("genre"));
                 b.addMember((String) row.get("member"));
@@ -147,16 +148,17 @@ public class Sql2oBandDao implements BandDao {
     }
 
     @Override
-    public Band add(String id, String musID) throws DaoException {
-        /*
+    public Band add(String bandId, String musicianId) throws DaoException {
+        String sql = "INSERT INTO BandMembers (member, band) VALUES (:member, :band);";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery()
-                    //FIXME
-                    .executeAndFetchFirst(Band.class);
+            conn.createQuery(sql)
+                    .addParameter("member", musicianId)
+                    .addParameter("band", bandId)
+                    .executeUpdate();
+            return this.read(bandId);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to add new member", ex);
-        }*/
-        return null;
+        }
     }
 
     @Override
@@ -209,7 +211,7 @@ public class Sql2oBandDao implements BandDao {
             // Check if we've seen this band already. If not, create new Band object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
-                bands.put(id, new Band(name, capacity, new HashSet<String>(), new HashSet<String>()));
+                bands.put(id, new Band(id, name, capacity, new HashSet<String>(), new HashSet<String>()));
             }
             // Add the genre and instrument from this row to the object lists
             Band b = bands.get(id);
