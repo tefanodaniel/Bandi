@@ -18,7 +18,7 @@ import java.sql.Statement;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = false;
+    public static boolean USE_TEST_DATABASE = true;
 
     private Database() {
         // This class should not be instantiated.
@@ -149,13 +149,14 @@ public final class Database {
 
             String sql = "CREATE TABLE IF NOT EXISTS Bands("
                     + "id VARCHAR(50) PRIMARY KEY,"
-                    + "name VARCHAR(30) NOT NULL"
+                    + "name VARCHAR(30) NOT NULL,"
+                    + "capacity integer CHECK(capacity > 0)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
             sql = "CREATE TABLE IF NOT EXISTS BandMembers("
-                    + "mid VARCHAR(30) REFERENCES Musicians," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "bid VARCHAR(50) REFERENCES Bands"
+                    + "member VARCHAR(30) REFERENCES Musicians," // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "band VARCHAR(50) REFERENCES Bands"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
@@ -167,21 +168,22 @@ public final class Database {
 
 
 
-            String band_sql = "INSERT INTO Bands(id, name) VALUES(:id, :name);";
-            String bandmembers_sql = "INSERT INTO BandMembers(mid, bid) VALUES(:mid, :bid);";
+            String band_sql = "INSERT INTO Bands(id, name, capacity) VALUES(:id, :name, :capacity);";
+            String bandmembers_sql = "INSERT INTO BandMembers(member, band) VALUES(:member, :band);";
             String bandgenres_sql = "INSERT INTO BandGenres(id, genre) VALUES(:id, :genre);";
             for (Band b : samples) {
                 conn.createQuery(band_sql)
                         .addParameter("id", b.getId())
                         .addParameter("name", b.getName())
+                        .addParameter("capacity", b.getCapacity())
                         .executeUpdate();
                 // Does this break if the class has more attributes than there are columns? Nope!
 
                 // Insert all band member info
                 for (String member : b.getMembers()) {
                     conn.createQuery(bandmembers_sql)
-                            .addParameter("mid", member)
-                            .addParameter("bid",b.getId())
+                            .addParameter("member", member)
+                            .addParameter("band",b.getId())
                             .executeUpdate();
                 }
 

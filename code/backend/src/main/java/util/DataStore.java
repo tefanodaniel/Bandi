@@ -53,8 +53,10 @@ public final class DataStore {
         genres.add("Rock");
         genres.add("Pop");
 
+        String bandId = UUID.randomUUID().toString();
+
         List<Band> sample_bands = new ArrayList<>();
-        sample_bands.add(new Band("Pink Floyd",4, genres, members));
+        sample_bands.add(new Band(bandId,"Pink Floyd",4, genres, members));
         //sample_bands.add(new Band("Imagine Dragons",4,genres, members));
         return sample_bands;
     }

@@ -1,9 +1,6 @@
 package model;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class Band extends Client {
 
@@ -15,8 +12,8 @@ public class Band extends Client {
     private Set<String> members;
     private Set<String> genres;
 
-    public Band(String name, int capacity, Set<String> genres, Set<String> members) {
-        super(UUID.randomUUID().toString());
+    public Band(String id, String name, int capacity, Set<String> genres, Set<String> members) {
+        super(id);
         this.name = name;
         //this.size = size;
         this.capacity = capacity;
@@ -39,6 +36,13 @@ public class Band extends Client {
 
     public Set<String> getGenres() {
         return this.genres;
+    }
+
+    public void addGenre(String genre) {
+        if (this.genres == null) {
+            this.genres = new HashSet<String>();
+        }
+        this.genres.add(genre);
     }
 /*
     public void setSize(int size) {
@@ -63,6 +67,13 @@ public class Band extends Client {
 
     public void setMembers (Musician member) {
         members.add(member.getId());
+    }
+
+    public void addMember(String member) {
+        if (this.members == null) {
+            this.members = new HashSet<String>();
+        }
+        this.members.add(member);
     }
 
     @Override
