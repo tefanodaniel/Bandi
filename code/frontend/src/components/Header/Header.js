@@ -1,9 +1,9 @@
 import React from 'react';
-
+import { withRouter } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
-
+import { logout } from "../../utils/api"; // logout is named export, needs brackets
 
 class Header extends React.Component {
   constructor(props) {
@@ -15,6 +15,7 @@ class Header extends React.Component {
 
     this.renderLogin = this.renderLogin.bind(this);
     this.handleLogOut = this.handleLogOut.bind(this);
+
   }
 
   handleLogOut() {
@@ -37,15 +38,18 @@ class Header extends React.Component {
     return (<p>Guest</p>)
   }
 
-
+  goToProfile = () => { this.props.history.push('/profile');}
+        
   render() {
   	return (
   		<Navbar>
-        <Button>Burger</Button>
 
         <h1>bandi</h1>
 
   			{this.renderLogin()}
+
+        <Button onClick={this.goToProfile}>My Profile</Button>
+			  <Button onClick={() => { logout(); this.props.history.push('/');}}>Log Out</Button>
 
   		</Navbar>
   	);
@@ -53,4 +57,4 @@ class Header extends React.Component {
 
 }
 
-export default Header;
+export default withRouter(Header);
