@@ -107,6 +107,7 @@ public final class Database {
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
+            String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";
 
             for (Musician m : samples) {
                 conn.createQuery(musician_sql).bind(m).executeUpdate();
@@ -125,6 +126,13 @@ public final class Database {
                     conn.createQuery(genre_sql)
                             .addParameter("id", m.getId())
                             .addParameter("genre", genre)
+                            .executeUpdate();
+                }
+
+                for (String link : m.getProfileLinks()) {
+                    conn.createQuery(link_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("link", link)
                             .executeUpdate();
                 }
             }
