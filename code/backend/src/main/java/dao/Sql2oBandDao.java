@@ -31,6 +31,7 @@ public class Sql2oBandDao implements BandDao {
     @Override
     public Band create(String id, String name, String genre,
                        int size, int capacity, List<String> members) throws DaoException {
+        /*
         String sql = "WITH inserted AS ("
                 + "INSERT INTO Bands(id, name, genre, size, capacity, members)" +
                 "VALUES(:id, :name, :genre, :size, :capacity, %s) RETURNING *"
@@ -48,7 +49,8 @@ public class Sql2oBandDao implements BandDao {
                     .executeAndFetchFirst(Band.class);
         } catch(Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
-        }
+        }*/
+        return null;
     }
 
     @Override

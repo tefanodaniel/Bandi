@@ -45,13 +45,17 @@ public final class DataStore {
      * @return a list of sample bands.
      */
     public static List<Band> sampleBands() {
-        List<String> members = new ArrayList<>();
+        Set<String> members = new HashSet<>();
         members.add("id1");
         members.add("id2");
 
+        Set<String> genres = new HashSet<>();
+        members.add("Rock");
+        members.add("Pop");
+
         List<Band> sample_bands = new ArrayList<>();
-        sample_bands.add(new Band("id1","Pink Floyd", "Rock", 2, 2, members));
-        sample_bands.add(new Band("id2","Imagine Dragons","Pop", 2, 2, members));
+        sample_bands.add(new Band("Pink Floyd",4, genres, members));
+        sample_bands.add(new Band("Imagine Dragons",4,genres, members));
         return sample_bands;
     }
 }

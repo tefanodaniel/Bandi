@@ -2,41 +2,27 @@ package model;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class Band extends Client {
 
     //all of these should be serialized I think.
     private String name;
-    private String genre;
-    private int size;
+    //private int size;
     private int capacity;
 
-    private List<String> members;
-    private String memberString;
+    private Set<String> members;
+    private Set<String> genres;
 
-    public Band(String id, String name, String genre, int size, int capacity, List<String> members) {
-        super(id);
+    public Band(String name, int capacity, Set<String> genres, Set<String> members) {
+        super(UUID.randomUUID().toString());
         this.name = name;
-        this.genre = genre;
-        this.size = size;
+        //this.size = size;
         this.capacity = capacity;
 
+        this.genres = genres;
         this.members = members;
-        setMemberString();
-    }
-
-    public String getMemberString() {
-        return this.memberString;
-    }
-
-    private void setMemberString() {
-        //   Resulting text should be of form: '{\"id1\",\"id2\"}'
-        String str = "\'{";
-        for (String memberID : members) {
-            str += "\\\"" + memberID + "\\\",";
-        }
-        memberString = str.substring(0, str.length() - 1) + "}\'";
     }
 
     public void setName(String name) {
@@ -47,21 +33,21 @@ public class Band extends Client {
         return name;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setGenres(Set<String> genres) {
+        this.genres = genres;
     }
 
-    public String getGenre() {
-        return genre;
+    public Set<String> getGenres() {
+        return this.genres;
     }
-
+/*
     public void setSize(int size) {
         this.size = size;
     }
 
     public int getSize() {
         return size;
-    }
+    }*/
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
@@ -71,15 +57,12 @@ public class Band extends Client {
         return capacity;
     }
 
-    public List<String> getMembers () {
+    public Set<String> getMembers () {
         return this.members;
     }
 
     public void setMembers (Musician member) {
-        if (size != capacity) {
-            members.add(member.getId());
-        }
-        setMemberString();
+        members.add(member.getId());
     }
 
     @Override
@@ -91,17 +74,11 @@ public class Band extends Client {
             return false;
         }
         Band band = (Band) o;
-        return name.equals(band.name) && this.getId().equals(band.getId());
+        return this.getId().equals(band.getId());
     }
 
     @Override
     public String toString () {
-
-        return "Band {" + "name =' "
-                + name
-                + '\'' + ", genre = '" + genre
-                + '\'' + ", size = '" + size + '\''
-                + ", capacity = '" + capacity + '\'' +
-                ", members = " + memberString + '}';
+        return "Band{name=\'" + name + "\'}";
     }
 }
