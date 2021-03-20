@@ -5,7 +5,9 @@ import Button from 'react-bootstrap/Button';
 import {findCookie, getBackendURL, getFrontendURL, getURL, logout} from "../utils/api";
 import axios from "axios";
 import Cookies from "js-cookie";
+
 import Header from './Header/Header.js'
+
 class Discover extends React.Component {
   constructor(props) {
     super(props)
@@ -16,6 +18,9 @@ class Discover extends React.Component {
   }
 
   viewMusicians = () => { this.props.history.push('/musicianview');}
+
+  viewBands = () => {this.props.history.push('/bandview')}
+
   render() {
 
   	// Get id from query params
@@ -41,8 +46,9 @@ class Discover extends React.Component {
 			<Jumbotron>
   				<h3>Musicians</h3>
   				<Button onClick={this.viewMusicians}>Browse</Button>
+
 				<h3>Bands</h3>
-				<Button>Browse</Button>
+				<Button onClick={this.viewBands}>Browse</Button>
   			</Jumbotron>
 
   		</div>

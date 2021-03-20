@@ -36,6 +36,10 @@ public final class DataStore {
         samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England", profileLinks));
         samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle", profileLinks));
 
+        // Adding my own account for testing
+        samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
+                genres2, instruments2, "Expert", "Freehold, NJ", profileLinks));
+
         return samples;
     }
 
@@ -49,15 +53,20 @@ public final class DataStore {
         members.add("00001fakeid");
         members.add("00002fakeid");
 
+        Set<String> members2 = new HashSet<>();
+        members.add("00001fakeid");
+        members.add("22zcnk76clvox7mifcwgz3tha");
+
         Set<String> genres = new HashSet<>();
         genres.add("Rock");
         genres.add("Pop");
 
         String bandId = UUID.randomUUID().toString();
+        String id2 = UUID.randomUUID().toString();
 
         List<Band> sample_bands = new ArrayList<>();
         sample_bands.add(new Band(bandId,"Pink Floyd",4, genres, members));
-        //sample_bands.add(new Band("Imagine Dragons",4,genres, members));
+        sample_bands.add(new Band(id2, "Imagine Dragons",4, genres, members2));
         return sample_bands;
     }
 }

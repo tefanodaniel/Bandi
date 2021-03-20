@@ -7,43 +7,26 @@ import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
 
-class MyProfile extends React.Component {
+class BandView extends React.Component {
     constructor(props) {
         super(props)
 
         // Define the state for this component
         this.state = {
-
             id: '',
-
-            bands: [],
-
-            name: 'Loading...',
-            location: '',
-            experience: '',
-            instruments: [],
-            genres: []
+            bands: []
         }
     }
-
-
 
     render() {
         // get user's id
         this.state.id = Cookies.get('id');
 
-        var bandsURL = getBackendURL() + "/bands" + "?musicianId=" + this.state.id;
-        var userURL = getBackendURL() + "/musicians/" + this.state.id;
+        var bandsURL = getBackendURL() + "/bands";
 
         // get bands
         axios.get(bandsURL)
             .then((response) => this.setState({bands: response.data}));
-
-        // get the signed-in user's info
-        axios.get(userURL)
-            .then((response) => this.setState(
-                {name: response.data.name, location: response.data.location,
-                experience: response.data.experience}));
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
@@ -57,11 +40,11 @@ class MyProfile extends React.Component {
             </div>
         );
 
-        if (this.state.bands) {
+        if (this.state.bands && this.state.bands.length > 0) {
             return (
                 <div>
                     <header>
-                        <h1>My Profile Page</h1>
+                        <h1>Browse Bands</h1>
 
                         <Button onClick={() => {
                             this.props.history.push('/');
@@ -70,36 +53,20 @@ class MyProfile extends React.Component {
 
                     </header>
 
-                    <Tabs>
-                        <TabList>
-                            <Tab>My Profile</Tab>
-                            <Tab>My Bands</Tab>
-                        </TabList>
-
-                        <TabPanel>
-                            <h2>Name: {this.state.name}</h2>
-                            <h4>Location: {this.state.location}</h4>
-                            <h4>Experience: {this.state.experience}</h4>
-                            <Button onClick={() => {; this.props.history.push('/editprofile');}}>Edit Profile</Button>
-                        </TabPanel>
-
-                        <TabPanel>
-                            {bandsList}
-                            <Button onClick={() => {this.props.history.push('/createband')}}>Create Band</Button>
-                        </TabPanel>
-
-                    </Tabs>
+                    {bandsList}
                 </div>
             );
         } else {
 
             return (
                 <div>
-                    <h1>My Profile Page</h1>
+                    <h1>Browse Bands</h1>
+
                     <Button onClick={() => {
                         this.props.history.push('/');
                     }}>Back to Discover
                     </Button>
+
                     <h3>Loading...</h3>
                 </div>
 
@@ -108,4 +75,4 @@ class MyProfile extends React.Component {
     }
 
 }
-export default MyProfile;
+export default BandView;

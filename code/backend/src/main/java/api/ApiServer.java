@@ -34,7 +34,7 @@ import javax.xml.crypto.Data;
 public class ApiServer {
 
     // flag for testing locally vs. deploying
-    private static final boolean isLocalTest = true;
+    private static final boolean isLocalTest = false;
 
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
@@ -207,6 +207,7 @@ public class ApiServer {
         // put musicians
         put("/musicians/:id", (req, res) -> {
             try {
+
                 String id = req.params("id");
                 Musician musician = gson.fromJson(req.body(), Musician.class);
                 if (musician == null) {
@@ -382,13 +383,21 @@ public class ApiServer {
 
         // To allow CORS
         before((req, res) -> {
+
             res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Methods", "*");
+            res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
             res.header("Access-Control-Allow-Headers", "*");
             res.type("application/json");
         });
 
-        after((req, res) -> res.type("application/json"));
+        // To allow CORS
+        after((req, res) -> {
+            /*
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            res.header("Access-Control-Allow-Headers", "*");
+            res.type("application/json");*/
+        });
     }
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
