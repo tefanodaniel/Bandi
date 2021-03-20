@@ -6,6 +6,8 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
+import Header from "./Header/Header";
+import {Container, Navbar} from "react-bootstrap";
 
 class BandView extends React.Component {
     constructor(props) {
@@ -43,15 +45,12 @@ class BandView extends React.Component {
         if (this.state.bands && this.state.bands.length > 0) {
             return (
                 <div>
-                    <header>
-                        <h1>Browse Bands</h1>
-
-                        <Button onClick={() => {
-                            this.props.history.push('/');
-                        }}>Back to Discover
-                        </Button>
-
-                    </header>
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Find bands you love here!
+                        </Navbar.Brand>
+                    </Navbar>
 
                     {bandsList}
                 </div>
@@ -60,14 +59,15 @@ class BandView extends React.Component {
 
             return (
                 <div>
-                    <h1>Browse Bands</h1>
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Find bands you love here!
+                        </Navbar.Brand>
+                    </Navbar>
 
-                    <Button onClick={() => {
-                        this.props.history.push('/');
-                    }}>Back to Discover
-                    </Button>
 
-                    <h3>Loading...</h3>
+                    <h3> Coming Soon...</h3>
                 </div>
 
             );

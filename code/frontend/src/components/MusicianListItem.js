@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import {Card, ListGroup } from "react-bootstrap";
 
 const selectMusiciansById = (state, user_id) => {
-    return state.mreducer.filteredMusicians.find((user) => user.id === user_id)
+    return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
 }
 
 const MusicianListItem = ({ id }) => {

@@ -1,0 +1,1 @@
+export const landing_page = require('./free-guitar-image.jpg')

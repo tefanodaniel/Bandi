@@ -1,9 +1,7 @@
 import React from 'react';
-
-import Button from 'react-bootstrap/Button';
-import axios from "axios";
 import {getBackendURL} from "../utils/api";
-
+import {Nav, Navbar, Image} from "react-bootstrap";
+import guitar from "../images/free-guitar-image.jpg"
 
 class Signin extends React.Component {
   constructor(props) {
@@ -19,10 +17,13 @@ class Signin extends React.Component {
 
     return (
         <div>
-          <h1>Bandi</h1>
-          <h2> Get started: </h2>
-          <Button onClick={() => window.location=url}>Log in with Spotify</Button>
-
+            <Navbar expand="lg" variant="light" bg="light">
+                <Navbar.Brand href="/">banDi</Navbar.Brand>
+                <Nav className="mr-auto">
+                    <Nav.Link onClick={() => window.location=url}>Log In (via Spotify)</Nav.Link>
+                </Nav>
+            </Navbar>
+            <Image src={guitar} />
         </div>
     );
   }

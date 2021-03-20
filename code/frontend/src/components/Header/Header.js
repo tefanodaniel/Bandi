@@ -1,13 +1,53 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import {Redirect, withRouter} from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
 import {getBackendURL, logout} from "../../utils/api"; // logout is named export, needs brackets
 import Cookies from "js-cookie";
 import axios from "axios";
+import {Container, Nav} from "react-bootstrap";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import {getUser} from "../../features/user/UserReducer";
 
-class Header extends React.Component {
+const selectUserData = (state) => {
+  return state.user_reducer.user//.find((it) => it.id === id)
+}
+
+const Header = (id) => {
+  const dispatch = useDispatch();
+  const id1 = Cookies.get("id");
+  let user = useSelector((state) => state.user_reducer, shallowEqual);
+  console.log('first is ', user);
+  if(user.length === 0) {
+    dispatch(getUser(id1))
+  }
+  user = useSelector((state) => state.user_reducer, shallowEqual);
+  console.log('user is ', user)
+  const handlelogout = () => {
+    logout()
+    dispatch({
+      type: 'user/logout'
+    })
+  }
+
+  return (
+      <div>
+        <Navbar expand="lg" variant="dark" bg="dark">
+          <Navbar.Brand href="/">banDi</Navbar.Brand>
+          <Navbar.Brand className="mx-auto">
+              Welcome, {user.name}!
+          </Navbar.Brand>
+            <Nav className="mr-sm-2">
+            <Nav.Link href="/myprofile">My Profile</Nav.Link>
+            <Nav.Link href="/signin" onClick={handlelogout}>Log Out</Nav.Link>
+          </Nav>
+        </Navbar>
+      </div>
+  )
+}
+
+/**class Header extends React.Component {
   constructor(props) {
     super(props)
 
@@ -35,7 +75,6 @@ class Header extends React.Component {
     if (this.state.authenticated) {
       return (
         <div>
-          <Image src="profile_placeholder.svg" roundedCircle="true" />
           <p>Welcome, {this.state.name}</p>
           <Button onClick={this.goToProfile}>My Profile</Button>
           <Button onClick={() => { logout(); this.handleLogOut(); this.props.history.push('/');}}>Log Out</Button>
@@ -62,16 +101,22 @@ class Header extends React.Component {
               experience: response.data.experience}));
 
   	return (
-  		<Navbar>
-
+  	    <div>
+        <Navbar expand="lg" variant="dark" bg="dark">
+          <Navbar.Brand href="/">banDi</Navbar.Brand>
+          <Nav className="mr-auto">
+            <Nav.Link href="/profile">My Profile</Nav.Link>
+            <Nav.Link href="/signin" onClick={logout}>Log Out</Nav.Link>
+          </Nav>
+        </Navbar>
+        <Navbar>
         <h1>bandi</h1>
-
   			{this.renderLogin()}
-
   		</Navbar>
-  	);
+        </div>
+  );
   }
 
-}
+}*/
 
 export default withRouter(Header);

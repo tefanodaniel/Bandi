@@ -18,7 +18,7 @@ export function newQuery(queryparams) {
     return async function fetchMusiciansNameQuery(dispatch, getState) {
         //const queryparams = { name : input }
         const response = await MusicianApi.findByQuery(queryparams)
-        console.log(response);
+        //console.log(response);
         dispatch({
             type : 'musicians/newquery',
             payload : response.data

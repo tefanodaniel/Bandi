@@ -5,6 +5,8 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Cookies from "js-cookie";
+import Header from "./Header/Header";
+import {Nav, Navbar} from "react-bootstrap";
 
 class Band extends React.Component {
     constructor(props) {
@@ -78,6 +80,12 @@ class Band extends React.Component {
         if (curBandId && this.state.bandId) {
             return (
                 <div>
+                <Header/>
+                <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                    <Navbar.Brand className="mx-auto">
+                        Explore Bands!
+                    </Navbar.Brand>
+                </Navbar>
                     <h1>{this.state.bandName}</h1>
                     <h3>Capacity: {this.state.bandCapacity}</h3>
 
@@ -89,8 +97,13 @@ class Band extends React.Component {
 
             return (
                 <div>
-                    <h1>View Band</h1>
-                    <h3>Loading...</h3>
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Explore Bands!
+                        </Navbar.Brand>
+                    </Navbar>
+                    <h3>Coming Soon...</h3>
                     <Button onClick={() => {this.goBack()}}>Go Back</Button>
                 </div>
 

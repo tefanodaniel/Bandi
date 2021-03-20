@@ -6,7 +6,7 @@ class MusicianAPIService {
     }
 
     get(id) {
-        return customhttp.get(`/musicians?id=${id}`);
+        return customhttp.get(`/musicians/${id}`);
     }
 
     create(data) {

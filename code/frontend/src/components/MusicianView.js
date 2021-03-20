@@ -1,13 +1,11 @@
 import 'react-tabs/style/react-tabs.css';
 import React, {Component} from 'react';
-import { Link } from 'react-router-dom';
 import {logout} from "../utils/api";
 import {connect} from 'react-redux';
-import Form from "react-bootstrap/Form";
-import FormGroup from "react-bootstrap/FormGroup";
-import { Container, Row, Col } from "react-bootstrap";
+import {Container, Row, Col, Navbar, Nav} from "react-bootstrap";
 import MusicianList from "./MusicianList";
 import MusicianSearch from "../features/browse/MusicianSearch";
+import Header from "./Header/Header";
 
 class SearchMusician extends Component {
     constructor(props) {
@@ -19,30 +17,24 @@ class SearchMusician extends Component {
         if(true) {
             return (
                 <div>
-                    <nav className="navbar navbar-expand navbar-dark bg-dark">
-                        <Link to={"/"} className="navbar-brand">
-                            banDi
-                        </Link>
-                        <div className="navbar-nav mr-auto">
-                            <li className="nav-item">
-                                <Link to={"/profile"} className="nav-link">
-                                    My Profile
-                                </Link>
-                            </li>
-                            <li className="nav-item">
-                                <Link to={"/signin"} onClick={logout} className="nav-link">
-                                    Log Out
-                                </Link>
-                            </li>
-                        </div>
-                    </nav>
+                    <Header/>
+                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                        <Navbar.Brand className="mx-auto">
+                            Find your musical soulmate here!
+                        </Navbar.Brand>
+                    </Navbar>
                     <Container>
-                        <h3 style={{textAlign:'center'}}> Welcome to BanDi's Search. </h3>
-                        <h6 style={{textAlign:'center'}}> Find your musical soulmate here. </h6>
+                        <Row>
+                            <Col>
+                                <MusicianSearch />
+                            </Col>
+                            <Col>
+                                <MusicianList />
+                            </Col>
+                        </Row>
                     </Container>
-                    <MusicianSearch />
                     <div></div>
-                    <MusicianList />
+
                 </div>
             );
         }
