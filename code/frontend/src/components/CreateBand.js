@@ -57,7 +57,7 @@ class CreateBand extends React.Component {
                     <Form.Group controlId="profileForm.name">
                         <Form.Label>Name of Band</Form.Label>
                         <Form.Control name="" type="input"
-                                      placeholder="ex. The Beatles" value={this.state.name} onChange={this.handleChange} />
+                                      placeholder="ex. The Beatles" defaultValue={this.state.name} onChange={this.handleChange} />
                     </Form.Group>
                 </Form>
 

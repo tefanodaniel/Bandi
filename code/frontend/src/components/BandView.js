@@ -35,7 +35,7 @@ class BandView extends React.Component {
             <div className="card">
                 <div className="card-body">
                     <h5 className="card-title">{band.name}</h5>
-                    <h6 className="card-subtitle"></h6>
+                    <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
                     <p className="card-text"></p>
                     <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
                 </div>

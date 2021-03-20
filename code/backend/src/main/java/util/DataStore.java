@@ -37,8 +37,10 @@ public final class DataStore {
         samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle", profileLinks));
 
         // Adding my own account for testing
+        Set<String> maxLinks = new HashSet<String>();
+        maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
         samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
-                genres2, instruments2, "Expert", "Freehold, NJ", profileLinks));
+                genres2, instruments2, "Expert", "Freehold, NJ", maxLinks));
 
         return samples;
     }
