@@ -26,3 +26,10 @@ export function getBackendURL() {
 export function logout() {
   Cookies.remove('id');
 }
+
+export default axios.create({
+  baseURL: getBackendURL(),
+  headers: {
+    "Content-type": "application/json"
+  }
+});
