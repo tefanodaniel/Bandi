@@ -38,7 +38,7 @@ class Header extends React.Component {
     return (<p>Guest</p>)
   }
 
-  goToProfile = () => { this.props.history.push('/profile');}
+  goToProfile = () => { this.props.history.push('/myprofile');}
         
   render() {
   	return (
