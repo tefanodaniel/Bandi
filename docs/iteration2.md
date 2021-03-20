@@ -51,25 +51,24 @@ Use Case: Creating a Band Entity
 # Retrospective
 
 #### What we have done
-- Built backend API, implemented functionality for `Musician` operations.
-- Implemented Spotify authentication.
-- Built several frontend components (edit profile, discover page)
-
-#### In Progress
-- Front-end styling to fully support the wireframes. 
-- Front-end browsing feature for bands and musicians. 
+- Built backend API, implemented functionality for MusicianDao and BandDao operations. Several new tables were introduced in order to efficiently store multi-variate attributes of Musicians and of Bands
+- Implemented Spotify authentication, obtaining the name from Spotify user data and storing it with unique id in the database
+- Built several frontend components (edit profile, discover page, my profile, create band, sign in, band browse, musician browse, band profile (other user), msuciian profile (other user))
+- added searching functionality for musician profiles
+- Created numerous functioning get requests to populate our views with up-to-date user data
+- Introduced a nav bar and other UI /UX components to make using our app a more pleasant experience
 
 #### What we haven't done
-- Basic API to service CRUD operations for `Band`.
-- React app components to provide profile view of `Band` and `User`
-- Unit-testing and Documentation of API. 
+- Post and put requests to update the data are attempted, but not functioning, due to being blocked by CORS (even in deployment, adding to our header is not allowing us to make these types of requests)
+- Reversibility in terms of deleting data after creation is not yet implemented
 
 #### Difficulties
-- Building backend at the same time as front end was not ideal.
-- Integration of frontend with backend.
-- Passing authentication information in a way that avoids using query parameters.
+- Building the backend at the same time as frontend is a complicated process since they are highly dependent on each other
+- Linking the frontend with the backend is difficult, especially with CORS issues frequently interfering with testing/development
+- Passing authentication information in a way that avoids relying on query parameters.
 
 #### Looking forward
-
+- We must eventually figure out how to get our post and put requests to work (resolve the error from CORS)
+- We hope to find a more secure way of passing the unique ID from Spotify to the frontend in order to keep the current user logged in
 
 
