@@ -4,6 +4,7 @@ import {getBackendURL, getFrontendURL} from "../utils/api";
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import Cookies from "js-cookie";
 
 class Band extends React.Component {
     constructor(props) {
@@ -11,6 +12,8 @@ class Band extends React.Component {
 
         // Define the state for this component
         this.state = {
+
+            userId : '',
 
             bandId : '',
             bandName : '',
@@ -26,6 +29,20 @@ class Band extends React.Component {
     goBack = () => {this.props.history.goBack()}
 
     join_leave() {
+
+        const url = getBackendURL() + "/bands/" + this.state.bandId + "/" + this.state.userId;
+
+        if (this.state.isMember) {
+            // put musician in the band
+            axios.put(url)
+                .then((response) => console.log(response.data));
+        }
+        else {
+            // delete musician from band
+            axios.delete(url)
+                .then((response) => console.log(response.data));
+        }
+
         this.state.isMember = !(this.state.isMember);
         this.setButtonText();
     }
@@ -42,6 +59,7 @@ class Band extends React.Component {
     render() {
         const params = new URLSearchParams(this.props.location.search);
         let curBandId = params.get("view");
+        this.state.userId = Cookies.get("id");
 
         let bandsURL = getBackendURL() + "/bands";
         const {data : members} = axios.get(bandsURL + "/" + curBandId)
@@ -53,6 +71,9 @@ class Band extends React.Component {
                     genres: response.data.genre,
                     members: response.data.members
                 }));
+
+        // TODO: determine if user is currently a member or not
+        // this.state.isMember = false;
 
         if (curBandId && this.state.bandId) {
             return (

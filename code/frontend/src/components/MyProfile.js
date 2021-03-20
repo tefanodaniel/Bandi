@@ -57,7 +57,7 @@ class MyProfile extends React.Component {
             </div>
         );
 
-        if (this.state.bands && this.state.bands.length > 0) {
+        if (this.state.bands) {
             return (
                 <div>
                     <header>
@@ -96,6 +96,10 @@ class MyProfile extends React.Component {
             return (
                 <div>
                     <h1>My Profile Page</h1>
+                    <Button onClick={() => {
+                        this.props.history.push('/');
+                    }}>Back to Discover
+                    </Button>
                     <h3>Loading...</h3>
                 </div>
 
