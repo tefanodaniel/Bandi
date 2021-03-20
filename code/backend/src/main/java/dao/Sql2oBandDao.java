@@ -82,7 +82,20 @@ public class Sql2oBandDao implements BandDao {
         try(Connection conn = sql2o.open()) {
             List<Band> bands = this.extractBandsFromDatabase(sql, conn);
             return bands;
-            //return conn.createQuery("SELECT id, name, genre, size, capacity FROM Bands;").executeAndFetch(Band.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read bands from the database", ex);
+        }
+    }
+
+    @Override
+    public List<Band> readAll(String musicianId) throws DaoException {
+        String sql = "SELECT * FROM (SELECT b.id as uBID, * FROM bands as b) as R\n"
+                + "LEFT JOIN BandMembers as BM ON R.uBID=BM.band\n"
+                + "LEFT JOIN BandGenres as BG ON R.uBID=BG.id\n"
+                + "WHERE BM.member='" + musicianId + "';";
+        try(Connection conn = sql2o.open()) {
+            List<Band> bands = this.extractBandsFromDatabase(sql, conn);
+            return bands;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read bands from the database", ex);
         }

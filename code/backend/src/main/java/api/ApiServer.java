@@ -278,10 +278,12 @@ public class ApiServer {
             try {
                 List<Band> bands;
                 Map<String, String[]> query = req.queryMap().toMap();
-                if (query.size() > 0) {
+
+                if (query.get("musicianId") != null) {
+                    bands = bandDao.readAll(query.get("musicianId")[0]);
+                } else if (query.size() > 0) {
                     bands = bandDao.readAll(query);
-                }
-                else {
+                } else {
                     bands = bandDao.readAll();
                 }
                 return gson.toJson(bands);
