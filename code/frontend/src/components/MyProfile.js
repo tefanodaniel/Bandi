@@ -32,7 +32,7 @@ class MyProfile extends React.Component {
         // get user's id
         this.state.id = Cookies.get('id');
 
-        var bandsURL = getBackendURL() + "/bands";
+        var bandsURL = getBackendURL() + "/bands" + "?musicianId=" + this.state.id;
         var userURL = getBackendURL() + "/musicians/" + this.state.id;
 
         // get bands
@@ -43,7 +43,7 @@ class MyProfile extends React.Component {
         axios.get(userURL)
             .then((response) => this.setState(
                 {name: response.data.name, location: response.data.location,
-                genre: response.data.genre}));
+                experience: response.data.experience}));
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
@@ -57,7 +57,7 @@ class MyProfile extends React.Component {
             </div>
         );
 
-        if (this.state.bands && this.state.bands.length > 0) {
+        if (this.state.bands) {
             return (
                 <div>
                     <header>
