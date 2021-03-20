@@ -9,6 +9,7 @@ import axios from "axios";
 import {Container, Nav} from "react-bootstrap";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {getUser} from "../../features/user/UserReducer";
+import { Link} from "react-router-dom";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)
@@ -30,7 +31,7 @@ const Header = (id) => {
       type: 'user/logout'
     })
   }
-  const goToProfile = () => { this.props.history.push('/myprofile');}
+  //const goToProfile = () => { this.props.history.push('/myprofile');}
 
   return (
       <div>
@@ -40,7 +41,7 @@ const Header = (id) => {
               Welcome, {user.name}!
           </Navbar.Brand>
             <Nav className="mr-sm-2">
-            <Nav.Link href="/myprofile" onClick={goToProfile}>My Profile</Nav.Link>
+                <Nav.Link href="#myprofile">My Profile</Nav.Link>
             <Nav.Link href="/signin" onClick={handlelogout}>Log Out</Nav.Link>
           </Nav>
         </Navbar>

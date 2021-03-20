@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
 import {getBackendURL} from "../utils/api";
+import Header from "./Header/Header";
+import {Container, Navbar} from "react-bootstrap";
 
 class CreateBand extends React.Component {
     constructor(props) {
@@ -50,8 +52,12 @@ class CreateBand extends React.Component {
     render() {
         return (
             <div>
-            <h1>Create Band</h1>
-
+                <Header/>
+                <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
+                    <Navbar.Brand className="mx-auto">
+                        Create a new Band!
+                    </Navbar.Brand>
+                </Navbar>
 
                 <Form>
                     <Form.Group controlId="profileForm.name">
