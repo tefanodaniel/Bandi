@@ -11,16 +11,33 @@ class Band extends React.Component {
 
         // Define the state for this component
         this.state = {
+
             bandId : '',
             bandName : '',
-            bandSize : 0,
             bandCapacity : 0,
             genres: [],
-            members: []
+            members: [],
+
+            isMember: false,
+            joinButtonText: 'Join Band'
         }
     }
 
     goBack = () => {this.props.history.goBack()}
+
+    join_leave() {
+        this.state.isMember = !(this.state.isMember);
+        this.setButtonText();
+    }
+
+    setButtonText() {
+        if (this.state.isMember) {
+            this.state.joinButtonText = "Leave Band";
+        }
+        else {
+            this.state.joinButtonText = "Join Band";
+        }
+    }
 
     render() {
         const params = new URLSearchParams(this.props.location.search);
@@ -32,7 +49,6 @@ class Band extends React.Component {
                 {
                     bandName: response.data.name,
                     bandId: response.data.id,
-                    bandSize: response.data.size,
                     bandCapacity: response.data.capacity,
                     genres: response.data.genre,
                     members: response.data.members
@@ -42,7 +58,9 @@ class Band extends React.Component {
             return (
                 <div>
                     <h1>{this.state.bandName}</h1>
-                    <h3>{this.state.bandSize} / {this.state.bandCapacity} spots filled</h3>
+                    <h3>Capacity: {this.state.bandCapacity}</h3>
+
+                    <Button onClick={() => {this.join_leave()}}>{this.state.joinButtonText}</Button>
                     <Button onClick={() => {this.goBack()}}>Go Back</Button>
                 </div>
             );
@@ -52,6 +70,7 @@ class Band extends React.Component {
                 <div>
                     <h1>View Band</h1>
                     <h3>Loading...</h3>
+                    <Button onClick={() => {this.goBack()}}>Go Back</Button>
                 </div>
 
             );

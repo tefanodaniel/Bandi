@@ -61,12 +61,13 @@ class BandView extends React.Component {
             return (
                 <div>
                     <h1>Browse Bands</h1>
-                    <h3>Loading...</h3>
 
                     <Button onClick={() => {
                         this.props.history.push('/');
                     }}>Back to Discover
                     </Button>
+
+                    <h3>Loading...</h3>
                 </div>
 
             );
