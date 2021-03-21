@@ -46,7 +46,14 @@ Use Case: Creating a Band Entity
   1. Post-login user dashboard 
   2. Band view / tab on profile
   3. Advanced search page
-- Test and Deploy.
+- refactor backend database to allow for multi-valued attributes (break down into more tables)
+- update BandDao, MusicianDao, Musician and Band classes to accomodate the database
+- store user id at login and access the user's identifier throughout the components using a cookie
+- implement the my profile view, with tabs for my profile and my bands
+- implement search / filter for musicians
+- implement a browsing page for musicians and for bands, and allow for a full screen view of any individual band / musician profile
+- add more style to the frontend
+- Test and Deploy
 
 # Retrospective
 
