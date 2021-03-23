@@ -8,11 +8,6 @@ Team Lead - Matthew Ost
 
 # Wireframe & Use-case
 <img src="" width="10" height="10" />
-
-![](assets/i2_wireframe/login.png)
-![](assets/i2_wireframe/createprofile.png)
-![](assets/i2_wireframe/homepage.png)
-![](assets/i2_wireframe/search.png)
 ![](assets/i2_wireframe/myprofile.png)
 ![](assets/i2_wireframe/mybands.png)
 ![](assets/i2_wireframe/mybandsdetails.png)
@@ -37,7 +32,9 @@ Use Case: Creating song-of-the-week challenges
 4. The user observes a few candidate submissions and finally has the option to submit their own A/V link with tags on instrument and experience. 
 
 Use Case: Creating a speed-dating event
-1. TODO
+1. An admin creates a new speed-dating event, setting the date, time, number of participants, and geographic eligibility.
+2. Users browse the "Events" section to find matching events.
+3. Once an event is found, a user can click register and will receive a confirmation email.
 
 # Iteration Backlog
 - As a user, I want to be able to save the profiles of people I meet in the app so that I can connect with them later.
@@ -53,6 +50,7 @@ Use Case: Creating a speed-dating event
   2. Speed-dating event creation page for admins
   3. Song-of-the-week challenge creation page for admins
   4. Song-of-the-week submission page for musicians
+- Create an admin user role
 - Update the database and add routes to support connections between users
 - Add models, DAO methods, and update the database to support speed-dating and song-of-the-week
 - Research external tools to faciliate quick development of chat functionality
