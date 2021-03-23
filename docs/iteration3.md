@@ -31,7 +31,10 @@ Use Case: Chatting with a connection
 5. The user types and sends a message.
 
 Use Case: Creating song-of-the-week challenges
-1. TODO
+1. An admin creates a new "event" inviting A/V submissions from the user. 
+2. Once the USER logsin, his/her dashboard has a tab/jumbotron with a button "Explore Song-of-the-week" 
+3. Clicking the button redirects to a new component view. A column in the left with a week reference - 'current week' or 'Sun X, 20** - Sat Y, 20**' and choosing an appropriate week gives a blurb on the right with a description of the song-of-the-week choice. 
+4. The user observes a few candidate submissions and finally has the option to submit their own A/V link with tags on instrument and experience. 
 
 Use Case: Creating a speed-dating event
 1. TODO
