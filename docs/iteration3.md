@@ -12,6 +12,10 @@ Team Lead - Matthew Ost
 ![](assets/i2_wireframe/mybands.png)
 ![](assets/i2_wireframe/mybandsdetails.png)
 
+<img src="assets/chat-flow/chat-flow-1" width="300" height="300" />
+<img src="assets/chat-flow/chat-flow-2" width="300" height="300" />
+<img src="assets/chat-flow/chat-flow-3" width="300" height="300" />
+
 User case: Adding a connection
 
 1. A user browses through the profiles of other musicians/bands and selects one to view in more depth.
