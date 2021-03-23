@@ -25,6 +25,8 @@ Try it out! - [Bandi](https://bandiscover.herokuapp.com/)
 If you are a project member or instructor, please visit [here](https://docs.google.com/document/d/1hD0D15o0scDjNEAtohE44THiiPuuUH_Sy34Ze_uUl9M/edit?usp=sharing)
 to get details on how to set environment variables locally for testing. 
 
+To run locally, please set the isLocal environment variable to "true". In our deployed Heroku backend, this configuration variable is set to "false".
+
 ## Install + Quick Run 
 
 - Clone the repository
