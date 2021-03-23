@@ -4,7 +4,7 @@ Team Lead - Matthew Ost
 [Team Availability](https://www.when2meet.com/?11411729-tWIoL)
 
 # OO Design
-![](assets/Iteration2_UML.png)
+![](assets/Iteration3_UML.png)
 
 # Wireframe & Use-case
 <img src="" width="10" height="10" />
