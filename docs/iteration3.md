@@ -8,13 +8,9 @@ Team Lead - Matthew Ost
 
 # Wireframe & Use-case
 <img src="" width="10" height="10" />
-![](assets/i2_wireframe/myprofile.png)
-![](assets/i2_wireframe/mybands.png)
-![](assets/i2_wireframe/mybandsdetails.png)
-
-<img src="assets/chat-flow/chat-flow-1" width="300" height="300" />
-<img src="assets/chat-flow/chat-flow-2" width="300" height="300" />
-<img src="assets/chat-flow/chat-flow-3" width="300" height="300" />
+<img src="assets/chat-flow/chat-flow-1.png" width="450" height="300" />
+<img src="assets/chat-flow/chat-flow-2.png" width="450" height="300" />
+<img src="assets/chat-flow/chat-flow-3.png" width="450" height="300" />
 
 User case: Adding a connection
 
