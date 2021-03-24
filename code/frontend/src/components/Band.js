@@ -24,19 +24,20 @@ class Band extends React.Component {
             members: [],
 
             isMember: false,
-            joinButtonText: 'Join Band',
+            buttonText: 'Join Band',
 
             memberNames: []
         }
-    }
 
-    goBack = () => {this.props.history.goBack()}
+        this.join_leave = this.join_leave.bind(this);
+        this.setButtonText = this.setButtonText.bind(this);
+    }
 
     join_leave() {
 
         const url = getBackendURL() + "/bands/" + this.state.bandId + "/" + this.state.userId;
 
-        if (this.state.isMember) {
+        if (!this.state.isMember) {
             // put musician in the band
             axios.put(url)
                 .then((response) => console.log(response.data));
@@ -47,27 +48,18 @@ class Band extends React.Component {
                 .then((response) => console.log(response.data));
         }
 
-        this.state.isMember = !(this.state.isMember);
+        this.setState({isMember: !this.state.isMember});
         this.setButtonText();
+        window.location.reload();
     }
 
     setButtonText() {
         if (this.state.isMember) {
-            this.state.joinButtonText = "Leave Band";
+            this.state.buttonText = "Leave Band";
         }
         else {
-            this.state.joinButtonText = "Join Band";
+            this.state.buttonText = "Join Band";
         }
-    }
-
-    getNames() {
-        this.setState({memberNames: []});
-        this.state.members.forEach(id => {
-            var userURL = getBackendURL() + "/musicians/" + id;
-            axios.get(userURL)
-                .then((response) =>
-                    this.setState({memberNames: this.state.memberNames.concat(response.data.name)}));
-        });
     }
 
     getBandInfo() {
@@ -84,21 +76,24 @@ class Band extends React.Component {
                     bandCapacity: response.data.capacity,
                     genres: response.data.genres,
                     members: response.data.members
-                }));
+                },
+                function() {
+                    console.log(this.state.members);
+                    this.setState({memberNames: []});
 
-        //this.getNames();
+                    this.state.members.forEach(id => {
+                        var userURL = getBackendURL() + "/musicians/" + id;
+                        axios.get(userURL)
+                            .then((response) =>
+                                this.setState({memberNames:
+                                        this.state.memberNames.concat(response.data.name)})
+                            );
+                    });
+                }));
     }
 
     componentDidMount() {
         this.getBandInfo();
-
-        //this.setState({memberNames: []});
-        this.state.members.forEach(id => {
-            var userURL = getBackendURL() + "/musicians/" + id;
-            axios.get(userURL)
-                .then((response) =>
-                    this.setState({memberNames: this.state.memberNames.concat(response.data.name)}));
-        });
     }
 
     render() {
@@ -120,8 +115,8 @@ class Band extends React.Component {
                     <h4>Genres: {this.state.genres.join(", ")}</h4>
                     <h4>Members: {this.state.memberNames.join(", ")}</h4>
 
-                    <Button onClick={() => {this.join_leave()}}>{this.state.joinButtonText}</Button>
-                    <Button onClick={() => {this.goBack()}}>Go Back</Button>
+                    <Button onClick={() => {this.join_leave()}}>{this.state.buttonText}</Button>
+                    <Button onClick={() => {this.props.history.goBack()}}>Go Back</Button>
                 </div>
             );
         } else {
@@ -135,7 +130,7 @@ class Band extends React.Component {
                         </Navbar.Brand>
                     </Navbar>
                     <h3>Coming Soon...</h3>
-                    <Button onClick={() => {this.goBack()}}>Go Back</Button>
+                    <Button onClick={() => {this.props.history.goBack()}}>Go Back</Button>
                 </div>
 
             );
