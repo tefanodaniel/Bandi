@@ -33,7 +33,6 @@ class MyProfile extends React.Component {
 
     render() {
         // get user's id
-        console.log("am I over here?")
         this.state.id = Cookies.get('id');
 
         var bandsURL = getBackendURL() + "/bands" + "?musicianId=" + this.state.id;

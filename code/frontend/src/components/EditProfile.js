@@ -45,27 +45,10 @@ class EditProfile extends React.Component {
       this.setState({
         instruments: newInstrumentList
       });
-
     }
 
     handleSubmit(event) {
-      const axios = require('axios')
-      const url = getBackendURL() + "/musicians";
 
-      axios
-        .put(url, {
-          id : this.state.id,
-          name: this.state.name,
-          location: this.state.location
-        })
-        .then(res => {
-          console.log(`statusCode: ${res.statusCode}`)
-          console.log(res)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-        event.preventDefault();
     }
 
     submit_form() {
@@ -91,12 +74,7 @@ class EditProfile extends React.Component {
         // get user's id
         this.state.id = Cookies.get('id');
         if (!this.state.id) {
-            return(
-                <div>
-                    <h1>Edit Your Profile</h1>
-                    <h3>Loading...</h3>
-                </div>
-            )
+            this.props.history.push('/discover');
         }
 
       return (
@@ -107,10 +85,12 @@ class EditProfile extends React.Component {
           </header>
 
           <Form onSubmit={this.handleSubmit}>
+
             <Form.Group controlId="profileForm.name">
               <Form.Label>Name</Form.Label>
               <Form.Control name="name" type="input"  placeholder="name namington" value={this.state.name} onChange={this.handleChange} />
             </Form.Group>
+
             <Form.Group controlId="profileForm.location">
               <Form.Label>Location</Form.Label>
               <Form.Control name="location" as="select" value={this.state.location} onChange={this.handleChange}>
@@ -120,8 +100,9 @@ class EditProfile extends React.Component {
                 <option>Boston, MA</option>
               </Form.Control>
             </Form.Group>
+
             <FormGroup controlId="profileForm.instrument">
-              <Form.Label>Instrument</Form.Label>
+              <Form.Label>Instrument:</Form.Label>
               <Form.Check inline name="guitar" label="Guitar" type="checkbox" onChange={this.handleInstrumentSelection}/>
               <Form.Check inline name="bass" label="Bass" type="checkbox" onChange={this.handleInstrumentSelection}/>
               <Form.Check inline name="drums" label="Drums" type="checkbox" onChange={this.handleInstrumentSelection}/>
