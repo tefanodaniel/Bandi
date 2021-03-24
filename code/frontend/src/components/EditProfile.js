@@ -78,7 +78,9 @@ class EditProfile extends React.Component {
               id: this.state.id,
             name: this.state.name,
               location: this.state.location,
-              experience: this.state.experience
+              experience: this.state.experience,
+              instruments: this.state.instruments,
+              genres: this.state.genres
           })
           .then(res => {
             console.log(`statusCode: ${res.statusCode}`)
@@ -103,7 +105,7 @@ class EditProfile extends React.Component {
             <h1>Edit Your Profile</h1>
           </header>
 
-          <Form onSubmit={""}>
+          <Form onSubmit={"nothing"}>
 
             <Form.Group controlId="profileForm.name">
               <Form.Label>Name:</Form.Label>
@@ -148,7 +150,7 @@ class EditProfile extends React.Component {
                   <Form.Check inline name="classical" label="Classical" type="checkbox" onChange={this.handleGenreSelection}/>
               </FormGroup>
 
-            <Button onClick={() => {this.submit_form(); this.props.history.push('/myprofile')}}>Go Back</Button>
+            <Button onClick={() => {this.submit_form(); this.props.history.push('/myprofile')}}>Finish</Button>
 
           </Form>
         </div>
