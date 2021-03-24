@@ -146,12 +146,6 @@ class EditProfile extends React.Component {
                   <Form.Check inline name="classical" label="Classical" type="checkbox" onChange={this.handleGenreSelection}/>
               </FormGroup>
 
-            <Button variant="primary" type="submit" onClick={() =>
-            {this.submit_form();
-            /*this.props.history.push('/myprofile');*/}}>
-              Submit
-            </Button>
-
             <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
 
           </Form>

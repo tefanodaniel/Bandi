@@ -19,7 +19,6 @@ const Header = (id) => {
   const dispatch = useDispatch();
   const id1 = Cookies.get("id");
   let user = useSelector((state) => state.user_reducer, shallowEqual);
-  console.log('first is ', user);
   if(user.length === 0) {
     dispatch(getUser(id1))
   }
