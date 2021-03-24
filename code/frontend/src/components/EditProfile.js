@@ -21,6 +21,7 @@ class EditProfile extends React.Component {
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleInstrumentSelection = this.handleInstrumentSelection.bind(this);
+      this.handleGenreSelection = this.handleGenreSelection.bind(this);
     }
 
     handleChange(event) {
@@ -47,6 +48,21 @@ class EditProfile extends React.Component {
       });
     }
 
+    handleGenreSelection(event) {
+        const target = event.target;
+        const name = target.name;
+        let newGenreList = this.state.genres.slice();
+        if (target.checked) {
+            newGenreList.push(name);
+        } else {
+            const index = newGenreList.indexOf(name);
+            if (index > -1) { newGenreList.splice(index, 1); }
+        }
+        this.setState({
+            genres: newGenreList
+        });
+    }
+
     handleSubmit(event) {
 
     }
@@ -69,7 +85,6 @@ class EditProfile extends React.Component {
           })
     }
 
-
     render() {
         // get user's id
         this.state.id = Cookies.get('id');
@@ -84,7 +99,7 @@ class EditProfile extends React.Component {
             <h1>Edit Your Profile</h1>
           </header>
 
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.submit_form()}>
 
             <Form.Group controlId="profileForm.name">
               <Form.Label>Name</Form.Label>
@@ -95,19 +110,30 @@ class EditProfile extends React.Component {
               <Form.Label>Location</Form.Label>
               <Form.Control name="location" as="select" value={this.state.location} onChange={this.handleChange}>
                 <option>Baltimore, MD</option>
-                <option>Washington DC, DC</option>
+                <option>Washington, DC</option>
                 <option>New York City, NY</option>
                 <option>Boston, MA</option>
+                  <option>Los Angeles, CA</option>
+                  <option>London, UK</option>
               </Form.Control>
             </Form.Group>
 
-            <FormGroup controlId="profileForm.instrument">
-              <Form.Label>Instrument:</Form.Label>
+            <FormGroup controlId="profileForm.instruments">
+              <Form.Label>Instruments:</Form.Label>
               <Form.Check inline name="guitar" label="Guitar" type="checkbox" onChange={this.handleInstrumentSelection}/>
               <Form.Check inline name="bass" label="Bass" type="checkbox" onChange={this.handleInstrumentSelection}/>
               <Form.Check inline name="drums" label="Drums" type="checkbox" onChange={this.handleInstrumentSelection}/>
               <Form.Check inline name="vocals" label="Vocals" type="checkbox" onChange={this.handleInstrumentSelection}/>
+              <Form.Check inline name="piano" label="Piano / Keyboard" type="checkbox" onChange={this.handleInstrumentSelection}/>
             </FormGroup>
+
+              <FormGroup controlId="profileForm.genres">
+                  <Form.Label>Genres:</Form.Label>
+                  <Form.Check inline name="rock" label="Rock" type="checkbox" onChange={this.handleGenreSelection}/>
+                  <Form.Check inline name="blues" label="Blues" type="checkbox" onChange={this.handleGenreSelection}/>
+                  <Form.Check inline name="jazz" label="Jazz" type="checkbox" onChange={this.handleGenreSelection}/>
+                  <Form.Check inline name="classical" label="Classical" type="checkbox" onChange={this.handleGenreSelection}/>
+              </FormGroup>
 
             <Button variant="primary" type="submit" onClick={() =>
             {this.submit_form();
