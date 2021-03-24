@@ -76,7 +76,9 @@ class EditProfile extends React.Component {
       axios
           .put(url, {
               id: this.state.id,
-            name: this.state.name
+            name: this.state.name,
+              location: this.state.location,
+              experience: this.state.experience
           })
           .then(res => {
             console.log(`statusCode: ${res.statusCode}`)
@@ -101,7 +103,7 @@ class EditProfile extends React.Component {
             <h1>Edit Your Profile</h1>
           </header>
 
-          <Form onSubmit={this.submit_form()}>
+          <Form onSubmit={""}>
 
             <Form.Group controlId="profileForm.name">
               <Form.Label>Name:</Form.Label>
@@ -146,7 +148,7 @@ class EditProfile extends React.Component {
                   <Form.Check inline name="classical" label="Classical" type="checkbox" onChange={this.handleGenreSelection}/>
               </FormGroup>
 
-            <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
+            <Button onClick={() => {this.submit_form(); this.props.history.push('/myprofile')}}>Go Back</Button>
 
           </Form>
         </div>

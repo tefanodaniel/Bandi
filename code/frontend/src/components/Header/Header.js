@@ -23,7 +23,6 @@ const Header = (id) => {
     dispatch(getUser(id1))
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);
-  console.log('user is ', user)
   const handlelogout = () => {
     logout()
     dispatch({
