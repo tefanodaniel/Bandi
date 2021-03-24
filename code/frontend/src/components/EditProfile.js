@@ -9,11 +9,13 @@ class EditProfile extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+
         id : '',
 
         name: '',
         location: '',
         experience: '',
+
         instruments: [],
         genres: []
       }
@@ -73,7 +75,7 @@ class EditProfile extends React.Component {
 
       axios
           .put(url, {
-              id: Cookies.get("id"),
+              id: this.state.id,
             name: this.state.name
           })
           .then(res => {
@@ -102,12 +104,12 @@ class EditProfile extends React.Component {
           <Form onSubmit={this.submit_form()}>
 
             <Form.Group controlId="profileForm.name">
-              <Form.Label>Name</Form.Label>
+              <Form.Label>Name:</Form.Label>
               <Form.Control name="name" type="input"  placeholder="name namington" value={this.state.name} onChange={this.handleChange} />
             </Form.Group>
 
             <Form.Group controlId="profileForm.location">
-              <Form.Label>Location</Form.Label>
+              <Form.Label>Location:</Form.Label>
               <Form.Control name="location" as="select" value={this.state.location} onChange={this.handleChange}>
                 <option>Baltimore, MD</option>
                 <option>Washington, DC</option>
@@ -117,6 +119,15 @@ class EditProfile extends React.Component {
                   <option>London, UK</option>
               </Form.Control>
             </Form.Group>
+
+              <Form.Group controlId="profileForm.experience">
+                  <Form.Label>Experience:</Form.Label>
+                  <Form.Control name="experience" as="select" value={this.state.experience} onChange={this.handleChange}>
+                      <option>Beginner</option>
+                      <option>Intermediate</option>
+                      <option>Expert</option>
+                  </Form.Control>
+              </Form.Group>
 
             <FormGroup controlId="profileForm.instruments">
               <Form.Label>Instruments:</Form.Label>
