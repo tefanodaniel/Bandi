@@ -6,10 +6,10 @@ import {findCookie, getBackendURL, getFrontendURL, getURL, logout} from "../util
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import Header from './Header/Header.js'
+import Header from './Header'
 import {Container} from "react-bootstrap";
-import MusicianSearch from "../features/browse/MusicianSearch";
-import {getUser} from "../features/user/UserReducer";
+import MusicianSearch from "./MusicianSearch";
+import { getUser } from "../actions/user_actions";
 import {shallowEqual, useSelector} from "react-redux";
 
 class Discover extends React.Component {
@@ -17,9 +17,9 @@ class Discover extends React.Component {
     super(props)
 
 	  this.state = {
-		id : '',
-		u_id : null,
-		first_view : true
+  		id : '',
+  		u_id : null,
+  		first_view : true
 	  }
   }
 

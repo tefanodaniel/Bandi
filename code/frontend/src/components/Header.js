@@ -1,15 +1,15 @@
 import React from 'react';
-import {Redirect, withRouter} from 'react-router-dom';
+import { Redirect, withRouter } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
-import {getBackendURL, logout} from "../../utils/api"; // logout is named export, needs brackets
+import { getBackendURL, logout } from "../utils/api"; // logout is named export, needs brackets
 import Cookies from "js-cookie";
-import axios from "axios";
-import {Container, Nav} from "react-bootstrap";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
-import {getUser} from "../../features/user/UserReducer";
-import { Link} from "react-router-dom";
+//import axios from "axios";
+import { Container, Nav } from "react-bootstrap";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { getUser } from "../actions/user_actions";
+import { Link } from "react-router-dom";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)
@@ -19,11 +19,13 @@ const Header = (id) => {
   const dispatch = useDispatch();
   const id1 = Cookies.get("id");
   let user = useSelector((state) => state.user_reducer, shallowEqual);
-  if(user.length === 0) {
+  console.log('user is', user)
+  if(Object.keys(user).length === 0) {
+    console.log("getting user here")
     dispatch(getUser(id1))
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);
-  const handlelogout = () => {
+  const handleLogout = () => {
     logout()
     dispatch({
       type: 'user/logout'
@@ -40,7 +42,7 @@ const Header = (id) => {
           </Navbar.Brand>
             <Nav className="mr-sm-2">
                 <Nav.Link href="#myprofile">My Profile</Nav.Link>
-            <Nav.Link href="/signin" onClick={handlelogout}>Log Out</Nav.Link>
+            <Nav.Link href="/signin" onClick={handleLogout}>Log Out</Nav.Link>
           </Nav>
         </Navbar>
       </div>
@@ -85,7 +87,7 @@ const Header = (id) => {
   }
 
   goToProfile = () => { this.props.history.push('/myprofile');}
-        
+
   render() {
     let my_id = Cookies.get("id");
     if (my_id) {

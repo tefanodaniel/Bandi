@@ -1,8 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import {Container, Row} from "react-bootstrap";
-import {newQuery, clearQuery} from "./MusicianBrowse";
-import {Button} from "react-bootstrap";
+import { newQuery, clearQuery } from "../actions/musician_actions";
+import { Button } from "react-bootstrap";
 
 const MusicianSearch = () => {
     const dispatch = useDispatch();
@@ -58,4 +58,3 @@ const MusicianSearch = () => {
 }
 
 export default MusicianSearch
-

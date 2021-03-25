@@ -5,7 +5,7 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Cookies from "js-cookie";
-import Header from "./Header/Header";
+import Header from "./Header";
 import {Nav, Navbar} from "react-bootstrap";
 
 class Band extends React.Component {

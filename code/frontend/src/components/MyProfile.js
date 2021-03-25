@@ -6,8 +6,10 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
-import Header from "./Header/Header";
+import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
+
+import {connect} from 'react-redux';
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -29,15 +31,30 @@ class MyProfile extends React.Component {
         }
     }
 
+    componentDidMount() {
+      var bandsURL = getBackendURL() + "/bands" + "?musicianId=" + this.state.id;
+      var userURL = getBackendURL() + "/musicians/" + this.state.id;
+      // get bands
+      axios.get(bandsURL)
+          .then((response) => this.setState({bands: response.data}));
 
+      // get the signed-in user's info
+      axios.get(userURL)
+          .then((response) => this.setState(
+              {name: response.data.name, location: response.data.location,
+              experience: response.data.experience,
+              instruments: response.data.instruments,
+              genres: response.data.genres,
+              links: response.data.profileLinks}));
+    }
 
     render() {
         // get user's id
         this.state.id = Cookies.get('id');
 
+
         var bandsURL = getBackendURL() + "/bands" + "?musicianId=" + this.state.id;
         var userURL = getBackendURL() + "/musicians/" + this.state.id;
-
         // get bands
         axios.get(bandsURL)
             .then((response) => this.setState({bands: response.data}));
@@ -50,6 +67,7 @@ class MyProfile extends React.Component {
                 instruments: response.data.instruments,
                 genres: response.data.genres,
                 links: response.data.profileLinks}));
+
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
@@ -120,4 +138,10 @@ class MyProfile extends React.Component {
     }
 
 }
-export default MyProfile;
+
+function mapStateToProps(state) {
+  return {
+    store: state
+  };
+} // end mapStateToProps
+export default connect(mapStateToProps, null)(MyProfile);

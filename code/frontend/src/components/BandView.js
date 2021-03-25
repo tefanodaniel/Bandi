@@ -6,7 +6,7 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
-import Header from "./Header/Header";
+import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 
 class BandView extends React.Component {
