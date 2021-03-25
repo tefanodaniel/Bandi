@@ -17,15 +17,15 @@ class MyProfile extends React.Component {
         this.state = {
 
             id: '',
-
             bands: [],
-
             name: 'Loading...',
             location: '',
             experience: '',
             instruments: [],
             genres: [],
-            links: []
+            links: [],
+            friends: [],
+            pending_outgoing_requests: [],
         }
     }
 
@@ -50,7 +50,9 @@ class MyProfile extends React.Component {
                 experience: response.data.experience,
                 instruments: response.data.instruments,
                 genres: response.data.genres,
-                links: response.data.profileLinks}));
+                links: response.data.profileLinks,
+                friends: response.data.friends,
+                pending_requests: response.data.pending_outgoing_requests}));
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
@@ -63,6 +65,16 @@ class MyProfile extends React.Component {
                 </div>
             </div>
         );
+
+        const getFriendsAndUrls = function () {
+            let friends = new Map();
+            this.state.friends.forEach(friendID => {
+                let friendURL = getBackendURL() + "/musicians/" + friendID;
+                axios.get(friendURL)
+                    .then(response => friends.set(response.data.name, friendURL));
+            });
+            return friends;
+        }
 
         if (this.state.bands) {
             return (
@@ -104,6 +116,8 @@ class MyProfile extends React.Component {
 
                         <TabPanel>
                             <h1>This is where my friends would be, if I had any</h1>
+                            <h3>Friends: </h3>
+                            
                         </TabPanel>
 
                     </Tabs>

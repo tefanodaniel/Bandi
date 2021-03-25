@@ -23,11 +23,26 @@ class Profile extends React.Component {
             experience: '',
             instruments: [],
             genres: [],
-            links: []
+            links: [],
+            pending_outgoing_requests: []
         }
+        this.addFriend.bind(this)
     }
 
-    goBack = () => {this.props.history.goBack()}
+    goBack = () => {this.props.history.goBack()};
+
+    
+    addFriend = () => {
+        this.state.pending_outgoing_requests.push(this.state.userId); // TODO: store pending outgoing requests in database as part of Musician
+        // alert("A request to connect was sent to " + this.state.name + ".");
+    }
+
+    renderConnectButton = () => {
+        // remove question mark once pending_outgoing_requests confirmed to exist 
+        if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
+            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
+        } else { return <Button disabled>Pending...</Button> };
+    }
 
     render() {
 
@@ -43,7 +58,8 @@ class Profile extends React.Component {
                         experience: response.data.experience,
                         instruments: response.data.instruments,
                         genres: response.data.genres,
-                        links: response.data.profileLinks}));
+                        links: response.data.profileLinks,
+                        pending_incoming_requests: response.data.pending_outgoing_requests}));
 
         if (this.state.name) {
             return (
@@ -66,6 +82,7 @@ class Profile extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
+                    {this.renderConnectButton()}
                 </div>
             );
         } else {
