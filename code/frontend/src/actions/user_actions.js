@@ -1,5 +1,4 @@
 import { USER_LOGIN, USER_LOGOUT } from './types';
-//import { logout } from "../utils/api";
 import MusicianAPI from "../utils/MusicianApiService";
 
 //thunk function to do user-login.
