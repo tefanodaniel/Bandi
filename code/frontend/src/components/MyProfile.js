@@ -9,6 +9,32 @@ import Form from "react-bootstrap/Form";
 import Header from "./Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 
+function makeFriendMap(list) {
+    let friendMap = new Map();
+    list.forEach(friendID => {
+        let friendURL = getBackendURL() + "/musicians/" + friendID;
+        axios.get(friendURL)
+            .then(response => friendMap.set(response.data.name, friendURL));
+    });
+    console.log(friendMap.size);
+    return friendMap;
+}
+
+function DisplayFriendsList(props) {
+
+    let friends = makeFriendMap(props.list)
+    if (friends.size > 0) {
+        const friendItems = friends.map((name, url) => {
+                <li> <a href={url}>{name}</a> </li>
+        });
+        return (
+          <ul>{friendItems}</ul>
+        );
+    } else {
+        return (<p>No friends to display :(</p>);
+    }
+}
+
 class MyProfile extends React.Component {
     constructor(props) {
         super(props)
@@ -53,19 +79,6 @@ class MyProfile extends React.Component {
         
     }
 
-    getFriendsAndUrls() {
-        let friends = new Map();
-        console.log(this.state);
-        this.state.friends.forEach(friendID => {
-            let friendURL = getBackendURL() + "/musicians/" + friendID;
-            axios.get(friendURL)
-                .then(response => friends.set(response.data.name, friendURL));
-        });
-        console.log(friends);
-        return friends;
-    }
-
-
 
     render() {
 
@@ -83,19 +96,6 @@ class MyProfile extends React.Component {
 
 
 
-        const FriendsList = () => {
-            let friends = this.getFriendsAndUrls();
-            if (friends.size > 0) {
-                const friendItems = friends.map((name, url) => {
-                        <li> <a href={url}>{name}</a> </li>
-                });
-                return (
-                  <ul>{friendItems}</ul>
-                );
-            } else {
-                return (<p>No friends to display :(</p>);
-            }
-        }
 
         if (this.state.bands) {
             return (
@@ -136,7 +136,10 @@ class MyProfile extends React.Component {
 
 
                         <TabPanel>
-                            <FriendsList/>
+                            <h3>My friends ({this.state.friends.length})</h3>
+                            <DisplayFriendsList list={this.state.friends}/>
+                            <h3>Pending friend requests ({this.state.pending_outgoing_requests.length})</h3>
+                            <DisplayFriendsList list={this.state.pending_outgoing_requests}/>
                         </TabPanel>
 
                     </Tabs>
@@ -160,4 +163,5 @@ class MyProfile extends React.Component {
     }
 
 }
+
 export default MyProfile;
