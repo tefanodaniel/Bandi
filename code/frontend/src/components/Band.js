@@ -78,7 +78,6 @@ class Band extends React.Component {
                     members: response.data.members
                 },
                 function() {
-                    console.log(this.state.members);
                     this.setState({memberNames: []});
 
                     this.state.members.forEach(id => {
@@ -102,7 +101,7 @@ class Band extends React.Component {
         this.state.isMember = (this.state.members).indexOf(this.state.userId) > -1;
         this.setButtonText();
 
-        if (this.state.bandId) {
+        if (this.state.userId) {
             return (
                 <div>
                 <Header/>
