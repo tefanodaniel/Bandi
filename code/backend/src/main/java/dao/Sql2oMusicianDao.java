@@ -113,8 +113,10 @@ public class Sql2oMusicianDao implements MusicianDao {
             String name = (String) queryResults.get(0).get("name");
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
+            String zipCode = (String) queryResults.get(0).get("zipCode");
 
-            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>());
+            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
+                    exp, new HashSet<String>(), loc, zipCode);
             for (Map row : queryResults) {
                 m.addGenre((String) row.get("genre"));
                 m.addInstrument((String) row.get("instrument"));
@@ -388,6 +390,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             String name = (String) row.get("name");
             String exp = (String) row.get("experience");
             String loc = (String) row.get("location");
+            String zipCode = (String) row.get("zipCode");
             String genre = (String) row.get("genre");
             String instrument = (String) row.get("instrument");
             String link = (String) row.get("link");
@@ -395,7 +398,8 @@ public class Sql2oMusicianDao implements MusicianDao {
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
-                musicians.put(id, new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>()));
+                musicians.put(id, new Musician(id, name, new HashSet<String>(),
+                        new HashSet<String>(), exp, new HashSet<String>(), loc, zipCode));
             }
             // Add the genre and instrument from this row to the object lists
             Musician m = musicians.get(id);

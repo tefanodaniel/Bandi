@@ -36,7 +36,7 @@ class Sql2oMusicianDaoTest {
     }
 
     @BeforeAll
-    static void setSampleCourses() {
+    static void setSampleMusicians() {
 //        samples = new ArrayList<>();
 //        samples.add(new Musician("fakeid1","Kenny G", "Jazz",
 //                "saxophone", "expert", "WNY, NJ", "07093"));
@@ -59,42 +59,18 @@ class Sql2oMusicianDaoTest {
         Set<String> profileLinks = new HashSet<String>();
 
         samples = new ArrayList<>();
-        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England", profileLinks));
-        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England", profileLinks));
-        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle", profileLinks));
+        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1,
+                "Expert", profileLinks, "WNY, NJ", "07093"));
+        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2,
+                "Expert",profileLinks, "Edgewater, NJ", "07020"));
+        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3,
+                "Expert", profileLinks, "San Diego, CA", "92168"));
     }
 
 
     @BeforeEach
     void injectDependency() {
         try (Connection conn = sql2o.open()) {
-//            conn.createQuery("create extension if not exists cube;").executeUpdate();
-//            conn.createQuery("create extension if not exists earthdistance;").executeUpdate();
-//
-//            conn.createQuery("DROP TABLE IF EXISTS MusiciansTest;").executeUpdate();
-//
-//            String sql = "CREATE TABLE IF NOT EXISTS MusiciansTest("
-//                    + "id VARCHAR(30) PRIMARY KEY,"
-//                    + "name VARCHAR(30) NOT NULL,"
-//                    + "genre VARCHAR(30) NOT NULL,"
-//                    + "instrument VARCHAR(50),"
-//                    + "experience VARCHAR(30),"
-//                    + "location VARCHAR(30),"
-//                    + "zipCode VARCHAR(10),"
-//                    + "latitude DOUBLE PRECISION,"
-//                    + "longitude DOUBLE PRECISION"
-//                    + ");";
-//            conn.createQuery(sql).executeUpdate();
-//
-//            sql = "INSERT INTO MusiciansTest(id, name, genre, instrument, experience, " +
-//                    "location, zipCode, latitude, longitude) " +
-//                    "VALUES(:id, :name, :genre, :instrument, :experience, " +
-//                    ":location, :zipCode, :latitude, :longitude);";
-//            for (Musician Musician : samples) {
-//                conn.createQuery(sql).bind(Musician).executeUpdate();
-//            }
-
-            // TODO: update database with new attributes:
             conn.createQuery("create extension if not exists cube;").executeUpdate();
             conn.createQuery("create extension if not exists earthdistance;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS MTest CASCADE;").executeUpdate();
@@ -176,13 +152,13 @@ class Sql2oMusicianDaoTest {
     @Test
     @DisplayName("create musician for valid input")
     void createNewMusician() {
-        // TODO: update Musician class with new fields
-//        Set<String> genres = new HashSet<String>(Arrays.asList("Pop"));
-//        Set<String> instruments = new HashSet<String>(Arrays.asList("Vocals"));
-//        Set<String> profileLinks = new HashSet<String>();
-//        Musician m1 = new Musician("fakeid5","Lady Gaga", genres, instruments,
-//                "Expert", "Honolulu, HI", "96816");
-//        Musician m2 = musicianDao.create(m1.getId(), m1.getName(), m1.getGenre(), m1.getInstrument(),
+        // TODO: update create() with new fields
+        Set<String> genres = new HashSet<String>(Arrays.asList("Pop"));
+        Set<String> instruments = new HashSet<String>(Arrays.asList("Vocals"));
+        Set<String> profileLinks = new HashSet<String>();
+        Musician m1 = new Musician("fakeid5","Lady Gaga", genres, instruments,
+                "Expert", profileLinks, "Honolulu, HI", "96816");
+//        Musician m2 = musicianDao.create(m1.getId(), m1.getName(), m1.getGenres(), m1.getInstruments(),
 //                m1.getExperience(), m1.getLocation(), m1.getZipCode(), m1.getLatitude(), m1.getLongitude());
 //        assertEquals(m1, m2);
     }
