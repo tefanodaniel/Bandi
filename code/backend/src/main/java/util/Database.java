@@ -18,7 +18,7 @@ import java.sql.Statement;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = false;
+    public static boolean USE_TEST_DATABASE = true;
 
     private Database() {
         // This class should not be instantiated.
@@ -50,10 +50,7 @@ public final class Database {
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
     public static Sql2o getSql2o() throws URISyntaxException, Sql2oException {
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (USE_TEST_DATABASE) {
-            databaseUrl = System.getenv("TEST_DATABASE_URL");
-        }
+        String databaseUrl = getDatabaseUrl();
         URI dbUri = new URI(databaseUrl);
 
         String username = dbUri.getUserInfo().split(":")[0];
