@@ -27,11 +27,7 @@ class MyProfile extends React.Component {
             friends: [],
             pending_outgoing_requests: [],
         }
-    }
 
-
-
-    render() {
         // get user's id
         console.log("am I over here?")
         this.state.id = Cookies.get('id');
@@ -50,9 +46,28 @@ class MyProfile extends React.Component {
                 experience: response.data.experience,
                 instruments: response.data.instruments,
                 genres: response.data.genres,
-                links: response.data.profileLinks,
-                friends: response.data.friends,
-                pending_requests: response.data.pending_outgoing_requests}));
+                links: response.data.profileLinks
+                //friends: response.data.friends,
+                //pending_requests: response.data.pending_outgoing_requests}));
+                }));
+        
+    }
+
+    getFriendsAndUrls() {
+        let friends = new Map();
+        console.log(this.state);
+        this.state.friends.forEach(friendID => {
+            let friendURL = getBackendURL() + "/musicians/" + friendID;
+            axios.get(friendURL)
+                .then(response => friends.set(response.data.name, friendURL));
+        });
+        console.log(friends);
+        return friends;
+    }
+
+
+
+    render() {
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
@@ -66,14 +81,20 @@ class MyProfile extends React.Component {
             </div>
         );
 
-        const getFriendsAndUrls = function () {
-            let friends = new Map();
-            this.state.friends.forEach(friendID => {
-                let friendURL = getBackendURL() + "/musicians/" + friendID;
-                axios.get(friendURL)
-                    .then(response => friends.set(response.data.name, friendURL));
-            });
-            return friends;
+
+
+        const FriendsList = () => {
+            let friends = this.getFriendsAndUrls();
+            if (friends.size > 0) {
+                const friendItems = friends.map((name, url) => {
+                        <li> <a href={url}>{name}</a> </li>
+                });
+                return (
+                  <ul>{friendItems}</ul>
+                );
+            } else {
+                return (<p>No friends to display :(</p>);
+            }
         }
 
         if (this.state.bands) {
@@ -115,9 +136,7 @@ class MyProfile extends React.Component {
 
 
                         <TabPanel>
-                            <h1>This is where my friends would be, if I had any</h1>
-                            <h3>Friends: </h3>
-                            
+                            <FriendsList/>
                         </TabPanel>
 
                     </Tabs>
