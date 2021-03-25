@@ -77,6 +77,7 @@ class MyProfile extends React.Component {
                         <TabList>
                             <Tab>My Profile</Tab>
                             <Tab>My Bands</Tab>
+                            <Tab>My Friends</Tab> 
                         </TabList>
 
                         <TabPanel>
@@ -98,6 +99,11 @@ class MyProfile extends React.Component {
                         <TabPanel>
                             {bandsList}
                             <Button onClick={() => {this.props.history.push('/createband')}}>Create Band</Button>
+                        </TabPanel>
+
+
+                        <TabPanel>
+                            <h1>This is where my friends would be, if I had any</h1>
                         </TabPanel>
 
                     </Tabs>
