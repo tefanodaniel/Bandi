@@ -5,17 +5,15 @@ import Image from 'react-bootstrap/Image';
 import Navbar from 'react-bootstrap/Navbar';
 import { getBackendURL, logout } from "../utils/api"; // logout is named export, needs brackets
 import Cookies from "js-cookie";
-//import axios from "axios";
 import { Container, Nav } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
-import { Link } from "react-router-dom";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)
 }
 
-const Header = (id) => {
+const Header = () => {
   const dispatch = useDispatch();
   const id1 = Cookies.get("id");
   let user = useSelector((state) => state.user_reducer, shallowEqual);
@@ -31,12 +29,13 @@ const Header = (id) => {
       type: 'user/logout'
     })
   }
-  //const goToProfile = () => { this.props.history.push('/myprofile');}
 
   return (
       <div>
         <Navbar expand="lg" variant="dark" bg="dark">
-          <Navbar.Brand href="/">banDi</Navbar.Brand>
+          <Navbar.Brand href="/">
+              banDi
+          </Navbar.Brand>
           <Navbar.Brand className="mx-auto">
               Welcome, {user.name}!
           </Navbar.Brand>
@@ -49,6 +48,7 @@ const Header = (id) => {
   )
 }
 
+<<<<<<< HEAD:code/frontend/src/components/Header.js
 /**class Header extends React.Component {
   constructor(props) {
     super(props)
@@ -120,5 +120,7 @@ const Header = (id) => {
   }
 
 }*/
+=======
+>>>>>>> 8286b04 (cleaned up search, improved grid display using chunking):code/frontend/src/components/Header/Header.js
 
 export default withRouter(Header);
