@@ -1,10 +1,47 @@
 import React from 'react';
-import {Link, Redirect, useHistory} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
+import Header from './Header/Header.js'
+import {Container, Row, Col} from "react-bootstrap";
+import band_img from "../images/band_jumbo.jpg";
+import music_img from "../images/music_jumbo.jpg";
+import sdate_img from "../images/speeddate_jumbo.jpg";
+import sotw_img from "../images/sotw_jumbo.jpg";
+import discover_bg from "../images/discover_bg.jpg";
 
-import Header from './Header';
+const discover_style = {
+	jumbo_music: {
+		backgroundAttachment: "static",
+		backgroundPosition: "center",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${music_img})`
+	},
+	jumbo_band: {
+		backgroundAttachment: "static",
+		backgroundPosition: "center",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${band_img})`
+	},
+	jumbo_sotw: {
+		backgroundAttachment: "static",
+		backgroundPosition: "center",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${sotw_img})`
+	},
+	jumbo_sdate: {
+		backgroundAttachment: "static",
+		backgroundPosition: "center",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${sdate_img})`
+	}
+
+}
 
 class Discover extends React.Component {
   constructor(props) {
@@ -20,6 +57,10 @@ class Discover extends React.Component {
   viewMusicians = () => { this.props.history.push('/musicianview');}
 
   viewBands = () => {this.props.history.push('/bandview')}
+
+  viewSpeedDating = () => {}
+
+  viewSOTW = () => {}
 
   render() {
 	  let cookie_id = Cookies.get('id');
@@ -43,18 +84,55 @@ class Discover extends React.Component {
 			  return (<Redirect to = '/signin'/>);
 		  }
 	  }
-
 	return (
-  		<div>
+  		<div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
         	<Header />
-			<Jumbotron>
-  				<h3>Musicians</h3>
-  				<Button onClick={this.viewMusicians}>Browse</Button>
+        	<div>
+        	<Container >
+				<Row style={{ marginTop:"20px"}}>
+					<Col style={{ width: "200px", height:"100px"}}>
+						<Jumbotron className="rounded text-white" style={discover_style.jumbo_music}>
+							<Container style={{float:"right"}}>
+								<h3 className="display-5" >Musicians</h3>
 
-				<h3>Bands</h3>
-				<Button onClick={this.viewBands}>Browse</Button>
-  			</Jumbotron>
+							</Container>
+							<Container>
+								<Button onClick={this.viewMusicians} variant="light" >Browse</Button>
+							</Container>
+						</Jumbotron>
+					</Col>
+					<Col style={{ width: "200px", height:"100px"}}>
+						<Jumbotron className="rounded text-white" style={discover_style.jumbo_band}>
+							<h3>Bands</h3>
+							<Button onClick={this.viewBands} variant="light">Browse</Button>
+						</Jumbotron>
+					</Col>
+				</Row>
+			</Container>
+			</div>
+			<div style={{marginTop:"120px"}}>
+			<Container >
+				<Row style={{ marginTop:"20px"}}>
+					<Col style={{ width: "200px", height:"100px"}}>
+						<Jumbotron className="rounded text-white" style={discover_style.jumbo_sdate}>
+							<Container style={{float:"right"}}>
+								<h3 className="display-5" >Speed-Dating</h3>
 
+							</Container>
+							<Container>
+								<Button onClick={this.viewSpeedDating} variant="light" >Explore</Button>
+							</Container>
+						</Jumbotron>
+					</Col>
+					<Col style={{ width: "200px", height:"100px"}}>
+						<Jumbotron className="rounded text-white" style={discover_style.jumbo_sotw}>
+							<h3>Song Of The Week!</h3>
+							<Button onClick={this.viewSOTW} variant="light">Explore</Button>
+						</Jumbotron>
+					</Col>
+				</Row>
+			</Container>
+			</div>
   		</div>
   	);
   }
