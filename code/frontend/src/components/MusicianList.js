@@ -27,11 +27,11 @@ const styles = {
 const FilteredMusicianItem = ( musician ) => {
     return (
             <Card style={styles.card} className="rounded shadow-sm border-0">
-                <Card.Body fluid>
+                <Card.Body>
                     <Card.Title><b>{musician.name}</b></Card.Title>
-                    <Card.Text><p className="small text-muted font-italic">Genres: {musician.genres.join(', ')}</p></Card.Text>
-                    <Card.Text><p className="small text-muted font-italic">Instruments: {musician.instruments.join(', ')}</p></Card.Text>
-                    <Card.Text><p className="small text-muted font-italic"> <a href={getFrontendURL() + "/#/profile?view=" + musician.id}>View More</a></p></Card.Text>
+                    <Card.Text className="small text-muted font-italic">Genres: {musician.genres.join(', ')}</Card.Text>
+                    <Card.Text className="small text-muted font-italic">Instruments: {musician.instruments.join(', ')}</Card.Text>
+                    <Card.Text className="small text-muted font-italic"> <a href={getFrontendURL() + "/#/profile?view=" + musician.id}>View More</a></Card.Text>
                 </Card.Body>
             </Card>
     )
@@ -44,12 +44,12 @@ const MusicianList = () => {
     const rows = fil_musicians_chunk.map((user_chunk, index) => {
         const fil_musicians_cols = user_chunk.map((user, index) => {
             return (
-                <Col key={index} style={{height: "250px"}}>
+                <Col key={index} style={{height: "200px" , columnWidth: "250px"}}>
                     <FilteredMusicianItem id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres}/>
                 </Col>
             );
         });
-        return <Row key={index}>{fil_musicians_cols}</Row>
+        return <Row key={index} style={{width: "900px"}}>{fil_musicians_cols}</Row>
     });
     return (
         <Container>
