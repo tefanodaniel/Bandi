@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import {getBackendURL} from "../utils/api";
 
 import { connect } from 'react-redux';
-import { updateUserProfile } from '../actions/user_actions';
+import { updateUserProfile, getUser } from '../actions/user_actions';
 
 class EditProfile extends React.Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class EditProfile extends React.Component {
         location: userInfo.location,
         experience: userInfo.experience,
         instruments: userInfo.instruments,
-        genres: userInfo.instruments
+        genres: userInfo.genres
       }
 
       this.handleSubmit = this.handleSubmit.bind(this);
@@ -84,18 +84,37 @@ class EditProfile extends React.Component {
       // Prevent refresh of the page
       event.preventDefault();
 
-      const data = {
-        id: this.state.id,
-        name: this.state.name,
-        location: this.state.location,
-        experience: this.state.experience,
-        instruments: this.state.instruments,
-        genres: this.state.genres
+      const userInfo = this.props.store.user_reducer;
+      console.log("Current user data", userInfo);
+
+      const formFields = ["id", "name", "location", "experience", "instruments", "genres"];
+      const formData = {
+        id: this.state.id
       }
 
-      // Send PUT request to our API
-      const { updateUserProfile } = this.props;
-      updateUserProfile(data);
+      for (let i = 0; i < formFields.length; i++) {
+        let key = formFields[i]
+        if (key === "instruments" || key === "genres") {
+          if (userInfo[key].join() !== this.state[key].join()) {
+            formData[key] = this.state[key];
+          }
+        } else {
+          if (userInfo[key] !== this.state[key]) {
+            formData[key] = this.state[key];
+          }
+        }
+
+      }
+
+      console.log("Updating: ", formData, Object.keys(formData).length);
+      if (Object.keys(formData).length > 1) {
+        // Send PUT request to our API
+        const { updateUserProfile, getUser } = this.props;
+        updateUserProfile(formData);
+
+        // GET our updated user to update the redux store
+        getUser(this.state.id);
+      }
 
       // Redirect back to view the updated profile
       this.props.history.push('/myprofile')
@@ -212,4 +231,4 @@ function mapStateToProps(state) {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, {updateUserProfile})(EditProfile);
+export default connect(mapStateToProps, {updateUserProfile, getUser})(EditProfile);

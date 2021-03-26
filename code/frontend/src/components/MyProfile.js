@@ -40,8 +40,8 @@ class MyProfile extends React.Component {
       const { fetchBandsForMusician, getUser } = this.props;
       fetchBandsForMusician({id: this.state.id});
 
-      // GET our updated user to update the redux store
-      //getUser(this.state.id);
+      // // GET our updated user to update the redux store
+      // getUser(this.state.id);
     }
 
     renderCustomizeProfileHeader() {
@@ -85,8 +85,8 @@ class MyProfile extends React.Component {
 
                         <TabPanel>
                             <h2>Name: {userInfo.name}</h2>
-                            <h4>Location: {userInfo.location}</h4>
-                            <h4>Experience: {userInfo.experience}</h4>
+                            <h4>Location: {userInfo.location === "NULL" ? "" : userInfo.location}</h4>
+                            <h4>Experience: {userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
                             <div>
                                 <h4>Instruments: {userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
                             </div>
