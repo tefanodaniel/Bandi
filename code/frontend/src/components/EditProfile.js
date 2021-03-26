@@ -13,8 +13,6 @@ class EditProfile extends React.Component {
       super(props);
 
       const userInfo = this.props.store.user_reducer;
-      console.log(userInfo);
-      //console.log(userInfo.instruments, userInfo.instruments.length);
 
       this.state = {
 
@@ -85,13 +83,12 @@ class EditProfile extends React.Component {
       event.preventDefault();
 
       const userInfo = this.props.store.user_reducer;
-      console.log("Current user data", userInfo);
-
       const formFields = ["id", "name", "location", "experience", "instruments", "genres"];
       const formData = {
         id: this.state.id
       }
 
+      // Create dictionary of only the profile fields that have changed
       for (let i = 0; i < formFields.length; i++) {
         let key = formFields[i]
         if (key === "instruments" || key === "genres") {
@@ -106,7 +103,6 @@ class EditProfile extends React.Component {
 
       }
 
-      console.log("Updating: ", formData, Object.keys(formData).length);
       if (Object.keys(formData).length > 1) {
         // Send PUT request to our API
         const { updateUserProfile, getUser } = this.props;
@@ -119,28 +115,6 @@ class EditProfile extends React.Component {
       // Redirect back to view the updated profile
       this.props.history.push('/myprofile')
     }
-
-    // submit_form() {
-    //   const axios = require('axios')
-    //   const url = getBackendURL() + "/musicians" + "/" + Cookies.get("id");
-    //
-    //   axios
-    //       .put(url, {
-    //           id: this.state.id,
-    //         name: this.state.name,
-    //           location: this.state.location,
-    //           experience: this.state.experience,
-    //           instruments: this.state.instruments,
-    //           genres: this.state.genres
-    //       })
-    //       .then(res => {
-    //         console.log(`statusCode: ${res.statusCode}`)
-    //         console.log(res)
-    //       })
-    //       .catch(error => {
-    //         console.error(error)
-    //       })
-    // }
 
     instrumentIsChecked(instrument) {
       const userInfo = this.props.store.user_reducer;
@@ -157,8 +131,6 @@ class EditProfile extends React.Component {
       if (!this.state.id) {
           this.props.history.push('/discover');
       }
-
-
 
       return (
         <div>

@@ -11,7 +11,7 @@ import {Container, Navbar} from "react-bootstrap";
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../actions/band_actions';
-import { getUser } from '../actions/user_actions';
+
 
 
 class MyProfile extends React.Component {
@@ -37,11 +37,8 @@ class MyProfile extends React.Component {
     }
 
     componentDidMount() {
-      const { fetchBandsForMusician, getUser } = this.props;
+      const { fetchBandsForMusician } = this.props;
       fetchBandsForMusician({id: this.state.id});
-
-      // // GET our updated user to update the redux store
-      // getUser(this.state.id);
     }
 
     renderCustomizeProfileHeader() {
@@ -127,4 +124,4 @@ function mapStateToProps(state) {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, {fetchBandsForMusician, getUser})(MyProfile);
+export default connect(mapStateToProps, {fetchBandsForMusician})(MyProfile);
