@@ -1,4 +1,4 @@
-import { LOAD_MUSICIANS_INITIAL, LOAD_MUSICIANS_QUERY, CLEAR_MUSICIANS_QUERY, UPDATE_MUSICIAN_PROFILE } from './types';
+import { LOAD_MUSICIANS_INITIAL, LOAD_MUSICIANS_QUERY, CLEAR_MUSICIANS_QUERY } from './types';
 import MusicianApi from "../utils/MusicianApiService";
 
 
@@ -30,11 +30,4 @@ export function newQuery(queryparams) {
 export const clearQuery = {
     type : CLEAR_MUSICIANS_QUERY,
     payload : []
-}
-
-export const updateMusicianProfile = (attr) => (dispatch) => {
-  return MusicianApi.update(attr.id, attr).then(response => dispatch({
-    payload: response.data,
-    type: UPDATE_MUSICIAN_PROFILE
-  }))
 }

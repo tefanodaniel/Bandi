@@ -6,8 +6,7 @@ import Cookies from "js-cookie";
 import {getBackendURL} from "../utils/api";
 
 import { connect } from 'react-redux';
-import { updateMusicianProfile } from '../actions/musician_actions';
-import { getUser } from '../actions/user_actions';
+import { updateUserProfile } from '../actions/user_actions';
 
 class EditProfile extends React.Component {
     constructor(props) {
@@ -95,11 +94,8 @@ class EditProfile extends React.Component {
       }
 
       // Send PUT request to our API
-      const { updateMusicianProfile, getUser } = this.props;
-      updateMusicianProfile(data);
-
-      // GET our updated user to update the redux store
-      getUser(data.id);
+      const { updateUserProfile } = this.props;
+      updateUserProfile(data);
 
       // Redirect back to view the updated profile
       this.props.history.push('/myprofile')
@@ -216,4 +212,4 @@ function mapStateToProps(state) {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, {updateMusicianProfile, getUser})(EditProfile);
+export default connect(mapStateToProps, {updateUserProfile})(EditProfile);
