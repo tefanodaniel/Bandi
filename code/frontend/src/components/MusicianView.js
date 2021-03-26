@@ -23,12 +23,12 @@ class SearchMusician extends Component {
                             Find your musical soulmate here!
                         </Navbar.Brand>
                     </Navbar>
-                    <Container>
+                    <Container className="mx-auto" fluid>
                         <Row>
-                            <Col>
+                            <Col className="col-sm-3">
                                 <MusicianSearch />
                             </Col>
-                            <Col>
+                            <Col className="col-sm-9">
                                 <MusicianList />
                             </Col>
                         </Row>
