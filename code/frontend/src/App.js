@@ -11,6 +11,7 @@ import CreateBand from "./components/CreateBand";
 import MusicianView from "./components/MusicianView";
 import BandView from "./components/BandView";
 import Profile from "./components/Profile";
+import SongOfTheWeek from "./components/SongOfTheWeek";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route exact path="/createband" component={CreateBand} />
           <Route exact path="/musicianview" component={MusicianView} />
           <Route exact path="/bandview" component={BandView} />
+          <Route exact path="/sotw" component={SongOfTheWeek} />
           <Route exact path="/profile" component={Profile} />
         </Switch>
       </HashRouter>

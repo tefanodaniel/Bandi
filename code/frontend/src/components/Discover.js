@@ -60,7 +60,7 @@ class Discover extends React.Component {
 
   viewSpeedDating = () => {}
 
-  viewSOTW = () => {}
+  viewSOTW = () => {this.props.history.push('/sotw')}
 
   render() {
 	  let cookie_id = Cookies.get('id');
