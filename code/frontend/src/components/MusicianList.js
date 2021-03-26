@@ -17,20 +17,16 @@ const chunk = (arr, chunkSize = 1, cache = []) => {
 
 
 const styles = {
-    container: {
-        width: 300,
-        margin: "0 auto"
-    },
     card: {
-//        backgroundColor: "#ff8952",
         borderRadius: 35,
         borderStyle: "dashed",
+        height: "250px"
     }
 }
 
 const FilteredMusicianItem = ( musician ) => {
     return (
-            <Card style={styles.card} className="rounded shadow-sm border-0" style={{height:"250px"}}>
+            <Card style={styles.card} className="rounded shadow-sm border-0">
                 <Card.Body fluid>
                     <Card.Title><b>{musician.name}</b></Card.Title>
                     <Card.Text><p className="small text-muted font-italic">Genres: {musician.genres.join(', ')}</p></Card.Text>
