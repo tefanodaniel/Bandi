@@ -77,6 +77,7 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS Instruments;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS MusicianGenres;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS ProfileAVLinks;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS MusicianFriends;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
                     + "id VARCHAR(30) PRIMARY KEY,"
@@ -98,6 +99,12 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
+            sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "friendID VARCHAR(30) REFERENCES Musicians"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
             sql = "CREATE TABLE IF NOT EXISTS ProfileAVLinks("
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
                     + "link VARCHAR(100)"
@@ -107,6 +114,7 @@ public final class Database {
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
+            String friend_sql = "INSERT INTO MusicianFriends(id, friendID) VALUES(:id, :friendID);";
             String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";
 
             for (Musician m : samples) {
@@ -126,6 +134,14 @@ public final class Database {
                     conn.createQuery(genre_sql)
                             .addParameter("id", m.getId())
                             .addParameter("genre", genre)
+                            .executeUpdate();
+                }
+
+                // Insert all friends for this musician
+                for (String friendID : m.getFriends()) {
+                    conn.createQuery(friend_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("friendID", friendID)
                             .executeUpdate();
                 }
 

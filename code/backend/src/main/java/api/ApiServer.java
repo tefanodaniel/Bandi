@@ -259,6 +259,8 @@ public class ApiServer {
             }
         });
 
+        // TODO: put request specifically for friend fields
+
         // delete musicians
         delete("/musicians/:id", (req, res) -> {
             try {

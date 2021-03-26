@@ -83,6 +83,8 @@ public interface MusicianDao {
 
     Musician updateProfileLinks(String id, Set<String> links) throws DaoException;
 
+    // TODO: add function for adding friends
+
     /**
      * Delete a Musician provided its offeringName.
      *
