@@ -52,6 +52,9 @@ public final class DataStore {
         samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
                 genres2, instruments2, "Expert", "Freehold, NJ", maxLinks, kennyFriends)); // Max and Kenny G are best friends
 
+        samples.add(new Musician("thegreatbelow1","Stefano Tusa",
+                genres2, instruments2, "Intermediate", "Orlando, FL", new HashSet<String>(), kennyFriends)); // Max, Kenny G, and I are all best friends.
+
 
         return samples;
     }

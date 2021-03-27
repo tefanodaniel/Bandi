@@ -20,10 +20,11 @@ public interface MusicianDao {
      * @param instruments The associated instruments
      * @param experience Self-declared level of expertise
      * @param location The location of a musician.
+     * @param friends The musician ids of this musician's friends.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String id, String name, Set<String> genres, Set<String> instruments, String experience, String location, Set<String> profileLinks) throws DaoException;
+    Musician create(String id, String name, Set<String> genres, Set<String> instruments, String experience, String location, Set<String> profileLinks, Set<String> friends) throws DaoException;
 
     /**
      * Create a Musician.

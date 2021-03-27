@@ -27,12 +27,14 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-                           String experience, String location, Set<String> profileLinks) throws DaoException {
+                           String experience, String location, Set<String> profileLinks, Set<String> friends) throws DaoException {
         // TODO: Update with friends
         String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
+        String friendsSQL = "INSERT INTO MusicianFriends (id, friendID) VALUES (:id, :friendID)";
+
         try (Connection conn = sql2o.open()) {
             // Insert musician into database
             conn.createQuery(musicianSQL)
@@ -66,6 +68,14 @@ public class Sql2oMusicianDao implements MusicianDao {
                         .executeUpdate();
             }
 
+            // Insert corresponding friends into database
+            for (String friendID : friends) {
+                conn.createQuery(genresSQL)
+                        .addParameter("id", id)
+                        .addParameter("friendID", friendID)
+                        .executeUpdate();
+            }
+
             // Return musician
             return this.read(id);
         } catch (Sql2oException ex) {
@@ -96,7 +106,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     "LEFT JOIN instruments as I ON R.MID=I.id\n" +
                     "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                     "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
-                    "LEFT JOIN musicianfriends as F ON R.MID=F.id\n" +
+                    "LEFT JOIN MusicianFriends as F ON R.MID=F.id\n" +
                     "WHERE R.mid=:id;";
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
@@ -139,7 +149,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN instruments as I ON R.MID=I.id\n" +
                 "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                 "LEFT JOIN profileavlinks as L ON R.MID=L.id;" +
-                "LEFT JOIN musicianfriends as F ON R.MID=F.id\n";
+                "LEFT JOIN MusicianFriends as F ON R.MID=F.id\n";
         try (Connection conn = sql2o.open()) {
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
             return musicians;

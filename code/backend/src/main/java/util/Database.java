@@ -99,15 +99,15 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
-                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "friendID VARCHAR(30) REFERENCES Musicians"
-                    + ");";
-            conn.createQuery(sql).executeUpdate();
-
             sql = "CREATE TABLE IF NOT EXISTS ProfileAVLinks("
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
                     + "link VARCHAR(100)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "friendID VARCHAR(30) REFERENCES Musicians"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 

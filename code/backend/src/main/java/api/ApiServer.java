@@ -190,13 +190,14 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
+                Set<String> friends = musician.getFriends();
                 if (instruments == null) { instruments = new HashSet<String>(); }
                 if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
                 if (profileLinks == null) { profileLinks = new HashSet<String>(); }
-
-                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks);
+                if (friends == null) { friends = new HashSet<String>(); }
+                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks, friends);
 
                 res.status(201);
                 return gson.toJson(musician);
