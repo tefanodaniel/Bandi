@@ -65,12 +65,12 @@ class EditProfile extends React.Component {
 
     handleGenreSelection(event) {
         const target = event.target;
-        const name = target.name;
+        const genre = target.name;
         let newGenreList = this.state.genres.slice();
         if (target.checked) {
-            newGenreList.push(name);
+            newGenreList.push(genre);
         } else {
-            const index = newGenreList.indexOf(name);
+            const index = newGenreList.indexOf(genre);
             if (index > -1) { newGenreList.splice(index, 1); }
         }
         this.setState({

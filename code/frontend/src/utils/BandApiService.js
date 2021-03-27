@@ -18,7 +18,7 @@ class BandAPIService {
     }
 
     deleteBandMember(bid, mid) {
-        return customhttp.delete(`/bands/${id}`);
+        return customhttp.delete(`/bands/${bid}/${mid}`);
     }
 
     findByQuery(queryParams) {
