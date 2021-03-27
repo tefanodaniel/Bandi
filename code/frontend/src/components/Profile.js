@@ -5,7 +5,7 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
-import Header from "./Header/Header";
+import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 
 function makeFriendMap(list) {
