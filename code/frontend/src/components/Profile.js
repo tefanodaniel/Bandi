@@ -8,6 +8,32 @@ import {TabPanel} from "react-tabs";
 import Header from "./Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 
+function makeFriendMap(list) {
+    let friendMap = new Map();
+    list.forEach(friendID => {
+        let friendURL = getBackendURL() + "/musicians/" + friendID;
+        axios.get(friendURL)
+            .then(response => friendMap.set(response.data.name, friendURL));
+    });
+    console.log(friendMap.size);
+    return friendMap;
+}
+
+function DisplayFriendsList(props) {
+
+    let friends = makeFriendMap(props.list)
+    if (friends.size > 0) {
+        const friendItems = friends.map((name, url) => {
+                <li> <a href={url}>{name}</a> </li>
+        });
+        return (
+          <ul>{friendItems}</ul>
+        );
+    } else {
+        return (<p>No friends to display :(</p>);
+    }
+}
+
 class Profile extends React.Component {
     constructor(props) {
         super(props)
@@ -24,7 +50,8 @@ class Profile extends React.Component {
             instruments: [],
             genres: [],
             links: [],
-            pending_outgoing_requests: []
+            friends: []
+            // pending_outgoing_requests: []
         }
         this.addFriend.bind(this)
     }
@@ -59,7 +86,9 @@ class Profile extends React.Component {
                         instruments: response.data.instruments,
                         genres: response.data.genres,
                         links: response.data.profileLinks,
-                        pending_incoming_requests: response.data.pending_outgoing_requests}));
+                        friends: response.data.friends
+                        // pending_incoming_requests: response.data.pending_outgoing_requests
+                        }));
 
         if (this.state.name) {
             return (
@@ -81,6 +110,9 @@ class Profile extends React.Component {
                     </div>
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
+                    </div>
+                    <div>
+                        <h4>Friends: {this.state.friends.map(friendID => <p>{friendID}</p>)}</h4>
                     </div>
                     {this.renderConnectButton()}
                 </div>
