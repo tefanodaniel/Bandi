@@ -207,6 +207,7 @@ public class ApiServer {
 
         // put musicians
         put("/musicians/:id", (req, res) -> {
+
             try {
 
                 String id = req.params("id");
@@ -252,7 +253,6 @@ public class ApiServer {
                 if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
-
                 return gson.toJson(musician);
             } catch (DaoException | JsonSyntaxException ex) {
                 throw new ApiError(ex.getMessage(), 500);
@@ -382,29 +382,32 @@ public class ApiServer {
             }
         });
 
-        // To allow CORS
-        before((req, res) -> {
-
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            res.header("Access-Control-Allow-Headers", "*");
-            res.type("application/json");
+        // options request to allow for CORS
+        options("/*", (req, res) -> {
+            String headers = req.headers("Access-Control-Request-Headers");
+            if (headers != null) {
+                res.header("Access-Control-Allow-Headers", headers);
+            }
+            String method = req.headers("Access-Control-Request-Method");
+            if (method != null) {
+                res.header("Access-Control-Allow-Methods", method);
+            }
+            return "OK";
         });
 
-        // To allow CORS
-        after((req, res) -> {
-            /*
+        before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            res.header("Access-Control-Request-Method", "*");
             res.header("Access-Control-Allow-Headers", "*");
-            res.type("application/json");*/
+            res.type("application/json");
         });
     }
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-        List<Musician> musicians = DataStore.sampleMusicians();
-        Database.createMusicianTablesWithSampleData(sql2o, musicians);
+        //List<Musician> musicians = DataStore.sampleMusicians();
+        //Database.createMusicianTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 

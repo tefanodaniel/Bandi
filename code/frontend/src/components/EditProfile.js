@@ -5,99 +5,129 @@ import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
 import {getBackendURL} from "../utils/api";
 
+import { connect } from 'react-redux';
+import { updateUserProfile, getUser } from '../actions/user_actions';
+
 class EditProfile extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {
-        id : '',
 
-        name: '',
-        location: '',
-        experience: '',
-        instruments: [],
-        genres: []
+      const userInfo = this.props.store.user_reducer;
+
+      this.state = {
+
+        id : Cookies.get('id'),
+
+        name: userInfo.name,
+        location: userInfo.location,
+        experience: userInfo.experience,
+        instruments: userInfo.instruments,
+        genres: userInfo.genres
       }
 
       this.handleSubmit = this.handleSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
       this.handleInstrumentSelection = this.handleInstrumentSelection.bind(this);
+      this.handleGenreSelection = this.handleGenreSelection.bind(this);
+      this.instrumentIsChecked = this.instrumentIsChecked.bind(this);
+      this.genreIsChecked = this.genreIsChecked.bind(this);
     }
 
     handleChange(event) {
       const target = event.target;
-      const value = target.value;
-      const name = target.name;
+      let value = target.value;
+      const field = target.name;
+      if (field === "experience" && value === "Select skill level") {
+        value = "";
+      } else if (field === "location" && value === "Select location") {
+        value = "";
+      }
       this.setState({
-        [name]: value
+        [field]: value
       });
     }
 
+
     handleInstrumentSelection(event) {
       const target = event.target;
-      const name = target.name;
+      const instrument = target.name;
       let newInstrumentList = this.state.instruments.slice();
       if (target.checked) {
-        newInstrumentList.push(name);
+        newInstrumentList.push(instrument);
       } else {
-        const index = newInstrumentList.indexOf(name);
+        const index = newInstrumentList.indexOf(instrument);
         if (index > -1) { newInstrumentList.splice(index, 1); }
       }
       this.setState({
         instruments: newInstrumentList
       });
+    }
 
+    handleGenreSelection(event) {
+        const target = event.target;
+        const genre = target.name;
+        let newGenreList = this.state.genres.slice();
+        if (target.checked) {
+            newGenreList.push(genre);
+        } else {
+            const index = newGenreList.indexOf(genre);
+            if (index > -1) { newGenreList.splice(index, 1); }
+        }
+        this.setState({
+            genres: newGenreList
+        });
     }
 
     handleSubmit(event) {
-      const axios = require('axios')
-      const url = getBackendURL() + "/musicians";
+      // Prevent refresh of the page
+      event.preventDefault();
 
-      axios
-        .put(url, {
-          id : this.state.id,
-          name: this.state.name,
-          location: this.state.location
-        })
-        .then(res => {
-          console.log(`statusCode: ${res.statusCode}`)
-          console.log(res)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-        event.preventDefault();
+      const userInfo = this.props.store.user_reducer;
+      const formFields = ["id", "name", "location", "experience", "instruments", "genres"];
+      const formData = {
+        id: this.state.id
+      }
+
+      // Create dictionary of only the profile fields that have changed
+      for (let i = 0; i < formFields.length; i++) {
+        let key = formFields[i]
+        if (key === "instruments" || key === "genres") {
+          if (userInfo[key].join() !== this.state[key].join()) {
+            formData[key] = this.state[key];
+          }
+        } else {
+          if (userInfo[key] !== this.state[key]) {
+            formData[key] = this.state[key];
+          }
+        }
+
+      }
+
+      if (Object.keys(formData).length > 1) {
+        // Send PUT request to our API
+        const { updateUserProfile, getUser } = this.props;
+        updateUserProfile(formData);
+      }
+
+      // Redirect back to view the updated profile
+      this.props.history.push('/myprofile')
     }
 
-    submit_form() {
-      const axios = require('axios')
-      const url = getBackendURL() + "/musicians" + "/" + Cookies.get("id");
-
-      axios
-          .put(url, {
-              id: Cookies.get("id"),
-            name: this.state.name
-          })
-          .then(res => {
-            console.log(`statusCode: ${res.statusCode}`)
-            console.log(res)
-          })
-          .catch(error => {
-            console.error(error)
-          })
+    instrumentIsChecked(instrument) {
+      const userInfo = this.props.store.user_reducer;
+      return userInfo.instruments && userInfo.instruments.includes(instrument);
     }
 
+    genreIsChecked(genre) {
+      const userInfo = this.props.store.user_reducer;
+      return userInfo.genres && userInfo.genres.includes(genre);
+    }
 
     render() {
-        // get user's id
-        this.state.id = Cookies.get('id');
-        if (!this.state.id) {
-            return(
-                <div>
-                    <h1>Edit Your Profile</h1>
-                    <h3>Loading...</h3>
-                </div>
-            )
-        }
+      // Check if user is logged in, else redirect to the main page
+      if (!this.state.id) {
+          this.props.history.push('/discover');
+      }
 
       return (
         <div>
@@ -107,34 +137,53 @@ class EditProfile extends React.Component {
           </header>
 
           <Form onSubmit={this.handleSubmit}>
+
             <Form.Group controlId="profileForm.name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control name="name" type="input"  placeholder="name namington" value={this.state.name} onChange={this.handleChange} />
+              <Form.Label>Name:</Form.Label>
+              <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} />
             </Form.Group>
+
             <Form.Group controlId="profileForm.location">
-              <Form.Label>Location</Form.Label>
+              <Form.Label>Location:</Form.Label>
               <Form.Control name="location" as="select" value={this.state.location} onChange={this.handleChange}>
+                <option>Select location</option>
                 <option>Baltimore, MD</option>
-                <option>Washington DC, DC</option>
+                <option>Washington, DC</option>
                 <option>New York City, NY</option>
                 <option>Boston, MA</option>
+                <option>Los Angeles, CA</option>
+                <option>London, UK</option>
               </Form.Control>
             </Form.Group>
-            <FormGroup controlId="profileForm.instrument">
-              <Form.Label>Instrument</Form.Label>
-              <Form.Check inline name="guitar" label="Guitar" type="checkbox" onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="bass" label="Bass" type="checkbox" onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="drums" label="Drums" type="checkbox" onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="vocals" label="Vocals" type="checkbox" onChange={this.handleInstrumentSelection}/>
+
+              <Form.Group controlId="profileForm.experience">
+                  <Form.Label>Experience:</Form.Label>
+                  <Form.Control name="experience" as="select" value={this.state.experience} onChange={this.handleChange}>
+                      <option>Select skill level</option>
+                      <option>Beginner</option>
+                      <option>Intermediate</option>
+                      <option>Expert</option>
+                  </Form.Control>
+              </Form.Group>
+
+            <FormGroup controlId="profileForm.instruments">
+              <Form.Label>Instruments:</Form.Label>
+              <Form.Check inline name="guitar" label="Guitar" type="checkbox" defaultChecked={this.instrumentIsChecked("guitar")} onChange={this.handleInstrumentSelection}/>
+              <Form.Check inline name="bass" label="Bass" type="checkbox" defaultChecked={this.instrumentIsChecked("bass")} onChange={this.handleInstrumentSelection}/>
+              <Form.Check inline name="drums" label="Drums" type="checkbox" defaultChecked={this.instrumentIsChecked("drums")} onChange={this.handleInstrumentSelection}/>
+              <Form.Check inline name="vocals" label="Vocals" type="checkbox" defaultChecked={this.instrumentIsChecked("vocals")} onChange={this.handleInstrumentSelection}/>
+              <Form.Check inline name="piano" label="Piano / Keyboard" type="checkbox" defaultChecked={this.instrumentIsChecked("piano")} onChange={this.handleInstrumentSelection}/>
             </FormGroup>
 
-            <Button variant="primary" type="submit" onClick={() =>
-            {this.submit_form();
-            /*this.props.history.push('/myprofile');*/}}>
-              Submit
-            </Button>
+              <FormGroup controlId="profileForm.genres">
+                  <Form.Label>Genres:</Form.Label>
+                  <Form.Check inline name="rock" label="Rock" type="checkbox" defaultChecked={this.genreIsChecked("rock")} onChange={this.handleGenreSelection}/>
+                  <Form.Check inline name="blues" label="Blues" type="checkbox" defaultChecked={this.genreIsChecked("blues")} onChange={this.handleGenreSelection}/>
+                  <Form.Check inline name="jazz" label="Jazz" type="checkbox" defaultChecked={this.genreIsChecked("jazz")} onChange={this.handleGenreSelection}/>
+                  <Form.Check inline name="classical" label="Classical" type="checkbox" defaultChecked={this.genreIsChecked("classical")} onChange={this.handleGenreSelection}/>
+              </FormGroup>
 
-            <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
+            <Button type="submit">Save</Button>
 
           </Form>
         </div>
@@ -144,4 +193,11 @@ class EditProfile extends React.Component {
     }
   }
 
-  export default EditProfile;
+//  export default EditProfile;
+
+function mapStateToProps(state) {
+  return {
+    store: state
+  };
+} // end mapStateToProps
+export default connect(mapStateToProps, {updateUserProfile, getUser})(EditProfile);

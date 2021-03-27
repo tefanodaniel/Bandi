@@ -6,7 +6,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import store from "./store";
-import { fetchMusicians } from "./features/browse/MusicianBrowse";
+import { fetchMusicians } from "./actions/musician_actions";
 
 console.log('Initial state: ', store.getState())
 
