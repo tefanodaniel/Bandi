@@ -33,11 +33,11 @@ public final class DataStore {
         Set<String> profileLinks = new HashSet<String>();
 
         // Create lists of friends for the test musicians
-        Set<String> davidFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00005fakeid"));
-        Set<String> rogerFriends = new HashSet<String>(Arrays.asList("00005fakeid"));
-        Set<String> nickFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00004fakeid"));
-        Set<String> ericFriends = new HashSet<String>(Arrays.asList("00003fakeid"));
-        Set<String> kennyFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00004fakeid", "00005fakeid" ));
+        Set<String> davidFriends = new HashSet<String>(Arrays.asList());
+        Set<String> ericFriends = new HashSet<String>(Arrays.asList("00001fakeid"));
+        Set<String> kennyFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid"));
+        Set<String> rogerFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid"));
+        Set<String> nickFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid", "00004fakeid"));
 
         List<Musician> samples = new ArrayList<>();
         samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England", profileLinks, davidFriends));
