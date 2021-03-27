@@ -107,9 +107,6 @@ class EditProfile extends React.Component {
         // Send PUT request to our API
         const { updateUserProfile, getUser } = this.props;
         updateUserProfile(formData);
-
-        // GET our updated user to update the redux store
-        getUser(this.state.id);
       }
 
       // Redirect back to view the updated profile
