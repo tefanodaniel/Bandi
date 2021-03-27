@@ -5,16 +5,16 @@ class BandAPIService {
         return customhttp.get("/bands");
     }
 
-    get(attr) {
-        return customhttp.get(`/band/${attr.id}`);
+    get(id) {
+        return customhttp.get(`/bands/${id}`);
     }
 
     create(data) {
         return customhttp.post("/bands", data);
     }
 
-    update(bid, mid, data) {
-        return customhttp.put(`/bands/${bid}/${mid}`, data);
+    update(bid, mid) {
+        return customhttp.put(`/bands/${bid}/${mid}`);
     }
 
     deleteBandMember(bid, mid) {

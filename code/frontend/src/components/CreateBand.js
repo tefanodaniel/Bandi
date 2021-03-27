@@ -7,6 +7,8 @@ import {getBackendURL} from "../utils/api";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 
+import BandApi from "../utils/BandApiService";
+
 class CreateBand extends React.Component {
     constructor(props) {
         super(props);
@@ -24,11 +26,8 @@ class CreateBand extends React.Component {
     }
 
     submit_form() {
-        const axios = require('axios')
-        const url = getBackendURL() + "/bands";
-
-        axios
-            .post(url, {
+        // post band
+        BandApi.create({
                 id : "foo",
                 name: this.state.name,
                 members: this.state.members,

@@ -8,6 +8,9 @@ import Cookies from "js-cookie";
 import Header from "./Header";
 import {Nav, Navbar} from "react-bootstrap";
 
+import BandApi from "../utils/BandApiService";
+import MusicianApi from "../utils/MusicianApiService";
+
 class Band extends React.Component {
     constructor(props) {
         super(props)
@@ -35,16 +38,14 @@ class Band extends React.Component {
 
     join_leave() {
 
-        const url = getBackendURL() + "/bands/" + this.state.bandId + "/" + this.state.userId;
-
         if (!this.state.isMember) {
             // put musician in the band
-            axios.put(url)
+            BandApi.update(this.state.bandId, this.state.userId)
                 .then((response) => console.log(response.data));
         }
         else {
             // delete musician from band
-            axios.delete(url)
+            BandApi.deleteBandMember(this.state.bandId, this.state.userId)
                 .then((response) => console.log(response.data));
         }
 
@@ -67,8 +68,7 @@ class Band extends React.Component {
         let curBandId = params.get("view");
         this.state.userId = Cookies.get("id");
 
-        let bandsURL = getBackendURL() + "/bands";
-        axios.get(bandsURL + "/" + curBandId)
+        BandApi.get(curBandId)
             .then((response) => this.setState(
                 {
                     bandName: response.data.name,
@@ -81,8 +81,7 @@ class Band extends React.Component {
                     this.setState({memberNames: []});
 
                     this.state.members.forEach(id => {
-                        var userURL = getBackendURL() + "/musicians/" + id;
-                        axios.get(userURL)
+                        MusicianApi.get(id)
                             .then((response) =>
                                 this.setState({memberNames:
                                         this.state.memberNames.concat(response.data.name)})

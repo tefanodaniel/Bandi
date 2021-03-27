@@ -36,26 +36,26 @@ class EditProfile extends React.Component {
     handleChange(event) {
       const target = event.target;
       let value = target.value;
-      const name = target.name;
-      if (name === "experience" && value === "Select skill level") {
+      const field = target.name;
+      if (field === "experience" && value === "Select skill level") {
         value = "";
-      } else if (name === "location" && value === "Select location") {
+      } else if (field === "location" && value === "Select location") {
         value = "";
       }
       this.setState({
-        [name]: value
+        [field]: value
       });
     }
 
 
     handleInstrumentSelection(event) {
       const target = event.target;
-      const name = target.name;
+      const instrument = target.name;
       let newInstrumentList = this.state.instruments.slice();
       if (target.checked) {
-        newInstrumentList.push(name);
+        newInstrumentList.push(instrument);
       } else {
-        const index = newInstrumentList.indexOf(name);
+        const index = newInstrumentList.indexOf(instrument);
         if (index > -1) { newInstrumentList.splice(index, 1); }
       }
       this.setState({
@@ -78,7 +78,7 @@ class EditProfile extends React.Component {
         });
     }
 
-    handleSubmit() {
+    handleSubmit(event) {
       // Prevent refresh of the page
       event.preventDefault();
 
