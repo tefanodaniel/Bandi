@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import {Card} from "react-bootstrap";
 import "../styles/neon.scss"
 
-
 const selectMusiciansById = (state, user_id) => {
     return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
 }
