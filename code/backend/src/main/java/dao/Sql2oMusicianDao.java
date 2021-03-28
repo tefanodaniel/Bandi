@@ -148,8 +148,8 @@ public class Sql2oMusicianDao implements MusicianDao {
         String sql = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
                 "LEFT JOIN instruments as I ON R.MID=I.id\n" +
                 "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
-                "LEFT JOIN profileavlinks as L ON R.MID=L.id;" +
-                "LEFT JOIN MusicianFriends as F ON R.MID=F.id\n";
+                "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
+                "LEFT JOIN musicianfriends as F ON R.MID=F.id;";
         try (Connection conn = sql2o.open()) {
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
             return musicians;
@@ -399,9 +399,7 @@ public class Sql2oMusicianDao implements MusicianDao {
      * @throws Sql2oException if query fails
      */
     private List<Musician> extractMusiciansFromDatabase(String sql, Connection conn) throws Sql2oException {
-
         List<Map<String, Object>> queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
-
         HashSet<String> alreadyAdded = new HashSet<String>();
         Map<String, Musician> musicians = new HashMap<String, Musician>();
         for (Map row : queryResults) {
@@ -427,6 +425,8 @@ public class Sql2oMusicianDao implements MusicianDao {
             m.addProfileLink(link);
             m.addFriend(friendID);
         }
+        System.out.println("Extraction successful?");
+
         return new ArrayList<Musician>(musicians.values());
     }
 }
