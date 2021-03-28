@@ -7,6 +7,7 @@ import SoTWsearch from "./SoTWsearch";
 import SoTWDesc from "./SoTWDesc";
 import SoTWSubmissions from "./SoTWSubmissions";
 import Header from "./Header/Header";
+import discover_bg from "../images/discover_bg.jpg";
 
 class SongOfTheWeek extends Component {
     constructor(props) {
@@ -17,11 +18,11 @@ class SongOfTheWeek extends Component {
     render() {
         if(true) {
             return (
-                <div>
+                <div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
                     <Header/>
                     <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
                         <Navbar.Brand className="mx-auto">
-                            Find your musical soulmate here!
+                            Participate in our weekly Song Of The Week event!
                         </Navbar.Brand>
                     </Navbar>
                     <Container className="mx-auto" fluid>
@@ -30,8 +31,8 @@ class SongOfTheWeek extends Component {
                                 <SoTWsearch />
                             </Col>
                             <Col className="col-sm-9">
-                                <SoTWDesc /> //this should have a submit button.
-                                <SoTWSubmissions /> //this should have a list of all filtered submissions (by cycle, genre, instrument) with pagination.
+                                <SoTWDesc />
+                                <SoTWSubmissions />
                             </Col>
                         </Row>
                     </Container>
