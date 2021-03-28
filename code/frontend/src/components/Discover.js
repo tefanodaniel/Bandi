@@ -87,9 +87,9 @@ class Discover extends React.Component {
 	return (
   		<div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
         	<Header />
-        	<div>
+        	<div style={{ marginTop:"120px"}}>
         	<Container >
-				<Row style={{ marginTop:"20px"}}>
+				<Row>
 					<Col style={{ width: "200px", height:"100px"}}>
 						<Jumbotron className="rounded text-white" style={discover_style.jumbo_music}>
 							<Container style={{float:"right"}}>
@@ -110,9 +110,9 @@ class Discover extends React.Component {
 				</Row>
 			</Container>
 			</div>
-			<div style={{marginTop:"120px"}}>
+			<div style={{marginTop:"220px"}}>
 			<Container >
-				<Row style={{ marginTop:"20px"}}>
+				<Row style={{ marginTop:"120px"}}>
 					<Col style={{ width: "200px", height:"100px"}}>
 						<Jumbotron className="rounded text-white" style={discover_style.jumbo_sdate}>
 							<Container style={{float:"right"}}>
@@ -133,7 +133,7 @@ class Discover extends React.Component {
 				</Row>
 			</Container>
 			</div>
-  		</div>
+		</div>
   	);
   }
 

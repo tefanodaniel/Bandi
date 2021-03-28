@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
+import discover_bg from "../images/discover_bg.jpg";
 
 class BandView extends React.Component {
     constructor(props) {
@@ -44,7 +45,7 @@ class BandView extends React.Component {
 
         if (this.state.bands && this.state.bands.length > 0) {
             return (
-                <div>
+                <div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
                     <Header/>
                     <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
                         <Navbar.Brand className="mx-auto">

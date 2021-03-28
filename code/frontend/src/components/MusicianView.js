@@ -6,6 +6,7 @@ import {Container, Row, Col, Navbar, Nav} from "react-bootstrap";
 import MusicianList from "./MusicianList";
 import MusicianSearch from "./MusicianSearch";
 import Header from "./Header";
+import discover_bg from "../images/discover_bg.jpg";
 
 class SearchMusician extends Component {
     constructor(props) {
@@ -16,7 +17,7 @@ class SearchMusician extends Component {
     render() {
         if(true) {
             return (
-                <div>
+                <div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
                     <Header/>
                     <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
                         <Navbar.Brand className="mx-auto">
