@@ -191,6 +191,53 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
+    public List<Musician> filterByDist(String startID, String miles) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+            String distFilter = "WITH allDistances AS (SELECT m.id AS MID, *, earth_distance(" +
+                    "  ll_to_earth(m.latitude, m.longitude)," +
+                    "  ll_to_earth(startPoint.latitude, startPoint.longitude)) " +
+                    " / 1609.344 AS distance " +
+                    "FROM MTest AS m, " +
+                    "LATERAL (SELECT id, latitude, longitude FROM MTest " +
+                    "WHERE id = '" + startID + "') AS startPoint " +
+                    "WHERE m.id <> startPoint.id)" +
+                    "SELECT * FROM allDistances AS A " +
+                    "LEFT JOIN InstrTest as I ON A.MID=I.id\n" +
+                    "LEFT JOIN MGenresTest as G ON A.MID=G.id\n" +
+                    "WHERE distance <=" + miles +
+                    " ORDER BY distance;";
+
+//
+//            String filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+//                    "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+//                    "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+//                    "WHERE " + distFilter;
+
+            // TODO: update test tables
+            String resultSQL = "SELECT * FROM (SELECT m.id as MID, * FROM MTest as m) as R\n" +
+                    "LEFT JOIN InstrTest as I ON R.MID=I.id\n" +
+                    "LEFT JOIN MGenresTest as G ON R.MID=G.id\n" +
+                    "LEFT JOIN ProfileAVLinksTest as L ON R.MID=L.id\n" +
+                    "WHERE R.mid IN (";
+
+            List<Musician> partialMusicians = this.extractMusiciansFromDatabase(distFilter, conn);
+            for (int i=0; i < partialMusicians.size(); i++) {
+                if (i == partialMusicians.size() - 1) {
+                    resultSQL += "'" + partialMusicians.get(i).getId() + "');";
+                } else {
+                    resultSQL += "'" + partialMusicians.get(i).getId() + "', ";
+                }
+            }
+            return this.extractMusiciansFromDatabase(resultSQL, conn);
+            //
+
+            //return conn.createQuery(distFilter).executeAndFetch(Musician.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to retrieve musicians by distance", ex);
+        }
+    }
+
+    @Override
     public Musician updateName(String id, String name) throws DaoException {
         // TODO: re-implement? No -- DONE
         String sql = "WITH updated AS ("
@@ -381,25 +428,28 @@ public class Sql2oMusicianDao implements MusicianDao {
      */
     private List<Musician> extractMusiciansFromDatabase(String sql, Connection conn) throws Sql2oException {
         List<Map<String, Object>> queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
-
+        // create global attribute list
+        // separate list for list attrib
+        // one for non lists
         HashSet<String> alreadyAdded = new HashSet<String>();
         Map<String, Musician> musicians = new HashMap<String, Musician>();
         for (Map row : queryResults) {
             // Extract data from this row
-            String id = (String) row.get("mid");
+            String id = (String) row.get("id");
             String name = (String) row.get("name");
             String exp = (String) row.get("experience");
             String loc = (String) row.get("location");
-            String zipCode = (String) row.get("zipCode");
+            String zipCode = (String) row.get("zipcode");
             String genre = (String) row.get("genre");
             String instrument = (String) row.get("instrument");
             String link = (String) row.get("link");
+            double dist = (double) row.get("distance");
 
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
                 musicians.put(id, new Musician(id, name, new HashSet<String>(),
-                        new HashSet<String>(), exp, new HashSet<String>(), loc, zipCode));
+                        new HashSet<String>(), exp, new HashSet<String>(), loc, zipCode, dist));
             }
             // Add the genre and instrument from this row to the object lists
             Musician m = musicians.get(id);

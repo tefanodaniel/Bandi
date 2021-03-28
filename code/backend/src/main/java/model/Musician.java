@@ -39,6 +39,21 @@ public class Musician extends Client {
         this.distance = 0;
     }
 
+    public Musician(String id, String name, Set<String> genres,
+                    Set<String> instruments, String experience, Set<String> profileLinks,
+                    String location, String zipCode, double distance) {
+        super(id);
+        this.name = name;
+        this.genres = genres;
+        this.instruments = instruments;
+        this.experience = experience;
+        this.profileLinks = profileLinks;
+        this.zipCode = zipCode;
+        this.location = location;
+        setLatitudeLongitude(zipCode);
+        this.distance = distance;
+    }
+
     private void setLatitudeLongitude(String zipCode) {
         final String BASE_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude";
         final String QUERY_PARAMS = "&facet=state&facet=timezone&facet=dst";
@@ -172,6 +187,7 @@ public class Musician extends Client {
                 ", instrument='" + instruments.toString() + '\'' +
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
+                ", distance=' " + distance + '\'' +
                 '}';
     }
 }

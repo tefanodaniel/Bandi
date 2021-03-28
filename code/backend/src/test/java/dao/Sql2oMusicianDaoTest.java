@@ -181,11 +181,13 @@ class Sql2oMusicianDaoTest {
     @Test
     @DisplayName("filter by distance of 20 miles")
     void distanceFilterTest() {
-//        String miles = "20";
-//        List<Musician> musicians = musicianDao.filterByDist("fakeid1", miles);
-//        assertNotEquals(0, musicians.size());
-//        for (Musician musician : musicians) {
-//            assertTrue(musician.getDistance() <= Double.parseDouble(miles));
-//        }
+        String miles = "20";
+        List<Musician> musicians = musicianDao.filterByDist("00001fakeid", miles);
+        assertNotEquals(0, musicians.size());
+        //System.out.println(samples.toString());
+        for (Musician musician : musicians) {
+            assertTrue(musician.getDistance() <= Double.parseDouble(miles));
+            System.out.println(musician);
+        }
     }
 }
