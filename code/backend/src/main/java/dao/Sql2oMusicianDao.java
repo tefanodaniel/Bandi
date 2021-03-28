@@ -411,8 +411,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             String genre = (String) row.get("genre");
             String instrument = (String) row.get("instrument");
             String link = (String) row.get("link");
-            String friendID = (String) row.get("friendID");
-
+            String friendID = (String) row.get("friendid");
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
