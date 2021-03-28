@@ -6,7 +6,7 @@ import {Container, Row, Col, Navbar, Nav} from "react-bootstrap";
 import SoTWsearch from "./SoTWsearch";
 import SoTWDesc from "./SoTWDesc";
 import SoTWSubmissions from "./SoTWSubmissions";
-import Header from "./Header/Header";
+import Header from "./Header";
 import discover_bg from "../images/discover_bg.jpg";
 
 class SongOfTheWeek extends Component {
@@ -30,7 +30,7 @@ class SongOfTheWeek extends Component {
                             <Col className="col-sm-3">
                                 <SoTWsearch />
                             </Col>
-                            <Col className="col-sm-9">
+                            <Col className="col-sm-9 bg-transparent">
                                 <SoTWDesc />
                                 <SoTWSubmissions />
                             </Col>

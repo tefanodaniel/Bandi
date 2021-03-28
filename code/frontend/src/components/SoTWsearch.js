@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
-import {newQuery, clearQuery} from "../features/browse/MusicianBrowse";
+import { newQuery, clearQuery } from "../actions/musician_actions";
 import {Button, Form} from "react-bootstrap";
 
 const SoTWsearch = () => {

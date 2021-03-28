@@ -1,8 +1,7 @@
 import 'react-tabs/style/react-tabs.css';
 import React, {Component} from 'react';
-import {logout} from "../utils/api";
 import {connect} from 'react-redux';
-import {Container, Row, Col, Navbar, Nav} from "react-bootstrap";
+import {Container, Row, Col, Navbar} from "react-bootstrap";
 import MusicianList from "./MusicianList";
 import MusicianSearch from "./MusicianSearch";
 import Header from "./Header";

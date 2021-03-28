@@ -3,7 +3,7 @@ import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
-import Header from './Header/Header.js'
+import Header from './Header'
 import {Container, Row, Col} from "react-bootstrap";
 import band_img from "../images/band_jumbo.jpg";
 import music_img from "../images/music_jumbo.jpg";

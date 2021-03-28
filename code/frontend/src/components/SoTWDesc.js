@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import {Card, ListGroup } from "react-bootstrap";
-import {getFrontendURL} from "../utils/api";
-import card_bg from "../images/card.jpg";
+import {Card} from "react-bootstrap";
+import "../styles/neon.scss"
+
 
 const selectMusiciansById = (state, user_id) => {
     return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
@@ -14,13 +14,10 @@ const styles = {
         margin: "0 auto"
     },
     card: {
-        borderStyle: "dashed",
+        borderStyle: "none",
         height: "180px",
         marginLeft: "100px",
-        backgroundImage: `url(${card_bg})`,
-        backgroundPosition: "center",
-        backgroundSize:"cover",
-        color: "white"
+        opacity: ".4"
     }
 }
 
@@ -28,7 +25,7 @@ const SoTWDesc = () => {
     let id = "22xpmsx47uendfh4kafp3zjmi";
     const musician = useSelector((state) => selectMusiciansById(state, id))
     let song = {
-        Name: "24k Magic",
+        Name: "24K Magic",
         Artist: "Bruno Mars",
         Album: "24K Magic",
         Released: "2016",
@@ -37,16 +34,17 @@ const SoTWDesc = () => {
     }
 
     return (
-        <Card style={styles.card} className="rounded shadow-sm border-0 text-center">
-                <Card.Body fluid>
-                    <Card.Title className="justify-content-center"><b>{song.Name}</b></Card.Title>
-                    <Card.Text><b>{song.Artist}</b></Card.Text>
-                    <Card.Text>{song.Album}</Card.Text>
-                    <Card.Text><p className="small font-italic">Genres: {song.Genres.join(', ')}</p></Card.Text>
-                </Card.Body>
-            </Card>
+        <Card style={styles.card} className="bg-transparent rounded border-0 text-center" style={{marginBottom:"20px", marginLeft:"20px"}}>
+        <section className="light">
+            <Card.Body className="gradient1" fluid>
+                <Card.Text><b>Song Of The Week: {song.Name}</b></Card.Text>
+                <Card.Text >Artist : {song.Artist}</Card.Text>
+                <Card.Text>Album : {song.Album}</Card.Text>
+                <Card.Text><p className="small font-italic">Genres: {song.Genres.join(', ')}</p></Card.Text>
+            </Card.Body>
+        </section>
+        </Card>
     )
 }
-
 export default SoTWDesc
 
