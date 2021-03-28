@@ -28,7 +28,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
                            String experience, String location, Set<String> profileLinks, Set<String> friends) throws DaoException {
-        // TODO: Update with friends
+
         String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
@@ -70,7 +70,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
             // Insert corresponding friends into database
             for (String friendID : friends) {
-                conn.createQuery(genresSQL)
+                conn.createQuery(friendsSQL)
                         .addParameter("id", id)
                         .addParameter("friendID", friendID)
                         .executeUpdate();
@@ -131,7 +131,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 if (row.get("link") != null) {
                     m.addProfileLink((String) row.get("link"));
                 }
-                if (row.get("friends") != null) {
+                if (row.get("friendID") != null) {
                     m.addFriend((String) row.get("friendID"));
                 }
 

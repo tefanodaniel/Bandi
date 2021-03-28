@@ -227,6 +227,7 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
+                Set<String> friends = musician.getFriends();
                 // Update specific fields:
                 boolean flag = false;
                 if (name != null) {
@@ -249,9 +250,7 @@ public class ApiServer {
                     musician = musicianDao.updateProfileLinks(id, profileLinks);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
-                }
-
-                if (musician == null) {
+                } if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
                 return gson.toJson(musician);
