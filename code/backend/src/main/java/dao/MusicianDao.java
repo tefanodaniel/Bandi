@@ -26,7 +26,7 @@ public interface MusicianDao {
      */
     Musician create(String id, String name, Set<String> genres,
                     Set<String> instruments, String experience, String location,
-                    Set<String> profileLinks, int admin) throws DaoException;
+                    Set<String> profileLinks, boolean admin) throws DaoException;
 
     /**
      * Create a Musician.
@@ -84,7 +84,7 @@ public interface MusicianDao {
 
     Musician updateLocation(String id, String name) throws DaoException;
 
-    Musician updateAdmin(String id, String admin) throws DaoException;
+    Musician updateAdmin(String id, boolean admin) throws DaoException;
 
     Musician updateProfileLinks(String id, Set<String> links) throws DaoException;
 

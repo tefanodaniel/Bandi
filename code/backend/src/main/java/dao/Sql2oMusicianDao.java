@@ -27,7 +27,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-                           String experience, String location, Set<String> profileLinks, int admin) throws DaoException {
+                           String experience, String location, Set<String> profileLinks, boolean admin) throws DaoException {
         // TODO: re-implement? Yes -- DONE
         String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, admin) VALUES (:id, :name, :experience, :location, :admin)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
@@ -109,7 +109,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             String name = (String) queryResults.get(0).get("name");
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
-            int admin = (int) queryResults.get(0).get("admin");
+            boolean admin = (boolean) queryResults.get(0).get("admin");
 
             Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
                     exp, loc, new HashSet<String>(), admin);
@@ -299,7 +299,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public Musician updateAdmin(String id, String admin) throws DaoException {
+    public Musician updateAdmin(String id, boolean admin) throws DaoException {
         String sql = "UPDATE Musicians SET admin=:admin WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("id", id)
@@ -395,7 +395,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             String genre = (String) row.get("genre");
             String instrument = (String) row.get("instrument");
             String link = (String) row.get("link");
-            int admin = (int) row.get("admin");
+            boolean admin = (boolean) row.get("admin");
 
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {

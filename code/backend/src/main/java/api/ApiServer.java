@@ -190,7 +190,7 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
-                int admin = musician.getAdmin();
+                boolean admin = musician.getAdmin();
 
                 if (instruments == null) { instruments = new HashSet<String>(); }
                 if (genres == null) { genres = new HashSet<String>(); }

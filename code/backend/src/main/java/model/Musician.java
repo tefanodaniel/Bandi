@@ -10,8 +10,7 @@ public class Musician extends Client {
     private String experience;
     private String location;
     private Set<String> profileLinks;
-    // boolean stored as int for SQL
-    private int admin;
+    private boolean admin;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
@@ -19,12 +18,12 @@ public class Musician extends Client {
         this.genres = genres;
 
         // false by default
-        admin = 0;
+        admin = false;
     }
 
     public Musician(String id, String name, Set<String> genres,
                     Set<String> instruments, String experience, String location,
-                    Set<String> profileLinks, int isAdmin) {
+                    Set<String> profileLinks, boolean isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -35,11 +34,11 @@ public class Musician extends Client {
         this.admin = isAdmin;
     }
 
-    public int getAdmin() {
+    public boolean getAdmin() {
         return this.admin;
     }
 
-    public void setAdmin(int isAdmin) {
+    public void setAdmin(boolean isAdmin) {
         this.admin = isAdmin;
     }
 

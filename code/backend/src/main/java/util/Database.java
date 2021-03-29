@@ -82,7 +82,7 @@ public final class Database {
                     + "name VARCHAR(30) NOT NULL,"
                     + "experience VARCHAR(30),"
                     + "location VARCHAR(30),"
-                    + "admin integer"
+                    + "admin boolean"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
