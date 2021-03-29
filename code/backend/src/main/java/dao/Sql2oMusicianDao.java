@@ -77,7 +77,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name) throws DaoException {
         // TODO: re-implement? Yes -- DONE
-        String sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, 'NULL', 'NULL', 0);";
+        String sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, 'NULL', 'NULL', FALSE);";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("id", id).addParameter("name", name).executeUpdate();
             return this.read(id);
