@@ -23,7 +23,8 @@ public class Musician extends Client {
     }
 
     public Musician(String id, String name, Set<String> genres,
-                    Set<String> instruments, String experience, String location, Set<String> profileLinks) {
+                    Set<String> instruments, String experience, String location,
+                    Set<String> profileLinks, int isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -31,9 +32,7 @@ public class Musician extends Client {
         this.experience = experience;
         this.location = location;
         this.profileLinks = profileLinks;
-
-        // false by default
-        admin = 0;
+        this.admin = isAdmin;
     }
 
     public int getAdmin() {
@@ -139,7 +138,7 @@ public class Musician extends Client {
                 ", instrument='" + instruments.toString() + '\'' +
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
-                ", isAdmin=' " + admin + '\'' +
+                ", admin=' " + admin + '\'' +
                 '}';
     }
 }
