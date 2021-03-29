@@ -1,11 +1,9 @@
 import React from 'react';
-import { Redirect, withRouter } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
-import Image from 'react-bootstrap/Image';
+import { withRouter } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
-import { getBackendURL, logout } from "../utils/api"; // logout is named export, needs brackets
+import { logout } from "../utils/api"; // logout is named export, needs brackets
 import Cookies from "js-cookie";
-import { Container, Nav } from "react-bootstrap";
+import { Nav } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
 

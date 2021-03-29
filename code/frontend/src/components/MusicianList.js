@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, shallowEqual } from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import {getFrontendURL} from "../utils/api";
-import card_bg from "../images/card.jpg";
+import { bandi_styles } from "../styles/bandi_styles";
 
 const selectMusicians = (state) => {
     return state.musician_reducer.filteredMusicians.map(user => user)
@@ -15,23 +15,10 @@ const chunk = (arr, chunkSize = 1, cache = []) => {
     while (tmp.length) cache.push(tmp.splice(0, chunkSize))
     return cache
 }
-//shadow-sm
-//style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}
-const styles = {
-    card: {
-        borderStyle: "dashed",
-        height: "180px",
-        width: "200px",
-        backgroundImage: `url(${card_bg})`,
-        backgroundPosition: "center",
-        backgroundSize:"cover",
-        color: "white"
-    }
-}
 
 const FilteredMusicianItem = ( musician ) => {
     return (
-            <Card style={styles.card} className="rounded border-0">
+            <Card style={bandi_styles.musician_card} className="rounded border-0">
                 <Card.Body>
                     <Card.Title><b>{musician.name}</b></Card.Title>
                     <Card.Text className="small font-italic" style={{textColor:"white"}}>Genres: {musician.genres.join(', ')}</Card.Text>

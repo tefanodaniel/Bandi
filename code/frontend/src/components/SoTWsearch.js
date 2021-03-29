@@ -3,6 +3,9 @@ import { useDispatch } from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
 import { newQuery, clearQuery } from "../actions/musician_actions";
 import {Button, Form} from "react-bootstrap";
+var startOfWeek = require('date-fns/startOfWeek');
+var endOfWeek = require('date-fns/endOfWeek');
+
 
 const SoTWsearch = () => {
     const dispatch = useDispatch();
@@ -31,26 +34,30 @@ const SoTWsearch = () => {
         }
     }
 
+    //Ideally should display last x weeks or have the calendar pop-up.
+    var start = startOfWeek(new Date());
+    start = start.toString().split(' ').slice(0, 3).join(' ');
+    var end = endOfWeek(new Date());
+    end = end.toString().split(' ').slice(0, 3).join(' ');
+
+
     return (
         <Container fluid>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-5">
-                    <h5> Week:</h5>
+                <Col className="col-sm-3">
+                    <h5>Week:</h5>
                 </Col>
-                <Form className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
+                <Form className="col-sm-7" style={{minWidth: "300px", textAlign:"center"}}>
                     <Form.Group controlId="exampleForm.SelectCustom">
                         <Form.Control as="select" custom>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                            <option>{start} - {end}</option>
+                            <option>Last Week</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-5">
+                <Col className="col-sm-3">
                     <h5> Instrument:</h5>
                 </Col>
                 <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
@@ -58,7 +65,7 @@ const SoTWsearch = () => {
                 </div>
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
-                <Col className="col-sm-5">
+                <Col className="col-sm-3">
                     <h5> Genre :</h5>
                 </Col>
                 <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>

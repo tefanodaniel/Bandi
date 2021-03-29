@@ -1,13 +1,13 @@
 import 'react-tabs/style/react-tabs.css';
 import React, {Component} from 'react';
-import {logout} from "../utils/api";
 import {connect} from 'react-redux';
-import {Container, Row, Col, Navbar, Nav} from "react-bootstrap";
+import {Container, Row, Col} from "react-bootstrap";
 import SoTWsearch from "./SoTWsearch";
 import SoTWDesc from "./SoTWDesc";
 import SoTWSubmissions from "./SoTWSubmissions";
 import Header from "./Header";
-import discover_bg from "../images/discover_bg.jpg";
+import SubHeader from "./SubHeader";
+import {bandi_styles} from "../styles/bandi_styles"
 
 class SongOfTheWeek extends Component {
     constructor(props) {
@@ -16,15 +16,10 @@ class SongOfTheWeek extends Component {
     }
 
     render() {
-        if(true) {
-            return (
-                <div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
+        return (
+                <div style={bandi_styles.discover_background}>
                     <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Participate in our weekly Song Of The Week event!
-                        </Navbar.Brand>
-                    </Navbar>
+                    <SubHeader text={"Participate in our weekly Song Of The Week event!"}/>
                     <Container className="mx-auto" fluid>
                         <Row>
                             <Col className="col-sm-3">
@@ -39,17 +34,7 @@ class SongOfTheWeek extends Component {
                     <div></div>
 
                 </div>
-            );
-        }
-        else {
-            return (
-                <div>
-                    <h1> Here is your search! </h1>
-                    <h3> Loading ... </h3>
-
-                </div>
-            );
-        }
+        );
     }
 }
 

@@ -2,27 +2,16 @@ import React from "react";
 import { useSelector } from "react-redux";
 import {Card} from "react-bootstrap";
 import "../styles/neon.scss"
+import {bandi_styles} from "../styles/bandi_styles";
 
-const selectMusiciansById = (state, user_id) => {
-    return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
-}
-
-const styles = {
-    container: {
-        width: 300,
-        margin: "0 auto"
-    },
-    card: {
-        borderStyle: "none",
-        height: "180px",
-        marginLeft: "100px",
-        opacity: ".4"
-    }
-}
+// this will be a state selector for the sotw info.
+//const selectSongOfTheWeekById = (state, user_id) => {
+//    return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
+//}
 
 const SoTWDesc = () => {
-    let id = "22xpmsx47uendfh4kafp3zjmi";
-    const musician = useSelector((state) => selectMusiciansById(state, id))
+    //let id; // id should be passed in based on search query
+    //const musician = useSelector((state) => selectMusiciansById(state, id))
     let song = {
         Name: "24K Magic",
         Artist: "Bruno Mars",
@@ -33,7 +22,7 @@ const SoTWDesc = () => {
     }
 
     return (
-        <Card style={styles.card} className="bg-transparent rounded border-0 text-center" style={{marginBottom:"20px", marginLeft:"20px"}}>
+        <Card style={bandi_styles.sotw_desc} className="bg-transparent rounded border-0 text-center">
         <section className="light">
             <Card.Body className="gradient1" fluid>
                 <Card.Text><b>Song Of The Week: {song.Name}</b></Card.Text>

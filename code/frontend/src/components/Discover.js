@@ -5,43 +5,9 @@ import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
 import Header from './Header'
 import {Container, Row, Col} from "react-bootstrap";
-import band_img from "../images/band_jumbo.jpg";
-import music_img from "../images/music_jumbo.jpg";
-import sdate_img from "../images/speeddate_jumbo.jpg";
-import sotw_img from "../images/sotw_jumbo.jpg";
-import discover_bg from "../images/discover_bg.jpg";
+import { bandi_styles } from "../styles/bandi_styles";
+import SubHeader from "./SubHeader";
 
-const discover_style = {
-	jumbo_music: {
-		backgroundAttachment: "static",
-		backgroundPosition: "center",
-		backgroundRepeat: "no-repeat",
-		backgroundSize: "cover",
-		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${music_img})`
-	},
-	jumbo_band: {
-		backgroundAttachment: "static",
-		backgroundPosition: "center",
-		backgroundRepeat: "no-repeat",
-		backgroundSize: "cover",
-		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${band_img})`
-	},
-	jumbo_sotw: {
-		backgroundAttachment: "static",
-		backgroundPosition: "center",
-		backgroundRepeat: "no-repeat",
-		backgroundSize: "cover",
-		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${sotw_img})`
-	},
-	jumbo_sdate: {
-		backgroundAttachment: "static",
-		backgroundPosition: "center",
-		backgroundRepeat: "no-repeat",
-		backgroundSize: "cover",
-		backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(${sdate_img})`
-	}
-
-}
 
 class Discover extends React.Component {
   constructor(props) {
@@ -58,7 +24,7 @@ class Discover extends React.Component {
 
   viewBands = () => {this.props.history.push('/bandview')}
 
-  viewSpeedDating = () => {}
+  viewSpeedDating = () => {} // To Do.. implement a speed-dating component that lets users browse events and register for them.
 
   viewSOTW = () => {this.props.history.push('/sotw')}
 
@@ -78,20 +44,21 @@ class Discover extends React.Component {
 			  window.history.replaceState(null, '', '/')
 		  }
 		  else {
-		  	  // either beyond first login or unsuccesful login
+		  	  // either beyond first login or unsuccessful login
 		  	  //shouldn't be here! so safe to redirect
 			  console.log('redirecting since no cookie_id or user_id ');
 			  return (<Redirect to = '/signin'/>);
 		  }
 	  }
 	return (
-  		<div style={{backgroundImage:`url(${discover_bg})`, height: "1000px",backgroundPosition: "center",backgroundSize: "cover"}}>
+  		<div style={bandi_styles.discover_background}>
         	<Header />
-        	<div style={{ marginTop:"120px"}}>
+        	<SubHeader text={"We need a banDi tagline to insert here"}/>
+        	<div style={{marginTop:"120px"}}>
         	<Container >
 				<Row>
-					<Col style={{ width: "200px", height:"100px"}}>
-						<Jumbotron className="rounded text-white" style={discover_style.jumbo_music}>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_music}>
 							<Container style={{float:"right"}}>
 								<h3 className="display-5" >Musicians</h3>
 
@@ -101,8 +68,8 @@ class Discover extends React.Component {
 							</Container>
 						</Jumbotron>
 					</Col>
-					<Col style={{ width: "200px", height:"100px"}}>
-						<Jumbotron className="rounded text-white" style={discover_style.jumbo_band}>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_band}>
 							<h3>Bands</h3>
 							<Button onClick={this.viewBands} variant="light">Browse</Button>
 						</Jumbotron>
@@ -112,9 +79,9 @@ class Discover extends React.Component {
 			</div>
 			<div style={{marginTop:"220px"}}>
 			<Container >
-				<Row style={{ marginTop:"120px"}}>
-					<Col style={{ width: "200px", height:"100px"}}>
-						<Jumbotron className="rounded text-white" style={discover_style.jumbo_sdate}>
+				<Row style={{marginTop:"120px"}}>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sdate}>
 							<Container style={{float:"right"}}>
 								<h3 className="display-5" >Speed-Dating</h3>
 
@@ -124,8 +91,8 @@ class Discover extends React.Component {
 							</Container>
 						</Jumbotron>
 					</Col>
-					<Col style={{ width: "200px", height:"100px"}}>
-						<Jumbotron className="rounded text-white" style={discover_style.jumbo_sotw}>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sotw}>
 							<h3>Song Of The Week!</h3>
 							<Button onClick={this.viewSOTW} variant="light">Explore</Button>
 						</Jumbotron>
