@@ -298,23 +298,20 @@ public class ApiServer {
                 }
         );
 
-        /*
         // update the admin status of a musician
         put("/adminstatus/:id", (req, res) -> {
                     try {
                         String id = req.params("id");
-                        Musician musician = musicianDao.read(id);
-                        if (musician == null) {
-                            throw new ApiError("Resource not found", 404); // Bad request
-                        }
-
+                        Map map = gson.fromJson(req.body(),HashMap.class);
+                        boolean isAdmin = (boolean) map.get("isAdmin");
+                        Musician m = musicianDao.updateAdmin(id, isAdmin);
                         res.type("application/json");
-                        return gson.toJson(musician);
+                        return gson.toJson(m);
                     } catch (DaoException ex) {
                         throw new ApiError(ex.getMessage(), 500);
                     }
                 }
-        );*/
+        );
 
         // Get all bands (optional query parameters)
         // if searching for id, only pass 1 parameter
