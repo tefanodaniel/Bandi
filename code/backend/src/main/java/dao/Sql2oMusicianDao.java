@@ -131,8 +131,8 @@ public class Sql2oMusicianDao implements MusicianDao {
                 if (row.get("link") != null) {
                     m.addProfileLink((String) row.get("link"));
                 }
-                if (row.get("friendID") != null) {
-                    m.addFriend((String) row.get("friendID"));
+                if (row.get("friendid") != null) {
+                    m.addFriend((String) row.get("friendid"));
                 }
 
             }

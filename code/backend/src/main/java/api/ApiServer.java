@@ -173,7 +173,6 @@ public class ApiServer {
                 }
                 else {
                     musicians = musicianDao.readAll();
-                    System.out.println("Read successful?");
                     System.out.println(musicians);
                 }
                 return gson.toJson(musicians);
