@@ -113,7 +113,6 @@ public class Sql2oMusicianDao implements MusicianDao {
 
             Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
                     exp, loc, new HashSet<String>(), admin);
-            m.setAdmin(admin);
 
             for (Map row : queryResults) {
                 if (row.get("genre") != null) {
@@ -296,6 +295,18 @@ public class Sql2oMusicianDao implements MusicianDao {
             return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician location", ex);
+        }
+    }
+
+    @Override
+    public Musician updateAdmin(String id, String admin) throws DaoException {
+        String sql = "UPDATE Musicians SET admin=:admin WHERE id=:id;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql).addParameter("id", id)
+                    .addParameter("admin", admin).executeUpdate();
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician admin", ex);
         }
     }
 

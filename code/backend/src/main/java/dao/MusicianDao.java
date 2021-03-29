@@ -84,6 +84,8 @@ public interface MusicianDao {
 
     Musician updateLocation(String id, String name) throws DaoException;
 
+    Musician updateAdmin(String id, String admin) throws DaoException;
+
     Musician updateProfileLinks(String id, Set<String> links) throws DaoException;
 
     /**
