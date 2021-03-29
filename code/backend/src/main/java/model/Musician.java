@@ -11,12 +11,15 @@ public class Musician extends Client {
     private String location;
     private Set<String> profileLinks;
     // boolean stored as int for SQL
-    private int isAdmin;
+    private int admin;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
         this.name = name;
         this.genres = genres;
+
+        // false by default
+        admin = 0;
     }
 
     public Musician(String id, String name, Set<String> genres,
@@ -28,14 +31,17 @@ public class Musician extends Client {
         this.experience = experience;
         this.location = location;
         this.profileLinks = profileLinks;
+
+        // false by default
+        admin = 0;
     }
 
-    public int isAdmin() {
-        return this.isAdmin;
+    public int getAdmin() {
+        return this.admin;
     }
 
-    public void setAdmin(int isAdminBoolean) {
-        this.isAdmin = isAdminBoolean;
+    public void setAdmin(int isAdmin) {
+        this.admin = isAdmin;
     }
 
     public String getName() {
@@ -116,12 +122,13 @@ public class Musician extends Client {
                 genres.equals(musician.genres) &&
                 Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
-                Objects.equals(location, musician.location);
+                Objects.equals(location, musician.location) &&
+                this.admin == musician.admin;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, genres, instruments, experience, location);
+        return Objects.hash(name, genres, instruments, experience, location, admin);
     }
 
     @Override
@@ -132,6 +139,7 @@ public class Musician extends Client {
                 ", instrument='" + instruments.toString() + '\'' +
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
+                ", isAdmin=' " + admin + '\'' +
                 '}';
     }
 }

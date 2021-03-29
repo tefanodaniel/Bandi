@@ -39,8 +39,12 @@ public final class DataStore {
         // Adding my own account for testing
         Set<String> maxLinks = new HashSet<String>();
         maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
-        samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
-                genres2, instruments2, "Expert", "Freehold, NJ", maxLinks));
+        Musician max = new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
+                genres2, instruments2, "Expert", "Freehold, NJ", maxLinks);
+        // make Max an admin
+        max.setAdmin(1);
+        System.out.print(max);
+        samples.add(max);
 
         return samples;
     }

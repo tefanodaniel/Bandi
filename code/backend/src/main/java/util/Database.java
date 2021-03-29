@@ -38,7 +38,6 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-
     }
 
     /**
@@ -82,7 +81,8 @@ public final class Database {
                     + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
                     + "experience VARCHAR(30),"
-                    + "location VARCHAR(30)"
+                    + "location VARCHAR(30),"
+                    + "admin integer"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
@@ -104,7 +104,7 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, :experience, :location, :admin);";
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
             String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";
