@@ -27,9 +27,9 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-                           String experience, String location, Set<String> profileLinks) throws DaoException {
+                           String experience, String location, Set<String> profileLinks, int admin) throws DaoException {
         // TODO: re-implement? Yes -- DONE
-        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
+        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, admin) VALUES (:id, :name, :experience, :location, :admin)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
@@ -40,6 +40,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .addParameter("name", name)
                     .addParameter("experience", experience)
                     .addParameter("location", location)
+                    .addParameter("admin", admin)
                     .executeUpdate();
 
             // Insert corresponding genres into database
@@ -76,7 +77,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name) throws DaoException {
         // TODO: re-implement? Yes -- DONE
-        String sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, 'NULL', 'NULL');";
+        String sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, 'NULL', 'NULL', 0);";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("id", id).addParameter("name", name).executeUpdate();
             return this.read(id);
@@ -108,8 +109,12 @@ public class Sql2oMusicianDao implements MusicianDao {
             String name = (String) queryResults.get(0).get("name");
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
+            int admin = (int) queryResults.get(0).get("admin");
 
-            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>());
+            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
+                    exp, loc, new HashSet<String>());
+            m.setAdmin(admin);
+
             for (Map row : queryResults) {
                 if (row.get("genre") != null) {
                     m.addGenre((String) row.get("genre"));

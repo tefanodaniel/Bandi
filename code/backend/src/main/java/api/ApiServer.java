@@ -256,10 +256,10 @@ public class ApiServer {
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
-
                 if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
+
                 return gson.toJson(musician);
             } catch (DaoException | JsonSyntaxException ex) {
                 throw new ApiError(ex.getMessage(), 500);
