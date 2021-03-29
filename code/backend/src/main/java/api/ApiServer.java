@@ -190,13 +190,16 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
+                int admin = musician.getAdmin();
+
                 if (instruments == null) { instruments = new HashSet<String>(); }
                 if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
                 if (profileLinks == null) { profileLinks = new HashSet<String>(); }
 
-                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks);
+                musicianDao.create(musician.getId(), musician.getName(), genres,
+                        instruments, experience, location, profileLinks, admin);
 
                 res.status(201);
                 return gson.toJson(musician);
@@ -226,6 +229,10 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
+                // no check for admin flag. We don't want to change admin on and off,
+                // and since ints default to 0, we might accidentally take admin
+                // permissions away.
+
                 // Update specific fields:
                 boolean flag = false;
                 if (name != null) {
@@ -395,6 +402,7 @@ public class ApiServer {
             return "OK";
         });
 
+        // CORS
         before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -406,8 +414,6 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-        //List<Musician> musicians = DataStore.sampleMusicians();
-        //Database.createMusicianTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 
