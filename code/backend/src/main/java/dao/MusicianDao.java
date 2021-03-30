@@ -66,7 +66,6 @@ public interface MusicianDao {
      */
     List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
-
     /**
      * Update the name of a Musicians provided the id.
      *

@@ -27,7 +27,6 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-
                            String experience, String location, Set<String> profileLinks, Set<String> friends, boolean admin) throws DaoException {
         // TODO: re-implement? Yes -- DONE
         String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, admin) VALUES (:id, :name, :experience, :location, :admin)";
