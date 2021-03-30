@@ -1,16 +1,13 @@
 import React from 'react';
-import {Link, Redirect, useHistory} from 'react-router-dom';
+import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
-import {findCookie, getBackendURL, getFrontendURL, getURL, logout} from "../utils/api";
-import axios from "axios";
 import Cookies from "js-cookie";
-
 import Header from './Header'
-import {Container} from "react-bootstrap";
-import MusicianSearch from "./MusicianSearch";
-import { getUser } from "../actions/user_actions";
-import {shallowEqual, useSelector} from "react-redux";
+import {Container, Row, Col} from "react-bootstrap";
+import { bandi_styles } from "../styles/bandi_styles";
+import SubHeader from "./SubHeader";
+
 
 class Discover extends React.Component {
   constructor(props) {
@@ -27,15 +24,14 @@ class Discover extends React.Component {
 
   viewBands = () => {this.props.history.push('/bandview')}
 
+  viewSpeedDating = () => {} // To Do.. implement a speed-dating component that lets users browse events and register for them.
+
+  viewSOTW = () => {this.props.history.push('/sotw')}
+
   render() {
 	  let cookie_id = Cookies.get('id');
 	  console.log('are the cookies already set?', cookie_id);
 	  if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
-		  //this.setState({
-		  //	...this.state,
-		  //	u_id : null,
-		  //	first_view : true
-		  //})
 		  const params = new URLSearchParams(window.location.search);
 		  let user_id = params.get("id");
 		  console.log('the userid from url params', user_id);
@@ -46,35 +42,65 @@ class Discover extends React.Component {
 			  Cookies.set('id', user_id);
 			  // remove id from url
 			  window.history.replaceState(null, '', '/')
-			  //getUser(user_id)
 		  }
 		  else {
-		  	  // either beyond first login or unsuccesful login
+		  	  // either beyond first login or unsuccessful login
 		  	  //shouldn't be here! so safe to redirect
-			  //this.setState({
-			  //	...this.state,
-			  //	u_id : null,
-			  //	first_view : true
-			  //})
 			  console.log('redirecting since no cookie_id or user_id ');
 			  return (<Redirect to = '/signin'/>);
 		  }
-		  //console.log('redirecting since no cookie');
-		  //return(<Redirect to ='/signin'/>);
 	  }
-
 	return (
-  		<div>
-        	<Header key={cookie_id} id={cookie_id} />
-			<Jumbotron>
-  				<h3>Musicians</h3>
-  				<Button onClick={this.viewMusicians}>Browse</Button>
+  		<div style={bandi_styles.discover_background}>
+        	<Header />
+        	<SubHeader text={"We need a banDi tagline to insert here"}/>
+        	<div style={{marginTop:"120px"}}>
+        	<Container >
+				<Row>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_music}>
+							<Container style={{float:"right"}}>
+								<h3 className="display-5" >Musicians</h3>
 
-				<h3>Bands</h3>
-				<Button onClick={this.viewBands}>Browse</Button>
-  			</Jumbotron>
+							</Container>
+							<Container>
+								<Button onClick={this.viewMusicians} variant="light" >Browse</Button>
+							</Container>
+						</Jumbotron>
+					</Col>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_band}>
+							<h3>Bands</h3>
+							<Button onClick={this.viewBands} variant="light">Browse</Button>
+						</Jumbotron>
+					</Col>
+				</Row>
+			</Container>
+			</div>
+			<div style={{marginTop:"220px"}}>
+			<Container >
+				<Row style={{marginTop:"120px"}}>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sdate}>
+							<Container style={{float:"right"}}>
+								<h3 className="display-5" >Speed-Dating</h3>
 
-  		</div>
+							</Container>
+							<Container>
+								<Button onClick={this.viewSpeedDating} variant="light" >Explore</Button>
+							</Container>
+						</Jumbotron>
+					</Col>
+					<Col style={bandi_styles.discover_row_col}>
+						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sotw}>
+							<h3>Song Of The Week!</h3>
+							<Button onClick={this.viewSOTW} variant="light">Explore</Button>
+						</Jumbotron>
+					</Col>
+				</Row>
+			</Container>
+			</div>
+		</div>
   	);
   }
 
