@@ -1,5 +1,6 @@
 package util;
 
+import model.Event;
 import model.Musician;
 import model.Band;
 
@@ -74,5 +75,23 @@ public final class DataStore {
         sample_bands.add(new Band(bandId,"Pink Floyd",4, genres, members));
         sample_bands.add(new Band(id2, "Imagine Dragons",4, genres, members2));
         return sample_bands;
+    }
+
+    /**
+     * Create a list of sample bands (based on the above sample musicians).
+     *
+     * @return a list of sample bands.
+     */
+    public static List<Event> sampleEvents() {
+
+        Event event1 = new Event(UUID.randomUUID().toString(), "Speed-Dating Part 1",
+                "https://zoom.us/", "April 15, 2021", 4);
+        Event event2 = new Event(UUID.randomUUID().toString(), "Speed-Dating Part 2",
+                "https://zoom.us/", "April 16, 2021", 6);
+
+        List<Event> sample_events = new ArrayList<>();
+        sample_events.add(event1);
+        sample_events.add(event2);
+        return sample_events;
     }
 }
