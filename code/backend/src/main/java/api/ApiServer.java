@@ -259,8 +259,6 @@ public class ApiServer {
             }
         });
 
-        // TODO: put request specifically for friend fields
-
         // delete musicians
         delete("/musicians/:id", (req, res) -> {
             try {
@@ -274,6 +272,10 @@ public class ApiServer {
             } catch (DaoException ex) {
                 throw new ApiError(ex.getMessage(), 500);
             }
+        });
+
+        post("/musicians/friend/:id", (req, res) -> {
+            return null;
         });
 
         // Get all bands (optional query parameters)
@@ -383,6 +385,9 @@ public class ApiServer {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
+
+        // sent friend request from user to user
+
 
         // options request to allow for CORS
         options("/*", (req, res) -> {
