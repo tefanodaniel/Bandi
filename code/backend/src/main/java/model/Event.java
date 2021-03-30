@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Event {
@@ -68,6 +69,13 @@ public class Event {
 
     public void setParticipants(Set<String> participants) {
         this.participants = participants;
+    }
+
+    public void addParticipant(String participant) {
+        if (this.participants == null) {
+            this.participants = new HashSet<String>();
+        }
+        this.participants.add(participant);
     }
 
     @Override
