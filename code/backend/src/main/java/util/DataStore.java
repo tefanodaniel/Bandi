@@ -84,10 +84,13 @@ public final class DataStore {
      */
     public static List<Event> sampleEvents() {
 
+        Set<String> participants = new HashSet<>();
+        participants.add("22zcnk76clvox7mifcwgz3tha");
+
         Event event1 = new Event(UUID.randomUUID().toString(), "Speed-Dating Part 1",
-                "https://zoom.us/", "April 15, 2021", 4);
+                "https://zoom.us/", "April 15, 2021", 4, participants);
         Event event2 = new Event(UUID.randomUUID().toString(), "Speed-Dating Part 2",
-                "https://zoom.us/", "April 16, 2021", 6);
+                "https://zoom.us/", "April 16, 2021", 6, participants);
 
         List<Event> sample_events = new ArrayList<>();
         sample_events.add(event1);
