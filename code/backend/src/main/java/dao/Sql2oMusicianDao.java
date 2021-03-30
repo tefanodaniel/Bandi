@@ -424,7 +424,6 @@ public class Sql2oMusicianDao implements MusicianDao {
             m.addProfileLink(link);
             m.addFriend(friendID);
         }
-        System.out.println("Extraction successful?");
 
         return new ArrayList<Musician>(musicians.values());
     }

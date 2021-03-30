@@ -9,20 +9,37 @@ import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 
 function makeFriendMap(list) {
+    console.log("making a map for list")
+    console.log(list)
     let friendMap = new Map();
-    list.forEach(friendID => {
-        let friendURL = getBackendURL() + "/musicians/" + friendID;
-        axios.get(friendURL)
-            .then(response => friendMap.set(response.data.name, friendURL));
-    });
-    console.log(friendMap.size);
+    if (list.length > 0) {
+        list.forEach(friendID => {
+            let friendURL = getBackendURL() + "/musicians/" + friendID;
+            axios.get(friendURL)
+                .then(response => friendMap.set(response.data.name, friendURL));
+        });
+    }
+    console.log("final map")
+    console.log(friendMap)
     return friendMap;
 }
 
-function DisplayFriendsList(props) {
+function getMapSize(x) {
+    var len = 0;
+    for (var count in x) {
+            len++;
+    }
+    console.log("map size")
+    console.log(len)
+    return len;
+}
 
+function DisplayFriendsList(props) {
+    /*
     let friends = makeFriendMap(props.list)
-    if (friends.size > 0) {
+    console.log("map to display")
+    console.log(friends)
+    if (getMapSize(friends) > 0) {
         const friendItems = friends.map((name, url) => {
                 <li> <a href={url}>{name}</a> </li>
         });
@@ -32,6 +49,13 @@ function DisplayFriendsList(props) {
     } else {
         return (<p>No friends to display :(</p>);
     }
+    */
+    return (
+        <div>
+            <h4>Friends:</h4>
+            {props.list.map(friendID => <p>{friendID}</p>)}
+        </div>
+    )
 }
 
 class Profile extends React.Component {
@@ -54,6 +78,26 @@ class Profile extends React.Component {
             // pending_outgoing_requests: []
         }
         this.addFriend.bind(this)
+
+        
+        const params = new URLSearchParams(this.props.location.search);
+        this.state.us_id = params.get("view");
+        this.state.my_id = Cookies.get("id");
+
+        var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
+        axios.get(userURL)
+            .then((response) => {
+                this.setState(
+                    {name: response.data.name, location: response.data.location,
+                        experience: response.data.experience,
+                        instruments: response.data.instruments,
+                        genres: response.data.genres,
+                        links: response.data.profileLinks,
+                        friends: response.data.friends
+                        // pending_incoming_requests: response.data.pending_outgoing_requests
+                    })
+                // console.log(response.data)
+            });
     }
 
     goBack = () => {this.props.history.goBack()};
@@ -72,23 +116,6 @@ class Profile extends React.Component {
     }
 
     render() {
-
-        const params = new URLSearchParams(this.props.location.search);
-        this.state.us_id = params.get("view");
-        this.state.my_id = Cookies.get("id");
-
-        var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
-        axios.get(userURL)
-            .then((response) =>
-                this.setState(
-                    {name: response.data.name, location: response.data.location,
-                        experience: response.data.experience,
-                        instruments: response.data.instruments,
-                        genres: response.data.genres,
-                        links: response.data.profileLinks,
-                        friends: response.data.friends
-                        // pending_incoming_requests: response.data.pending_outgoing_requests
-                        }));
 
         if (this.state.name) {
             return (
@@ -112,7 +139,7 @@ class Profile extends React.Component {
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
                     <div>
-                        <h4>Friends: {this.state.friends.map(friendID => <p>{friendID}</p>)}</h4>
+                        <DisplayFriendsList list={this.state.friends}/>
                     </div>
                     {this.renderConnectButton()}
                 </div>

@@ -4,6 +4,7 @@ import MusicianListItem from './MusicianListItem'
 import {Container, Row, Col, ListGroup} from "react-bootstrap";
 
 const selectMusicianIds = (state) => {
+    console.log(state)
     return state.musician_reducer.filteredMusicians.map(user => user.id)
 }
 
