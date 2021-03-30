@@ -11,15 +11,21 @@ public class Musician extends Client {
     private String location;
     private Set<String> profileLinks;
     private Set<String> friends;
+    private boolean admin;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
         this.name = name;
         this.genres = genres;
+
+        // false by default
+        admin = false;
     }
 
     public Musician(String id, String name, Set<String> genres,
-                    Set<String> instruments, String experience, String location, Set<String> profileLinks, Set<String> friends) {
+                    Set<String> instruments, String experience, String location,
+                    Set<String> profileLinks, Set<String> friends, boolean isAdmin) {
+
         super(id);
         this.name = name;
         this.genres = genres;
@@ -28,6 +34,15 @@ public class Musician extends Client {
         this.location = location;
         this.profileLinks = profileLinks;
         this.friends = friends;
+        this.admin = isAdmin;
+    }
+
+    public boolean getAdmin() {
+        return this.admin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.admin = isAdmin;
     }
 
     public String getName() {
@@ -121,12 +136,14 @@ public class Musician extends Client {
                 Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
                 Objects.equals(location, musician.location) &&
-                Objects.equals(friends, musician.friends);
+                Objects.equals(friends, musician.friends) &&
+                this.admin == musician.admin;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, genres, instruments, experience, location, friends);
+
+        return Objects.hash(name, genres, instruments, experience, location, friends, admin);
     }
 
     @Override
@@ -138,6 +155,7 @@ public class Musician extends Client {
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
                 ", friends=' " + friends + '\'' +
+                ", admin=' " + admin + '\'' +
                 '}';
     }
 

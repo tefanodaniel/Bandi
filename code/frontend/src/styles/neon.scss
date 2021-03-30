@@ -1,0 +1,98 @@
+.neon2 {
+  color: #fff;
+  text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 20px #ff0080, 0 0 30px #ff0080, 0 0 40px #ff0080, 0 0 55px #ff0080, 0 0 75px #ff0080;
+
+}
+
+.neon4 {
+  color: #FBB4FF;
+  text-shadow:
+          -.1vw 0vw .25vw #FBB4FF, -.2vw 0vw .25vw #FBB4FF, -.4vw 0vw .25vw #FBB4FF,
+          -.1vw 0vw 1vw #E82FF5, -.2vw 0vw .8vw #E82FF5, -.4vw 0vw .8vw #E82FF5, .2vw 0vw .5vw #E82FF5,
+          -.1vw 0vw 10vw #CB16FA, -.2vw 0vw 10vw #CB16FA, -.4vw 0vw 10vw #CB16FA;
+}
+
+// Update: September 2016, after a lot of grumbling, decided to simplify this. Cons: The color accuracy has gone down and mostly works on very dark or very light backgrounds. Pros: The code is far simpler and doesn't require doubling-up the text.
+
+@mixin gradient-text($gradient, $bg : 'light') {
+  @supports(mix-blend-mode: lighten) {
+    display: inline-block;
+    position: relative;
+
+    &::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 0; right: 0; bottom: 0; left: 0;
+
+      background: unquote($gradient);
+      pointer-events: none;
+    }
+
+    @if ($bg == 'light') {
+      color: #000;
+      background: #fff;
+      mix-blend-mode: multiply;
+
+      &::before {
+        mix-blend-mode: screen;
+      }
+    } @else {
+      color: #fff;
+      background: #000;
+      mix-blend-mode: lighten;
+
+      &::before {
+        mix-blend-mode: multiply;
+      }
+    }
+  }
+}
+
+section.light {
+  //background: #eee;
+  //background-image:url("../images/discover_bg.jpg");
+  //background-position: center;
+  //background-size: cover;
+
+  .gradient1 {
+    @include gradient-text('linear-gradient(to right,#23966c, #faaa54, #e23b4a, #db0768, #360670)', 'light');
+  }
+
+  .gradient2 {
+    @include gradient-text('radial-gradient(circle, #23966c, #faaa54, #e23b4a, #db0768, #360670)', 'light');
+  }
+}
+
+.dark {
+//  background: #222;
+  background-image:url("../images/discover_bg.jpg");
+  background-position: center;
+  background-size: cover;
+
+  .gradient1 {
+    color: #fff; // Fallback color
+
+    @include gradient-text('linear-gradient(to right,#23966c, #faaa54, #e23b4a, #db0768, #360670)', 'dark');
+  }
+
+  .gradient2 {
+    color: #fff;
+
+    @include gradient-text('radial-gradient(circle, #23966c, #faaa54, #e23b4a, #db0768, #360670)', 'dark');
+  }
+}
+
+
+
+.gradient1 {
+  font-size: 26px;
+  margin: 0.5em;
+  opacity: 0.9;
+}
+
+.gradient2 {
+  text-align: center;
+  margin: 1em auto;
+  width: 10em;
+}

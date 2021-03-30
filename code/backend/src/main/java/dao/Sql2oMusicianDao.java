@@ -27,9 +27,10 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-                           String experience, String location, Set<String> profileLinks, Set<String> friends) throws DaoException {
 
-        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
+                           String experience, String location, Set<String> profileLinks, Set<String> friends, boolean admin) throws DaoException {
+        // TODO: re-implement? Yes -- DONE
+        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, admin) VALUES (:id, :name, :experience, :location, :admin)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
@@ -42,6 +43,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .addParameter("name", name)
                     .addParameter("experience", experience)
                     .addParameter("location", location)
+                    .addParameter("admin", admin)
                     .executeUpdate();
 
             // Insert corresponding genres into database
@@ -86,7 +88,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name) throws DaoException {
         // TODO: re-implement? Yes -- DONE
-        String sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, 'NULL', 'NULL');";
+        String sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, 'NULL', 'NULL', FALSE);";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("id", id).addParameter("name", name).executeUpdate();
             return this.read(id);
@@ -118,8 +120,11 @@ public class Sql2oMusicianDao implements MusicianDao {
             String name = (String) queryResults.get(0).get("name");
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
+            boolean admin = (boolean) queryResults.get(0).get("admin");
 
-            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>(), new HashSet<String>());
+            Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
+                    exp, loc, new HashSet<String>(), new HashSet<String>(), admin);
+
             for (Map row : queryResults) {
 
                 if (row.get("genre") != null) {
@@ -318,6 +323,18 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
+    public Musician updateAdmin(String id, boolean admin) throws DaoException {
+        String sql = "UPDATE Musicians SET admin=:admin WHERE id=:id;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql).addParameter("id", id)
+                    .addParameter("admin", admin).executeUpdate();
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician admin", ex);
+        }
+    }
+
+    @Override
     public Musician updateProfileLinks(String id, Set<String> newLinks) throws DaoException {
 
         String getCurrentLinksSQL = "SELECT * FROM ProfileAVLinks WHERE id=:id";
@@ -412,10 +429,15 @@ public class Sql2oMusicianDao implements MusicianDao {
             String instrument = (String) row.get("instrument");
             String link = (String) row.get("link");
             String friendID = (String) row.get("friendid");
+            boolean admin = (boolean) row.get("admin");
+
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
-                musicians.put(id, new Musician(id, name, new HashSet<String>(), new HashSet<String>(), exp, loc, new HashSet<String>(), new HashSet<String>()));
+                musicians.put(id, new Musician(id, name, new HashSet<String>(),
+                        new HashSet<String>(), exp, loc, new HashSet<String>(),
+                        new HashSet<String>(), admin));
+
             }
             // Add the genre and instrument from this row to the object lists
             Musician m = musicians.get(id);
