@@ -238,42 +238,30 @@ public final class Database {
             conn.createQuery(sql).executeUpdate();
 
             sql = "CREATE TABLE IF NOT EXISTS Participants("
-                    + "id VARCHAR(30),"
-                    + "event VARCHAR(50) REFERENCES Events"
+                    + "participant VARCHAR(30),"
+                    + "event VARCHAR(50)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            /*
-            String band_sql = "INSERT INTO Bands(id, name, capacity) VALUES(:id, :name, :capacity);";
-            String bandmembers_sql = "INSERT INTO BandMembers(member, band) VALUES(:member, :band);";
-            String bandgenres_sql = "INSERT INTO BandGenres(id, genre) VALUES(:id, :genre);";
-            for (Band b : samples) {
-                conn.createQuery(band_sql)
-                        .addParameter("id", b.getId())
-                        .addParameter("name", b.getName())
-                        .addParameter("capacity", b.getCapacity())
+            String event_sql = "INSERT INTO Events(id, name, link, date, minusers) VALUES(:id, :name, :link, :date, :minusers);";
+            String participants_sql = "INSERT INTO Participants(participant, event) VALUES(:participant, :event);";
+            for (Event e : samples) {
+                conn.createQuery(event_sql)
+                        .addParameter("id", e.getId())
+                        .addParameter("name", e.getName())
+                        .addParameter("link", e.getLink())
+                        .addParameter("date", e.getDate())
+                        .addParameter("minusers", e.getMinusers())
                         .executeUpdate();
-                // Does this break if the class has more attributes than there are columns? Nope!
 
-                // Insert all band member info
-                for (String member : b.getMembers()) {
-                    conn.createQuery(bandmembers_sql)
-                            .addParameter("member", member)
-                            .addParameter("band",b.getId())
+                // Insert participant info
+                for (String participant : e.getParticipants()) {
+                    conn.createQuery(participants_sql)
+                            .addParameter("participant", participant)
+                            .addParameter("event", e.getId())
                             .executeUpdate();
                 }
-
-                // Insert all genres for this musician
-                for (String genre : b.getGenres()) {
-                    conn.createQuery(bandgenres_sql)
-                            .addParameter("id", b.getId())
-                            .addParameter("genre", genre)
-                            .executeUpdate();
-                }
-
-
             }
-            */
 
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
