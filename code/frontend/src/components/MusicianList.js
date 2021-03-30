@@ -4,14 +4,8 @@ import {Container, Row, Col, Card} from "react-bootstrap";
 import {getFrontendURL} from "../utils/api";
 import { bandi_styles } from "../styles/bandi_styles";
 
-<<<<<<< HEAD
-const selectMusicianIds = (state) => {
-    console.log(state)
-    return state.musician_reducer.filteredMusicians.map(user => user.id)
-=======
 const selectMusicians = (state) => {
     return state.musician_reducer.filteredMusicians.map(user => user)
->>>>>>> origin/iteration-3
 }
 
 

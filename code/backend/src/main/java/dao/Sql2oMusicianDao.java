@@ -157,6 +157,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN musicianfriends as F ON R.MID=F.id;";
         try (Connection conn = sql2o.open()) {
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
+            System.out.println(musicians);
             return musicians;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from the database", ex);
@@ -446,7 +447,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             m.addProfileLink(link);
             m.addFriend(friendID);
         }
-
+        System.out.println("Extraction successful");
         return new ArrayList<Musician>(musicians.values());
     }
 }
