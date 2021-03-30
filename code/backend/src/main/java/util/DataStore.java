@@ -44,8 +44,14 @@ public final class DataStore {
         Set<String> maxLinks = new HashSet<String>();
         maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
         Musician max = new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
-                genres2, instruments2, "Expert", "Freehold, NJ", maxLinks, true);
+                genres2, instruments2, "Expert", "New York, NY", maxLinks, true);
         samples.add(max);
+
+        // Adding Nick as an admin so he can test admin functionality
+        Musician Nick = new Musician("12101628937","Nick Xitco",
+                genres2, instruments2,
+                "Expert", "New York, NY", maxLinks, true);
+        samples.add(Nick);
 
         return samples;
     }
@@ -78,9 +84,9 @@ public final class DataStore {
     }
 
     /**
-     * Create a list of sample bands (based on the above sample musicians).
+     * Create a list of sample events
      *
-     * @return a list of sample bands.
+     * @return a list of sample events.
      */
     public static List<Event> sampleEvents() {
 

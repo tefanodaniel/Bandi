@@ -1,6 +1,7 @@
 package util;
 
 import model.Band;
+import model.Event;
 import model.Musician;
 import org.sql2o.Connection;
 import org.sql2o.Query;
@@ -38,6 +39,7 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
+        createEventTablesWithSampleData(sql2o, DataStore.sampleEvents());
     }
 
     /**
@@ -143,10 +145,10 @@ public final class Database {
     }
 
     /**
-     * Create Musicians table schema and add sample CS Musicians to it.
+     * Create Bands table schema and add sample CS Musicians to it.
      *
      * @param sql2o a Sql2o object connected to the database to be used in this application.
-     * @param samples a list of sample CS Musicians.
+     * @param samples a list of sample bands.
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
     public static void createBandTablesWithSampleData(Sql2o sql2o, List<Band> samples) throws Sql2oException {
@@ -207,6 +209,71 @@ public final class Database {
             }
 
 
+
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+
+    /**
+     * Create Events table schema and add sample events
+     *
+     * @param sql2o a Sql2o object connected to the database to be used in this application.
+     * @param samples a list of sample Events
+     * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
+     */
+    public static void createEventTablesWithSampleData(Sql2o sql2o, List<Event> samples) throws Sql2oException {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS Events CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Participants;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS Events("
+                    + "id VARCHAR(50) PRIMARY KEY,"
+                    + "name VARCHAR(30) NOT NULL,"
+                    + "link VARCHAR(50),"
+                    + "date VARCHAR(50),"
+                    + "minusers integer"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS Participants("
+                    + "id VARCHAR(30),"
+                    + "event VARCHAR(50) REFERENCES Events"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            /*
+            String band_sql = "INSERT INTO Bands(id, name, capacity) VALUES(:id, :name, :capacity);";
+            String bandmembers_sql = "INSERT INTO BandMembers(member, band) VALUES(:member, :band);";
+            String bandgenres_sql = "INSERT INTO BandGenres(id, genre) VALUES(:id, :genre);";
+            for (Band b : samples) {
+                conn.createQuery(band_sql)
+                        .addParameter("id", b.getId())
+                        .addParameter("name", b.getName())
+                        .addParameter("capacity", b.getCapacity())
+                        .executeUpdate();
+                // Does this break if the class has more attributes than there are columns? Nope!
+
+                // Insert all band member info
+                for (String member : b.getMembers()) {
+                    conn.createQuery(bandmembers_sql)
+                            .addParameter("member", member)
+                            .addParameter("band",b.getId())
+                            .executeUpdate();
+                }
+
+                // Insert all genres for this musician
+                for (String genre : b.getGenres()) {
+                    conn.createQuery(bandgenres_sql)
+                            .addParameter("id", b.getId())
+                            .addParameter("genre", genre)
+                            .executeUpdate();
+                }
+
+
+            }
+            */
 
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());

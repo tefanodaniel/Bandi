@@ -69,7 +69,7 @@ public class Event {
     public void setParticipants(Set<String> participants) {
         this.participants = participants;
     }
-    
+
     @Override
     public String toString() {
         return "Event {" +
