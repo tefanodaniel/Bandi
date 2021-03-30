@@ -5,6 +5,7 @@ import exceptions.ApiError;
 import exceptions.DaoException;
 import kong.unirest.json.JSONObject;
 import model.Band;
+import model.Event;
 import spark.QueryParamsMap;
 import util.Database;
 import util.DataStore;
@@ -56,8 +57,11 @@ public class ApiServer {
         int myPort = getHerokuAssignedPort();
         port(myPort);
         staticFiles.location("/public");
+
+        // Dao objects
         MusicianDao musicianDao = getMusicianDao();
         BandDao bandDao = getBandDao();
+        Sql2oEventDao eventDao = getEventDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
@@ -421,6 +425,18 @@ public class ApiServer {
             }
         });
 
+        // Get all Events
+        get("/events", (req, res) -> {
+            try {
+                List<Event> events;
+                Map<String, String[]> query = req.queryMap().toMap();
+                events = eventDao.readAll();
+                return gson.toJson(events);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // options request to allow for CORS
         options("/*", (req, res) -> {
             String headers = req.headers("Access-Control-Request-Headers");
@@ -452,5 +468,10 @@ public class ApiServer {
     private static BandDao getBandDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oBandDao(sql2o);
+    }
+
+    private static Sql2oEventDao getEventDao() throws URISyntaxException {
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oEventDao(sql2o);
     }
 }
