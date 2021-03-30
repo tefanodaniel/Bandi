@@ -190,13 +190,16 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
+                boolean admin = musician.getAdmin();
+
                 if (instruments == null) { instruments = new HashSet<String>(); }
                 if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
                 if (profileLinks == null) { profileLinks = new HashSet<String>(); }
 
-                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks);
+                musicianDao.create(musician.getId(), musician.getName(), genres,
+                        instruments, experience, location, profileLinks, admin);
 
                 res.status(201);
                 return gson.toJson(musician);
@@ -226,6 +229,10 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
+                // no check for admin flag. We don't want to change admin on and off,
+                // and since ints default to 0, we might accidentally take admin
+                // permissions away.
+
                 // Update specific fields:
                 boolean flag = false;
                 if (name != null) {
@@ -249,10 +256,10 @@ public class ApiServer {
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
-
                 if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
+
                 return gson.toJson(musician);
             } catch (DaoException | JsonSyntaxException ex) {
                 throw new ApiError(ex.getMessage(), 500);
@@ -273,6 +280,38 @@ public class ApiServer {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
+
+        // get the admin status of a musician
+        get("/adminstatus/:id", (req, res) -> {
+                    try {
+                        String id = req.params("id");
+                        Musician musician = musicianDao.read(id);
+                        if (musician == null) {
+                            throw new ApiError("Resource not found", 404); // Bad request
+                        }
+                        boolean isAdmin = musician.getAdmin();
+                        res.type("application/json");
+                        return "{\"isAdmin\":"+ isAdmin +"}";
+                    } catch (DaoException ex) {
+                        throw new ApiError(ex.getMessage(), 500);
+                    }
+                }
+        );
+
+        // update the admin status of a musician
+        put("/adminstatus/:id", (req, res) -> {
+                    try {
+                        String id = req.params("id");
+                        Map map = gson.fromJson(req.body(),HashMap.class);
+                        boolean isAdmin = (boolean) map.get("isAdmin");
+                        Musician m = musicianDao.updateAdmin(id, isAdmin);
+                        res.type("application/json");
+                        return gson.toJson(m);
+                    } catch (DaoException ex) {
+                        throw new ApiError(ex.getMessage(), 500);
+                    }
+                }
+        );
 
         // Get all bands (optional query parameters)
         // if searching for id, only pass 1 parameter
@@ -395,6 +434,7 @@ public class ApiServer {
             return "OK";
         });
 
+        // CORS
         before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
@@ -406,8 +446,6 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-        //List<Musician> musicians = DataStore.sampleMusicians();
-        //Database.createMusicianTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 
