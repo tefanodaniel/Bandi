@@ -26,7 +26,7 @@ class SpeedDate extends React.Component {
             minusers: 1
         }
 
-        //this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
 
@@ -37,6 +37,22 @@ class SpeedDate extends React.Component {
         this.setState({
             [field]: value
         });
+    }
+
+    handleSubmit(event) {
+        SDEventApi.create({
+            name: this.state.name,
+            link: this.state.link,
+            date: this.state.date,
+            minusers: this.state.minusers
+        })
+            .then(res => {
+                console.log(`statusCode: ${res.statusCode}`)
+                console.log(res)
+            })
+            .catch(error => {
+                console.error(error)
+            })
     }
 
     componentDidMount() {
