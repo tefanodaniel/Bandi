@@ -447,12 +447,13 @@ public class ApiServer {
                 String link = event.getLink();
                 String date = event.getDate();
                 int minusers = event.getMinusers();
-                Set<String> participants = new HashSet<>();
+                Set<String> participants = event.getParticipants();
 
                 if (name == null) { name = "NULL"; }
                 if (link == null) { link = "NULL"; }
                 if (date == null) { date = "NULL"; }
                 if (minusers == 0) { minusers = 1; }
+                if (participants == null) {participants = new HashSet<>();}
 
                 eventDao.create(id, name, link, date, minusers, participants);
 

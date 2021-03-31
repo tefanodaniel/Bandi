@@ -55,4 +55,33 @@ public class Sql2oEventDao {
         }
         return new ArrayList<Event>(events.values());
     }
+
+    public Event create(String id, String name, String link,
+                        String date, int minusers, Set<String> participants) throws DaoException {
+
+        String eventSQL = "INSERT INTO Events (id, name, link, date, minusers) VALUES (:id, :name, :link, :date, :minusers)";
+        String participantSQL = "INSERT INTO Participants (participant, event) VALUES (:participant, :event)";
+
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(eventSQL)
+                    .addParameter("id", id)
+                    .addParameter("name", name)
+                    .addParameter("link", link)
+                    .addParameter("date", date)
+                    .addParameter("minusers", minusers)
+                    .executeUpdate();
+
+            for (String participant : participants) {
+                conn.createQuery(participantSQL)
+                        .addParameter("participant", participant)
+                        .addParameter("event", id)
+                        .executeUpdate();
+            }
+
+            return null;
+            // return this.read(id);
+        } catch(Sql2oException ex) {
+            throw new DaoException(ex.getMessage(), ex);
+        }
+    }
 }
