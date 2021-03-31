@@ -10,10 +10,10 @@ public interface RequestDao {
 
     List<FriendRequest> readAllFrom(String senderID) throws DaoException;
 
-    boolean acceptRequest(String senderID, String recipientID) throws DaoException;
+    FriendRequest read(String senderID, String recipientID) throws DaoException;
 
-    boolean declineRequest(String senderID, String recipientID) throws DaoException;
+    String acceptRequest(String senderID, String recipientID) throws DaoException;
 
-    FriendRequest deleteRequest(String senderID, String recipientID) throws DaoException;
+    String declineRequest(String senderID, String recipientID) throws DaoException;
 
 }
