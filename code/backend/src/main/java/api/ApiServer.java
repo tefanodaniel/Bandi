@@ -437,6 +437,32 @@ public class ApiServer {
             }
         });
 
+        // post an event
+        post("/events", (req, res) -> {
+            try {
+                Event event = gson.fromJson(req.body(), Event.class);
+
+                String id = UUID.randomUUID().toString();
+                String name = event.getName();
+                String link = event.getLink();
+                String date = event.getDate();
+                int minusers = event.getMinusers();
+                Set<String> participants = new HashSet<>();
+
+                if (name == null) { name = "NULL"; }
+                if (link == null) { link = "NULL"; }
+                if (date == null) { date = "NULL"; }
+                if (minusers == 0) { minusers = 1; }
+
+                eventDao.create(id, name, link, date, minusers, participants);
+
+                res.status(201);
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // options request to allow for CORS
         options("/*", (req, res) -> {
             String headers = req.headers("Access-Control-Request-Headers");
