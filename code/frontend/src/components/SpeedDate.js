@@ -11,6 +11,7 @@ import Button from "react-bootstrap/Button";
 import {fetchBandsForMusician} from "../actions/band_actions";
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
+import Jumbotron from "react-bootstrap/Jumbotron";
 
 class SpeedDate extends React.Component {
     constructor(props) {
@@ -69,15 +70,20 @@ class SpeedDate extends React.Component {
         console.log('here here', userInfo);
 
         var eventList = this.state.sdEvents.map((event) =>
+
             <div className="card">
+                <Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sdate}>
                 <div className="card-body">
                     <h5 className="card-title">{event.name}</h5>
                     <h6 className="card-subtitle">{event.date}</h6>
                     <h6 className="card-subtitle"><a href={event.link}>{event.link}</a></h6>
                     <p className="card-text">Minimum number of participants: {event.minusers}</p>
+                    <p className="card-text">Registered participants: {event.participants.length}</p>
                     <Button className="small font-italic" onClick={() => {}}>Register</Button>
                 </div>
+                </Jumbotron>
             </div>
+
         );
 
         if (isAdmin) {
@@ -90,8 +96,6 @@ class SpeedDate extends React.Component {
                     {eventList}
 
                     <h1>Create Event: (Admin)</h1>
-
-                    <h1>{this.state.name}{this.state.link}{this.state.date}{this.state.minusers}</h1>
 
                     <Form onSubmit={this.handleSubmit}>
 
