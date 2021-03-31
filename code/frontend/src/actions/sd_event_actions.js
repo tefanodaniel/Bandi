@@ -1,9 +1,11 @@
-import { LOAD_SD_EVENTS } from './types';
+import {LOAD_SD_EVENTS} from './types';
 import SDEventApi from "../utils/SDEventApiService";
 
-export const fetchSDEvents = (attr) => (dispatch) => {
-    return SDEventApi.get(attr).then(response => dispatch({
-        payload: response.data,
-        type: LOAD_SD_EVENTS
-    }))
+export async function fetchSDEvents(dispatch, getState) {
+    console.log("Inside fetchSDEvents action");
+    const response = await SDEventApi.getAll();
+    dispatch({
+        type : LOAD_SD_EVENTS,
+        payload : response.data
+    })
 }

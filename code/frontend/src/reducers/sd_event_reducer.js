@@ -1,4 +1,4 @@
-import {LOAD_SD_EVENTS} from "./types";
+import {LOAD_SD_EVENTS} from "../actions/types";
 
 export default function sdEventReducer (state = {}, action) {
     switch (action.type) {
