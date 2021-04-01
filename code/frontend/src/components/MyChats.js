@@ -2,6 +2,7 @@ import React from 'react';
 import Cookies from "js-cookie";
 
 import { CometChat } from "@cometchat-pro/chat"
+import { CometChatUI } from "../cometchat-pro-react-ui-kit/CometChatWorkspace/src";
 import config from '../config';
 import ChatApi from "../utils/ChatApiService";
 import { connect } from 'react-redux';
@@ -30,9 +31,8 @@ class MyChats extends React.Component {
 
   render() {
     return (
-      <div>
-        <p>{Cookies.get('chatInitialized')}</p>
-        <p>{Cookies.get('loggedIntoChat')}</p>
+      <div style={{width: '800px', height:'800px' }}>
+          <CometChatUI />
       </div>
       );
   }
