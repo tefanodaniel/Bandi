@@ -437,6 +437,21 @@ public class ApiServer {
             }
         });
 
+        // Get Event given the id
+        get("/events/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                Event event = eventDao.read(id);
+                if (event == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // post an event
         post("/events", (req, res) -> {
             try {

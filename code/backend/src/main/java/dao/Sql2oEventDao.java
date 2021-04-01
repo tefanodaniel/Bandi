@@ -20,7 +20,7 @@ public class Sql2oEventDao {
     public List<Event> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT e.id as eID, * FROM events as e) as R\n"
                 + "LEFT JOIN participants as P ON R.eID=P.event;";
-        try(Connection conn = sql2o.open()) {
+        try (Connection conn = sql2o.open()) {
             List<Event> events = this.extractEventsFromDatabase(sql, conn);
             return events;
         } catch (Sql2oException ex) {
@@ -80,8 +80,60 @@ public class Sql2oEventDao {
 
             return null;
             // return this.read(id);
-        } catch(Sql2oException ex) {
+        } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
     }
+
+    public Event add(String eventId, String musId) throws DaoException {
+        String sql = "INSERT INTO Participants (participant, event) VALUES (:participant, :event);";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql)
+                    .addParameter("participant", musId)
+                    .addParameter("event", eventId)
+                    .executeUpdate();
+            //return this.read(eventId);
+            return null;
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to add new participant", ex);
+        }
+    }
+
+    public Event remove(String eventId, String musId) throws DaoException {
+        String sql = "DELETE FROM Participants WHERE participant=:musId;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql)
+                    .addParameter("musId", musId)
+                    .executeUpdate();
+            //return this.read(eventId);
+            return null;
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to remove participant", ex);
+        }
+    }
+
+    public Event read(String id) throws DaoException {
+        String sql = "SELECT * FROM (SELECT e.id as eID, * FROM events as e) as R\n"
+                + "LEFT JOIN Participants as P ON R.eID=P.event\n"
+                + "WHERE R.eID=:id";
+        try (Connection conn = sql2o.open()) {
+            List<Map<String, Object>> queryResults =
+                    conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
+
+            String eventId = (String) queryResults.get(0).get("id");
+            String name = (String) queryResults.get(0).get("name");
+            String link = (String) queryResults.get(0).get("link");
+            String date = (String) queryResults.get(0).get("date");
+            int minusers = (int) queryResults.get(0).get("minusers");
+
+            Event e = new Event(eventId, name, link, date, minusers, new HashSet<String>());
+            for (Map row : queryResults) {
+                e.addParticipant((String) row.get("participant"));
+            }
+            return e;
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read an Event with id " + id, ex);
+        }
+    }
+
 }
