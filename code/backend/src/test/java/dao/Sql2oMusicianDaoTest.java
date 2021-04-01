@@ -50,7 +50,7 @@ class Sql2oMusicianDaoTest {
         // Create lists of genres for the test musicians
         Set<String> genres1 = new HashSet<String>(Arrays.asList("Progressive Rock", "Psychedelic Rock"));
         Set<String> genres2 = new HashSet<String>(Arrays.asList("Blues", "Rock", "Classic Rock"));
-        Set<String> genres3 = new HashSet<String>(Arrays.asList("Jazz"));
+        Set<String> genres3 = new HashSet<String>(Arrays.asList("Jazz", "Rock"));
 
         // Create lists of instruments for the test musicians
         Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
@@ -85,7 +85,8 @@ class Sql2oMusicianDaoTest {
                     + "location VARCHAR(30),"
                     + "zipCode VARCHAR(10),"
                     + "latitude DOUBLE PRECISION,"
-                    + "longitude DOUBLE PRECISION"
+                    + "longitude DOUBLE PRECISION,"
+                    + "distance DOUBLE PRECISION DEFAULT 9999.0"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
@@ -107,8 +108,10 @@ class Sql2oMusicianDaoTest {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String musician_sql = "INSERT INTO MTest(id, name, experience, location, zipCode, latitude, longitude)" +
-                    " VALUES(:id, :name, :experience, :location, :zipCode, :latitude, :longitude);";
+            String musician_sql = "INSERT INTO MTest(id, name, experience, location, " +
+                    "zipCode, latitude, longitude, distance)" +
+                    " VALUES(:id, :name, :experience, :location, :zipCode, " +
+                    ":latitude, :longitude, :distance);";
             String instrument_sql = "INSERT INTO InstrTest(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MGenresTest(id, genre) VALUES(:id, :genre);";
             String link_sql = "INSERT INTO ProfileAVLinksTest(id, link) VALUES(:id, :link);";
@@ -166,16 +169,17 @@ class Sql2oMusicianDaoTest {
     @Test
     @DisplayName("read all the musicians that satisfy the search query")
     void readAllGivenSearchQuery() {
-//        String[] genre = new String[]{"pop"};
-//        String[] distance = new String[]{"20"};
-//        String[] sourceID = new String[]{"fakeid1"};
-//        Map<String, String[]> query = Map.of("genre", genre, "distance", distance, "id", sourceID);
-//        List<Musician> musicians = musicianDao.readAll(query);
-//        assertNotEquals(0, musicians.size());
-//        for (Musician musician : musicians) {
-//            assertTrue(musician.getDistance() <= Double.parseDouble("20"));
-//            assertTrue(musician.getGenre().equals("Pop"));
-//        }
+        String[] genre = new String[]{"rock"};
+        String[] distance = new String[]{"5000"};
+        String[] sourceID = new String[]{"00001fakeid"};
+        Map<String, String[]> query = Map.of("distance", distance, "id", sourceID);
+        List<Musician> musicians = musicianDao.readAll(query);
+        assertNotEquals(0, musicians.size());
+        for (Musician musician : musicians) {
+            assertTrue(musician.getDistance() <= Double.parseDouble("5000"));
+            //assertTrue(musician.getGenres().toArray()[0].equals("Rock"));
+            System.out.println(musician);
+        }
     }
 
     @Test
@@ -187,7 +191,7 @@ class Sql2oMusicianDaoTest {
         //System.out.println(samples.toString());
         for (Musician musician : musicians) {
             assertTrue(musician.getDistance() <= Double.parseDouble(miles));
-            System.out.println(musician);
+            //System.out.println(musician);
         }
     }
 }
