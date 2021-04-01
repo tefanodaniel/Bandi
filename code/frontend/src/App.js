@@ -14,6 +14,7 @@ import Profile from "./components/Profile";
 import SongOfTheWeek from "./components/SongOfTheWeek";
 import SpeedDate from "./components/SpeedDate";
 import SpeedDateEvent from "./components/SpeedDateEvent";
+import MyChats from "./components/MyChats";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/speeddate" component={SpeedDate} />
           <Route exact path="/speeddateevent" component={SpeedDateEvent} />
+          <Route exact path="/mychats" component={MyChats} />
         </Switch>
       </HashRouter>
     </div>

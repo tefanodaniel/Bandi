@@ -8,6 +8,12 @@ import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./SubHeader";
 
+import { CometChat } from "@cometchat-pro/chat"
+import config from '../config';
+import ChatApi from "../utils/ChatApiService";
+import { connect } from 'react-redux';
+//import { fetchBandsForMusician } from '../actions/band_actions';
+
 
 class Discover extends React.Component {
   constructor(props) {
@@ -16,8 +22,13 @@ class Discover extends React.Component {
 	  this.state = {
   		id : '',
   		u_id : null,
-  		first_view : true
+  		first_view : true,
+      chatUserData: null
 	  }
+
+    this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
+    this.createCometChatUser = this.createCometChatUser.bind(this);
+    this.logInCometChatUser = this.logInCometChatUser.bind(this);
   }
 
   viewMusicians = () => { this.props.history.push('/musicianview');}
@@ -28,29 +39,87 @@ class Discover extends React.Component {
 
   viewSOTW = () => {this.props.history.push('/sotw')}
 
-  render() {
-	  let cookie_id = Cookies.get('id');
+  setCookieOnLogin() {
+    let cookie_id = Cookies.get('id');
 	  console.log('are the cookies already set?', cookie_id);
-	  if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
-		  const params = new URLSearchParams(window.location.search);
-		  let user_id = params.get("id");
-		  console.log('the userid from url params', user_id);
-		  // id is in url
-		  if (user_id) {
-		  	  // so first log in
-			  // store id as a cookie
-			  Cookies.set('id', user_id);
-			  // remove id from url
-			  window.history.replaceState(null, '', '/')
-		  }
-		  else {
-		  	  // either beyond first login or unsuccessful login
-		  	  //shouldn't be here! so safe to redirect
-			  console.log('redirecting since no cookie_id or user_id ');
-			  return (<Redirect to = '/signin'/>);
-		  }
-	  }
-	return (
+    if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
+      const params = new URLSearchParams(window.location.search);
+      let user_id = params.get("id");
+      console.log('the userid from url params', user_id);
+      // id is in url
+      if (user_id) {
+         // so first log in
+        // store id as a cookie
+        Cookies.set('id', user_id);
+
+        // remove id from url
+        window.history.replaceState(null, '', '/')
+      }
+    }
+  }
+
+  createCometChatUser(uid, name) {
+    var user = new CometChat.User(uid);
+    user.setName(name);
+
+    CometChat.createUser(user, config.apiKey).then(
+      user => {
+        console.log("user created", user);
+        this.setState({chatUserData: user});
+      },error => {
+        console.log("error", error);
+      }
+    );
+  }
+
+  logInCometChatUser(uid) {
+    CometChat.login(uid, config.apiKey).then(
+      user => {
+        console.log("Login Successful:", { user });
+      },
+      error => {
+        console.log("Login failed with exception:", { error });
+      }
+    );
+  }
+
+  componentDidMount() {
+    this.setCookieOnLogin();
+    let userId = Cookies.get('id');
+    if (userId && Cookies.get('chatInitialized')) {
+      // Log in to chat
+      ChatApi
+        .getCurrentUser(userId)
+        .then((res) => {
+          this.setState({chatUserData: res.data.data});
+          Cookies.set("loggedIntoChat", true);
+        }).catch((error) => {
+          // If UID not found, need to create chat account for this user
+          let errorCode = error.response.data.error.code;
+          if (errorCode === "ERR_UID_NOT_FOUND") {
+            this.createCometChatUser(userId, this.props.store.user_reducer.name);
+            Cookies.set("loggedIntoChat", true);
+            return;
+          } else {
+            Cookies.set("loggedIntoChat", false);
+            return error;
+          }
+        });
+    }
+
+    if (Cookies.get("loggedIntoChat")) {
+      console.log("Successfully logged user into chat");
+    }
+
+  }
+
+  render() {
+    this.setCookieOnLogin()
+    if (!Cookies.get('id')) {
+      console.log('redirecting since no cookie_id or user_id ');
+      return (<Redirect to = '/signin'/>);
+    }
+	  return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
         	<SubHeader text={"We need a banDi tagline to insert here"}/>
@@ -106,4 +175,11 @@ class Discover extends React.Component {
 
 }
 
-export default Discover;
+//export default Discover;
+
+function mapStateToProps(state) {
+  return {
+    store: state
+  };
+} // end mapStateToProps
+export default connect(mapStateToProps, null)(Discover);

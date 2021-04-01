@@ -1142,6 +1142,11 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
+"@cometchat-pro/chat@2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@cometchat-pro/chat/-/chat-2.3.0.tgz#d54b2db8ace69d375b2aac5c5644e39339f8d8e2"
+  integrity sha512-jXvfsUkv69wnnOk53HeoBO1JECPCzxPrK9Hs9cJfrjhEJscWjKy4PyYb0VmD4o+olxZk81enLbCB5dseYtkosw==
+
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"
   resolved "https://registry.npmjs.org/@csstools/convert-colors/-/convert-colors-1.4.0.tgz"

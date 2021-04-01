@@ -39,6 +39,7 @@ const Header = () => {
           </Navbar.Brand>
             <Nav className="mr-sm-2">
                 <Nav.Link href="#myprofile">My Profile</Nav.Link>
+                <Nav.Link href="#mychats">My Chats</Nav.Link>
             <Nav.Link href="/signin" onClick={handleLogout}>Log Out</Nav.Link>
           </Nav>
         </Navbar>
