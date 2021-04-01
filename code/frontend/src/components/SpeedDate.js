@@ -64,6 +64,17 @@ class SpeedDate extends React.Component {
             this.setState({sdEvents : response.data}));
     }
 
+    func(arr) {
+        var size;
+        if (arr[0] == null) {
+            size = 0;
+        }
+        else{
+            size = arr.length;
+        }
+        return size;
+    }
+
     render() {
         console.log(this.state.sdEvents);
 
@@ -80,7 +91,7 @@ class SpeedDate extends React.Component {
                     <h6 className="card-subtitle">{event.date}</h6>
                     <h6 className="card-subtitle"><a href={event.link}>{event.link}</a></h6>
                     <p className="card-text">Minimum number of participants: {event.minusers}</p>
-                    <p className="card-text">Registered participants: {event.participants.length}</p>
+                    <p className="card-text">Registered participants: {this.func(event.participants)}</p>
                     <Button className="small font-italic" onClick={() => {this.props.history.push('/speeddateevent?view=' + event.id);}}>View More</Button>
                 </div>
                 </Jumbotron>
