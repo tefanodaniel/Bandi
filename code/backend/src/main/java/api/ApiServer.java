@@ -300,8 +300,30 @@ public class ApiServer {
         });
 
         // respond (accept or decline) friend request
-        put("friend/:senderid/:recipientid/:answer", (req, res) -> {
-            return null;
+        delete("friend/:senderid/:recipientid/:action", (req, res) -> {
+            try {
+                String senderID = req.params("senderid");
+                String recipientID = req.params("recipientid");
+                String action = req.params("action");
+
+                FriendRequest fr = null;
+
+                if (action.equals("accept"))  {
+                    fr = requestDao.acceptRequest(senderID, recipientID);
+                } else if (action.equals("decline")) {
+                    fr = requestDao.declineRequest(senderID, recipientID);
+                } else {
+                    throw new ApiError("Invalid action to perform on request", 505);
+                }
+
+                if (fr == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(fr);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
         });
 
         // get the admin status of a musician

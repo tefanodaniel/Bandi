@@ -12,8 +12,8 @@ public interface RequestDao {
 
     FriendRequest read(String senderID, String recipientID) throws DaoException;
 
-    String acceptRequest(String senderID, String recipientID) throws DaoException;
+    FriendRequest acceptRequest(String senderID, String recipientID) throws DaoException;
 
-    String declineRequest(String senderID, String recipientID) throws DaoException;
+    FriendRequest declineRequest(String senderID, String recipientID) throws DaoException;
 
 }

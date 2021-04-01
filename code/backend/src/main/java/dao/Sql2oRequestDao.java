@@ -99,7 +99,7 @@ public class Sql2oRequestDao implements RequestDao {
     }
 
     @Override
-    public String acceptRequest(String senderID, String recipientID) throws DaoException {
+    public FriendRequest acceptRequest(String senderID, String recipientID) throws DaoException {
 
         String makeFriendsSql1 = "INSERT INTO MusicianFriends(id, friendid) VALUES(:senderid, :recipientid);";
         String makeFriendsSql2 = "INSERT INTO MusicianFriends(id, friendid) VALUES(:recipientid, :senderid);";
@@ -112,11 +112,11 @@ public class Sql2oRequestDao implements RequestDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to accept friend request", ex);
         }
-        return recipientID;
+        return new FriendRequest(senderID, recipientID);
     }
 
     @Override
-    public String declineRequest(String senderID, String recipientID) throws DaoException {
+    public FriendRequest declineRequest(String senderID, String recipientID) throws DaoException {
 
         String deleteRequestSql = "DELETE FROM Requests WHERE senderid=:senderid AND recipientid=:recipientid;";
         try (Connection conn = sql2o.open()) {
@@ -124,7 +124,7 @@ public class Sql2oRequestDao implements RequestDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to decline friend request", ex);
         }
-        return recipientID;
+        return new FriendRequest(senderID, recipientID);
     }
 
 }
