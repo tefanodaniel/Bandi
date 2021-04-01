@@ -1,19 +1,15 @@
 package util;
 
 import model.Band;
-import model.Event;
+import model.SpeedDateEvent;
 import model.Musician;
 import org.sql2o.Connection;
-import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.List;
-import java.sql.Statement;
 
 /**
  * A utility class with methods to establish JDBC connection, set schemas, etc.
@@ -39,7 +35,7 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-        createEventTablesWithSampleData(sql2o, DataStore.sampleEvents());
+        createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
     }
 
     /**
@@ -223,12 +219,12 @@ public final class Database {
      * @param samples a list of sample Events
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
-    public static void createEventTablesWithSampleData(Sql2o sql2o, List<Event> samples) throws Sql2oException {
+    public static void createSpeedDateEventsWithSampleData(Sql2o sql2o, List<SpeedDateEvent> samples) throws Sql2oException {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS Events CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS SpeedDateEvents CASCADE;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS Participants;").executeUpdate();
 
-            String sql = "CREATE TABLE IF NOT EXISTS Events("
+            String sql = "CREATE TABLE IF NOT EXISTS SpeedDateEvents("
                     + "id VARCHAR(50) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
                     + "link VARCHAR(50),"
@@ -243,9 +239,9 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String event_sql = "INSERT INTO Events(id, name, link, date, minusers) VALUES(:id, :name, :link, :date, :minusers);";
+            String event_sql = "INSERT INTO SpeedDateEvents(id, name, link, date, minusers) VALUES(:id, :name, :link, :date, :minusers);";
             String participants_sql = "INSERT INTO Participants(participant, event) VALUES(:participant, :event);";
-            for (Event e : samples) {
+            for (SpeedDateEvent e : samples) {
                 conn.createQuery(event_sql)
                         .addParameter("id", e.getId())
                         .addParameter("name", e.getName())

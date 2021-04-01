@@ -3,7 +3,7 @@ package model;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Event {
+public class SpeedDateEvent {
 
     private String id;
     private String name;
@@ -12,13 +12,13 @@ public class Event {
     private int minusers;
     private Set<String> participants;
 
-    public Event(String id, String name) {
+    public SpeedDateEvent(String id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public Event(String id, String name, String link,
-                 String date, int minusers, Set<String> participants) {
+    public SpeedDateEvent(String id, String name, String link,
+                          String date, int minusers, Set<String> participants) {
         this.id = id;
         this.name = name;
         this.link = link;
@@ -80,7 +80,7 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event {" +
+        return "SpeedDateEvent {" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", link='" + link + '\'' +

@@ -1,6 +1,6 @@
 package util;
 
-import model.Event;
+import model.SpeedDateEvent;
 import model.Musician;
 import model.Band;
 
@@ -88,17 +88,17 @@ public final class DataStore {
      *
      * @return a list of sample events.
      */
-    public static List<Event> sampleEvents() {
+    public static List<SpeedDateEvent> sampleSpeedDateEvents() {
 
         Set<String> participants = new HashSet<>();
         participants.add("22zcnk76clvox7mifcwgz3tha");
 
-        Event event1 = new Event(UUID.randomUUID().toString(), "Speed-Dating Part 1",
+        SpeedDateEvent event1 = new SpeedDateEvent(UUID.randomUUID().toString(), "Speed-Dating Part 1",
                 "https://zoom.us/", "April 15, 2021 8-9pm", 4, participants);
-        Event event2 = new Event(UUID.randomUUID().toString(), "Speed-Dating Part 2",
+        SpeedDateEvent event2 = new SpeedDateEvent(UUID.randomUUID().toString(), "Speed-Dating Part 2",
                 "https://zoom.us/", "April 16, 2021 4-5pm", 6, participants);
 
-        List<Event> sample_events = new ArrayList<>();
+        List<SpeedDateEvent> sample_events = new ArrayList<>();
         sample_events.add(event1);
         sample_events.add(event2);
         return sample_events;
