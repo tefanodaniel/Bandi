@@ -39,9 +39,16 @@ public class Sql2oMusicianDao implements MusicianDao {
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
 
-        double[] coordinates = getLatitudeLongitude(zipCode);
-        double latitude = coordinates[0];
-        double longitude = coordinates[1];
+        double latitude;
+        double longitude;
+        if (zipCode.equals("NULL")) {
+            latitude = 0;
+            longitude = 0;
+        } else {
+            double[] coordinates = getLatitudeLongitude(zipCode);
+            latitude = coordinates[0];
+            longitude = coordinates[1];
+        }
 
         try (Connection conn = sql2o.open()) {
             // Insert musician into database
@@ -139,7 +146,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             String name = (String) queryResults.get(0).get("name");
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
-            String zipCode = (String) queryResults.get(0).get("zipCode");
+            String zipCode = (String) queryResults.get(0).get("zipcode");
             boolean admin = (boolean) queryResults.get(0).get("admin");
 
             Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
@@ -215,7 +222,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 if (!key.equals("distance") && !key.equals("id")) {
                     additionalQFlag = true;
                     if (key.equals("admin")) {
-                        filterOn = key + " = " + query.get(key)[0]; // check if need to convert to string
+                        filterOn = key + " = " + query.get(key)[0];
                     } else {
                         // process queries with multiple values for the same query param
                         for (int k = 0; k < query.get(key).length; k++) {
@@ -233,7 +240,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 String key = keyArray[i];
                 if (!key.equals("distance") && !key.equals("id")) {
                     if (key.equals("admin")) {
-                        filterOn = filterOn + " AND " + key + " = " + query.get(key)[0]; // check if need to convert to string
+                        filterOn = filterOn + " AND " + key + " = " + query.get(key)[0];
                     } else {
                         // process queries with multiple values for the same query param
                         for (int k = 0; k < query.get(key).length; k++) {

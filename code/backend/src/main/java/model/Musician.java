@@ -61,16 +61,21 @@ public class Musician extends Client {
     }
 
     private void setLatitudeLongitude(String zipCode) {
-        final String BASE_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude";
-        final String QUERY_PARAMS = "&facet=state&facet=timezone&facet=dst";
-        final String ZIP_CODE = "&q=" + zipCode;
-        String endpoint = BASE_URL + ZIP_CODE + QUERY_PARAMS;
-        JSONObject fields = Unirest.get(endpoint).asJson().getBody().getObject()
-                .getJSONArray("records")
-                .getJSONObject(0)
-                .getJSONObject("fields");
-        this.latitude = fields.getDouble("latitude");
-        this.longitude = fields.getDouble("longitude");
+        if(zipCode == null || zipCode.equals("NULL")) {
+            this.latitude = 0;
+            this.longitude = 0;
+        } else {
+            final String BASE_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude";
+            final String QUERY_PARAMS = "&facet=state&facet=timezone&facet=dst";
+            final String ZIP_CODE = "&q=" + zipCode;
+            String endpoint = BASE_URL + ZIP_CODE + QUERY_PARAMS;
+            JSONObject fields = Unirest.get(endpoint).asJson().getBody().getObject()
+                    .getJSONArray("records")
+                    .getJSONObject(0)
+                    .getJSONObject("fields");
+            this.latitude = fields.getDouble("latitude");
+            this.longitude = fields.getDouble("longitude");
+        }
     }
 
     public boolean getAdmin() {
