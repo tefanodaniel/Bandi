@@ -10,6 +10,7 @@ public class Musician extends Client {
     private String experience;
     private String location;
     private Set<String> profileLinks;
+    private Set<String> friends;
     private boolean admin;
 
     public Musician(String id, String name, Set<String> genres) {
@@ -23,7 +24,8 @@ public class Musician extends Client {
 
     public Musician(String id, String name, Set<String> genres,
                     Set<String> instruments, String experience, String location,
-                    Set<String> profileLinks, boolean isAdmin) {
+                    Set<String> profileLinks, Set<String> friends, boolean isAdmin) {
+
         super(id);
         this.name = name;
         this.genres = genres;
@@ -31,6 +33,7 @@ public class Musician extends Client {
         this.experience = experience;
         this.location = location;
         this.profileLinks = profileLinks;
+        this.friends = friends;
         this.admin = isAdmin;
     }
 
@@ -64,6 +67,7 @@ public class Musician extends Client {
         }
         this.genres.add(genre);
     }
+
 
     public Set<String> getInstruments() {
         return instruments;
@@ -111,6 +115,17 @@ public class Musician extends Client {
         this.profileLinks.add(link);
     }
 
+    public Set<String> getFriends() { return friends; }
+
+    public void setFriends(Set<String> friends) { this.friends = friends; }
+
+    public void addFriend(String friendID) {
+        if (this.friends == null) {
+            this.friends = new HashSet<String>();
+        }
+        this.friends.add(friendID);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -121,12 +136,14 @@ public class Musician extends Client {
                 Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
                 Objects.equals(location, musician.location) &&
+                Objects.equals(friends, musician.friends) &&
                 this.admin == musician.admin;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, genres, instruments, experience, location, admin);
+
+        return Objects.hash(name, genres, instruments, experience, location, friends, admin);
     }
 
     @Override
@@ -137,7 +154,10 @@ public class Musician extends Client {
                 ", instrument='" + instruments.toString() + '\'' +
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
+                ", friends=' " + friends + '\'' +
                 ", admin=' " + admin + '\'' +
                 '}';
     }
+
+
 }

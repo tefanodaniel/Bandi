@@ -20,13 +20,14 @@ public interface MusicianDao {
      * @param instruments The associated instruments
      * @param experience Self-declared level of expertise
      * @param location The location of a musician.
+     * @param friends The musician ids of this musician's friends.
      * @param admin flag for if musician is an admin or not.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
     Musician create(String id, String name, Set<String> genres,
                     Set<String> instruments, String experience, String location,
-                    Set<String> profileLinks, boolean admin) throws DaoException;
+                    Set<String> profileLinks, Set<String> friends, boolean admin) throws DaoException;
 
     /**
      * Create a Musician.
@@ -65,7 +66,6 @@ public interface MusicianDao {
      */
     List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
-
     /**
      * Update the name of a Musicians provided the id.
      *
@@ -87,6 +87,8 @@ public interface MusicianDao {
     Musician updateAdmin(String id, boolean admin) throws DaoException;
 
     Musician updateProfileLinks(String id, Set<String> links) throws DaoException;
+
+    // TODO: add function for adding friends
 
     /**
      * Delete a Musician provided its offeringName.
