@@ -59,13 +59,20 @@ class Sql2oMusicianDaoTest {
         Set<String> instruments3 = new HashSet<String>(Arrays.asList("Saxophone"));
         Set<String> profileLinks = new HashSet<String>();
 
+        // Create lists of friends for the test musicians
+        Set<String> davidFriends = new HashSet<String>(Arrays.asList());
+        Set<String> ericFriends = new HashSet<String>(Arrays.asList("00001fakeid"));
+        Set<String> kennyFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid"));
+        Set<String> rogerFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid"));
+        Set<String> nickFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid", "00004fakeid"));
+
         samples = new ArrayList<>();
-        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1,
-                "Expert", profileLinks, "WNY, NJ", "07093", false));
-        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2,
-                "Expert",profileLinks, "Edgewater, NJ", "07020", false));
-        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3,
-                "Expert", profileLinks, "San Diego, CA", "92168", false));
+        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert",
+                profileLinks, "WNY, NJ", "07093", davidFriends, false));
+        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert",
+                profileLinks, "Edgewater, NJ", "07020", ericFriends,false));
+        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert",
+                profileLinks, "San Diego, CA", "92168",kennyFriends, false));
     }
 
 
@@ -160,8 +167,9 @@ class Sql2oMusicianDaoTest {
         Set<String> genres = new HashSet<String>(Arrays.asList("Pop"));
         Set<String> instruments = new HashSet<String>(Arrays.asList("Vocals"));
         Set<String> profileLinks = new HashSet<String>();
+        Set<String> gagaFriends = new HashSet<String>(Arrays.asList("00001fakeid"));
         Musician m1 = new Musician("fakeid5","Lady Gaga", genres, instruments,
-                "Expert", profileLinks, "Honolulu, HI", "96816", false);
+                "Expert", profileLinks, "Honolulu, HI", "96816", gagaFriends, false);
 //        Musician m2 = musicianDao.create(m1.getId(), m1.getName(), m1.getGenres(), m1.getInstruments(),
 //                m1.getExperience(), m1.getLocation(), m1.getZipCode(), m1.getLatitude(), m1.getLongitude());
 //        assertEquals(m1, m2);

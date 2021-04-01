@@ -17,6 +17,7 @@ public class Musician extends Client {
     private double latitude;
     private double longitude;
     private double distance;
+    private Set<String> friends;
     private boolean admin;
 
     public Musician(String id, String name, Set<String> genres) {
@@ -30,7 +31,7 @@ public class Musician extends Client {
 
     public Musician(String id, String name, Set<String> genres, Set<String> instruments,
                     String experience, Set<String> profileLinks, String location,
-                    String zipCode, boolean isAdmin) {
+                    String zipCode, Set<String> friends, boolean isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -41,12 +42,13 @@ public class Musician extends Client {
         this.location = location;
         setLatitudeLongitude(zipCode);
         this.distance = 9999;
+        this.friends = friends;
         this.admin = isAdmin;
     }
 
     public Musician(String id, String name, Set<String> genres, Set<String> instruments,
                     String experience, Set<String> profileLinks, String location,
-                    String zipCode, double distance, boolean isAdmin) {
+                    String zipCode, double distance, Set<String> friends, boolean isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -57,6 +59,7 @@ public class Musician extends Client {
         this.location = location;
         setLatitudeLongitude(zipCode);
         this.distance = distance;
+        this.friends = friends;
         this.admin = isAdmin;
     }
 
@@ -108,6 +111,7 @@ public class Musician extends Client {
         }
         this.genres.add(genre);
     }
+
 
     public Set<String> getInstruments() {
         return instruments;
@@ -175,6 +179,17 @@ public class Musician extends Client {
         return distance;
     }
 
+    public Set<String> getFriends() { return friends; }
+
+    public void setFriends(Set<String> friends) { this.friends = friends; }
+
+    public void addFriend(String friendID) {
+        if (this.friends == null) {
+            this.friends = new HashSet<String>();
+        }
+        this.friends.add(friendID);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -185,12 +200,13 @@ public class Musician extends Client {
                 Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
                 Objects.equals(location, musician.location) &&
+                Objects.equals(friends, musician.friends) &&
                 this.admin == musician.admin;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, genres, instruments, experience, location, zipCode, admin);
+        return Objects.hash(name, genres, instruments, experience, location, zipCode, friends, admin);
     }
 
     @Override
@@ -203,7 +219,10 @@ public class Musician extends Client {
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
                 ", distance=' " + distance + '\'' +
+                ", friends=' " + friends + '\'' +
                 ", admin=' " + admin + '\'' +
                 '}';
     }
+
+
 }

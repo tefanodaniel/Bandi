@@ -5,6 +5,7 @@ import exceptions.ApiError;
 import exceptions.DaoException;
 import kong.unirest.json.JSONObject;
 import model.Band;
+import model.FriendRequest;
 import spark.QueryParamsMap;
 import spark.Spark;
 import util.Database;
@@ -59,6 +60,7 @@ public class ApiServer {
         staticFiles.location("/public");
         MusicianDao musicianDao = getMusicianDao();
         BandDao bandDao = getBandDao();
+        RequestDao requestDao = getRequestDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
@@ -191,6 +193,7 @@ public class ApiServer {
                 String location = musician.getLocation();
                 String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
+                Set<String> friends = musician.getFriends();
                 boolean admin = musician.getAdmin();
 
                 if (instruments == null) { instruments = new HashSet<String>(); }
@@ -199,10 +202,9 @@ public class ApiServer {
                 if (location == null) { location = "NULL"; }
                 if (zipCode == null) { zipCode = "NULL"; }
                 if (profileLinks == null) { profileLinks = new HashSet<String>(); }
-
+                if (friends == null) { friends = new HashSet<String>(); }
                 musicianDao.create(musician.getId(), musician.getName(), genres,
-                        instruments, experience, location, zipCode, profileLinks, admin);
-
+                        instruments, experience, location, zipCode, profileLinks, friends, admin);
                 res.status(201);
                 return gson.toJson(musician);
             } catch (DaoException ex) {
@@ -232,6 +234,8 @@ public class ApiServer {
                 String location = musician.getLocation();
                 String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
+                // TODO: add updateFriends method
+                Set<String> friends = musician.getFriends();
                 // no check for admin flag. We don't want to change admin on and off,
                 // and since ints default to 0, we might accidentally take admin
                 // permissions away.
@@ -261,8 +265,7 @@ public class ApiServer {
                     musician = musicianDao.updateProfileLinks(id, profileLinks);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
-                }
-                if (musician == null) {
+                } if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
 
@@ -282,6 +285,61 @@ public class ApiServer {
                 }
                 res.type("application/json");
                 return gson.toJson(musician);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // get all of user's pending friend requests
+        get("/friend/:senderid", (req, res) -> {
+            try {
+                String senderID = req.params("senderid");
+                List<FriendRequest> requests = requestDao.readAllFrom(senderID);
+                res.type("application/json");
+                return gson.toJson(requests);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // send friend request
+        post("/friend/:senderid/:recipientid", (req, res) -> {
+            try {
+                String senderID = req.params("senderid");
+                String recipientID = req.params("recipientid");
+                FriendRequest fr = requestDao.createRequest(senderID, recipientID);
+                if (fr == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(fr);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // respond (accept or decline) friend request
+        delete("friend/:senderid/:recipientid/:action", (req, res) -> {
+            try {
+                String senderID = req.params("senderid");
+                String recipientID = req.params("recipientid");
+                String action = req.params("action");
+
+                FriendRequest fr = null;
+
+                if (action.equals("accept"))  {
+                    fr = requestDao.acceptRequest(senderID, recipientID);
+                } else if (action.equals("decline")) {
+                    fr = requestDao.declineRequest(senderID, recipientID);
+                } else {
+                    throw new ApiError("Invalid action to perform on request", 505);
+                }
+
+                if (fr == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(fr);
             } catch (DaoException ex) {
                 throw new ApiError(ex.getMessage(), 500);
             }
@@ -427,6 +485,9 @@ public class ApiServer {
             }
         });
 
+        // sent friend request from user to user
+
+
         // options request to allow for CORS
         options("/*", (req, res) -> {
             String headers = req.headers("Access-Control-Request-Headers");
@@ -460,6 +521,11 @@ public class ApiServer {
     private static BandDao getBandDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oBandDao(sql2o);
+    }
+
+    private static RequestDao getRequestDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oRequestDao(sql2o);
     }
 
     /**

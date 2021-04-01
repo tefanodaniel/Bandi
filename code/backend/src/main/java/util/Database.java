@@ -1,6 +1,7 @@
 package util;
 
 import model.Band;
+import model.FriendRequest;
 import model.Musician;
 import org.sql2o.Connection;
 import org.sql2o.Query;
@@ -38,6 +39,7 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
+        createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
     }
 
     /**
@@ -73,6 +75,7 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS Instruments;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS MusicianGenres;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS ProfileAVLinks;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS MusicianFriends;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
                     + "id VARCHAR(30) PRIMARY KEY,"
@@ -105,13 +108,20 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
-                                                        "zipCode, latitude, longitude, distance, admin)" +
-                                  " VALUES(:id, :name, :experience, :location, " +
-                                            ":zipCode, :latitude, :longitude, :distance, :admin);";
+            sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "friendID VARCHAR(30) REFERENCES Musicians"
+                    + ");";
 
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
+                    "zipCode, latitude, longitude, distance, admin)" +
+                    " VALUES(:id, :name, :experience, :location, " +
+                    ":zipCode, :latitude, :longitude, :distance, :admin);";
+
+            conn.createQuery(sql).executeUpdate();
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
+            String friend_sql = "INSERT INTO MusicianFriends(id, friendID) VALUES(:id, :friendID);";
             String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";
 
             for (Musician m : samples) {
@@ -134,12 +144,46 @@ public final class Database {
                             .executeUpdate();
                 }
 
+                // Insert all friends for this musician
+                for (String friendID : m.getFriends()) {
+                    conn.createQuery(friend_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("friendID", friendID)
+                            .executeUpdate();
+                }
+
                 for (String link : m.getProfileLinks()) {
                     conn.createQuery(link_sql)
                             .addParameter("id", m.getId())
                             .addParameter("link", link)
                             .executeUpdate();
                 }
+            }
+
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+    public static void createRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS Requests;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS Requests("
+                    + "senderid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
+                    + ");";
+
+            conn.createQuery(sql).executeUpdate();
+
+            String requestSql = "INSERT INTO Requests(senderid, recipientid) VALUES (:senderid, :recipientid);";
+
+            for (FriendRequest fr : samples) {
+                conn.createQuery(requestSql)
+                        .addParameter("senderid", fr.getSenderID())
+                        .addParameter("recipientid", fr.getRecipientID())
+                        .executeUpdate();
             }
 
         } catch (Sql2oException ex) {
