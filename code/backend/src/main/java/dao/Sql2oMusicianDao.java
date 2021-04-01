@@ -193,6 +193,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             Functions properly for single value search query parameters (genre: "blues", distance: "20").
          */
         try (Connection conn = sql2o.open()) {
+            // Ensure that the user performing the advanced search provided their user ID
             String[] sourceIDArray = query.get("id");
             String sourceID;
             if (sourceIDArray != null) {
@@ -207,28 +208,31 @@ public class Sql2oMusicianDao implements MusicianDao {
             boolean additionalQFlag = false;
             String distFilter = "";
 
-            // perform distance filter
+            // If advanced search includes distance, apply this filter first.
             if (keys.contains("distance")) {
                 distFilter = filterByDistance(query, conn);
                 distFlag = true;
             }
 
-            // process additional filters
+            // Process search query parameters that are not distance and id.
             String[] keyArray = keys.toArray(new String[keys.size()]);
             String filterOn = "";
+            // Locate first query parameter that is not distance or id:
             int firstKeyIndex;
             for (firstKeyIndex = 0; firstKeyIndex < keyArray.length; firstKeyIndex++) {
                 String key = keyArray[firstKeyIndex];
                 if (!key.equals("distance") && !key.equals("id")) {
                     additionalQFlag = true;
                     if (key.equals("admin")) {
+                        // Create SQL query expression for admin boolean:
                         filterOn = key + " = " + query.get(key)[0];
                     } else {
-                        // process queries with multiple values for the same query param
+                        // Create SQL query expression for String attributes:
                         for (int k = 0; k < query.get(key).length; k++) {
                             if (k == 0) {
                                 filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
                             } else {
+                                // Process queries with multiple values for the same query param:
                                 filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
                             }
                         }
@@ -236,14 +240,17 @@ public class Sql2oMusicianDao implements MusicianDao {
                     break;
                 }
             }
+            // Process remaining search query parameters that are not distance or id:
             for (int i=firstKeyIndex+1; i < keyArray.length; i++) {
                 String key = keyArray[i];
                 if (!key.equals("distance") && !key.equals("id")) {
                     if (key.equals("admin")) {
+                        // Append SQL query expression for admin boolean:
                         filterOn = filterOn + " AND " + key + " = " + query.get(key)[0];
                     } else {
-                        // process queries with multiple values for the same query param
+                        // Append SQL query expression for String attributes:
                         for (int k = 0; k < query.get(key).length; k++) {
+                            // process queries with multiple values for the same query param
                             filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
                         }
                     }
@@ -251,6 +258,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             }
 
             String filterSQL;
+            // Create final SQL query expression based on advanced search query parameters:
             if(distFlag && additionalQFlag) {
                 filterSQL = distFilter + " AND " + filterOn + " ORDER BY distance;";
             }
@@ -517,6 +525,19 @@ public class Sql2oMusicianDao implements MusicianDao {
         return new ArrayList<Musician>(musicians.values());
     }
 
+    private List<Musician> getCorrespondingMusicians(Connection conn, String filterSQL, String resultSQL) {
+        List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn);
+        for (int i=0; i < partialMusicians.size(); i++) {
+            if (i == partialMusicians.size() - 1) {
+                resultSQL += "'" + partialMusicians.get(i).getId() + "');";
+            } else {
+                resultSQL += "'" + partialMusicians.get(i).getId() + "', ";
+            }
+        }
+
+        return this.extractMusiciansFromDatabase(resultSQL, conn);
+    }
+
     /**
      * Query the database and calculate all distances from the starting point.
      * @param startID The starting point to calculate distances from
@@ -556,19 +577,6 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "WHERE distance <=" + miles ;
 
         return distFilter;
-    }
-
-    private List<Musician> getCorrespondingMusicians(Connection conn, String filterSQL, String resultSQL) {
-        List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn);
-        for (int i=0; i < partialMusicians.size(); i++) {
-            if (i == partialMusicians.size() - 1) {
-                resultSQL += "'" + partialMusicians.get(i).getId() + "');";
-            } else {
-                resultSQL += "'" + partialMusicians.get(i).getId() + "', ";
-            }
-        }
-
-        return this.extractMusiciansFromDatabase(resultSQL, conn);
     }
 
     private void addDefaultDistances(Connection conn) throws DaoException {
