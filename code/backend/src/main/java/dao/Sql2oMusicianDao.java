@@ -138,6 +138,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                 "LEFT JOIN profileavlinks as L ON R.MID=L.id;";
         try (Connection conn = sql2o.open()) {
+            addDefaultDistances(conn); // this will prevent a null distance val
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
             return musicians;
         } catch (Sql2oException ex) {
@@ -146,13 +147,22 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     @Override
-    public List<Musician> readAll(Map<String, String[]> query) throws DaoException {
+    public List<Musician> readAll(Map<String, String[]> query) throws DaoException, ApiError {
         // TODO: re-implement? Yes -- DONE FOR NOW. See comment below.
         /* TODO Note that this method creates sql queries for search queries with parameters of multiple values
             (genre: "jazz", "blues"), but throws SQL Dao exception. Need to edit to properly handle this case.
             Functions properly for single value search query parameters (genre: "blues", distance: "20").
          */
         try (Connection conn = sql2o.open()) {
+            String[] sourceIDArray = query.get("id");
+            String sourceID;
+            if (sourceIDArray != null) {
+                sourceID = sourceIDArray[0];
+            }
+            else {
+                throw new ApiError("Must provide user ID performing the search", 500);
+            }
+
             Set<String> keys = query.keySet();
             boolean distFlag = false;
             boolean additionalQFlag = false;
@@ -187,7 +197,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 String key = keyArray[i];
                 if (!key.equals("distance") && !key.equals("id")) {
                     // process queries with multiple values for the same query param
-                    for (int k = 0; i < query.get(key).length; i++) {
+                    for (int k = 0; k < query.get(key).length; k++) {
                         filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
                     }
                 }
@@ -200,16 +210,17 @@ public class Sql2oMusicianDao implements MusicianDao {
             else if (distFlag && !additionalQFlag){
                 filterSQL = distFilter + " ORDER BY distance;";
             }
-             else {
-                filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM MTest as m) as R\n" +
-                        "LEFT JOIN InstrTest as I ON R.MID=I.id\n" +
-                        "LEFT JOIN MGenresTest as G ON R.MID=G.id\n" +
-                        "WHERE " + filterOn + ";";
+            else {
+                addDefaultDistances(conn);
+                filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                        "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                        "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                        "WHERE " + filterOn + " AND R.MID <> '" + sourceID + "';";
             }
-            String resultSQL = "SELECT * FROM (SELECT m.id as MID, * FROM MTest as m) as R\n" +
-                    "LEFT JOIN InstrTest as I ON R.MID=I.id\n" +
-                    "LEFT JOIN MGenresTest as G ON R.MID=G.id\n" +
-                    "LEFT JOIN ProfileAVLinksTest as L ON R.MID=L.id\n" +
+            String resultSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                    "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                    "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                    "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
                     "WHERE R.MID IN (";
 
             return getCorrespondingMusicians(conn, filterSQL, resultSQL);
@@ -409,9 +420,7 @@ public class Sql2oMusicianDao implements MusicianDao {
      */
     private List<Musician> extractMusiciansFromDatabase(String sql, Connection conn) throws Sql2oException {
         List<Map<String, Object>> queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
-        // create global attribute list
-        // separate list for list attrib
-        // one for non lists
+
         HashSet<String> alreadyAdded = new HashSet<String>();
         Map<String, Musician> musicians = new HashMap<String, Musician>();
         for (Map row : queryResults) {
@@ -452,12 +461,12 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "  ll_to_earth(m.latitude, m.longitude)," +
                 "  ll_to_earth(startPoint.latitude, startPoint.longitude)) " +
                 " / 1609.344 AS newDistance " +
-                "FROM MTest AS m, " +
-                "LATERAL (SELECT id, latitude, longitude FROM MTest " +
+                "FROM musicians AS m, " +
+                "LATERAL (SELECT id, latitude, longitude FROM musicians " +
                 "WHERE id = '" + startID + "') AS startPoint " +
                 "WHERE m.id <> startPoint.id) " +
-                "UPDATE MTest SET distance = (SELECT d.newDistance " +
-                "FROM allDistances AS d WHERE MTest.id = d.MID)" +
+                "UPDATE musicians SET distance = (SELECT d.newDistance " +
+                "FROM allDistances AS d WHERE musicians.id = d.MID)" +
                 ";";
 
         conn.createQuery(calculateDist).executeUpdate();
@@ -467,24 +476,16 @@ public class Sql2oMusicianDao implements MusicianDao {
      * Query the database and return the SQL query to filter musicians by distance.
      * @param query The map of search parameters
      * @param conn The SQL connection
-     * @throws ApiError if sourceID is missing
      */
-    private String filterByDistance(Map<String, String[]> query, Connection conn) throws ApiError {
+    private String filterByDistance(Map<String, String[]> query, Connection conn) {
         String miles = query.get("distance")[0];
-        String[] sourceIDArray = query.get("id");
-        String sourceID;
-        if (sourceIDArray != null) {
-            sourceID = sourceIDArray[0];
-        }
-        else {
-            throw new ApiError("missing source ID to calculate distance from", 500);
-        }
+        String sourceID = query.get("id")[0];
 
         calculateDistances(sourceID, conn);
 
-        String distFilter = "SELECT * FROM (SELECT m.id as MID, * FROM MTest as m) as R\n" +
-                "LEFT JOIN InstrTest as I ON R.MID=I.id\n" +
-                "LEFT JOIN MGenresTest as G ON R.MID=G.id\n" +
+        String distFilter = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                 "WHERE distance <=" + miles ;
 
         return distFilter;
@@ -501,5 +502,10 @@ public class Sql2oMusicianDao implements MusicianDao {
         }
 
         return this.extractMusiciansFromDatabase(resultSQL, conn);
+    }
+
+    private void addDefaultDistances(Connection conn) throws DaoException {
+        String sql = "UPDATE Musicians SET distance = 9999";
+        conn.createQuery(sql).executeUpdate();
     }
 }

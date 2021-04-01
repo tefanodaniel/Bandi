@@ -28,7 +28,7 @@ class ApiServerTest {
 
     @AfterAll
     static void stopApiServer() {
-        //ApiServer.stop();
+        ApiServer.stop();
     }
 
     @Test

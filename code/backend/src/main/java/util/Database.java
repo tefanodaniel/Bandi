@@ -79,7 +79,11 @@ public final class Database {
                     + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
                     + "experience VARCHAR(30),"
-                    + "location VARCHAR(30)"
+                    + "location VARCHAR(30),"
+                    + "zipCode VARCHAR(10),"
+                    + "latitude DOUBLE PRECISION,"
+                    + "longitude DOUBLE PRECISION,"
+                    + "distance DOUBLE PRECISION DEFAULT 9999.0"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
@@ -101,7 +105,10 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String musician_sql = "INSERT INTO Musicians(id, name, experience, location) VALUES(:id, :name, :experience, :location);";
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
+                                                        "zipCode, latitude, longitude, distance)" +
+                                " VALUES(:id, :name, :experience, :location, :zipCode, " +
+                                        ":latitude, :longitude, :distance);";
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
             String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";

@@ -6,6 +6,7 @@ import exceptions.DaoException;
 import kong.unirest.json.JSONObject;
 import model.Band;
 import spark.QueryParamsMap;
+import spark.Spark;
 import util.Database;
 import util.DataStore;
 import com.google.gson.JsonSyntaxException;
@@ -403,13 +404,20 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-        List<Musician> musicians = DataStore.sampleMusicians();
-        Database.createMusicianTablesWithSampleData(sql2o, musicians);
+//        List<Musician> musicians = DataStore.sampleMusicians();
+//        Database.createMusicianTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 
     private static BandDao getBandDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oBandDao(sql2o);
+    }
+
+    /**
+     * Stop the server.
+     */
+    public static void stop() {
+        Spark.stop();
     }
 }
