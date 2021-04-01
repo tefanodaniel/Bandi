@@ -51,10 +51,7 @@ public final class Database {
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
     public static Sql2o getSql2o() throws URISyntaxException, Sql2oException {
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (USE_TEST_DATABASE) {
-            databaseUrl = System.getenv("TEST_DATABASE_URL");
-        }
+        String databaseUrl = getDatabaseUrl();
         URI dbUri = new URI(databaseUrl);
 
         String username = dbUri.getUserInfo().split(":")[0];
@@ -85,6 +82,10 @@ public final class Database {
                     + "name VARCHAR(30) NOT NULL,"
                     + "experience VARCHAR(30),"
                     + "location VARCHAR(30),"
+                    + "zipCode VARCHAR(10),"
+                    + "latitude DOUBLE PRECISION,"
+                    + "longitude DOUBLE PRECISION,"
+                    + "distance DOUBLE PRECISION DEFAULT 9999.0,"
                     + "admin boolean"
                     + ");";
             conn.createQuery(sql).executeUpdate();
@@ -111,9 +112,13 @@ public final class Database {
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
                     + "friendID VARCHAR(30) REFERENCES Musicians"
                     + ");";
-            conn.createQuery(sql).executeUpdate();
 
-            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, :experience, :location, :admin);";
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
+                    "zipCode, latitude, longitude, distance, admin)" +
+                    " VALUES(:id, :name, :experience, :location, " +
+                    ":zipCode, :latitude, :longitude, :distance, :admin);";
+
+            conn.createQuery(sql).executeUpdate();
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
             String friend_sql = "INSERT INTO MusicianFriends(id, friendID) VALUES(:id, :friendID);";

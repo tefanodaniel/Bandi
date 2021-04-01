@@ -40,26 +40,24 @@ public final class DataStore {
         Set<String> nickFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid", "00004fakeid"));
 
         List<Musician> samples = new ArrayList<>();
-
-        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert", "England",
-                                        profileLinks, davidFriends, false));
-        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert", "England",
-                                        profileLinks, ericFriends, false));
-        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert", "Seattle",
-                                        profileLinks, kennyFriends, false));
-        samples.add(new Musician("00004fakeid","Roger Waters", genres1, instruments2, "Expert", "England",
-                                        profileLinks, rogerFriends, false));
-        samples.add(new Musician("00005fakeid","Nick Mason", genres1, instruments4, "Expert", "England",
-                                        profileLinks, nickFriends, false));
+        samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert",
+                profileLinks, "WNY, NJ", "07093", davidFriends, false));
+        samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert",
+                profileLinks, "Edgewater, NJ", "07020", ericFriends,false));
+        samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert",
+                profileLinks, "San Diego, CA", "92168",kennyFriends, false));
+        samples.add(new Musician("00004fakeid","Roger Waters", genres1, instruments2, "Expert",
+                profileLinks, "Grand Prairie, TX", "75050", rogerFriends, false));
+        samples.add(new Musician("00005fakeid","Nick Mason", genres1, instruments4, "Expert",
+                                        profileLinks,"Cambridge, MA", "02138", nickFriends, false));
 
         // Adding my own account for testing
         Set<String> maxLinks = new HashSet<String>();
         maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
-        samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres",
-                genres2, instruments2, "Expert", "Freehold, NJ", maxLinks, kennyFriends, true)); // Max and Kenny G are best friends
-
-        samples.add(new Musician("thegreatbelow1","Stefano Tusa",
-                genres2, instruments2, "Intermediate", "Orlando, FL", new HashSet<String>(), kennyFriends, true)); // Max, Kenny G, and I are all best friends.
+        samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres", genres2, instruments2, "Expert",
+                maxLinks, "Freehold, NJ", "07728",  kennyFriends,true)); // Max and Kenny G are best friends
+        samples.add(new Musician("thegreatbelow1","Stefano Tusa", genres2, instruments2, "Intermediate",
+                new HashSet<String>(),  "Orlando, FL", "32825", kennyFriends, true)); // Max, Kenny G, and I are all best friends.
 
         return samples;
     }

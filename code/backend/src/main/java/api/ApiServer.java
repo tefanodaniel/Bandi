@@ -7,6 +7,7 @@ import kong.unirest.json.JSONObject;
 import model.Band;
 import model.FriendRequest;
 import spark.QueryParamsMap;
+import spark.Spark;
 import util.Database;
 import util.DataStore;
 import com.google.gson.JsonSyntaxException;
@@ -186,11 +187,11 @@ public class ApiServer {
         post("/musicians", (req, res) -> {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
-                //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
                 Set<String> instruments = musician.getInstruments();
                 Set<String> genres = musician.getGenres();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
                 Set<String> friends = musician.getFriends();
                 boolean admin = musician.getAdmin();
@@ -199,10 +200,11 @@ public class ApiServer {
                 if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
+                if (zipCode == null) { zipCode = "NULL"; }
                 if (profileLinks == null) { profileLinks = new HashSet<String>(); }
                 if (friends == null) { friends = new HashSet<String>(); }
                 musicianDao.create(musician.getId(), musician.getName(), genres,
-                        instruments, experience, location, profileLinks, friends, admin);
+                        instruments, experience, location, zipCode, profileLinks, friends, admin);
                 res.status(201);
                 return gson.toJson(musician);
             } catch (DaoException ex) {
@@ -230,7 +232,9 @@ public class ApiServer {
                 Set<String> instruments = musician.getInstruments();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
+                // TODO: add updateFriends method
                 Set<String> friends = musician.getFriends();
                 // no check for admin flag. We don't want to change admin on and off,
                 // and since ints default to 0, we might accidentally take admin
@@ -253,6 +257,9 @@ public class ApiServer {
                 } if (location != null) {
                     flag = true;
                     musician = musicianDao.updateLocation(id, location);
+                } if (zipCode != null) {
+                    flag = true;
+                    musician = musicianDao.updateZipCode(id, zipCode);
                 } if (profileLinks != null) {
                     flag = true;
                     musician = musicianDao.updateProfileLinks(id, profileLinks);
@@ -506,6 +513,8 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
+//        List<Musician> musicians = DataStore.sampleMusicians();
+//        Database.createMusicianTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 
@@ -517,5 +526,12 @@ public class ApiServer {
     private static RequestDao getRequestDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oRequestDao(sql2o);
+    }
+
+    /**
+     * Stop the server.
+     */
+    public static void stop() {
+        Spark.stop();
     }
 }
