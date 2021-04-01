@@ -369,7 +369,7 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateZipCode(String id, String zipCode) throws DaoException {
-        // TODO: re-implement? Add to ApiServer
+        // TODO: re-implement? DONE, also updates latitude and longitude using new zip code
         double[] coordinates = getLatitudeLongitude(zipCode);
         double latitude = coordinates[0];
         double longitude = coordinates[1];
