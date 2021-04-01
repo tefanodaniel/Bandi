@@ -295,6 +295,27 @@ public class Sql2oMusicianDao implements MusicianDao {
                     "LEFT JOIN musicianfriends as F ON R.MID=F.id\n" +
                     "WHERE R.mid IN (";
 
+            // Example final filterSQL queries:
+            // case: distFlag && additionalQFlag
+            // filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+            //                "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+            //                "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+            //                "WHERE distance <=" 5000 AND UPPER(genre) LIKE '%ROCK%' AND UPPER(experience) " +
+            //                "LIKE '%EXPERT%' AND admin = false ORDER BY distance;";
+            //
+            // case: distFlag && !additionalQFlag
+            // filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+            //                "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+            //                "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+            //                "WHERE distance <=" 5000 ORDER BY distance;";
+            //
+            // case: no distance advanced search query
+            // filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+            //                        "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+            //                        "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+            //                        "WHERE UPPER(genre) LIKE '%ROCK%' AND UPPER(experience) LIKE '%EXPERT%'" +
+            //                        " AND admin = false AND R.MID <> '00001fakeid';";
+
             return getCorrespondingMusicians(conn, filterSQL, resultSQL);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from the database by filters", ex);
