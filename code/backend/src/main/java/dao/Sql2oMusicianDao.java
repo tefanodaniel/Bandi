@@ -1,6 +1,8 @@
 package dao;
 
 import exceptions.ApiError;
+import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
 import model.Musician;
 import exceptions.DaoException;
 
@@ -28,12 +30,19 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician create(String id, String name, Set<String> genres, Set<String> instruments,
-                           String experience, String location, Set<String> profileLinks) throws DaoException {
-        // TODO: re-implement? Yes -- DONE
-        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location) VALUES (:id, :name, :experience, :location)";
+                           String experience, String location, String zipCode,
+                           Set<String> profileLinks, boolean admin) throws DaoException {
+        // TODO: re-implement? DONE
+        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, zipCode, latitude, longitude, admin) " +
+                             "VALUES (:id, :name, :experience, :location, :zipCode, :latitude, :longitude, :admin)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
+
+        double[] coordinates = getLatitudeLongitude(zipCode);
+        double latitude = coordinates[0];
+        double longitude = coordinates[1];
+
         try (Connection conn = sql2o.open()) {
             // Insert musician into database
             conn.createQuery(musicianSQL)
@@ -41,6 +50,10 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .addParameter("name", name)
                     .addParameter("experience", experience)
                     .addParameter("location", location)
+                    .addParameter("zipCode", zipCode)
+                    .addParameter("latitude", latitude)
+                    .addParameter("longitude", longitude)
+                    .addParameter("admin", admin)
                     .executeUpdate();
 
             // Insert corresponding genres into database
@@ -74,18 +87,30 @@ public class Sql2oMusicianDao implements MusicianDao {
         }
     }
 
+    private double[] getLatitudeLongitude(String zipCode) {
+        final String BASE_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude";
+        final String QUERY_PARAMS = "&facet=state&facet=timezone&facet=dst";
+        final String ZIP_CODE = "&q=" + zipCode;
+        String endpoint = BASE_URL + ZIP_CODE + QUERY_PARAMS;
+        JSONObject fields = Unirest.get(endpoint).asJson().getBody().getObject()
+                .getJSONArray("records")
+                .getJSONObject(0)
+                .getJSONObject("fields");
+        double latitude = fields.getDouble("latitude");
+        double longitude = fields.getDouble("longitude");
+        return new double[]{latitude, longitude};
+    }
+
     @Override
     public Musician create(String id, String name) throws DaoException {
-        // TODO: re-implement? I don't think so
-        String sql = "WITH inserted AS ("
-                + "INSERT INTO Musicians(id, name) " +
-                "VALUES(:id, :name) RETURNING *"
-                + ") SELECT * FROM inserted;";
+        // TODO: re-implement? DONE
+        String sql = "INSERT INTO Musicians(id, name, experience, location, zipCode, latitude, longitude, admin) " +
+                     "VALUES(:id, :name, 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', FALSE);";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    .addParameter("name", name)
-                    .executeAndFetchFirst(Musician.class);
+            conn.createQuery(sql).addParameter("id", id)
+                                 .addParameter("name", name)
+                                 .executeUpdate();
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
@@ -115,15 +140,22 @@ public class Sql2oMusicianDao implements MusicianDao {
             String exp = (String) queryResults.get(0).get("experience");
             String loc = (String) queryResults.get(0).get("location");
             String zipCode = (String) queryResults.get(0).get("zipCode");
+            boolean admin = (boolean) queryResults.get(0).get("admin");
 
             Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
-                    exp, new HashSet<String>(), loc, zipCode);
-            for (Map row : queryResults) {
-                m.addGenre((String) row.get("genre"));
-                m.addInstrument((String) row.get("instrument"));
-                m.addProfileLink((String) row.get("link"));
-            }
+                    exp, new HashSet<String>(), loc, zipCode, admin);
 
+            for (Map row : queryResults) {
+                if (row.get("genre") != null) {
+                    m.addGenre((String) row.get("genre"));
+                }
+                if (row.get("instrument") != null) {
+                    m.addInstrument((String) row.get("instrument"));
+                }
+                if (row.get("link") != null) {
+                    m.addProfileLink((String) row.get("link"));
+                }
+            }
             return m;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read a musician with id " + id, ex);
@@ -231,15 +263,11 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateName(String id, String name) throws DaoException {
-        // TODO: re-implement? No -- DONE
-        String sql = "WITH updated AS ("
-                + "UPDATE Musicians SET name = :name WHERE id = :id RETURNING *"
-                + ") SELECT * FROM updated;";
+        // TODO: re-implement? Yes -- DONE
+        String sql = "UPDATE Musicians SET name=:name WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    .addParameter("name", name)
-                    .executeAndFetchFirst(Musician.class);
+            conn.createQuery(sql).addParameter("id", id).addParameter("name", name).executeUpdate();
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician name", ex);
         }
@@ -317,15 +345,11 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateExperience(String id, String experience) throws DaoException {
-        // TODO: re-implement? No -- DONE
-        String sql = "WITH updated AS ("
-                + "UPDATE Musicians SET experience = :experience WHERE id = :id RETURNING *"
-                + ") SELECT * FROM updated;";
+        // TODO: re-implement? Yes -- DONE
+        String sql = "UPDATE Musicians SET experience=:experience WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    .addParameter("experience", experience)
-                    .executeAndFetchFirst(Musician.class);
+            conn.createQuery(sql).addParameter("id", id).addParameter("experience", experience).executeUpdate();
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician experience", ex);
         }
@@ -333,17 +357,44 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public Musician updateLocation(String id, String location) throws DaoException {
-        // TODO: re-implement? No -- DONE
-        String sql = "WITH updated AS ("
-                + "UPDATE Musicians SET location = :location WHERE id = :id RETURNING *"
-                + ") SELECT * FROM updated;";
+        // TODO: re-implement? YES -- DONE
+        String sql = "UPDATE Musicians SET location=:location WHERE id=:id;";
         try (Connection conn = sql2o.open()) {
-            return conn.createQuery(sql)
-                    .addParameter("id", id)
-                    .addParameter("location", location)
-                    .executeAndFetchFirst(Musician.class);
+            conn.createQuery(sql).addParameter("id", id).addParameter("location", location).executeUpdate();
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the musician location", ex);
+        }
+    }
+
+    @Override
+    public Musician updateZipCode(String id, String zipCode) throws DaoException {
+        // TODO: re-implement? Add to ApiServer
+        double[] coordinates = getLatitudeLongitude(zipCode);
+        double latitude = coordinates[0];
+        double longitude = coordinates[1];
+        String sql = "UPDATE Musicians SET zipCode=:zipCode, latitude=:latitude, longitude=:longitude WHERE id=:id;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql).addParameter("id", id)
+                                 .addParameter("zipCode", zipCode)
+                                 .addParameter("latitude", latitude)
+                                 .addParameter("longitude", longitude)
+                                 .executeUpdate();
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician zipCode", ex);
+        }
+    }
+
+    @Override
+    public Musician updateAdmin(String id, boolean admin) throws DaoException {
+        String sql = "UPDATE Musicians SET admin=:admin WHERE id=:id;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql).addParameter("id", id)
+                    .addParameter("admin", admin).executeUpdate();
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the musician admin", ex);
         }
     }
 
@@ -434,12 +485,13 @@ public class Sql2oMusicianDao implements MusicianDao {
             String instrument = (String) row.get("instrument");
             String link = (String) row.get("link");
             double dist = (double) row.get("distance");
+            boolean admin = (boolean) row.get("admin");
 
             // Check if we've seen this musician already. If not, create new Musician object
             if (!alreadyAdded.contains(id)) {
                 alreadyAdded.add(id);
                 musicians.put(id, new Musician(id, name, new HashSet<String>(),
-                        new HashSet<String>(), exp, new HashSet<String>(), loc, zipCode, dist));
+                        new HashSet<String>(), exp, new HashSet<String>(), loc, zipCode, dist, admin));
             }
             // Add the genre and instrument from this row to the object lists
             Musician m = musicians.get(id);

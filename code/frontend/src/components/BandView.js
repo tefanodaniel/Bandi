@@ -5,9 +5,10 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Form from "react-bootstrap/Form";
-import Header from "./Header/Header";
-import {Container, Navbar} from "react-bootstrap";
+import Header from "./Header";
+import SubHeader from "./SubHeader";
+import { bandi_styles } from "../styles/bandi_styles"
+import {Card} from "react-bootstrap";
 
 class BandView extends React.Component {
     constructor(props) {
@@ -32,41 +33,29 @@ class BandView extends React.Component {
 
         // Generate a list of band views
         var bandsList = this.state.bands.map((band) =>
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title">{band.name}</h5>
-                    <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
-                    <p className="card-text"></p>
-                    <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
-                </div>
-            </div>
+            <Card style={bandi_styles.band_card} className="rounded border-0">
+            <Card.Body>
+                <Card.Title>{band.name}</Card.Title>
+                <Card.Text className="small font-italic" style={{textColor:"white"}}>Genres: {band.genres.join(", ")}</Card.Text>
+                <Button className="small font-italic" onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
+            </Card.Body>
+            </Card>
         );
 
         if (this.state.bands && this.state.bands.length > 0) {
             return (
-                <div>
+                <div className="bg-transparent" style={bandi_styles.discover_background}>
                     <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Find bands you love here!
-                        </Navbar.Brand>
-                    </Navbar>
-
+                    <SubHeader text={"Find bands you love here!"}/>
                     {bandsList}
                 </div>
             );
         } else {
 
             return (
-                <div>
+                <div className="bg-transparent">
                     <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Find bands you love here!
-                        </Navbar.Brand>
-                    </Navbar>
-
-
+                    <SubHeader text={"Find bands you love here!"}/>
                     <h3> Coming Soon...</h3>
                 </div>
 

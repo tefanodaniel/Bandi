@@ -185,19 +185,23 @@ public class ApiServer {
         post("/musicians", (req, res) -> {
             try {
                 Musician musician = gson.fromJson(req.body(), Musician.class);
-                //musicianDao.create(musician.getId(), musician.getName(), musician.getGenre());
                 Set<String> instruments = musician.getInstruments();
                 Set<String> genres = musician.getGenres();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
+                boolean admin = musician.getAdmin();
+
                 if (instruments == null) { instruments = new HashSet<String>(); }
                 if (genres == null) { genres = new HashSet<String>(); }
                 if (experience == null) { experience = "NULL"; }
                 if (location == null) { location = "NULL"; }
+                if (zipCode == null) { zipCode = "NULL"; }
                 if (profileLinks == null) { profileLinks = new HashSet<String>(); }
 
-                musicianDao.create(musician.getId(), musician.getName(), genres, instruments, experience, location, profileLinks);
+                musicianDao.create(musician.getId(), musician.getName(), genres,
+                        instruments, experience, location, zipCode, profileLinks, admin);
 
                 res.status(201);
                 return gson.toJson(musician);
@@ -208,6 +212,7 @@ public class ApiServer {
 
         // put musicians
         put("/musicians/:id", (req, res) -> {
+
             try {
 
                 String id = req.params("id");
@@ -225,7 +230,12 @@ public class ApiServer {
                 Set<String> instruments = musician.getInstruments();
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
+                String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
+                // no check for admin flag. We don't want to change admin on and off,
+                // and since ints default to 0, we might accidentally take admin
+                // permissions away.
+
                 // Update specific fields:
                 boolean flag = false;
                 if (name != null) {
@@ -243,13 +253,15 @@ public class ApiServer {
                 } if (location != null) {
                     flag = true;
                     musician = musicianDao.updateLocation(id, location);
+                } if (zipCode != null) {
+                    flag = true;
+                    musician = musicianDao.updateZipCode(id, zipCode);
                 } if (profileLinks != null) {
                     flag = true;
                     musician = musicianDao.updateProfileLinks(id, profileLinks);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 }
-
                 if (musician == null) {
                     throw new ApiError("Resource not found", 404);
                 }
@@ -274,6 +286,38 @@ public class ApiServer {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
+
+        // get the admin status of a musician
+        get("/adminstatus/:id", (req, res) -> {
+                    try {
+                        String id = req.params("id");
+                        Musician musician = musicianDao.read(id);
+                        if (musician == null) {
+                            throw new ApiError("Resource not found", 404); // Bad request
+                        }
+                        boolean isAdmin = musician.getAdmin();
+                        res.type("application/json");
+                        return "{\"isAdmin\":"+ isAdmin +"}";
+                    } catch (DaoException ex) {
+                        throw new ApiError(ex.getMessage(), 500);
+                    }
+                }
+        );
+
+        // update the admin status of a musician
+        put("/adminstatus/:id", (req, res) -> {
+                    try {
+                        String id = req.params("id");
+                        Map map = gson.fromJson(req.body(),HashMap.class);
+                        boolean isAdmin = (boolean) map.get("isAdmin");
+                        Musician m = musicianDao.updateAdmin(id, isAdmin);
+                        res.type("application/json");
+                        return gson.toJson(m);
+                    } catch (DaoException ex) {
+                        throw new ApiError(ex.getMessage(), 500);
+                    }
+                }
+        );
 
         // Get all bands (optional query parameters)
         // if searching for id, only pass 1 parameter
@@ -383,22 +427,26 @@ public class ApiServer {
             }
         });
 
-        // To allow CORS
-        before((req, res) -> {
-
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
-            res.header("Access-Control-Allow-Headers", "*");
-            res.type("application/json");
+        // options request to allow for CORS
+        options("/*", (req, res) -> {
+            String headers = req.headers("Access-Control-Request-Headers");
+            if (headers != null) {
+                res.header("Access-Control-Allow-Headers", headers);
+            }
+            String method = req.headers("Access-Control-Request-Method");
+            if (method != null) {
+                res.header("Access-Control-Allow-Methods", method);
+            }
+            return "OK";
         });
 
-        // To allow CORS
-        after((req, res) -> {
-            /*
+        // CORS
+        before((req, res) -> {
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS");
+            res.header("Access-Control-Request-Method", "*");
             res.header("Access-Control-Allow-Headers", "*");
-            res.type("application/json");*/
+            res.type("application/json");
         });
     }
 

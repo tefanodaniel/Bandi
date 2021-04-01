@@ -18,7 +18,7 @@ import java.sql.Statement;
  * A utility class with methods to establish JDBC connection, set schemas, etc.
  */
 public final class Database {
-    public static boolean USE_TEST_DATABASE = true;
+    public static boolean USE_TEST_DATABASE = Boolean.parseBoolean(System.getenv("isLocal"));
 
     private Database() {
         // This class should not be instantiated.
@@ -38,7 +38,6 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-
     }
 
     /**
@@ -83,7 +82,8 @@ public final class Database {
                     + "zipCode VARCHAR(10),"
                     + "latitude DOUBLE PRECISION,"
                     + "longitude DOUBLE PRECISION,"
-                    + "distance DOUBLE PRECISION DEFAULT 9999.0"
+                    + "distance DOUBLE PRECISION DEFAULT 9999.0,"
+                    + "admin boolean"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
@@ -106,9 +106,10 @@ public final class Database {
             conn.createQuery(sql).executeUpdate();
 
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
-                                                        "zipCode, latitude, longitude, distance)" +
-                                " VALUES(:id, :name, :experience, :location, :zipCode, " +
-                                        ":latitude, :longitude, :distance);";
+                                                        "zipCode, latitude, longitude, distance, admin)" +
+                                  " VALUES(:id, :name, :experience, :location, " +
+                                            ":zipCode, :latitude, :longitude, :distance, :admin);";
+
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
             String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";

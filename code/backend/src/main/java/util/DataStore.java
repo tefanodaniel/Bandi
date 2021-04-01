@@ -33,17 +33,17 @@ public final class DataStore {
 
         List<Musician> samples = new ArrayList<>();
         samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert",
-                profileLinks, "WNY, NJ", "07093"));
+                profileLinks, "WNY, NJ", "07093", false));
         samples.add(new Musician("00002fakeid","Eric Clapton", genres2, instruments2, "Expert",
-                profileLinks, "Edgewater, NJ", "07020"));
+                profileLinks, "Edgewater, NJ", "07020", false));
         samples.add(new Musician("00003fakeid","Kenny G", genres3, instruments3, "Expert",
-                profileLinks, "San Diego, CA", "92168"));
+                profileLinks, "San Diego, CA", "92168", false));
 
         // Adding my own account for testing
         Set<String> maxLinks = new HashSet<String>();
         maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
         samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres", genres2, instruments2, "Expert",
-                maxLinks, "Freehold, NJ", "07728"));
+                maxLinks, "Freehold, NJ", "07728", true));
 
         return samples;
     }

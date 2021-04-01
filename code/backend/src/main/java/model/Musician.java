@@ -17,16 +17,20 @@ public class Musician extends Client {
     private double latitude;
     private double longitude;
     private double distance;
+    private boolean admin;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
         this.name = name;
         this.genres = genres;
+
+        // false by default
+        admin = false;
     }
 
-    public Musician(String id, String name, Set<String> genres,
-                    Set<String> instruments, String experience, Set<String> profileLinks,
-                    String location, String zipCode) {
+    public Musician(String id, String name, Set<String> genres, Set<String> instruments,
+                    String experience, Set<String> profileLinks, String location,
+                    String zipCode, boolean isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -37,11 +41,12 @@ public class Musician extends Client {
         this.location = location;
         setLatitudeLongitude(zipCode);
         this.distance = 9999;
+        this.admin = isAdmin;
     }
 
-    public Musician(String id, String name, Set<String> genres,
-                    Set<String> instruments, String experience, Set<String> profileLinks,
-                    String location, String zipCode, double distance) {
+    public Musician(String id, String name, Set<String> genres, Set<String> instruments,
+                    String experience, Set<String> profileLinks, String location,
+                    String zipCode, double distance, boolean isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
@@ -52,6 +57,7 @@ public class Musician extends Client {
         this.location = location;
         setLatitudeLongitude(zipCode);
         this.distance = distance;
+        this.admin = isAdmin;
     }
 
     private void setLatitudeLongitude(String zipCode) {
@@ -65,6 +71,14 @@ public class Musician extends Client {
                 .getJSONObject("fields");
         this.latitude = fields.getDouble("latitude");
         this.longitude = fields.getDouble("longitude");
+    }
+
+    public boolean getAdmin() {
+        return this.admin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.admin = isAdmin;
     }
 
     public String getName() {
@@ -156,10 +170,6 @@ public class Musician extends Client {
         return distance;
     }
 
-    public void setDistance(double distance) {
-        this.distance = distance;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -169,13 +179,13 @@ public class Musician extends Client {
                 genres.equals(musician.genres) &&
                 Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
-                Objects.equals(location, musician.location);
+                Objects.equals(location, musician.location) &&
+                this.admin == musician.admin;
     }
 
     @Override
     public int hashCode() {
-        // TODO: update with new fields
-        return Objects.hash(name, genres, instruments, experience, location);
+        return Objects.hash(name, genres, instruments, experience, location, zipCode, admin);
     }
 
     @Override
@@ -188,6 +198,7 @@ public class Musician extends Client {
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
                 ", distance=' " + distance + '\'' +
+                ", admin=' " + admin + '\'' +
                 '}';
     }
 }
