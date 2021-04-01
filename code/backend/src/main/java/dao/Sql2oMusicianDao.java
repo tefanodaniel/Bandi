@@ -214,12 +214,16 @@ public class Sql2oMusicianDao implements MusicianDao {
                 String key = keyArray[firstKeyIndex];
                 if (!key.equals("distance") && !key.equals("id")) {
                     additionalQFlag = true;
-                    // process queries with multiple values for the same query param
-                    for (int k = 0; k < query.get(key).length; k++) {
-                        if (k == 0) {
-                            filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
-                        } else {
-                            filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                    if (key.equals("admin")) {
+                        filterOn = key + " = " + query.get(key)[0]; // check if need to convert to string
+                    } else {
+                        // process queries with multiple values for the same query param
+                        for (int k = 0; k < query.get(key).length; k++) {
+                            if (k == 0) {
+                                filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+                            } else {
+                                filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                            }
                         }
                     }
                     break;
@@ -228,9 +232,13 @@ public class Sql2oMusicianDao implements MusicianDao {
             for (int i=firstKeyIndex+1; i < keyArray.length; i++) {
                 String key = keyArray[i];
                 if (!key.equals("distance") && !key.equals("id")) {
-                    // process queries with multiple values for the same query param
-                    for (int k = 0; k < query.get(key).length; k++) {
-                        filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                    if (key.equals("admin")) {
+                        filterOn = filterOn + " AND " + key + " = " + query.get(key)[0]; // check if need to convert to string
+                    } else {
+                        // process queries with multiple values for the same query param
+                        for (int k = 0; k < query.get(key).length; k++) {
+                            filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                        }
                     }
                 }
             }
