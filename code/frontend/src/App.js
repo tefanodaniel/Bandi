@@ -13,6 +13,7 @@ import BandView from "./components/BandView";
 import Profile from "./components/Profile";
 import SongOfTheWeek from "./components/SongOfTheWeek";
 import SpeedDate from "./components/SpeedDate";
+import SpeedDateEvent from "./components/SpeedDateEvent";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Route exact path="/sotw" component={SongOfTheWeek} />
           <Route exact path="/profile" component={Profile} />
           <Route exact path="/speeddate" component={SpeedDate} />
+          <Route exact path="/speeddateevent" component={SpeedDateEvent} />
         </Switch>
       </HashRouter>
     </div>

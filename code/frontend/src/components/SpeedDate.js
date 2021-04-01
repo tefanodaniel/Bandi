@@ -12,6 +12,8 @@ import {fetchBandsForMusician} from "../actions/band_actions";
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import BandApi from "../utils/BandApiService";
+import MusicianApi from "../utils/MusicianApiService";
 
 class SpeedDate extends React.Component {
     constructor(props) {
@@ -79,7 +81,7 @@ class SpeedDate extends React.Component {
                     <h6 className="card-subtitle"><a href={event.link}>{event.link}</a></h6>
                     <p className="card-text">Minimum number of participants: {event.minusers}</p>
                     <p className="card-text">Registered participants: {event.participants.length}</p>
-                    <Button className="small font-italic" onClick={() => {}}>Register</Button>
+                    <Button className="small font-italic" onClick={() => {this.props.history.push('/speeddateevent?view=' + event.id);}}>View More</Button>
                 </div>
                 </Jumbotron>
             </div>

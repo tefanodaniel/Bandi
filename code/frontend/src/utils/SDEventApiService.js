@@ -5,6 +5,10 @@ class SDEventAPIService {
         return customhttp.get("/events");
     }
 
+    get(id) {
+        return customhttp.get(`/events/${id}`);
+    }
+
     create(data) {
         return customhttp.post("/events", data);
     }
