@@ -1,6 +1,7 @@
 package util;
 
 import model.Band;
+import model.FriendRequest;
 import model.Musician;
 import org.sql2o.Connection;
 import org.sql2o.Query;
@@ -38,6 +39,7 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
+        createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
     }
 
     /**
@@ -151,6 +153,32 @@ public final class Database {
                             .addParameter("link", link)
                             .executeUpdate();
                 }
+            }
+
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+    public static void createRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS Requests;");
+
+            String sql = "CREATE TABLE IF NOT EXISTS Requests("
+                    + "senderid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
+                    + ");";
+
+            conn.createQuery(sql).executeUpdate();
+
+            String requestSql = "INSERT INTO Requests(senderid, recipientid) VALUES (:senderid, :recipientid);";
+
+            for (FriendRequest fr : samples) {
+                conn.createQuery(requestSql)
+                        .addParameter("senderid", fr.getSenderID())
+                        .addParameter("recipientid", fr.getRecipientID())
+                        .executeUpdate();
             }
 
         } catch (Sql2oException ex) {

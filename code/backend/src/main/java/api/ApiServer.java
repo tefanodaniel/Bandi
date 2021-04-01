@@ -5,6 +5,7 @@ import exceptions.ApiError;
 import exceptions.DaoException;
 import kong.unirest.json.JSONObject;
 import model.Band;
+import model.FriendRequest;
 import spark.QueryParamsMap;
 import util.Database;
 import util.DataStore;
@@ -58,6 +59,7 @@ public class ApiServer {
         staticFiles.location("/public");
         MusicianDao musicianDao = getMusicianDao();
         BandDao bandDao = getBandDao();
+        RequestDao requestDao = getRequestDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
@@ -281,7 +283,24 @@ public class ApiServer {
             }
         });
 
-        post("/musicians/friend/:id", (req, res) -> {
+        // send friend request
+        post("/friend/:senderid/:recipientid", (req, res) -> {
+            try {
+                String senderID = req.params("senderid");
+                String recipientID = req.params("recipientid");
+                FriendRequest fr = requestDao.createRequest(senderID, recipientID);
+                if (fr == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(fr);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // respond (accept or decline) friend request
+        put("friend/:senderid/:recipientid/:answer", (req, res) -> {
             return null;
         });
 
@@ -459,5 +478,10 @@ public class ApiServer {
     private static BandDao getBandDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oBandDao(sql2o);
+    }
+
+    private static RequestDao getRequestDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oRequestDao(sql2o);
     }
 }

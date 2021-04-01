@@ -27,8 +27,9 @@ public class Sql2oRequestDao implements RequestDao {
     }
 
     @Override
-    public FriendRequest create(String senderID, String recipientID) throws DaoException {
+    public FriendRequest createRequest(String senderID, String recipientID) throws DaoException {
         String sql = "INSERT INTO Requests(senderid, recipientid) VALUES(:senderid, :recipientid);";
+
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("senderid", senderID).addParameter("recipientid", recipientID).executeUpdate();
             return this.read(senderID, recipientID);
@@ -42,19 +43,16 @@ public class Sql2oRequestDao implements RequestDao {
 
         try (Connection conn = sql2o.open()) {
 
-            String sql = "SELECT * FROM friendrequests AS fr " +
+            String sql = "SELECT * FROM requests AS fr " +
                          "WHERE fr.senderid = :senderid " +
                          "AND fr.recipientid = :recipientid;";
 
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("senderid", senderID)
                     .addParameter("recipientid", recipientID).executeAndFetchTable().asList();
 
-            if (queryResults.size() == 0) { // no such musician is present
+            if (queryResults.size() == 0) { // recipient doesn't exist
                 return null;
             }
-
-            // Extract attributes
-            boolean name = (boolean) queryResults.get(0).get("accepted");
 
             FriendRequest fr = new FriendRequest(senderID, recipientID);
             return fr;
@@ -84,7 +82,6 @@ public class Sql2oRequestDao implements RequestDao {
                 // Extract data from this row
                 String senderid = (String) row.get("senderid");
                 String recipientid = (String) row.get("recipientid");
-                boolean accepted = (boolean) row.get("accepted");
 
                 from.add(new FriendRequest(senderid, recipientid));
             }
