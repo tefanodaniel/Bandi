@@ -70,8 +70,21 @@ class SpeedDateEvent extends React.Component {
     }
 
     register_leave() {
+        if (!this.state.isParticipant) {
+            // add participant to event
+            SDEventApi.addParticipant(this.state.eventId, this.state.id)
+                .then((response) => console.log(response.data));
+        }
+        else {
+            // remove participant from event
+            SDEventApi.deleteParticipant(this.state.eventId, this.state.id)
+                .then((response) => console.log(response.data));
+        }
+
         this.setState({isParticipant : !(this.state.isParticipant)});
         this.buttonText();
+
+        this.props.history.push('/speeddate');
     }
 
     buttonText() {
@@ -96,6 +109,7 @@ class SpeedDateEvent extends React.Component {
         const isAdmin = userInfo.admin;
         this.buttonText();
 
+
         if (!isAdmin) { // non admin view
             return(
                 <div className="bg-transparent" style={bandi_styles.discover_background}>
@@ -116,8 +130,6 @@ class SpeedDateEvent extends React.Component {
                     <h2>Registered participants: {this.state.participants.length}</h2>
 
                     <Button onClick={() => {this.register_leave()}}>{this.state.buttonText}</Button>
-                    <h1>{this.state.isParticipant.toString()}</h1>
-
 
                 </div>
             )

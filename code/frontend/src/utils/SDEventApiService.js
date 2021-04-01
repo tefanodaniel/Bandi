@@ -12,6 +12,14 @@ class SDEventAPIService {
     create(data) {
         return customhttp.post("/events", data);
     }
+
+    addParticipant(eid, mid) {
+        return customhttp.put(`/events/${eid}/${mid}`);
+    }
+
+    deleteParticipant(eid, mid) {
+        return customhttp.delete(`/events/${eid}/${mid}`);
+    }
 }
 
 export default new SDEventAPIService();
