@@ -31,8 +31,13 @@ public class Sql2oRequestDao implements RequestDao {
         String sql = "INSERT INTO Requests(senderid, recipientid) VALUES(:senderid, :recipientid);";
 
         try (Connection conn = sql2o.open()) {
-            conn.createQuery(sql).addParameter("senderid", senderID).addParameter("recipientid", recipientID).executeUpdate();
-            return this.read(senderID, recipientID);
+            FriendRequest result = this.read(senderID, recipientID);
+            if (result == null) {
+                conn.createQuery(sql).addParameter("senderid", senderID).addParameter("recipientid", recipientID).executeUpdate();
+                return this.read(senderID, recipientID);
+            }
+            return result;
+
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
