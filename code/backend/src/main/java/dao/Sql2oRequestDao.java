@@ -71,24 +71,20 @@ public class Sql2oRequestDao implements RequestDao {
     public List<FriendRequest> readAllFrom(String senderID) throws DaoException {
         try (Connection conn = sql2o.open()) {
 
-            String sql = "SELECT * FROM friendrequests AS fr " +
+            String sql = "SELECT * FROM requests AS fr " +
                     "WHERE fr.senderid = :senderid;";
 
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("senderid", senderID)
                     .executeAndFetchTable().asList();
 
             if (queryResults.size() == 0) { // user has no sent out friend request
-                return null;
+                return new ArrayList<FriendRequest>();
             }
 
             List<FriendRequest> from = new ArrayList<>();
             for (Map row : queryResults) {
-
-                // Extract data from this row
-                String senderid = (String) row.get("senderid");
-                String recipientid = (String) row.get("recipientid");
-
-                from.add(new FriendRequest(senderid, recipientid));
+                String recipientID = (String) row.get("recipientid");
+                from.add(new FriendRequest(senderID, recipientID));
             }
 
             return from;

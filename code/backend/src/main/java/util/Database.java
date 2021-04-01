@@ -162,7 +162,7 @@ public final class Database {
 
     public static void createRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS Requests;");
+            conn.createQuery("DROP TABLE IF EXISTS Requests;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Requests("
                     + "senderid VARCHAR(30) REFERENCES Musicians,"

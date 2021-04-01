@@ -283,6 +283,18 @@ public class ApiServer {
             }
         });
 
+        // get all of user's pending friend requests
+        get("/friend/:senderid", (req, res) -> {
+            try {
+                String senderID = req.params("senderid");
+                List<FriendRequest> requests = requestDao.readAllFrom(senderID);
+                res.type("application/json");
+                return gson.toJson(requests);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // send friend request
         post("/friend/:senderid/:recipientid", (req, res) -> {
             try {
