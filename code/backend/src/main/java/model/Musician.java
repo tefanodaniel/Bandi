@@ -36,7 +36,7 @@ public class Musician extends Client {
         this.zipCode = zipCode;
         this.location = location;
         setLatitudeLongitude(zipCode);
-        this.distance = 0;
+        this.distance = 9999;
     }
 
     public Musician(String id, String name, Set<String> genres,

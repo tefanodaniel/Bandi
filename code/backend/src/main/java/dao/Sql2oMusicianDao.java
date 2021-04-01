@@ -416,14 +416,14 @@ public class Sql2oMusicianDao implements MusicianDao {
         Map<String, Musician> musicians = new HashMap<String, Musician>();
         for (Map row : queryResults) {
             // Extract data from this row
-            String id = (String) row.get("mid"); //change to mid if id is null?
+            String id = (String) row.get("mid");
             String name = (String) row.get("name");
             String exp = (String) row.get("experience");
             String loc = (String) row.get("location");
             String zipCode = (String) row.get("zipcode");
             String genre = (String) row.get("genre");
             String instrument = (String) row.get("instrument");
-            String link = (String) row.get("link"); //check if always null or nah
+            String link = (String) row.get("link");
             double dist = (double) row.get("distance");
 
             // Check if we've seen this musician already. If not, create new Musician object

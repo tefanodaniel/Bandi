@@ -2,6 +2,7 @@ package dao;
 
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
+import exceptions.ApiError;
 import model.Musician;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -176,7 +177,6 @@ class Sql2oMusicianDaoTest {
         List<Musician> musicians = musicianDao.readAll(query);
         assertNotEquals(0, musicians.size());
         for (Musician musician : musicians) {
-            System.out.println(musician);
             assertTrue(musician.getDistance() <= Double.parseDouble("5000"));
             assertTrue(musician.getGenres().contains("Blues"));
         }
@@ -194,4 +194,13 @@ class Sql2oMusicianDaoTest {
             assertTrue(musician.getDistance() <= Double.parseDouble("5000"));
         }
     }
+
+    @Test
+    public void testAPIErrorExceptionNoSourceID() {
+        String[] distance = new String[]{"5000"};
+        Map<String, String[]> query = Map.of("distance", distance);
+        assertThrows(ApiError.class, ()->musicianDao.readAll(query));
+    }
+
+
 }
