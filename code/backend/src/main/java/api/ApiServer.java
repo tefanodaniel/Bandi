@@ -408,7 +408,7 @@ public class ApiServer {
             }
         });
 
-        // remove
+        // remove band member from band
         delete("/bands/:bid/:mid", (req, res) -> {
             try {
                 String bandId = req.params("bid");
@@ -445,6 +445,45 @@ public class ApiServer {
                 if (event == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
+                res.type("application/json");
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // put new event participant
+        put("/events/:eid/:mid", (req, res) -> {
+            try {
+                String eventId = req.params("eid");
+                String musicianId = req.params("mid");
+                Event event = eventDao.read(eventId);
+                Musician musician = musicianDao.read(musicianId);
+                if (event == null || musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                Event e = eventDao.add(eventId, musicianId);
+                if (e == null) {
+                    throw new ApiError("Failed to add participant", 404);
+                }
+
+                return gson.toJson(e);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // remove participant from event
+        delete("/events/:eid/:mid", (req, res) -> {
+            try {
+                String eventId = req.params("eid");
+                String musicianId = req.params("mid");
+                Event event = eventDao.remove(eventId, musicianId);
+                if (event == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
                 res.type("application/json");
                 return gson.toJson(event);
             } catch (DaoException ex) {

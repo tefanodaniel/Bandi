@@ -78,8 +78,7 @@ public class Sql2oEventDao {
                         .executeUpdate();
             }
 
-            return null;
-            // return this.read(id);
+            return this.read(id);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
@@ -92,8 +91,7 @@ public class Sql2oEventDao {
                     .addParameter("participant", musId)
                     .addParameter("event", eventId)
                     .executeUpdate();
-            //return this.read(eventId);
-            return null;
+            return this.read(eventId);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to add new participant", ex);
         }
@@ -105,8 +103,7 @@ public class Sql2oEventDao {
             conn.createQuery(sql)
                     .addParameter("musId", musId)
                     .executeUpdate();
-            //return this.read(eventId);
-            return null;
+            return this.read(eventId);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to remove participant", ex);
         }
