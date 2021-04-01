@@ -122,6 +122,14 @@ class SpeedDateEvent extends React.Component {
                 <div className="bg-transparent" style={bandi_styles.discover_background}>
                     <Header/>
 
+                    <h1>{this.state.name} (Admin)</h1>
+                    <h2>{this.state.date}</h2>
+                    <h2><a href={this.state.link}>{this.state.link}</a></h2>
+                    <h2>Minimum number of participants: {this.state.minusers}</h2>
+                    <h2>Registered participants: {size}</h2>
+
+                    <Button onClick={() => {this.register_leave()}}>{this.state.buttonText}</Button>
+
                 </div>
             )
         }
