@@ -62,8 +62,6 @@ public interface MusicianDao {
      */
     List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
-    List<Musician> filterByDist(String startID, String miles) throws DaoException;
-
     /**
      * Update the name of a Musicians provided the id.
      *

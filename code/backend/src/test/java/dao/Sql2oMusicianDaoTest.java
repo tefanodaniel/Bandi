@@ -167,9 +167,24 @@ class Sql2oMusicianDaoTest {
     }
 
     @Test
-    @DisplayName("read all the musicians that satisfy the search query")
+    @DisplayName("read all the musicians that satisfy the search query by distance and genre")
     void readAllGivenSearchQuery() {
-        String[] genre = new String[]{"rock"};
+        String[] genre = new String[]{"blues"};
+        String[] distance = new String[]{"5000"};
+        String[] sourceID = new String[]{"00001fakeid"};
+        Map<String, String[]> query = Map.of("genre", genre,"distance", distance, "id", sourceID);
+        List<Musician> musicians = musicianDao.readAll(query);
+        assertNotEquals(0, musicians.size());
+        for (Musician musician : musicians) {
+            System.out.println(musician);
+            assertTrue(musician.getDistance() <= Double.parseDouble("5000"));
+            assertTrue(musician.getGenres().contains("Blues"));
+        }
+    }
+
+    @Test
+    @DisplayName("read all the musicians that satisfy the search query")
+    void readAllGivenSearchQueryDistanceOnly() {
         String[] distance = new String[]{"5000"};
         String[] sourceID = new String[]{"00001fakeid"};
         Map<String, String[]> query = Map.of("distance", distance, "id", sourceID);
@@ -177,21 +192,6 @@ class Sql2oMusicianDaoTest {
         assertNotEquals(0, musicians.size());
         for (Musician musician : musicians) {
             assertTrue(musician.getDistance() <= Double.parseDouble("5000"));
-            //assertTrue(musician.getGenres().toArray()[0].equals("Rock"));
-            System.out.println(musician);
-        }
-    }
-
-    @Test
-    @DisplayName("filter by distance of 20 miles")
-    void distanceFilterTest() {
-        String miles = "20";
-        List<Musician> musicians = musicianDao.filterByDist("00001fakeid", miles);
-        assertNotEquals(0, musicians.size());
-        //System.out.println(samples.toString());
-        for (Musician musician : musicians) {
-            assertTrue(musician.getDistance() <= Double.parseDouble(miles));
-            //System.out.println(musician);
         }
     }
 }
