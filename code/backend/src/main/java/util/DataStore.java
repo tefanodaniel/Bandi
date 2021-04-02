@@ -64,8 +64,7 @@ public final class DataStore {
 
         // Adding Nick as an admin so he can test admin functionality
         Musician Nick = new Musician("12101628937","Nick Xitco",
-                genres2, instruments2,
-                "Expert", "New York, NY", maxLinks, true);
+                genres2, instruments2, "Expert", maxLinks, "New York, NY", "32825", kennyFriends, true);
         samples.add(Nick);
 
         return samples;
