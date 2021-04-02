@@ -84,7 +84,7 @@ public interface SongDao {
      * @throws DaoException
      */
 
-    SongOfTheWeekEvent updateGenres(String songId, Set<String> genres) throws DaoException;
+    Song updateGenres(String songId, Set<String> genres) throws DaoException;
 
     /** Delete a song from database given unique id.
      *

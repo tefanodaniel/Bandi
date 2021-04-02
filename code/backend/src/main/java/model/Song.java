@@ -1,5 +1,6 @@
 package model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Song {
@@ -10,6 +11,13 @@ public class Song {
     private Integer releaseYear;
     private Set<String> genres;
 
+    public Song(String songId, String songName, String artistName, String albumName, Integer releaseYear) {
+        this.songId = songId;
+        this.songName = songName;
+        this.artistName = artistName;
+        this.albumName = albumName;
+        this.releaseYear = releaseYear;
+    }
     public Song(String songId, String songName, String artistName, String albumName, Integer releaseYear, Set<String> genres) {
         this.songId = songId;
         this.songName = songName;
@@ -57,6 +65,15 @@ public class Song {
     public Set<String> getGenres() {
         return this.genres;
     }
+
+
+    public void addGenre(String genre) {
+        if (this.genres == null) {
+            this.genres = new HashSet<String>();
+        }
+        this.genres.add(genre);
+    }
+
 
     public void setGenres(Set<String> genre_set) {
         this.genres = genre_set;
