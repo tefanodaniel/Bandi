@@ -590,7 +590,6 @@ public class ApiServer {
             }
         });
 
-
         // get (read) a song given songId
         get("/songs/:songId", (req, res) -> {
             try {
@@ -781,7 +780,7 @@ public class ApiServer {
 
         // Song of the Week Event Api Routes
         // get (read) all sotw events
-        get("/events", (req, res) -> {
+        get("/sotwevents", (req, res) -> {
             try {
                 List<SongOfTheWeekEvent> events = sotw_eventDao.readAll();
                 return gson.toJson(events);
@@ -791,7 +790,7 @@ public class ApiServer {
         });
 
         // get (read) a sotw event given event id
-        get("/events/:eventId", (req, res) -> {
+        get("/sotwevents/:eventId", (req, res) -> {
             try {
                 String eventId = req.params("eventId");
                 SongOfTheWeekEvent s = sotw_eventDao.read(eventId);
@@ -806,7 +805,7 @@ public class ApiServer {
         });
 
         // post (create) a sotw event
-        post("/events", (req, res) -> {
+        post("/sotwevents", (req, res) -> {
             try {
                 SongOfTheWeekEvent event = gson.fromJson(req.body(), SongOfTheWeekEvent.class);
                 Set<String> submissions = event.getSubmissions();
@@ -821,7 +820,7 @@ public class ApiServer {
         });
 
         // put (update) an sotw event
-        put("/events/:eventId", (req, res) -> {
+        put("/sotwevents/:eventId", (req, res) -> {
             // doesn't include adding or removing submissions
             try {
 
@@ -864,15 +863,82 @@ public class ApiServer {
 
 
         // get (read All) submissions given sotw event id
+        get("/sotwevents/submissions/:eventId", (req, res) -> {
+            try {
+                String eventId = req.params("eventId");
+                Set<String> submission_ids = sotw_eventDao.readAllSubmissionsGivenEvent(eventId);
+                List<SongOfTheWeekSubmission> submissions = new ArrayList<SongOfTheWeekSubmission>();
+                for (String sid : submission_ids) {
+                    submissions.add(sotw_submissionDao.read(sid));
+                }
+                return gson.toJson(submissions);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
 
         // put (add) a submission to an sotw events
+        put("/sotwevents/submissions/:eventId/:submissionId", (req, res) -> {
+            try {
+                String eventId = req.params("eventId");
+                String submissionId = req.params("submissionId");
+                SongOfTheWeekEvent event = sotw_eventDao.read(eventId);
+                SongOfTheWeekSubmission submission = sotw_submissionDao.read(submissionId);
+                if (event == null){
+                    throw new ApiError("Event Resource not found", 404);
+                }
+                if (submission == null) {
+                    throw new ApiError("Submission Resource not found", 404);
+                }
+
+                /** is this needed?
+                if (!event.getEventId().equals(eventId)) {
+                    throw new ApiError("Event ID does not match the resource identifier", 400);
+                }
+
+                if (!submission.getSubmission_id().equals(submissionId)) {
+                    throw new ApiError("Submission ID does not match the resource identifier", 400);
+                }*/
+
+                event = sotw_eventDao.addSubmissionToEvent(eventId, submissionId);
+                if (event == null) {
+                    throw new ApiError("Updated Event resource not found", 404);
+                }
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
 
         // delete (remove) a submission from an sotw event
+        delete("/sotwevents/submissions/:eventId/:submissionId", (req, res) -> {
+            try {
+                String eventId = req.params("eventId");
+                String submissionId = req.params("submissionId");
+                SongOfTheWeekEvent event = sotw_eventDao.read(eventId);
+                SongOfTheWeekSubmission submission = sotw_submissionDao.read(submissionId);
+                if (event == null){
+                    throw new ApiError("Event Resource not found", 404);
+                }
+                if (submission == null) {
+                    throw new ApiError("Submission Resource not found", 404);
+                }
 
+                event = sotw_eventDao.removeSubmissionFromEvent(eventId, submissionId);
+                if (event == null) {
+                    throw new ApiError("Updated Event Resource not found", 404);
+                }
 
+                res.type("application/json");
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
 
         // delete a sotw event
-        delete("/events/:eventId", (req, res) -> {
+        delete("/sotwevents/:eventId", (req, res) -> {
             try {
                 String eventId = req.params("eventId");
                 SongOfTheWeekEvent event = sotw_eventDao.deleteEvent(eventId);
