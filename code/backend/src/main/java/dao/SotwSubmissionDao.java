@@ -30,7 +30,7 @@ public interface SotwSubmissionDao {
      * @return
      * @throws DaoException
      */
-    SongOfTheWeekSubmission readAll() throws DaoException;
+    List<SongOfTheWeekSubmission> readAll() throws DaoException;
 
 
     /** Update the Audio/Video link for a submission

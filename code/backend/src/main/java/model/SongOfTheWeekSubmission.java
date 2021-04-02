@@ -1,4 +1,5 @@
 package model;
+import java.util.HashSet;
 import java.util.Set;
 
 public class SongOfTheWeekSubmission {
@@ -6,6 +7,12 @@ public class SongOfTheWeekSubmission {
     private String musician_id;
     private String avSubmission;
     private Set<String> instruments;
+
+    public SongOfTheWeekSubmission(String submission_id, String musician_id, String avSubmission) {
+        this.submission_id = submission_id;
+        this.musician_id = musician_id;
+        this.avSubmission = avSubmission;
+    }
 
 
     public SongOfTheWeekSubmission(String submission_id, String musician_id, String avSubmission, Set<String> instruments) {
@@ -37,6 +44,13 @@ public class SongOfTheWeekSubmission {
 
     public void setInstruments(Set<String> instruments){
         this.instruments = instruments;
+    }
+
+    public void addInstrument(String instrument) {
+        if (this.instruments == null) {
+            this.instruments = new HashSet<String>();
+        }
+        this.instruments.add(instrument);
     }
 
     @Override
