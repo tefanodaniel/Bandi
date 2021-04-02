@@ -3,13 +3,12 @@ package api;
 import dao.*;
 import exceptions.ApiError;
 import exceptions.DaoException;
-import kong.unirest.json.JSONObject;
 import model.Band;
+import model.SpeedDateEvent;
 import model.FriendRequest;
 import spark.QueryParamsMap;
 import spark.Spark;
 import util.Database;
-import util.DataStore;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,9 +28,6 @@ import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeUriRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
-
-
-import javax.xml.crypto.Data;
 
 public class ApiServer {
 
@@ -58,8 +54,11 @@ public class ApiServer {
         int myPort = getHerokuAssignedPort();
         port(myPort);
         staticFiles.location("/public");
+
+        // Dao objects
         MusicianDao musicianDao = getMusicianDao();
         BandDao bandDao = getBandDao();
+        Sql2oSpeedDateEventDao speedDateEventDao = getSpeedDateEventDao();
         RequestDao requestDao = getRequestDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -468,7 +467,7 @@ public class ApiServer {
             }
         });
 
-        // remove
+        // remove band member from band
         delete("/bands/:bid/:mid", (req, res) -> {
             try {
                 String bandId = req.params("bid");
@@ -485,8 +484,100 @@ public class ApiServer {
             }
         });
 
-        // sent friend request from user to user
+        // Get all SpeedDateEvents
+        get("/speeddateevents", (req, res) -> {
+            try {
+                List<SpeedDateEvent> events;
+                Map<String, String[]> query = req.queryMap().toMap();
+                events = speedDateEventDao.readAll();
+                return gson.toJson(events);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
 
+        // Get SpeedDateEvent given the id
+        get("/speeddateevents/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                SpeedDateEvent event = speedDateEventDao.read(id);
+                if (event == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // put new SpeedDateEvent participant
+        put("/speeddateevents/:eid/:mid", (req, res) -> {
+            try {
+                String eventId = req.params("eid");
+                String musicianId = req.params("mid");
+                SpeedDateEvent event = speedDateEventDao.read(eventId);
+                Musician musician = musicianDao.read(musicianId);
+                if (event == null || musician == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                SpeedDateEvent e = speedDateEventDao.add(eventId, musicianId);
+                if (e == null) {
+                    throw new ApiError("Failed to add participant", 404);
+                }
+
+                return gson.toJson(e);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // remove SpeedDateEvent participant from event
+        delete("/speeddateevents/:eid/:mid", (req, res) -> {
+            try {
+                String eventId = req.params("eid");
+                String musicianId = req.params("mid");
+                SpeedDateEvent event = speedDateEventDao.remove(eventId, musicianId);
+                if (event == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                res.type("application/json");
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // post a SpeedDateEvent
+        post("/speeddateevents", (req, res) -> {
+            try {
+                SpeedDateEvent event = gson.fromJson(req.body(), SpeedDateEvent.class);
+
+                String id = UUID.randomUUID().toString();
+                String name = event.getName();
+                String link = event.getLink();
+                String date = event.getDate();
+                int minusers = event.getMinusers();
+                Set<String> participants = event.getParticipants();
+
+                if (name == null) { name = "NULL"; }
+                if (link == null) { link = "NULL"; }
+                if (date == null) { date = "NULL"; }
+                if (minusers == 0) { minusers = 1; }
+                if (participants == null) {participants = new HashSet<>();}
+
+                speedDateEventDao.create(id, name, link, date, minusers, participants);
+
+                res.status(201);
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+      
+        // sent friend request from user to user
 
         // options request to allow for CORS
         options("/*", (req, res) -> {
@@ -521,6 +612,12 @@ public class ApiServer {
     private static BandDao getBandDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oBandDao(sql2o);
+    }
+
+
+    private static Sql2oSpeedDateEventDao getSpeedDateEventDao() throws URISyntaxException {
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oSpeedDateEventDao(sql2o);
     }
 
     private static RequestDao getRequestDao() throws URISyntaxException{

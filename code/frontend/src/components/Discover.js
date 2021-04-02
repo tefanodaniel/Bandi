@@ -24,7 +24,7 @@ class Discover extends React.Component {
 
   viewBands = () => {this.props.history.push('/bandview')}
 
-  viewSpeedDating = () => {} // To Do.. implement a speed-dating component that lets users browse events and register for them.
+  viewSpeedDating = () => {this.props.history.push('/speeddate')} // To Do.. implement a speed-dating component that lets users browse events and register for them.
 
   viewSOTW = () => {this.props.history.push('/sotw')}
 
