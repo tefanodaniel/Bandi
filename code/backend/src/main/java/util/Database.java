@@ -1,9 +1,6 @@
 package util;
 
-import model.Band;
-import model.SpeedDateEvent;
-import model.FriendRequest;
-import model.Musician;
+import model.*;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -39,6 +36,9 @@ public final class Database {
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
         createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
         createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
+        createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
+        createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
+        createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
     }
 
     /**
@@ -263,7 +263,7 @@ public final class Database {
 
 
     /**
-     * Create Events table schema and add sample events
+     * Create Speed Dating Events table schema and add sample speed dating events
      *
      * @param sql2o a Sql2o object connected to the database to be used in this application.
      * @param samples a list of sample SpeedDateEvents
@@ -313,6 +313,150 @@ public final class Database {
             throw new Sql2oException(ex.getMessage());
         }
     }
+
+    public static void createSongTablesWithSampleData(Sql2o sql2o, List<Song> sample_songs) throws Sql2oException {
+        try (Connection conn = sql2o.open()) {
+
+            conn.createQuery("DROP TABLE IF EXISTS Songs CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS SongGenres;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS Songs("
+                    + "songId VARCHAR(50) PRIMARY KEY,"
+                    + "songName VARCHAR(50) NOT NULL,"
+                    + "artistName VARCHAR(50) NOT NULL,"
+                    + "albumName VARCHAR(50),"
+                    + "releasedYear integer"
+                    + ");";
+
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS SongGenres("
+                    + "songId VARCHAR(50) REFERENCES Songs,"
+                    + "genre VARCHAR(30)"
+                    + ");";
+
+            conn.createQuery(sql).executeUpdate();
+
+            String song_sql = "INSERT INTO Songs(songId, songName, artistName, albumName, releasedYear) VALUES(:songId, :songName, :artistName, :albumName, :releaseYear);";
+            String song_genres_sql = "INSERT INTO SongGenres(songId, genre) VALUES (:songId, :genre);";
+
+            for (Song s: sample_songs) {
+                conn.createQuery(song_sql)
+                        .addParameter("songId", s.getSongId())
+                        .addParameter("songName", s.getSongName())
+                        .addParameter("artistName", s.getArtistName())
+                        .addParameter("albumName", s.getAlbumName())
+                        .addParameter("releaseYear", s.getReleaseYear())
+                        .executeUpdate();
+
+                // Insert song-genre info.
+
+                for (String genre : s.getGenres()) {
+                    conn.createQuery(song_genres_sql)
+                            .addParameter("songId", s.getSongId())
+                            .addParameter("genre", genre)
+                            .executeUpdate();
+                }
+            }
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+    public static void createSotwSubmissionTablesWithSampleData(Sql2o sql2o, List<SongOfTheWeekSubmission> sample_submissions) throws Sql2oException {
+            try (Connection conn = sql2o.open()) {
+                conn.createQuery("DROP TABLE IF EXISTS SotwSubmissions CASCADE;").executeUpdate();
+                conn.createQuery("DROP TABLE IF EXISTS SotwSubmissionsInstruments;").executeUpdate();
+
+                String sql = "CREATE TABLE IF NOT EXISTS SotwSubmissions("
+                        + "submissionId VARCHAR(50) PRIMARY KEY,"
+                        + "musicianId VARCHAR(50) REFERENCES Musicians,"
+                        + "avSubmission VARCHAR(50) NOT NULL"
+                        + ");";
+
+                conn.createQuery(sql).executeUpdate();
+
+                sql = "CREATE TABLE IF NOT EXISTS SotwSubmissionsInstruments("
+                        + "submissionId VARCHAR(50) REFERENCES SotwSubmissions,"
+                        + "instrument VARCHAR(30)"
+                        + ");";
+
+                conn.createQuery(sql).executeUpdate();
+
+                String sotw_submissions_sql = "INSERT INTO SotwSubmissions(submissionId, musicianId, avSubmission) VALUES(:submissionId, :musicianId, :avSubmission);";
+                String sotw_submissions_instruments_sql = "INSERT INTO SotwSubmissionsInstruments(submissionId, instrument) VALUES (:submissionId, :instrument);";
+
+                for (SongOfTheWeekSubmission s: sample_submissions) {
+                    conn.createQuery(sotw_submissions_sql)
+                            .addParameter("submissionId", s.getSubmission_id())
+                            .addParameter("musicianId", s.getMusician_id())
+                            .addParameter("avSubmission", s.getAVSubmission())
+                            .executeUpdate();
+
+                    // Insert sotw-submissions-instruments info.
+
+                    for (String instrument : s.getInstruments()) {
+                        conn.createQuery(sotw_submissions_instruments_sql)
+                                .addParameter("submissionId", s.getSubmission_id())
+                                .addParameter("instrument", instrument)
+                                .executeUpdate();
+                    }
+                }
+
+
+            } catch (Sql2oException ex) {
+                throw new Sql2oException(ex.getMessage());
+            }
+    }
+
+    public static void createSotwEventTablesWithSampleData(Sql2o sql2o, List<SongOfTheWeekEvent> sample_events) throws Sql2oException {
+            try (Connection conn = sql2o.open()) {
+                conn.createQuery("DROP TABLE IF EXISTS SotwEvents CASCADE;").executeUpdate();
+                conn.createQuery("DROP TABLE IF EXISTS SotwEventsSubmissions;").executeUpdate();
+
+                String sql = "CREATE TABLE IF NOT EXISTS SotwEvents("
+                        + "eventId VARCHAR(50) PRIMARY KEY,"
+                        + "adminId VARCHAR(50) REFERENCES Musicians,"
+                        + "start_week VARCHAR(50) NOT NULL,"
+                        + "end_week VARCHAR(50) NOT NULL,"
+                        + "songId VARCHAR(50) NOT NULL"
+                        + ");";
+
+                conn.createQuery(sql).executeUpdate();
+
+                sql = "CREATE TABLE IF NOT EXISTS SotwEventsSubmissions("
+                        + "eventId VARCHAR(50) REFERENCES SotwEvents,"
+                        + "submissionId VARCHAR(50)"
+                        + ");";
+
+                conn.createQuery(sql).executeUpdate();
+
+                String sotw_events_sql = "INSERT INTO SotwEvents(eventId, adminId, start_week, end_week, songId) VALUES(:eventId, :adminId, :start_week, :end_week, :songId);";
+                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventId, submissionId) VALUES (:eventId, :submissionId);";
+
+                for (SongOfTheWeekEvent s: sample_events) {
+                    conn.createQuery(sotw_events_sql)
+                            .addParameter("eventId", s.getEventId())
+                            .addParameter("adminId", s.getAdminId())
+                            .addParameter("start_week", s.getStart_week())
+                            .addParameter("end_week", s.getEnd_week())
+                            .addParameter("songId", s.getSongId())
+                            .executeUpdate();
+
+                    // Insert sotw-events-submissions info.
+
+                    for (String t_id : s.getSubmissions()) {
+                        conn.createQuery(sotw_events_submissions_sql)
+                                .addParameter("eventId", s.getEventId())
+                                .addParameter("submissionId", t_id)
+                                .executeUpdate();
+                    }
+                }
+
+            } catch (Sql2oException ex) {
+                throw new Sql2oException(ex.getMessage());
+            }
+        }
 
     // Get either the test or the production Database URL
     private static String getDatabaseUrl() throws URISyntaxException {

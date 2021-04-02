@@ -20,6 +20,15 @@ public class SongOfTheWeekEvent {
         this.songId = songId;
     }
 
+    public SongOfTheWeekEvent(String eventId, String adminId, String start_week, String end_week, String songId, Set<String> submissions){
+        this.eventId = eventId;
+        this.adminId = adminId;
+        this.start_week = start_week;
+        this.end_week = end_week;
+        this.songId = songId;
+        this.submissions = submissions;
+    }
+
     public String getEventId() {
         return this.eventId;
     }
