@@ -369,35 +369,35 @@ public final class Database {
                 conn.createQuery("DROP TABLE IF EXISTS SotwSubmissionsInstruments;").executeUpdate();
 
                 String sql = "CREATE TABLE IF NOT EXISTS SotwSubmissions("
-                        + "submissionId VARCHAR(50) PRIMARY KEY,"
-                        + "musicianId VARCHAR(50) REFERENCES Musicians,"
-                        + "avSubmission VARCHAR(50) NOT NULL"
+                        + "submissionid VARCHAR(50) PRIMARY KEY,"
+                        + "musicianid VARCHAR(50) REFERENCES Musicians,"
+                        + "avsubmission VARCHAR(50) NOT NULL"
                         + ");";
 
                 conn.createQuery(sql).executeUpdate();
 
                 sql = "CREATE TABLE IF NOT EXISTS SotwSubmissionsInstruments("
-                        + "submissionId VARCHAR(50) REFERENCES SotwSubmissions,"
+                        + "submissionid VARCHAR(50) REFERENCES SotwSubmissions,"
                         + "instrument VARCHAR(30)"
                         + ");";
 
                 conn.createQuery(sql).executeUpdate();
 
-                String sotw_submissions_sql = "INSERT INTO SotwSubmissions(submissionId, musicianId, avSubmission) VALUES(:submissionId, :musicianId, :avSubmission);";
-                String sotw_submissions_instruments_sql = "INSERT INTO SotwSubmissionsInstruments(submissionId, instrument) VALUES (:submissionId, :instrument);";
+                String sotw_submissions_sql = "INSERT INTO SotwSubmissions(submissionid, musicianid, avsubmission) VALUES(:submissionid, :musicianid, :avsubmission);";
+                String sotw_submissions_instruments_sql = "INSERT INTO SotwSubmissionsInstruments(submissionid, instrument) VALUES (:submissionid, :instrument);";
 
                 for (SongOfTheWeekSubmission s: sample_submissions) {
                     conn.createQuery(sotw_submissions_sql)
-                            .addParameter("submissionId", s.getSubmission_id())
-                            .addParameter("musicianId", s.getMusician_id())
-                            .addParameter("avSubmission", s.getAVSubmission())
+                            .addParameter("submissionid", s.getSubmission_id())
+                            .addParameter("musicianid", s.getMusician_id())
+                            .addParameter("avsubmission", s.getAVSubmission())
                             .executeUpdate();
 
                     // Insert sotw-submissions-instruments info.
 
                     for (String instrument : s.getInstruments()) {
                         conn.createQuery(sotw_submissions_instruments_sql)
-                                .addParameter("submissionId", s.getSubmission_id())
+                                .addParameter("submissionid", s.getSubmission_id())
                                 .addParameter("instrument", instrument)
                                 .executeUpdate();
                     }
@@ -415,39 +415,39 @@ public final class Database {
                 conn.createQuery("DROP TABLE IF EXISTS SotwEventsSubmissions;").executeUpdate();
 
                 String sql = "CREATE TABLE IF NOT EXISTS SotwEvents("
-                        + "eventId VARCHAR(50) PRIMARY KEY,"
-                        + "adminId VARCHAR(50) REFERENCES Musicians,"
+                        + "eventid VARCHAR(50) PRIMARY KEY,"
+                        + "adminid VARCHAR(50) REFERENCES Musicians,"
                         + "start_week VARCHAR(50) NOT NULL,"
                         + "end_week VARCHAR(50) NOT NULL,"
-                        + "songId VARCHAR(50) NOT NULL"
+                        + "songid VARCHAR(50) NOT NULL"
                         + ");";
 
                 conn.createQuery(sql).executeUpdate();
 
                 sql = "CREATE TABLE IF NOT EXISTS SotwEventsSubmissions("
-                        + "eventId VARCHAR(50) REFERENCES SotwEvents,"
+                        + "eventid VARCHAR(50) REFERENCES SotwEvents,"
                         + "submission VARCHAR(50)"
                         + ");";
 
                 conn.createQuery(sql).executeUpdate();
 
-                String sotw_events_sql = "INSERT INTO SotwEvents(eventId, adminId, start_week, end_week, songId) VALUES(:eventId, :adminId, :start_week, :end_week, :songId);";
-                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventId, submission) VALUES (:eventId, :submission);";
+                String sotw_events_sql = "INSERT INTO SotwEvents(eventid, adminid, start_week, end_week, songid) VALUES(:eventid, :adminid, :start_week, :end_week, :songid);";
+                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventid, submission) VALUES (:eventid, :submission);";
 
                 for (SongOfTheWeekEvent s: sample_events) {
                     conn.createQuery(sotw_events_sql)
-                            .addParameter("eventId", s.getEventId())
-                            .addParameter("adminId", s.getAdminId())
+                            .addParameter("eventid", s.getEventId())
+                            .addParameter("adminid", s.getAdminId())
                             .addParameter("start_week", s.getStart_week())
                             .addParameter("end_week", s.getEnd_week())
-                            .addParameter("songId", s.getSongId())
+                            .addParameter("songid", s.getSongId())
                             .executeUpdate();
 
                     // Insert sotw-events-submissions info.
 
                     for (String t_id : s.getSubmissions()) {
                         conn.createQuery(sotw_events_submissions_sql)
-                                .addParameter("eventId", s.getEventId())
+                                .addParameter("eventid", s.getEventId())
                                 .addParameter("submission", t_id)
                                 .executeUpdate();
                     }

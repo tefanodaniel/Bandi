@@ -17,48 +17,48 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
     }
 
     @Override
-    public SongOfTheWeekSubmission create(String submissionId, String musicianId,
-                                          String avSubmission, Set<String> instruments) throws DaoException {
-        String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionId, musicianId, avSubmission)" +
-                "VALUES (:submissionId, :musicianId, :avSubmission)";
-        String sotw_submissions_instruments_sql = "INSERT INTO sotwsubmissionsinstruments (submissionId, instrument) VALUES (:submissionId, :instrument)";
+    public SongOfTheWeekSubmission create(String submissionid, String musicianid,
+                                          String avsubmission, Set<String> instruments) throws DaoException {
+        String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionid, musicianid, avsubmission)" +
+                "VALUES (:submissionid, :musicianid, :avsubmission)";
+        String sotw_submissions_instruments_sql = "INSERT INTO sotwsubmissionsinstruments (submissionid, instrument) VALUES (:submissionid, :instrument)";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sotw_submission_sql)
-                    .addParameter("submissionId", submissionId)
-                    .addParameter("musicianId", musicianId)
-                    .addParameter("avSubmission", avSubmission)
+                    .addParameter("submissionid", submissionid)
+                    .addParameter("musicianid", musicianid)
+                    .addParameter("avsubmission", avsubmission)
                     .executeUpdate();
 
             for (String instrument : instruments) {
                 conn.createQuery(sotw_submissions_instruments_sql)
-                        .addParameter("submissionId", submissionId)
+                        .addParameter("submissionid", submissionid)
                         .addParameter("instrument", instrument)
                         .executeUpdate();
             }
 
-            return this.read(submissionId);
+            return this.read(submissionid);
         } catch (Sql2oException ex) {
             throw new DaoException(ex.getMessage(), ex);
         }
     };
 
     @Override
-    public SongOfTheWeekSubmission read(String submissionId) throws DaoException {
+    public SongOfTheWeekSubmission read(String submissionid) throws DaoException {
         try (Connection conn = sql2o.open()) {
-            String sql = "SELECT * FROM (SELECT S.submissionId as SID, * FROM sotwsubmissions as S) as R\n"
-                    + "LEFT JOIN sotwsubmissionsinstruments as G ON R.SID=G.submissionId\n"
-                    + "WHERE R.SID=:submissionId;";
+            String sql = "SELECT * FROM (SELECT S.submissionid as SID, * FROM sotwsubmissions as S) as R\n"
+                    + "LEFT JOIN sotwsubmissionsinstruments as G ON R.SID=G.submissionid\n"
+                    + "WHERE R.SID=:submissionid;";
 
-            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("submissionId", submissionId).executeAndFetchTable().asList();
+            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("submissionid", submissionid).executeAndFetchTable().asList();
 
             if (queryResults.size() == 0) {
                 return null;
             }
 
-            String musicianId = (String) queryResults.get(0).get("musicianId");
-            String avSubmission = (String) queryResults.get(0).get("avSubmission");
+            String musicianid = (String) queryResults.get(0).get("musicianid");
+            String avsubmission = (String) queryResults.get(0).get("avsubmission");
 
-            SongOfTheWeekSubmission s = new SongOfTheWeekSubmission(submissionId, musicianId, avSubmission);
+            SongOfTheWeekSubmission s = new SongOfTheWeekSubmission(submissionid, musicianid, avsubmission);
             for (Map row : queryResults) {
                 if (row.get("instrument") != null) {
                     s.addInstrument((String) row.get("instrument"));
@@ -67,14 +67,14 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
 
             return s;
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to read song with id " + submissionId, ex);
+            throw new DaoException("Unable to read submission with id " + submissionid, ex);
         }
     };
 
     @Override
     public List<SongOfTheWeekSubmission> readAll() throws DaoException {
-        String sql = "SELECT * FROM (SELECT S.submissionId as SID, * FROM sotwsubmissions as  S) as R\n" +
-                "LEFT JOIN sotwsubmisssionsinstruments as G on R.SID=G.submissionId;";
+        String sql = "SELECT * FROM (SELECT S.submissionid as SID, * FROM sotwsubmissions as  S) as R\n" +
+                "LEFT JOIN sotwsubmissionsinstruments as G on R.SID=G.submissionid;";
 
         try (Connection conn = sql2o.open()) {
             List<SongOfTheWeekSubmission> submissions = this.extractSubmissionsFromDatabase(sql, conn);
@@ -86,25 +86,25 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
     };
 
     @Override
-    public SongOfTheWeekSubmission updateAVSubmission(String submissionId, String avSubmission) throws DaoException {
-        String sql = "UPDATE sotwsubmissions SET avSubmission=:avSubmission WHERE submissionId=:submissionId;";
+    public SongOfTheWeekSubmission updateAVSubmission(String submissionid, String avsubmission) throws DaoException {
+        String sql = "UPDATE sotwsubmissions SET avsubmission=:avsubmission WHERE submissionid=:submissionid;";
 
         try (Connection conn = sql2o.open()) {
-            conn.createQuery(sql).addParameter("submissionId", submissionId).addParameter("avSubmission", avSubmission).executeUpdate();
-            return this.read(submissionId);
+            conn.createQuery(sql).addParameter("submissionid", submissionid).addParameter("avsubmission", avsubmission).executeUpdate();
+            return this.read(submissionid);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the av link", ex);
         }
     };
 
     @Override
-    public SongOfTheWeekSubmission updateInstruments(String submissionId, Set<String> newInstruments) throws DaoException {
-        String getCurrentInstrumentsSQL = "SELECT * FROM sotwsubmissionsinstruments WHERE submissionId=:submissionId";
-        String deleteInstrumentSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionId=:submissionId AND instrument=:instrument";
-        String insertInstrumentSQL = "INSERT INTO sotwsubmissionsinstruments (submissionId, instrument) VALUES (:submissionId, :instrument)";
+    public SongOfTheWeekSubmission updateInstruments(String submissionid, Set<String> newInstruments) throws DaoException {
+        String getCurrentInstrumentsSQL = "SELECT * FROM sotwsubmissionsinstruments WHERE submissionid=:submissionid";
+        String deleteInstrumentSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionid=:submissionid AND instrument=:instrument";
+        String insertInstrumentSQL = "INSERT INTO sotwsubmissionsinstruments (submissionid, instrument) VALUES (:submissionid, :instrument)";
         try (Connection conn = sql2o.open()) {
             // Get current instruments stored in DB for this musician
-            List<Map<String, Object>> rows = conn.createQuery(getCurrentInstrumentsSQL).addParameter("submissionId", submissionId).executeAndFetchTable().asList();
+            List<Map<String, Object>> rows = conn.createQuery(getCurrentInstrumentsSQL).addParameter("submissionid", submissionid).executeAndFetchTable().asList();
             HashSet<String> currentInstruments = new HashSet<String>();
             for (Map row : rows) {
                 currentInstruments.add((String) row.get("instrument"));
@@ -113,42 +113,42 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
             // Delete any values currently in the database that aren't in the new set of instruments to store
             for (String instrument : currentInstruments) {
                 if (!newInstruments.contains(instrument)) {
-                    conn.createQuery(deleteInstrumentSQL).addParameter("submissionId", submissionId).addParameter("instrument", instrument).executeUpdate();
+                    conn.createQuery(deleteInstrumentSQL).addParameter("submissionid", submissionid).addParameter("instrument", instrument).executeUpdate();
                 }
             }
 
             // Add new instruments to the database, if they aren't already in there
             for (String instrument : newInstruments) {
                 if (!currentInstruments.contains(instrument)) {
-                    conn.createQuery(insertInstrumentSQL).addParameter("submissionId", submissionId).addParameter("instrument", instrument).executeUpdate();
+                    conn.createQuery(insertInstrumentSQL).addParameter("submissionid", submissionid).addParameter("instrument", instrument).executeUpdate();
                 }
             }
 
             // Return Musician object for this particular id
-            return this.read(submissionId);
+            return this.read(submissionid);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to update the song genre", ex);
+            throw new DaoException("Unable to update the submission instruments", ex);
         }
     };
 
     @Override
-    public SongOfTheWeekSubmission delete(String submissionId) throws DaoException {
-        String deletesubmissioninstrumentsSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionId=:submissionId;";
-        String deletesubmissionSQL = "DELETE FROM sotwsubmissions WHERE submissionId=:submissionId;";
+    public SongOfTheWeekSubmission delete(String submissionid) throws DaoException {
+        String deletesubmissioninstrumentsSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionid=:submissionid;";
+        String deletesubmissionSQL = "DELETE FROM sotwsubmissions WHERE submissionid=:submissionid;";
         try (Connection conn = sql2o.open()) {
             // Get songs to return before we delete
-            SongOfTheWeekSubmission submissionToDelete = this.read(submissionId);
+            SongOfTheWeekSubmission submissionToDelete = this.read(submissionid);
 
             // Delete associated genres
-            conn.createQuery(deletesubmissioninstrumentsSQL).addParameter("submissionId", submissionId).executeUpdate();
+            conn.createQuery(deletesubmissioninstrumentsSQL).addParameter("submissionid", submissionid).executeUpdate();
 
             // Delete musician
-            conn.createQuery(deletesubmissionSQL).addParameter("submissionId", submissionId).executeUpdate();
+            conn.createQuery(deletesubmissionSQL).addParameter("submissionid", submissionid).executeUpdate();
 
 
             return submissionToDelete;
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to delete the musician", ex);
+            throw new DaoException("Unable to delete the submission", ex);
         }
 
     };
@@ -166,16 +166,16 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         Map<String, SongOfTheWeekSubmission> submissions = new HashMap<String, SongOfTheWeekSubmission>();
         for (Map row : queryResults) {
             // Extract data from this row
-            String submissionId = (String) row.get("submissionId");
-            String musicianId = (String) row.get("musicianId");
-            String avSubmission = (String) row.get("avSubmission");
+            String submissionid = (String) row.get("submissionid");
+            String musicianid = (String) row.get("musicianid");
+            String avsubmission = (String) row.get("avsubmission");
             String instrument = (String) row.get("instrument");
-            if (!alreadyAdded.contains(submissionId)){
-                alreadyAdded.add(submissionId);
-                submissions.put(submissionId, new SongOfTheWeekSubmission(submissionId, musicianId, avSubmission, new HashSet<String>()));
+            if (!alreadyAdded.contains(submissionid)){
+                alreadyAdded.add(submissionid);
+                submissions.put(submissionid, new SongOfTheWeekSubmission(submissionid, musicianid, avsubmission, new HashSet<String>()));
             }
 
-            SongOfTheWeekSubmission s = submissions.get(submissionId);
+            SongOfTheWeekSubmission s = submissions.get(submissionid);
             s.addInstrument(instrument);
         }
         System.out.println("SOTW Submission Extraction successful");

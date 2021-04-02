@@ -690,6 +690,7 @@ public class ApiServer {
         get("/submissions", (req, res) -> {
             try {
                 List<SongOfTheWeekSubmission> submissions = sotw_submissionDao.readAll();
+                System.out.println(submissions);
                 return gson.toJson(submissions);
             } catch (DaoException ex) {
                 throw new ApiError(ex.getMessage(), 500);
@@ -697,10 +698,10 @@ public class ApiServer {
         });
 
         // get (read) a submission given submissionId
-        get("/submissions/:submissionId", (req, res) -> {
+        get("/submissions/:submissionid", (req, res) -> {
             try {
-                String submissionId = req.params("submissionId");
-                SongOfTheWeekSubmission s = sotw_submissionDao.read(submissionId);
+                String submissionid = req.params("submissionid");
+                SongOfTheWeekSubmission s = sotw_submissionDao.read(submissionid);
                 if (s == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
@@ -727,30 +728,30 @@ public class ApiServer {
         });
 
         // put (update) a submission with info
-        put("/submissions/:submissionId", (req, res) -> {
+        put("/submissions/:submissionid", (req, res) -> {
             try {
 
-                String submissionId = req.params("submissionId");
+                String submissionid = req.params("submissionid");
                 SongOfTheWeekSubmission submission = gson.fromJson(req.body(), SongOfTheWeekSubmission.class);
                 if (submission == null) {
                     throw new ApiError("Resource not found", 404);
                 }
 
-                if (! (submission.getSubmission_id().equals(submissionId))) {
+                if (! (submission.getSubmission_id().equals(submissionid))) {
                     throw new ApiError("submission ID does not match the resource identifier", 400);
                 }
 
-                String avSubmission = submission.getAVSubmission();
+                String avsubmission = submission.getAVSubmission();
                 Set<String> instruments = submission.getInstruments();
 
                 // Update specific fields:
                 boolean flag = false;
-                if (avSubmission != null) {
+                if (avsubmission != null) {
                     flag = true;
-                    submission = sotw_submissionDao.updateAVSubmission(submissionId, avSubmission);
+                    submission = sotw_submissionDao.updateAVSubmission(submissionid, avsubmission);
                 } if (instruments != null) {
                     flag = true;
-                    submission = sotw_submissionDao.updateInstruments(submissionId, instruments);
+                    submission = sotw_submissionDao.updateInstruments(submissionid, instruments);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 } if (submission == null) {
@@ -764,10 +765,10 @@ public class ApiServer {
         });
 
         // delete (remove) a submission
-        delete("/submissions/:submissionId", (req, res) -> {
+        delete("/submissions/:submissionid", (req, res) -> {
             try {
-                String submissionId = req.params("submissionId");
-                SongOfTheWeekSubmission submission = sotw_submissionDao.delete(submissionId);
+                String submissionid = req.params("submissionid");
+                SongOfTheWeekSubmission submission = sotw_submissionDao.delete(submissionid);
                 if (submission == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
