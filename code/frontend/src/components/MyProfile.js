@@ -8,48 +8,11 @@ import Cookies from "js-cookie";
 import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
+import BandApiService from '../utils/BandApiService';
+
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../actions/band_actions';
-
-function DisplayFriendsList(props) {
-    console.log(props.list)
-    if (props.list.length > 0) {
-        return (<p>Hello</p>) ;
-
-
-        let friends = new Map();
-        props.list.forEach(friendID => {
-            let friendURL = getBackendURL() + "/musicians/" + friendID;
-            axios.get(friendURL)
-                .then(response => friends.set(response.data.name, friendURL));
-        });
-        return (
-            <div>
-                {friends.forEach((value, key) => <p>{key}</p>)}
-            </div>
-        )
-    }
-    /*
-    if (getMapSize(friends) > 0) {
-        const friendItems = friends.map((name, url) => {
-                <li> <a href={url}>{name}</a> </li>
-        });
-        return (
-          <ul>{friendItems}</ul>
-        );
-    } else {
-        return (<p>No friends to display :(</p>);
-    }
-    */
-    return (
-        <div>
-            {props.list.map(friendID => <p key={friendID}>{friendID}</p>)}
-        </div>
-    )
-}
-
-
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -61,17 +24,32 @@ class MyProfile extends React.Component {
             id: Cookies.get('id'),
             bands: [],
             name: 'Loading...',
-
-            pending_outgoing_requests: [],
+            friendList: [],
+            pending_outgoing_requests: []
         }
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
+        
+        BandApiService.getUserFriendList(this.state.id)
+                    .then((result) => {
+                        this.setState({
+                            friendList: result.data
+                        })
+                    });
     }
 
     componentDidMount() {
       const { fetchBandsForMusician } = this.props;
       fetchBandsForMusician({id: this.state.id});
-      // Fetch friend list
+    }
+
+    renderFriendListForMusician() {
+        const listItems = this.state.friendList.map((friend) =>
+        <li key={friend.id}>{friend.name}</li>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
     }
 
     renderCustomizeProfileHeader() {
@@ -138,7 +116,7 @@ class MyProfile extends React.Component {
 
                         <TabPanel>
                             <h3>My friends ({userInfo.friends?.length})</h3>
-                            <DisplayFriendsList list={userInfo?.friends}/>
+                            {this.renderFriendListForMusician()}
                         </TabPanel>
 
                     </Tabs>

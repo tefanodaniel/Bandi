@@ -9,56 +9,6 @@ import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../utils/BandApiService';
 
-function makeFriendMap(list) {
-    console.log("making a map for list")
-    console.log(list)
-    let friendMap = new Map();
-    if (list.length > 0) {
-        list.forEach(friendID => {
-            let friendURL = getBackendURL() + "/musicians/" + friendID;
-            axios.get(friendURL)
-                .then(response => friendMap.set(response.data.name, friendURL));
-        });
-    }
-    console.log("final map")
-    console.log(friendMap)
-    return friendMap;
-}
-
-function getMapSize(x) {
-    var len = 0;
-    for (var count in x) {
-            len++;
-    }
-    console.log("map size")
-    console.log(len)
-    return len;
-}
-
-function DisplayFriendsList(props) {
-    /*
-    let friends = makeFriendMap(props.list)
-    console.log("map to display")
-    console.log(friends)
-    if (getMapSize(friends) > 0) {
-        const friendItems = friends.map((name, url) => {
-                <li> <a href={url}>{name}</a> </li>
-        });
-        return (
-          <ul>{friendItems}</ul>
-        );
-    } else {
-        return (<p>No friends to display :(</p>);
-    }
-    */
-    return (
-        <div>
-            <h4>Friends:</h4>
-            {props.list.map(friendID => <p>{friendID}</p>)}
-        </div>
-    )
-}
-
 class Profile extends React.Component {
     constructor(props) {
         super(props)
@@ -105,13 +55,18 @@ class Profile extends React.Component {
 
     
     addFriend = () => {
-        BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id); // TODO: store pending outgoing requests in database as part of Musician
-        // alert("A request to connect was sent to " + this.state.name + ".");
+        BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
+            alert("A request to connect was sent to " + this.state.name + ".")
+        );
     }
 
     renderConnectButton = () => {
         // remove question mark once pending_outgoing_requests confirmed to exist 
+        /*
         if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
+            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
+        } else { return <Button disabled>Pending...</Button> };*/
+        if (true) {
             return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
         } else { return <Button disabled>Pending...</Button> };
     }
