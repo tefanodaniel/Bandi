@@ -295,10 +295,10 @@ public class ApiServer {
         });
 
         // get all of user's pending incoming friend requests
-        get("/requests/in/:senderid", (req, res) -> {
+        get("/requests/in/:recipientid", (req, res) -> {
             try {
-                String senderID = req.params("senderid");
-                List<FriendRequest> requests = requestDao.readAllFrom(senderID);
+                String recipientID = req.params("recipientid");
+                List<FriendRequest> requests = requestDao.readAllTo(recipientID);
                 res.type("application/json");
                 return gson.toJson(requests);
             } catch (DaoException ex) {
@@ -307,10 +307,10 @@ public class ApiServer {
         });
 
         // get all of user's pending outgoing friend requests
-        get("/requests/out/:recipientid", (req, res) -> {
+        get("/requests/out/:senderid", (req, res) -> {
             try {
-                String recipientID = req.params("recipientid");
-                List<FriendRequest> requests = requestDao.readAllTo(recipientID);
+                String senderID = req.params("senderid");
+                List<FriendRequest> requests = requestDao.readAllFrom(senderID);
                 res.type("application/json");
                 return gson.toJson(requests);
             } catch (DaoException ex) {
