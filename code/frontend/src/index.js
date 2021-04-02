@@ -8,6 +8,8 @@ import reportWebVitals from './reportWebVitals';
 import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
 
+import {fetchSDEvents} from "./actions/sd_event_actions";
+
 console.log('Initial state: ', store.getState())
 
 const unsubscribe = store.subscribe(() =>
@@ -15,6 +17,8 @@ const unsubscribe = store.subscribe(() =>
 )
 
 store.dispatch(fetchMusicians)
+
+store.dispatch(fetchSDEvents)
 
 
 ReactDOM.render(

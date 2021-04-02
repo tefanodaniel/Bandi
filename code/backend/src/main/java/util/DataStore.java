@@ -1,5 +1,6 @@
 package util;
 
+import model.SpeedDateEvent;
 import model.Musician;
 import model.Band;
 
@@ -54,10 +55,17 @@ public final class DataStore {
         // Adding my own account for testing
         Set<String> maxLinks = new HashSet<String>();
         maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
+
         samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres", genres2, instruments2, "Expert",
                 maxLinks, "Freehold, NJ", "07728",  kennyFriends,true)); // Max and Kenny G are best friends
+      
         samples.add(new Musician("thegreatbelow1","Stefano Tusa", genres2, instruments2, "Intermediate",
                 new HashSet<String>(),  "Orlando, FL", "32825", kennyFriends, true)); // Max, Kenny G, and I are all best friends.
+
+        // Adding Nick as an admin so he can test admin functionality
+        Musician Nick = new Musician("12101628937","Nick Xitco",
+                genres2, instruments2, "Expert", maxLinks, "New York, NY", "32825", kennyFriends, true);
+        samples.add(Nick);
 
         return samples;
     }
@@ -88,5 +96,26 @@ public final class DataStore {
         sample_bands.add(new Band(bandId,"Pink Floyd",4, genres, members));
         sample_bands.add(new Band(id2, "Imagine Dragons",4, genres, members2));
         return sample_bands;
+    }
+
+    /**
+     * Create a list of sample events
+     *
+     * @return a list of sample events.
+     */
+    public static List<SpeedDateEvent> sampleSpeedDateEvents() {
+
+        Set<String> participants = new HashSet<>();
+        participants.add("22zcnk76clvox7mifcwgz3tha");
+
+        SpeedDateEvent event1 = new SpeedDateEvent(UUID.randomUUID().toString(), "Speed-Dating Part 1",
+                "https://zoom.us/", "April 15, 2021 8-9pm", 4, participants);
+        SpeedDateEvent event2 = new SpeedDateEvent(UUID.randomUUID().toString(), "Speed-Dating Part 2",
+                "https://zoom.us/", "April 16, 2021 4-5pm", 6, participants);
+
+        List<SpeedDateEvent> sample_events = new ArrayList<>();
+        sample_events.add(event1);
+        sample_events.add(event2);
+        return sample_events;
     }
 }

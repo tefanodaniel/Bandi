@@ -1,19 +1,16 @@
 package util;
 
 import model.Band;
+import model.SpeedDateEvent;
 import model.FriendRequest;
 import model.Musician;
 import org.sql2o.Connection;
-import org.sql2o.Query;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.List;
-import java.sql.Statement;
 
 /**
  * A utility class with methods to establish JDBC connection, set schemas, etc.
@@ -39,6 +36,7 @@ public final class Database {
         Sql2o sql2o = getSql2o();
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
+        createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
         createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
     }
 
@@ -192,10 +190,10 @@ public final class Database {
     }
 
     /**
-     * Create Musicians table schema and add sample CS Musicians to it.
+     * Create Bands table schema and add sample CS Musicians to it.
      *
      * @param sql2o a Sql2o object connected to the database to be used in this application.
-     * @param samples a list of sample CS Musicians.
+     * @param samples a list of sample bands.
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
     public static void createBandTablesWithSampleData(Sql2o sql2o, List<Band> samples) throws Sql2oException {
@@ -256,6 +254,59 @@ public final class Database {
             }
 
 
+
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+
+    /**
+     * Create Events table schema and add sample events
+     *
+     * @param sql2o a Sql2o object connected to the database to be used in this application.
+     * @param samples a list of sample SpeedDateEvents
+     * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
+     */
+    public static void createSpeedDateEventsWithSampleData(Sql2o sql2o, List<SpeedDateEvent> samples) throws Sql2oException {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS SpeedDateEvents CASCADE;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS SpeedDateParticipants;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS SpeedDateEvents("
+                    + "id VARCHAR(50) PRIMARY KEY,"
+                    + "name VARCHAR(30) NOT NULL,"
+                    + "link VARCHAR(50),"
+                    + "date VARCHAR(50),"
+                    + "minusers integer"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            sql = "CREATE TABLE IF NOT EXISTS SpeedDateParticipants("
+                    + "participant VARCHAR(30),"
+                    + "event VARCHAR(50)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
+            String event_sql = "INSERT INTO SpeedDateEvents(id, name, link, date, minusers) VALUES(:id, :name, :link, :date, :minusers);";
+            String participants_sql = "INSERT INTO SpeedDateParticipants(participant, event) VALUES(:participant, :event);";
+            for (SpeedDateEvent e : samples) {
+                conn.createQuery(event_sql)
+                        .addParameter("id", e.getId())
+                        .addParameter("name", e.getName())
+                        .addParameter("link", e.getLink())
+                        .addParameter("date", e.getDate())
+                        .addParameter("minusers", e.getMinusers())
+                        .executeUpdate();
+
+                // Insert participant info
+                for (String participant : e.getParticipants()) {
+                    conn.createQuery(participants_sql)
+                            .addParameter("participant", participant)
+                            .addParameter("event", e.getId())
+                            .executeUpdate();
+                }
+            }
 
         } catch (Sql2oException ex) {
             throw new Sql2oException(ex.getMessage());
