@@ -10,6 +10,8 @@ public interface RequestDao {
 
     List<FriendRequest> readAllFrom(String senderID) throws DaoException;
 
+    List<FriendRequest> readAllTo(String recipientID) throws DaoException;
+
     FriendRequest read(String senderID, String recipientID) throws DaoException;
 
     FriendRequest acceptRequest(String senderID, String recipientID) throws DaoException;

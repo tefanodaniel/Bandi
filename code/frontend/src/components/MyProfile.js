@@ -32,10 +32,15 @@ class MyProfile extends React.Component {
         
         BandApiService.getUserFriendList(this.state.id)
                     .then((result) => {
-                        this.setState({
+                        this.state['friendList'] = result.data ({
                             friendList: result.data
                         })
                     });
+        
+        BandApiService.getIncomingFriendRequests(this.state.id)
+
+        BandApiService.getOutgoingFriendRequests(this.state.id)
+
     }
 
     componentDidMount() {
@@ -50,6 +55,10 @@ class MyProfile extends React.Component {
         return (
             <ul>{listItems}</ul>
         );
+    }
+
+    renderPendingRequestList() {
+        const 
     }
 
     renderCustomizeProfileHeader() {
@@ -117,6 +126,10 @@ class MyProfile extends React.Component {
                         <TabPanel>
                             <h3>My friends ({userInfo.friends?.length})</h3>
                             {this.renderFriendListForMusician()}
+                            <h3>Friend requests ({this.state.friendRequests?.length})</h3>
+                            {this.renderFriendRequestList()}
+                            <h3>Pending friend requests  ({this.state.pendingFriendRequests?.length})</h3>
+                            {this.renderPendingRequestList()}
                         </TabPanel>
 
                     </Tabs>

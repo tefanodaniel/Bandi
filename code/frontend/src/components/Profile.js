@@ -94,9 +94,6 @@ class Profile extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
-                    <div>
-                        <DisplayFriendsList list={this.state.friends}/>
-                    </div>
                     {this.renderConnectButton()}
                 </div>
             );

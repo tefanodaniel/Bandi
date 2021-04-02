@@ -95,6 +95,33 @@ public class Sql2oRequestDao implements RequestDao {
     }
 
     @Override
+    public List<FriendRequest> readAllTo(String recipientID) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+
+            String sql = "SELECT * FROM requests AS fr " +
+                    "WHERE fr.recipientid = :recipientid;";
+
+            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("recipientid", recipientID)
+                    .executeAndFetchTable().asList();
+
+            if (queryResults.size() == 0) { // user has no incoming friend requests
+                return new ArrayList<FriendRequest>();
+            }
+
+            List<FriendRequest> to = new ArrayList<>();
+            for (Map row : queryResults) {
+                String senderID = (String) row.get("senderid");
+                to.add(new FriendRequest(senderID, recipientID));
+            }
+
+            return to;
+
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read a friend request to " + recipientID, ex);
+        }
+    }
+
+    @Override
     public FriendRequest acceptRequest(String senderID, String recipientID) throws DaoException {
 
         String makeFriendsSql1 = "INSERT INTO MusicianFriends(id, friendid) VALUES(:senderid, :recipientid);";

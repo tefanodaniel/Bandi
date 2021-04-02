@@ -294,11 +294,23 @@ public class ApiServer {
             }
         });
 
-        // get all of user's pending friend requests
-        get("/request/:senderid", (req, res) -> {
+        // get all of user's pending incoming friend requests
+        get("/requests/in/:senderid", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 List<FriendRequest> requests = requestDao.readAllFrom(senderID);
+                res.type("application/json");
+                return gson.toJson(requests);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // get all of user's pending outgoing friend requests
+        get("/requests/out/:recipientid", (req, res) -> {
+            try {
+                String recipientID = req.params("recipientid");
+                List<FriendRequest> requests = requestDao.readAllTo(recipientID);
                 res.type("application/json");
                 return gson.toJson(requests);
             } catch (DaoException ex) {
