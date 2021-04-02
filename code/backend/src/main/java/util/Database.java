@@ -325,7 +325,7 @@ public final class Database {
                     + "songName VARCHAR(50) NOT NULL,"
                     + "artistName VARCHAR(50) NOT NULL,"
                     + "albumName VARCHAR(50),"
-                    + "releasedYear integer"
+                    + "releaseYear integer"
                     + ");";
 
             conn.createQuery(sql).executeUpdate();
@@ -337,7 +337,7 @@ public final class Database {
 
             conn.createQuery(sql).executeUpdate();
 
-            String song_sql = "INSERT INTO Songs(songId, songName, artistName, albumName, releasedYear) VALUES(:songId, :songName, :artistName, :albumName, :releaseYear);";
+            String song_sql = "INSERT INTO Songs(songId, songName, artistName, albumName, releaseYear) VALUES(:songId, :songName, :artistName, :albumName, :releaseYear);";
             String song_genres_sql = "INSERT INTO SongGenres(songId, genre) VALUES (:songId, :genre);";
 
             for (Song s: sample_songs) {
@@ -432,7 +432,7 @@ public final class Database {
                 conn.createQuery(sql).executeUpdate();
 
                 String sotw_events_sql = "INSERT INTO SotwEvents(eventId, adminId, start_week, end_week, songId) VALUES(:eventId, :adminId, :start_week, :end_week, :songId);";
-                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventId, submission) VALUES (:eventId, :submissionId);";
+                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventId, submission) VALUES (:eventId, :submission);";
 
                 for (SongOfTheWeekEvent s: sample_events) {
                     conn.createQuery(sotw_events_sql)

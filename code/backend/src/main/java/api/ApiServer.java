@@ -591,10 +591,10 @@ public class ApiServer {
         });
 
         // get (read) a song given songId
-        get("/songs/:songId", (req, res) -> {
+        get("/songs/:songid", (req, res) -> {
             try {
-                String songId = req.params("songId");
-                Song s = songDao.read(songId);
+                String songid = req.params("songid");
+                Song s = songDao.read(songid);
                 if (s == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
@@ -621,17 +621,17 @@ public class ApiServer {
         });
 
         // put (updated) a song with info
-        put("/songs/:songId", (req, res) -> {
+        put("/songs/:songid", (req, res) -> {
 
             try {
 
-                String songId = req.params("songId");
+                String songid = req.params("songid");
                 Song song = gson.fromJson(req.body(), Song.class);
                 if (song == null) {
                     throw new ApiError("Resource not found", 404);
                 }
 
-                if (! (song.getSongId().equals(songId))) {
+                if (! (song.getSongId().equals(songid))) {
                     throw new ApiError("song ID does not match the resource identifier", 400);
                 }
 
@@ -645,19 +645,19 @@ public class ApiServer {
                 boolean flag = false;
                 if (songName != null) {
                     flag = true;
-                    song = songDao.updateSongName(songId, songName);
+                    song = songDao.updateSongName(songid, songName);
                 } if (artistName != null) {
                     flag = true;
-                    song = songDao.updateArtistName(songId, songName);
+                    song = songDao.updateArtistName(songid, artistName);
                 } if (albumName != null) {
                     flag = true;
-                    song = songDao.updateAlbumName(songId, albumName);
+                    song = songDao.updateAlbumName(songid, albumName);
                 } if (releaseYear != 0) {
                     flag = true;
-                    song = songDao.updateReleaseYear(songId, releaseYear);
+                    song = songDao.updateReleaseYear(songid, releaseYear);
                 } if (genres != null) {
                     flag = true;
-                    song = songDao.updateGenres(songId, genres);
+                    song = songDao.updateGenres(songid, genres);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 } if (song == null) {
@@ -665,7 +665,7 @@ public class ApiServer {
                 }
 
                 return gson.toJson(song);
-            } catch (DaoException | JsonSyntaxException ex) {
+            } catch (DaoException ex) {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
