@@ -44,6 +44,11 @@ class ChatAPIService {
     deleteAllUserAuthTokens(uid) {
       return this.chatApiInstance.delete(`/${uid}/auth_tokens`);
     }
+
+    addChatFriend(uid, friendUID) {
+      let data = {"accepted": [friendUID]}
+      return this.chatApiInstance.post(`/${uid}/friends`, data);
+    }
 }
 
 export default new ChatAPIService();

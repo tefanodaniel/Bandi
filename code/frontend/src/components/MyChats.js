@@ -27,7 +27,7 @@ class MyChats extends React.Component {
     return (
       <div>
         <Header />
-        <div style={{width: '1000px', height:'900px' }}>
+        <div style={{width: '100%', height: '94vh' }}>
           <CometChatUI />
         </div>
       </div>
