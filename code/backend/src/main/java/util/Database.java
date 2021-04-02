@@ -2,6 +2,7 @@ package util;
 
 import model.Band;
 import model.SpeedDateEvent;
+import model.FriendRequest;
 import model.Musician;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -36,6 +37,7 @@ public final class Database {
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
         createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
+        createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
     }
 
     /**
@@ -47,10 +49,7 @@ public final class Database {
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
     public static Sql2o getSql2o() throws URISyntaxException, Sql2oException {
-        String databaseUrl = System.getenv("DATABASE_URL");
-        if (USE_TEST_DATABASE) {
-            databaseUrl = System.getenv("TEST_DATABASE_URL");
-        }
+        String databaseUrl = getDatabaseUrl();
         URI dbUri = new URI(databaseUrl);
 
         String username = dbUri.getUserInfo().split(":")[0];
@@ -74,12 +73,17 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS Instruments;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS MusicianGenres;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS ProfileAVLinks;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS MusicianFriends;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
                     + "id VARCHAR(30) PRIMARY KEY,"
                     + "name VARCHAR(30) NOT NULL,"
                     + "experience VARCHAR(30),"
                     + "location VARCHAR(30),"
+                    + "zipCode VARCHAR(10),"
+                    + "latitude DOUBLE PRECISION,"
+                    + "longitude DOUBLE PRECISION,"
+                    + "distance DOUBLE PRECISION DEFAULT 9999.0,"
                     + "admin boolean"
                     + ");";
             conn.createQuery(sql).executeUpdate();
@@ -102,9 +106,20 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, admin) VALUES(:id, :name, :experience, :location, :admin);";
+            sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
+                    + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
+                    + "friendID VARCHAR(30) REFERENCES Musicians"
+                    + ");";
+
+            String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
+                    "zipCode, latitude, longitude, distance, admin)" +
+                    " VALUES(:id, :name, :experience, :location, " +
+                    ":zipCode, :latitude, :longitude, :distance, :admin);";
+
+            conn.createQuery(sql).executeUpdate();
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";
             String genre_sql = "INSERT INTO MusicianGenres(id, genre) VALUES(:id, :genre);";
+            String friend_sql = "INSERT INTO MusicianFriends(id, friendID) VALUES(:id, :friendID);";
             String link_sql = "INSERT INTO profileavlinks(id, link) VALUES(:id, :link);";
 
             for (Musician m : samples) {
@@ -127,12 +142,46 @@ public final class Database {
                             .executeUpdate();
                 }
 
+                // Insert all friends for this musician
+                for (String friendID : m.getFriends()) {
+                    conn.createQuery(friend_sql)
+                            .addParameter("id", m.getId())
+                            .addParameter("friendID", friendID)
+                            .executeUpdate();
+                }
+
                 for (String link : m.getProfileLinks()) {
                     conn.createQuery(link_sql)
                             .addParameter("id", m.getId())
                             .addParameter("link", link)
                             .executeUpdate();
                 }
+            }
+
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
+    public static void createRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS Requests;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS Requests("
+                    + "senderid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
+                    + ");";
+
+            conn.createQuery(sql).executeUpdate();
+
+            String requestSql = "INSERT INTO Requests(senderid, recipientid) VALUES (:senderid, :recipientid);";
+
+            for (FriendRequest fr : samples) {
+                conn.createQuery(requestSql)
+                        .addParameter("senderid", fr.getSenderID())
+                        .addParameter("recipientid", fr.getRecipientID())
+                        .executeUpdate();
             }
 
         } catch (Sql2oException ex) {

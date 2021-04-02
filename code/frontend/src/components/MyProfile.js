@@ -11,6 +11,32 @@ import {Container, Navbar} from "react-bootstrap";
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../actions/band_actions';
+function makeFriendMap(list) {
+    let friendMap = new Map();
+    list.forEach(friendID => {
+        let friendURL = getBackendURL() + "/musicians/" + friendID;
+        axios.get(friendURL)
+            .then(response => friendMap.set(response.data.name, friendURL));
+    });
+    console.log(friendMap.size);
+    return friendMap;
+}
+
+function DisplayFriendsList(props) {
+
+    let friends = makeFriendMap(props.list)
+    if (friends.size > 0) {
+        const friendItems = friends.map((name, url) => {
+                <li> <a href={url}>{name}</a> </li>
+        });
+        return (
+          <ul>{friendItems}</ul>
+        );
+    } else {
+        return (<p>No friends to display :(</p>);
+    }
+}
+
 
 
 
@@ -22,15 +48,15 @@ class MyProfile extends React.Component {
         this.state = {
 
             id: Cookies.get('id'),
-
             bands: [],
-
             name: 'Loading...',
             location: '',
             experience: '',
             instruments: [],
             genres: [],
-            links: []
+            links: [],
+            friends: [],
+            pending_outgoing_requests: [],
         }
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
@@ -78,6 +104,7 @@ class MyProfile extends React.Component {
                         <TabList>
                             <Tab>My Profile</Tab>
                             <Tab>My Bands</Tab>
+                            <Tab>My Friends</Tab> 
                         </TabList>
 
                         <TabPanel>
@@ -99,6 +126,14 @@ class MyProfile extends React.Component {
                         <TabPanel>
                             {bandsList}
                             <Button onClick={() => this.props.history.push('/createband')}>Create Band</Button>
+                        </TabPanel>
+
+
+                        <TabPanel>
+                            <h3>My friends ({this.state.friends.length})</h3>
+                            <DisplayFriendsList list={this.state.friends}/>
+                            <h3>Pending friend requests ({this.state.pending_outgoing_requests.length})</h3>
+                            <DisplayFriendsList list={this.state.pending_outgoing_requests}/>
                         </TabPanel>
 
                     </Tabs>
