@@ -155,7 +155,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
                 "LEFT JOIN musicianfriends as F ON R.MID=F.id;";
         try (Connection conn = sql2o.open()) {
-            List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn);
+            List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn, "");
             System.out.println(musicians);
             return musicians;
         } catch (Sql2oException ex) {
@@ -196,7 +196,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     "LEFT JOIN musicianfriends as F ON R.MID=F.id\n" +
                     "WHERE R.mid IN (";
 
-            List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn);
+            List<Musician> partialMusicians = this.extractMusiciansFromDatabase(filterSQL, conn, "");
             for (int i=0; i < partialMusicians.size(); i++) {
                 if (i == partialMusicians.size() - 1) {
                     resultSQL += "'" + partialMusicians.get(i).getId() + "');";
@@ -204,9 +204,26 @@ public class Sql2oMusicianDao implements MusicianDao {
                     resultSQL += "'" + partialMusicians.get(i).getId() + "', ";
                 }
             }
-            return this.extractMusiciansFromDatabase(resultSQL, conn);
+            return this.extractMusiciansFromDatabase(resultSQL, conn, "");
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from the database by filters", ex);
+        }
+    }
+
+    @Override
+    public List<Musician> getAllFriendsOf(String id) throws DaoException {
+        // TODO: re-implement? Yes -- DONE
+        String sql = "SELECT * FROM (SELECT friendid AS id FROM musicianfriends AS mf WHERE mf.id=:id) as R \n" +
+                "LEFT JOIN musicianfriends AS MF USING(id)\n" +
+                "LEFT JOIN musicians AS M USING(id)\n" +
+                "LEFT JOIN instruments AS I USING(id)\n" +
+                "LEFT JOIN musiciangenres AS MG USING(id)\n" +
+                "LEFT JOIN profileavlinks AS P USING(id);";
+        try (Connection conn = sql2o.open()) {
+            List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn, id);
+            return musicians;
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read musicians from the database", ex);
         }
     }
 
@@ -371,7 +388,6 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     }
 
-    // TODO: Add function for adding friends
 
     @Override
     public Musician delete(String id) throws DaoException {
@@ -415,13 +431,22 @@ public class Sql2oMusicianDao implements MusicianDao {
      * @return the list of musicians
      * @throws Sql2oException if query fails
      */
-    private List<Musician> extractMusiciansFromDatabase(String sql, Connection conn) throws Sql2oException {
-        List<Map<String, Object>> queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
+    private List<Musician> extractMusiciansFromDatabase(String sql, Connection conn, String withID) throws Sql2oException {
+        List<Map<String, Object>> queryResults;
+        String mid_or_id;
+        if (!withID.equals("")) {
+            queryResults = conn.createQuery(sql).addParameter("id", withID).executeAndFetchTable().asList();
+            mid_or_id = "id";
+        } else {
+            queryResults = conn.createQuery(sql).executeAndFetchTable().asList();
+            mid_or_id = "mid";
+        }
+
         HashSet<String> alreadyAdded = new HashSet<String>();
         Map<String, Musician> musicians = new HashMap<String, Musician>();
         for (Map row : queryResults) {
             // Extract data from this row
-            String id = (String) row.get("mid");
+            String id = (String) row.get(mid_or_id);
             String name = (String) row.get("name");
             String exp = (String) row.get("experience");
             String loc = (String) row.get("location");
@@ -446,7 +471,6 @@ public class Sql2oMusicianDao implements MusicianDao {
             m.addProfileLink(link);
             m.addFriend(friendID);
         }
-        System.out.println("Extraction successful");
         return new ArrayList<Musician>(musicians.values());
     }
 }

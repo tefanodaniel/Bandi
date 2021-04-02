@@ -231,7 +231,6 @@ public class ApiServer {
                 String experience = musician.getExperience();
                 String location = musician.getLocation();
                 Set<String> profileLinks = musician.getProfileLinks();
-                Set<String> friends = musician.getFriends();
                 // no check for admin flag. We don't want to change admin on and off,
                 // and since ints default to 0, we might accidentally take admin
                 // permissions away.
@@ -283,8 +282,20 @@ public class ApiServer {
             }
         });
 
+        // get all of user's friends
+        get("/friends/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                List<Musician> musicians = musicianDao.getAllFriendsOf(id);
+                res.type("application/json");
+                return gson.toJson(musicians);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
         // get all of user's pending friend requests
-        get("/friend/:senderid", (req, res) -> {
+        get("/request/:senderid", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 List<FriendRequest> requests = requestDao.readAllFrom(senderID);
@@ -296,7 +307,7 @@ public class ApiServer {
         });
 
         // send friend request
-        post("/friend/:senderid/:recipientid", (req, res) -> {
+        post("/request/:senderid/:recipientid", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 String recipientID = req.params("recipientid");
@@ -312,7 +323,7 @@ public class ApiServer {
         });
 
         // respond (accept or decline) friend request
-        delete("friend/:senderid/:recipientid/:action", (req, res) -> {
+        delete("request/:senderid/:recipientid/:action", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 String recipientID = req.params("recipientid");

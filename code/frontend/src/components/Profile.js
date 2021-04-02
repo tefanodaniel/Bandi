@@ -7,6 +7,7 @@ import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
+import BandApiService from '../utils/BandApiService';
 
 function makeFriendMap(list) {
     console.log("making a map for list")
@@ -104,7 +105,7 @@ class Profile extends React.Component {
 
     
     addFriend = () => {
-        this.state.pending_outgoing_requests.push(this.state.userId); // TODO: store pending outgoing requests in database as part of Musician
+        BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id); // TODO: store pending outgoing requests in database as part of Musician
         // alert("A request to connect was sent to " + this.state.name + ".");
     }
 

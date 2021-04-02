@@ -109,7 +109,7 @@ public final class Database {
 
             sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "friendID VARCHAR(30) REFERENCES Musicians"
+                    + "friendID VARCHAR(30)" // TODO: Make reference musician.
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
