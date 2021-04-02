@@ -15,6 +15,7 @@ public class Sql2oSongDao implements SongDao {
         this.sql2o = sql2o;
     }
 
+    @Override
     public Song create(String songId, String songName, String artistName, String albumName, Integer releaseYear,
                        Set<String> genres) throws DaoException {
         String song_sql = "INSERT INTO Songs (songId, songName, artistName, albumName, releaseYear)" +
@@ -42,6 +43,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public Song read(String songId) throws DaoException {
         try (Connection conn = sql2o.open()) {
             String sql = "SELECT * FROM (SELECT S.songid as SID, * FROM songs as S) as R\n"
@@ -72,6 +74,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public List<Song> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT S.songId as SID, * FROM Songs as  S) as R\n" +
                 "LEFT JOIN songgenres as G on R.SID=G.songId;";
@@ -85,6 +88,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public Song updateSongName(String songId, String songName) throws DaoException {
         String sql = "UPDATE Songs SET songName=:songName WHERE songId=:songId;";
 
@@ -96,6 +100,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public Song updateArtistName(String songId, String artistName) throws DaoException {
         String sql = "UPDATE Songs SET artistName=:artistName WHERE songId=:songId;";
 
@@ -107,6 +112,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public Song updateAlbumName(String songId, String albumName) throws DaoException {
         String sql = "UPDATE Songs SET albumName=:albumName WHERE songId=:songId;";
 
@@ -118,6 +124,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public Song updateReleaseYear(String songId, Integer releaseYear) throws DaoException {
         String sql = "UPDATE Songs SET releaseYear=:releaseYear WHERE songId=:songId;";
 
@@ -129,6 +136,7 @@ public class Sql2oSongDao implements SongDao {
         }
     };
 
+    @Override
     public Song updateGenres(String songId, Set<String> newGenres) throws DaoException {
         String getCurrentGenresSQL = "SELECT * FROM SongGenres WHERE songId=:songId";
         String deleteGenreSQL = "DELETE FROM SongGenres WHERE songId=:songId AND genre=:genre";
@@ -163,6 +171,7 @@ public class Sql2oSongDao implements SongDao {
 
     };
 
+    @Override
     public Song deleteSong(String songId) throws DaoException {
         String deleteSongGenresSQL = "DELETE FROM SongGenres WHERE songId=:songId;";
         String deleteSongSQL = "DELETE FROM Songs WHERE songId=:songId;";

@@ -42,6 +42,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         return new ArrayList<SongOfTheWeekEvent>(sotwEvents.values());
     }
 
+    @Override
     public SongOfTheWeekEvent create(String eventId, String adminId, String start_week, String end_week, String songId) throws DaoException {
         String sotw_event_sql = "INSERT INTO sotwevents (eventId, adminId, start_week, end_week, songId)" +
                 "VALUES (:eventId, :adminId, :start_week, :end_week, :songId)";
@@ -62,6 +63,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
 
 
 
+    @Override
     public SongOfTheWeekEvent create(String eventId, String adminId, String start_week, String end_week, String songId, Set<String> submissions) throws DaoException {
         String sotw_event_sql = "INSERT INTO sotwevents (eventId, adminId, start_week, end_week, songId)" +
                 "VALUES (:eventId, :adminId, :start_week, :end_week, :songId)";
@@ -88,6 +90,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent read(String eventId) throws DaoException {
         try (Connection conn = sql2o.open()) {
             String sql = "SELECT * FROM (SELECT S.eventId as EID, * FROM sotwevents as S) as R\n"
@@ -118,6 +121,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public List<SongOfTheWeekEvent> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT S.eventId as EID, * FROM sotwevents as S) as R\n"
                 + "LEFT JOIN sotweventssubmissions as G ON R.EID=G.eventId;";
@@ -131,6 +135,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent updateAdmin(String eventId, String adminId) throws DaoException{
         String sql = "UPDATE sotwevents SET adminId=:adminId WHERE eventId=:eventId;";
 
@@ -142,6 +147,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent updateStartWeek(String eventId, String new_week) throws DaoException{
         String sql = "UPDATE sotwevents SET start_week=:start_week WHERE eventId=:eventId;";
 
@@ -153,6 +159,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent updateEndWeek(String eventId, String new_week) throws DaoException {
         String sql = "UPDATE sotwevents SET end_week=:end_week WHERE eventId=:eventId;";
 
@@ -164,6 +171,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent updateSong(String eventId, String songId) throws DaoException {
         String sql = "UPDATE sotwevents SET songId=:songId WHERE eventId=:eventId;";
 
@@ -175,6 +183,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public Set<String> readAllSubmissionsGivenEvent(String eventId) throws DaoException{
         String getCurrentSubmissionsSQL = "SELECT * FROM sotweventssubmissions WHERE eventId=:eventId";
         try (Connection conn = sql2o.open()) {
@@ -192,6 +201,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent addSubmissionToEvent(String eventId, String submissionId) throws DaoException {
         String getCurrentSubmissionsSQL = "SELECT * FROM sotweventssubmissions WHERE eventId=:eventId";
         String addSubmissionSQL = "INSERT INTO sotweventssubmissions (eventId, submission) VALUES (:eventId, :submission)";
@@ -215,6 +225,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent removeSubmissionFromEvent(String eventId, String submissionId) throws DaoException {
         String getCurrentSubmissionsSQL = "SELECT * FROM sotweventssubmissions WHERE eventId=:eventId";
         String removeSubmissionSQL = "DELETE FROM sotweventssubmissions WHERE eventId=:eventId AND submission=:submission";
@@ -240,6 +251,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         }
     };
 
+    @Override
     public SongOfTheWeekEvent deleteEvent(String eventId) throws DaoException {
         String deleteeventssubmissionsSQL = "DELETE FROM sotweventssubmissions WHERE eventId=:eventId;";
         String deleteeventSQL = "DELETE FROM sotwevents WHERE eventId=:eventId;";

@@ -3,9 +3,7 @@ package api;
 import dao.*;
 import exceptions.ApiError;
 import exceptions.DaoException;
-import model.Band;
-import model.SpeedDateEvent;
-import model.FriendRequest;
+import model.*;
 import spark.QueryParamsMap;
 import spark.Spark;
 import util.Database;
@@ -18,7 +16,6 @@ import java.net.URISyntaxException;
 import java.util.*;
 
 import dao.MusicianDao;
-import model.Musician;
 import org.sql2o.Sql2o;
 
 import com.wrapper.spotify.SpotifyApi;
@@ -60,6 +57,9 @@ public class ApiServer {
         BandDao bandDao = getBandDao();
         Sql2oSpeedDateEventDao speedDateEventDao = getSpeedDateEventDao();
         RequestDao requestDao = getRequestDao();
+        SongDao songDao = getSongDao();
+        SotwSubmissionDao sotw_submissionDao = getSubmissionDao();
+        SotwEventDao sotw_eventDao = getEventDao();
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
@@ -576,8 +576,315 @@ public class ApiServer {
                 throw new ApiError(ex.getMessage(), 500);
             }
         });
-      
+
         // sent friend request from user to user
+
+        // Song Api Routes
+        // get (read) all songs
+        get("/songs", (req, res) -> {
+            try {
+                List<Song> songs = songDao.readAll();
+                return gson.toJson(songs);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+
+        // get (read) a song given songId
+        get("/songs/:songId", (req, res) -> {
+            try {
+                String songId = req.params("songId");
+                Song s = songDao.read(songId);
+                if (s == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(s);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // post (create) a song
+        post("/songs", (req, res) -> {
+            try {
+                Song song = gson.fromJson(req.body(), Song.class);
+                Set<String> genres = song.getGenres();
+
+                if (genres == null) { genres = new HashSet<String>(); }
+                songDao.create(song.getSongId(), song.getSongName(), song.getArtistName(), song.getAlbumName(), song.getReleaseYear(), genres);
+                res.status(201);
+                return gson.toJson(song);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // put (updated) a song with info
+        put("/songs/:songId", (req, res) -> {
+
+            try {
+
+                String songId = req.params("songId");
+                Song song = gson.fromJson(req.body(), Song.class);
+                if (song == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                if (! (song.getSongId().equals(songId))) {
+                    throw new ApiError("song ID does not match the resource identifier", 400);
+                }
+
+                String songName = song.getSongName();
+                String artistName = song.getArtistName();
+                String albumName = song.getAlbumName();
+                Integer releaseYear = song.getReleaseYear();
+                Set<String> genres = song.getGenres();
+
+                // Update specific fields:
+                boolean flag = false;
+                if (songName != null) {
+                    flag = true;
+                    song = songDao.updateSongName(songId, songName);
+                } if (artistName != null) {
+                    flag = true;
+                    song = songDao.updateArtistName(songId, songName);
+                } if (albumName != null) {
+                    flag = true;
+                    song = songDao.updateAlbumName(songId, albumName);
+                } if (releaseYear != 0) {
+                    flag = true;
+                    song = songDao.updateReleaseYear(songId, releaseYear);
+                } if (genres != null) {
+                    flag = true;
+                    song = songDao.updateGenres(songId, genres);
+                } if (!flag) {
+                    throw new ApiError("Nothing to update", 400);
+                } if (song == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                return gson.toJson(song);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // delete (remove) a song
+        delete("/songs/:songId", (req, res) -> {
+            try {
+                String songId = req.params("songId");
+                Song song = songDao.deleteSong(songId);
+                if (song == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(song);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // Song of the Week Submission Api Routes
+        // get (read) all submissions
+        get("/submissions", (req, res) -> {
+            try {
+                List<SongOfTheWeekSubmission> submissions = sotw_submissionDao.readAll();
+                return gson.toJson(submissions);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // get (read) a submission given submissionId
+        get("/submissions/:submissionId", (req, res) -> {
+            try {
+                String submissionId = req.params("submissionId");
+                SongOfTheWeekSubmission s = sotw_submissionDao.read(submissionId);
+                if (s == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(s);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // post (create) a submission from a user with musician_id
+        post("/submissions", (req, res) -> {
+            try {
+                SongOfTheWeekSubmission submission = gson.fromJson(req.body(), SongOfTheWeekSubmission.class);
+                Set<String> instruments = submission.getInstruments();
+
+                if (instruments == null) { instruments = new HashSet<String>(); }
+                sotw_submissionDao.create(submission.getSubmission_id(), submission.getMusician_id(), submission.getAVSubmission(), instruments);
+                res.status(201);
+                return gson.toJson(submission);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // put (update) a submission with info
+        put("/submissions/:submissionId", (req, res) -> {
+            try {
+
+                String submissionId = req.params("submissionId");
+                SongOfTheWeekSubmission submission = gson.fromJson(req.body(), SongOfTheWeekSubmission.class);
+                if (submission == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                if (! (submission.getSubmission_id().equals(submissionId))) {
+                    throw new ApiError("submission ID does not match the resource identifier", 400);
+                }
+
+                String avSubmission = submission.getAVSubmission();
+                Set<String> instruments = submission.getInstruments();
+
+                // Update specific fields:
+                boolean flag = false;
+                if (avSubmission != null) {
+                    flag = true;
+                    submission = sotw_submissionDao.updateAVSubmission(submissionId, avSubmission);
+                } if (instruments != null) {
+                    flag = true;
+                    submission = sotw_submissionDao.updateInstruments(submissionId, instruments);
+                } if (!flag) {
+                    throw new ApiError("Nothing to update", 400);
+                } if (submission == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                return gson.toJson(submission);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // delete (remove) a submission
+        delete("/submissions/:submissionId", (req, res) -> {
+            try {
+                String submissionId = req.params("submissionId");
+                SongOfTheWeekSubmission submission = sotw_submissionDao.delete(submissionId);
+                if (submission == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(submission);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // Song of the Week Event Api Routes
+        // get (read) all sotw events
+        get("/events", (req, res) -> {
+            try {
+                List<SongOfTheWeekEvent> events = sotw_eventDao.readAll();
+                return gson.toJson(events);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // get (read) a sotw event given event id
+        get("/events/:eventId", (req, res) -> {
+            try {
+                String eventId = req.params("eventId");
+                SongOfTheWeekEvent s = sotw_eventDao.read(eventId);
+                if (s == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(s);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // post (create) a sotw event
+        post("/events", (req, res) -> {
+            try {
+                SongOfTheWeekEvent event = gson.fromJson(req.body(), SongOfTheWeekEvent.class);
+                Set<String> submissions = event.getSubmissions();
+
+                if (submissions == null) { submissions = new HashSet<String>(); }
+                sotw_eventDao.create(event.getEventId(), event.getAdminId(), event.getStart_week(), event.getEnd_week(), event.getSongId(), submissions);
+                res.status(201);
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // put (update) an sotw event
+        put("/events/:eventId", (req, res) -> {
+            // doesn't include adding or removing submissions
+            try {
+
+                String eventId = req.params("eventId");
+                SongOfTheWeekEvent event = gson.fromJson(req.body(), SongOfTheWeekEvent.class);
+                if (event == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                if (! (event.getEventId().equals(eventId))) {
+                    throw new ApiError("event ID does not match the resource identifier", 400);
+                }
+
+                String start_week = event.getStart_week();
+                String end_week = event.getEnd_week();
+                String songId = event.getSongId();
+
+                // Update specific fields:
+                boolean flag = false;
+                if (start_week != null) {
+                    flag = true;
+                    event = sotw_eventDao.updateStartWeek(eventId, start_week);
+                } if (end_week != null) {
+                    flag = true;
+                    event = sotw_eventDao.updateEndWeek(eventId, end_week);
+                } if (songId != null) {
+                    flag = true;
+                    event = sotw_eventDao.updateSong(eventId, songId);
+                } if (!flag) {
+                    throw new ApiError("Nothing to update", 400);
+                } if (event == null) {
+                    throw new ApiError("Resource not found", 404);
+                }
+
+                return gson.toJson(event);
+            } catch (DaoException | JsonSyntaxException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+
+        // get (read All) submissions given sotw event id
+
+        // put (add) a submission to an sotw events
+
+        // delete (remove) a submission from an sotw event
+
+
+
+        // delete a sotw event
+        delete("/events/:eventId", (req, res) -> {
+            try {
+                String eventId = req.params("eventId");
+                SongOfTheWeekEvent event = sotw_eventDao.deleteEvent(eventId);
+                if (event == null) {
+                    throw new ApiError("Resource not found", 404); // Bad request
+                }
+                res.type("application/json");
+                return gson.toJson(event);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
 
         // options request to allow for CORS
         options("/*", (req, res) -> {
@@ -623,6 +930,21 @@ public class ApiServer {
     private static RequestDao getRequestDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oRequestDao(sql2o);
+    }
+
+    private static SongDao getSongDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oSongDao(sql2o);
+    }
+
+    private static SotwEventDao getEventDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oSotwEventDao(sql2o);
+    }
+
+    private static SotwSubmissionDao getSubmissionDao() throws URISyntaxException{
+        Sql2o sql2o = Database.getSql2o();
+        return new Sql2oSotwSubmissionDao(sql2o);
     }
 
     /**

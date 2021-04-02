@@ -16,6 +16,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         this.sql2o = sql2o;
     }
 
+    @Override
     public SongOfTheWeekSubmission create(String submissionId, String musicianId,
                                           String avSubmission, Set<String> instruments) throws DaoException {
         String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionId, musicianId, avSubmission)" +
@@ -41,6 +42,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         }
     };
 
+    @Override
     public SongOfTheWeekSubmission read(String submissionId) throws DaoException {
         try (Connection conn = sql2o.open()) {
             String sql = "SELECT * FROM (SELECT S.submissionId as SID, * FROM sotwsubmissions as S) as R\n"
@@ -69,6 +71,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         }
     };
 
+    @Override
     public List<SongOfTheWeekSubmission> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT S.submissionId as SID, * FROM sotwsubmissions as  S) as R\n" +
                 "LEFT JOIN sotwsubmisssionsinstruments as G on R.SID=G.submissionId;";
@@ -82,6 +85,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         }
     };
 
+    @Override
     public SongOfTheWeekSubmission updateAVSubmission(String submissionId, String avSubmission) throws DaoException {
         String sql = "UPDATE sotwsubmissions SET avSubmission=:avSubmission WHERE submissionId=:submissionId;";
 
@@ -93,6 +97,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         }
     };
 
+    @Override
     public SongOfTheWeekSubmission updateInstruments(String submissionId, Set<String> newInstruments) throws DaoException {
         String getCurrentInstrumentsSQL = "SELECT * FROM sotwsubmissionsinstruments WHERE submissionId=:submissionId";
         String deleteInstrumentSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionId=:submissionId AND instrument=:instrument";
@@ -126,6 +131,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         }
     };
 
+    @Override
     public SongOfTheWeekSubmission delete(String submissionId) throws DaoException {
         String deletesubmissioninstrumentsSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionId=:submissionId;";
         String deletesubmissionSQL = "DELETE FROM sotwsubmissions WHERE submissionId=:submissionId;";
