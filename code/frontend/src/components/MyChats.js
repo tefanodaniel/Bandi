@@ -13,20 +13,13 @@ class MyChats extends React.Component {
 
     this.state = {
       userId: Cookies.get('id'),
-      chatInitialized: Cookies.get('chatInitialized'),
-      loggedIntoChat: Cookies.get('loggedIntoChat'),
-      chatUserData: null
     }
   }
 
   componentDidMount() {
-    //console.log(CometChat.getLoggedInUser());
-    if (this.state.chatInitialized && this.state.loggedIntoChat) {
-      ChatApi.getCurrentUser(this.state.userId).then((res) => {
-          this.setState({chatUserData: res.data.data});
-        });
-    }
-
+    CometChat.getLoggedInUser().then((res) => {
+      console.log(res);
+    })
   }
 
   render() {

@@ -26,6 +26,9 @@ const Header = () => {
     dispatch({
       type: 'user/logout'
     })
+    dispatch({
+      type: 'user/chatlogout'
+    })
   }
 
   return (

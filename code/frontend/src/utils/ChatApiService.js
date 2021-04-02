@@ -6,32 +6,44 @@ class ChatAPIService {
     }
 
     getCurrentUser(uid) {
-        return this.chatApiInstance.get(`/${uid}/me`);
+      return this.chatApiInstance.get(`/${uid}/me`);
     }
 
-    // get(id) {
-    //     return customhttp.get(`/musicians/${id}`);
-    // }
-    //
-    // create(data) {
-    //     return customhttp.post("/musicians", data);
-    // }
-    //
-    // update(id, data) {
-    //     return customhttp.put(`/musicians/${id}`, data);
-    // }
-    //
-    // delete(id) {
-    //     return customhttp.delete(`/musicians/${id}`);
-    // }
-    //
-    // deleteAll() {
-    //     return customhttp.delete(`/musicians`);
-    // }
-    //
-    // findByQuery(queryparams) {
-    //     return customhttp.get(`/musicians`, { params: queryparams });
-    // }
+    async accountExists(uid) {
+      try {
+        let res = await this.getCurrentUser(uid);
+        return res.data.data;
+      } catch (e) {
+        if (e.response.data.error.code === "ERR_UID_NOT_FOUND") {
+          return false;
+        } else {
+          console.log("Encounted other error with chat API");
+          return false;
+        }
+      }
+    }
+
+    createUserAuthToken(uid) {
+      return this.chatApiInstance.post(`/${uid}/auth_tokens`);
+    }
+
+    getUserAuthTokens(uid) {
+      return this.chatApiInstance.get(`/${uid}/auth_tokens`);
+    }
+
+    async hasAuthTokens(uid) {
+      try {
+        let res = await this.getUserAuthTokens(uid);
+        return res.data.meta.pagination.total;
+      } catch (e) {
+        console.log("Encountered error while counting user auth tokens", e);
+        return null;
+      }
+    }
+
+    deleteAllUserAuthTokens(uid) {
+      return this.chatApiInstance.delete(`/${uid}/auth_tokens`);
+    }
 }
 
 export default new ChatAPIService();

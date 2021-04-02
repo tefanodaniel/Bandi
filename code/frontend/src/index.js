@@ -8,6 +8,8 @@ import reportWebVitals from './reportWebVitals';
 import Cookies from "js-cookie";
 import { CometChat } from "@cometchat-pro/chat"
 import config from './config';
+//import { useDispatch } from "react-redux";
+
 
 import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
@@ -31,7 +33,9 @@ CometChat.init(appID, appSetting).then(
   () => {
     console.log("CometChat initialization completed successfully");
     //Cookies.set('chatInitialized', true);
-    // You can now call login function.
+    store.dispatch({
+      type: 'chat/initialize'
+    });
   },
   error => {
     console.log("CometChat initialization failed with error:", error);
