@@ -426,13 +426,13 @@ public final class Database {
 
                 sql = "CREATE TABLE IF NOT EXISTS SotwEventsSubmissions("
                         + "eventId VARCHAR(50) REFERENCES SotwEvents,"
-                        + "submissionId VARCHAR(50)"
+                        + "submission VARCHAR(50)"
                         + ");";
 
                 conn.createQuery(sql).executeUpdate();
 
                 String sotw_events_sql = "INSERT INTO SotwEvents(eventId, adminId, start_week, end_week, songId) VALUES(:eventId, :adminId, :start_week, :end_week, :songId);";
-                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventId, submissionId) VALUES (:eventId, :submissionId);";
+                String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventId, submission) VALUES (:eventId, :submissionId);";
 
                 for (SongOfTheWeekEvent s: sample_events) {
                     conn.createQuery(sotw_events_sql)
@@ -448,7 +448,7 @@ public final class Database {
                     for (String t_id : s.getSubmissions()) {
                         conn.createQuery(sotw_events_submissions_sql)
                                 .addParameter("eventId", s.getEventId())
-                                .addParameter("submissionId", t_id)
+                                .addParameter("submission", t_id)
                                 .executeUpdate();
                     }
                 }

@@ -57,11 +57,11 @@ public class SongOfTheWeekEvent {
         this.submissions = submission_set;
     }
 
-    public void addSubmissions(SongOfTheWeekSubmission newSubmission) {
+    public void addSubmissions(String newSubmission) {
         if(this.submissions == null) {
             this.submissions = new HashSet<String>();
         }
-        this.submissions.add(newSubmission.getSubmission_id());
+        this.submissions.add(newSubmission);
     }
 
     @Override
