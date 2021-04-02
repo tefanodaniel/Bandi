@@ -120,92 +120,6 @@ class Discover extends React.Component {
     });
   }
 
-  // componentDidMount() {
-  //   this.setCookieOnLogin();
-  //   let userId = Cookies.get('id');
-  //   let chatInitialized = this.props.store.chat_reducer.initialized;
-  //   console.log("ON MOUNT, ", this.props.store);
-    // let loggedIntoChat = this.props.store.chat_reducer.loggedIn;
-    // console.log("LOOK HERE: ", chatInitialized, this.props.store.chat_reducer.loggedIn);
-    // if (userId && chatInitialized && !loggedIntoChat) {
-    //   // Log in to chat
-    //   // ChatApi
-    //   //   .getCurrentUser(userId)
-    //   //   .then((res) => {
-    //   //     this.setState({chatUserData: res.data.data});
-    //   //     Cookies.set("loggedIntoChat", true);
-    //   //   }).catch((error) => {
-    //   //     // If UID not found, need to create chat account for this user
-    //   //     let errorCode = error.response.data.error.code;
-    //   //     if (errorCode === "ERR_UID_NOT_FOUND") {
-    //   //       this.createCometChatUser(userId, this.props.store.user_reducer.name);
-    //   //       Cookies.set("loggedIntoChat", true);
-    //   //       return;
-    //   //     } else {
-    //   //       Cookies.set("loggedIntoChat", false);
-    //   //       return error;
-    //   //     }
-    //   //   });
-    //   ChatApi.accountExists(userId).then((res) => {
-    //       // Check if account exists, and if so, delete any existing auth tokens
-    //       // If no account exists, create one
-    //       if (res) {
-    //         console.log("Found existing account for this user");
-    //         //this.setState({ chatUserData: res });
-    //
-    //         ChatApi.hasAuthTokens(userId).then((res) => {
-    //           console.log("HAS AUTH TOKENS: ", res);
-    //           // If there are previous auth tokens, delete them
-    //           if (res > 0) {
-    //             ChatApi.deleteAllUserAuthTokens(userId).then((res) => {
-    //               if (!res.data.data.success) {
-    //                 console.log("Encountered error while flushing auth tokens", res);
-    //               }
-    //             })
-    //           }
-    //         });
-    //       } else {
-    //         // Create account for this user
-    //         this.createCometChatUser(userId, this.props.store.user_reducer.name);
-    //       }
-    //
-    //       // Create new auth token for this user
-    //       ChatApi.createUserAuthToken(userId).then((res) => {
-    //         //this.setState({ chatUserAuthToken: res.data.data.authToken });
-    //
-    //         // Log the user in
-    //         this.logInCometChatUser(res.data.data.authToken);
-    //       });
-    //
-    //
-    //
-    //   });
-    //
-    //
-    //
-    //   //   // TODO: log in and set cookie to reflect that
-    //   //
-    //   //   ChatApi.deleteAllUserAuthTokens(userId).then((res) => {
-    //   //     if (res.data.success) {
-    //   //       console.log("Flushed all previous auth tokens");
-    //   //       ChatApi.createUserAuthToken(userId).then((res) => {
-    //   //         console.log("Generated new user auth token");
-    //   //         this.setState({ userChatAuthToken: res.data.authToken });
-    //   //       }).catch((error) => {
-    //   //         console.log("Encountered error while creating new user auth token", error);
-    //   //       });
-    //   //     }
-    //   //   }
-    //   // ).catch((error) => {
-    //   //   console.log("Encounted error while flushing user auth tokens", error);
-    //   // });
-    // }
-    // if (this.props.store?.chat_reducer) {
-    //   console.log("Successfully logged user into chat");
-    // }
-
-  //}
-
   render() {
     this.setCookieOnLogin()
     if (!Cookies.get('id')) {
@@ -219,8 +133,6 @@ class Discover extends React.Component {
     if (chatInitialized && !loggedIntoChat) {
       if (!this.loginInProgress) {
         this.loginInProgress = true;
-        console.log("TRYING TO LOGIN TO CHAT");
-        //this.props.chatLogin({test: "test_data"})
         this.doChatLogin();
       }
     }
