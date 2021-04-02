@@ -94,19 +94,6 @@ class Discover extends React.Component {
         // If no account exists, create one
         if (res) {
           console.log("Found existing account for this user");
-          // ChatApi.hasAuthTokens(userId).then((res) => {
-          //   console.log("HAS AUTH TOKENS: ", res);
-          //   // If there are previous auth tokens, delete them
-          //   if (res > 0) {
-          //     ChatApi.deleteAllUserAuthTokens(userId).then((res) => {
-          //       if (!res.data.data.success) {
-          //         console.log("Encountered error while flushing auth tokens", res);
-          //       } else {
-          //         console.log("Successfully flushed existing auth tokens", res);
-          //       }
-          //     })
-          //   }
-          // });
         } else {
           // Create account for this user
           this.createCometChatUser(userId, this.props.store.user_reducer.name);
