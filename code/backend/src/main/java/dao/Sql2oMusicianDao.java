@@ -121,7 +121,7 @@ public class Sql2oMusicianDao implements MusicianDao {
     public Musician create(String id, String name) throws DaoException {
         // TODO: re-implement? DONE
         String sql = "INSERT INTO Musicians(id, name, experience, location, zipCode, latitude, longitude, admin) " +
-                     "VALUES(:id, :name, 'NULL', 'NULL', 'NULL', 'NULL', 'NULL', FALSE);";
+                     "VALUES(:id, :name, 'NULL', 'NULL', 'NULL', 0, 0, FALSE);";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("id", id)
                                  .addParameter("name", name)

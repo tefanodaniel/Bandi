@@ -513,8 +513,8 @@ public class ApiServer {
 
     private static MusicianDao getMusicianDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
-//        List<Musician> musicians = DataStore.sampleMusicians();
-//        Database.createMusicianTablesWithSampleData(sql2o, musicians);
+        //List<Musician> musicians = DataStore.sampleMusicians();
+        //Database.createMusicianTablesWithSampleData(sql2o, musicians);
         return new Sql2oMusicianDao(sql2o);
     }
 
