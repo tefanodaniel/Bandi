@@ -11,6 +11,7 @@ import org.sql2o.Sql2oException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A utility class with methods to establish JDBC connection, set schemas, etc.

@@ -618,6 +618,7 @@ public class ApiServer {
     private static Sql2oSpeedDateEventDao getSpeedDateEventDao() throws URISyntaxException {
         Sql2o sql2o = Database.getSql2o();
         return new Sql2oSpeedDateEventDao(sql2o);
+    }
 
     private static RequestDao getRequestDao() throws URISyntaxException{
         Sql2o sql2o = Database.getSql2o();
