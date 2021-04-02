@@ -216,13 +216,13 @@ public final class Database {
      * Create Events table schema and add sample events
      *
      * @param sql2o a Sql2o object connected to the database to be used in this application.
-     * @param samples a list of sample Events
+     * @param samples a list of sample SpeedDateEvents
      * @throws Sql2oException an generic exception thrown by Sql2o encapsulating anny issues with the Sql2o ORM.
      */
     public static void createSpeedDateEventsWithSampleData(Sql2o sql2o, List<SpeedDateEvent> samples) throws Sql2oException {
         try (Connection conn = sql2o.open()) {
             conn.createQuery("DROP TABLE IF EXISTS SpeedDateEvents CASCADE;").executeUpdate();
-            conn.createQuery("DROP TABLE IF EXISTS Participants;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS SpeedDateParticipants;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS SpeedDateEvents("
                     + "id VARCHAR(50) PRIMARY KEY,"
@@ -233,14 +233,14 @@ public final class Database {
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
-            sql = "CREATE TABLE IF NOT EXISTS Participants("
+            sql = "CREATE TABLE IF NOT EXISTS SpeedDateParticipants("
                     + "participant VARCHAR(30),"
                     + "event VARCHAR(50)"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
             String event_sql = "INSERT INTO SpeedDateEvents(id, name, link, date, minusers) VALUES(:id, :name, :link, :date, :minusers);";
-            String participants_sql = "INSERT INTO Participants(participant, event) VALUES(:participant, :event);";
+            String participants_sql = "INSERT INTO SpeedDateParticipants(participant, event) VALUES(:participant, :event);";
             for (SpeedDateEvent e : samples) {
                 conn.createQuery(event_sql)
                         .addParameter("id", e.getId())

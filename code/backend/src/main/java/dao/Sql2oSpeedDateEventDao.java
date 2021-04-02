@@ -18,7 +18,7 @@ public class Sql2oSpeedDateEventDao {
 
     public List<SpeedDateEvent> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT e.id as eID, * FROM speeddateevents as e) as R\n"
-                + "LEFT JOIN participants as P ON R.eID=P.event;";
+                + "LEFT JOIN SpeedDateParticipants as P ON R.eID=P.event;";
         try (Connection conn = sql2o.open()) {
             List<SpeedDateEvent> events = this.extractEventsFromDatabase(sql, conn);
             return events;
@@ -59,7 +59,7 @@ public class Sql2oSpeedDateEventDao {
                                  String date, int minusers, Set<String> participants) throws DaoException {
 
         String eventSQL = "INSERT INTO SpeedDateEvents (id, name, link, date, minusers) VALUES (:id, :name, :link, :date, :minusers)";
-        String participantSQL = "INSERT INTO Participants (participant, event) VALUES (:participant, :event)";
+        String participantSQL = "INSERT INTO SpeedDateParticipants (participant, event) VALUES (:participant, :event)";
 
         try (Connection conn = sql2o.open()) {
             conn.createQuery(eventSQL)
@@ -84,7 +84,7 @@ public class Sql2oSpeedDateEventDao {
     }
 
     public SpeedDateEvent add(String eventId, String musId) throws DaoException {
-        String sql = "INSERT INTO Participants (participant, event) VALUES (:participant, :event);";
+        String sql = "INSERT INTO SpeedDateParticipants (participant, event) VALUES (:participant, :event);";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql)
                     .addParameter("participant", musId)
@@ -97,7 +97,7 @@ public class Sql2oSpeedDateEventDao {
     }
 
     public SpeedDateEvent remove(String eventId, String musId) throws DaoException {
-        String sql = "DELETE FROM Participants WHERE participant=:musId;";
+        String sql = "DELETE FROM SpeedDateParticipants WHERE participant=:musId;";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql)
                     .addParameter("musId", musId)
@@ -110,7 +110,7 @@ public class Sql2oSpeedDateEventDao {
 
     public SpeedDateEvent read(String id) throws DaoException {
         String sql = "SELECT * FROM (SELECT e.id as eID, * FROM speeddateevents as e) as R\n"
-                + "LEFT JOIN Participants as P ON R.eID=P.event\n"
+                + "LEFT JOIN SpeedDateParticipants as P ON R.eID=P.event\n"
                 + "WHERE R.eID=:id";
         try (Connection conn = sql2o.open()) {
             List<Map<String, Object>> queryResults =
