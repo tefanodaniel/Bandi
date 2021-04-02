@@ -3,12 +3,12 @@ import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
-import Header from './Header'
+import Header from './Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./SubHeader";
 
-import { CometChat } from "@cometchat-pro/chat"
+import { CometChat } from "@cometchat-pro/chat";
 import config from '../config';
 import ChatApi from "../utils/ChatApiService";
 import { connect } from 'react-redux';
@@ -94,19 +94,19 @@ class Discover extends React.Component {
         // If no account exists, create one
         if (res) {
           console.log("Found existing account for this user");
-          ChatApi.hasAuthTokens(userId).then((res) => {
-            console.log("HAS AUTH TOKENS: ", res);
-            // If there are previous auth tokens, delete them
-            if (res > 0) {
-              ChatApi.deleteAllUserAuthTokens(userId).then((res) => {
-                if (!res.data.data.success) {
-                  console.log("Encountered error while flushing auth tokens", res);
-                } else {
-                  console.log("Successfully flushed existing auth tokens", res);
-                }
-              })
-            }
-          });
+          // ChatApi.hasAuthTokens(userId).then((res) => {
+          //   console.log("HAS AUTH TOKENS: ", res);
+          //   // If there are previous auth tokens, delete them
+          //   if (res > 0) {
+          //     ChatApi.deleteAllUserAuthTokens(userId).then((res) => {
+          //       if (!res.data.data.success) {
+          //         console.log("Encountered error while flushing auth tokens", res);
+          //       } else {
+          //         console.log("Successfully flushed existing auth tokens", res);
+          //       }
+          //     })
+          //   }
+          // });
         } else {
           // Create account for this user
           this.createCometChatUser(userId, this.props.store.user_reducer.name);

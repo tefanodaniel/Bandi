@@ -1,5 +1,6 @@
 import React from 'react';
 import Cookies from "js-cookie";
+import Header from './Header';
 
 import { CometChat } from "@cometchat-pro/chat"
 import { CometChatUI } from "../cometchat-pro-react-ui-kit/CometChatWorkspace/src";
@@ -24,8 +25,11 @@ class MyChats extends React.Component {
 
   render() {
     return (
-      <div style={{width: '800px', height:'800px' }}>
+      <div>
+        <Header />
+        <div style={{width: '1000px', height:'900px' }}>
           <CometChatUI />
+        </div>
       </div>
       );
   }

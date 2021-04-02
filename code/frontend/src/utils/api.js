@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from '../config';
 import Cookies from "js-cookie";
 import MusicianApi from "./MusicianApiService";
+import { CometChat } from "@cometchat-pro/chat";
 
 export function loginWithSpotify() {
   //Test API call:
@@ -27,6 +28,12 @@ export function getBackendURL() {
 
 export function logout() {
   Cookies.remove('id');
+  CometChat.logout().then(() => {
+      console.log("Chat logout completed successfully");
+    }, error => {
+      //Logout failed with exception
+      console.log("Chat logout failed with exception:",{error});
+    });
 }
 
 export function chatApiInstance() {
