@@ -791,10 +791,10 @@ public class ApiServer {
         });
 
         // get (read) a sotw event given event id
-        get("/sotwevents/:eventId", (req, res) -> {
+        get("/sotwevents/:eventid", (req, res) -> {
             try {
-                String eventId = req.params("eventId");
-                SongOfTheWeekEvent s = sotw_eventDao.read(eventId);
+                String eventid = req.params("eventid");
+                SongOfTheWeekEvent s = sotw_eventDao.read(eventid);
                 if (s == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
@@ -821,17 +821,17 @@ public class ApiServer {
         });
 
         // put (update) an sotw event
-        put("/sotwevents/:eventId", (req, res) -> {
+        put("/sotwevents/:eventid", (req, res) -> {
             // doesn't include adding or removing submissions
             try {
 
-                String eventId = req.params("eventId");
+                String eventid = req.params("eventid");
                 SongOfTheWeekEvent event = gson.fromJson(req.body(), SongOfTheWeekEvent.class);
                 if (event == null) {
                     throw new ApiError("Resource not found", 404);
                 }
 
-                if (! (event.getEventId().equals(eventId))) {
+                if (! (event.getEventId().equals(eventid))) {
                     throw new ApiError("event ID does not match the resource identifier", 400);
                 }
 
@@ -843,13 +843,13 @@ public class ApiServer {
                 boolean flag = false;
                 if (start_week != null) {
                     flag = true;
-                    event = sotw_eventDao.updateStartWeek(eventId, start_week);
+                    event = sotw_eventDao.updateStartWeek(eventid, start_week);
                 } if (end_week != null) {
                     flag = true;
-                    event = sotw_eventDao.updateEndWeek(eventId, end_week);
+                    event = sotw_eventDao.updateEndWeek(eventid, end_week);
                 } if (songId != null) {
                     flag = true;
-                    event = sotw_eventDao.updateSong(eventId, songId);
+                    event = sotw_eventDao.updateSong(eventid, songId);
                 } if (!flag) {
                     throw new ApiError("Nothing to update", 400);
                 } if (event == null) {
@@ -864,10 +864,10 @@ public class ApiServer {
 
 
         // get (read All) submissions given sotw event id
-        get("/sotwevents/submissions/:eventId", (req, res) -> {
+        get("/sotwevents/submissions/:eventid", (req, res) -> {
             try {
-                String eventId = req.params("eventId");
-                Set<String> submission_ids = sotw_eventDao.readAllSubmissionsGivenEvent(eventId);
+                String eventid = req.params("eventid");
+                Set<String> submission_ids = sotw_eventDao.readAllSubmissionsGivenEvent(eventid);
                 List<SongOfTheWeekSubmission> submissions = new ArrayList<SongOfTheWeekSubmission>();
                 for (String sid : submission_ids) {
                     submissions.add(sotw_submissionDao.read(sid));
@@ -880,12 +880,12 @@ public class ApiServer {
 
 
         // put (add) a submission to an sotw events
-        put("/sotwevents/submissions/:eventId/:submissionId", (req, res) -> {
+        put("/sotwevents/submissions/:eventid/:submissionid", (req, res) -> {
             try {
-                String eventId = req.params("eventId");
-                String submissionId = req.params("submissionId");
-                SongOfTheWeekEvent event = sotw_eventDao.read(eventId);
-                SongOfTheWeekSubmission submission = sotw_submissionDao.read(submissionId);
+                String eventid = req.params("eventid");
+                String submissionid = req.params("submissionid");
+                SongOfTheWeekEvent event = sotw_eventDao.read(eventid);
+                SongOfTheWeekSubmission submission = sotw_submissionDao.read(submissionid);
                 if (event == null){
                     throw new ApiError("Event Resource not found", 404);
                 }
@@ -902,7 +902,7 @@ public class ApiServer {
                     throw new ApiError("Submission ID does not match the resource identifier", 400);
                 }*/
 
-                event = sotw_eventDao.addSubmissionToEvent(eventId, submissionId);
+                event = sotw_eventDao.addSubmissionToEvent(eventid, submissionid);
                 if (event == null) {
                     throw new ApiError("Updated Event resource not found", 404);
                 }
@@ -913,12 +913,12 @@ public class ApiServer {
         });
 
         // delete (remove) a submission from an sotw event
-        delete("/sotwevents/submissions/:eventId/:submissionId", (req, res) -> {
+        delete("/sotwevents/submissions/:eventid/:submissionid", (req, res) -> {
             try {
-                String eventId = req.params("eventId");
-                String submissionId = req.params("submissionId");
-                SongOfTheWeekEvent event = sotw_eventDao.read(eventId);
-                SongOfTheWeekSubmission submission = sotw_submissionDao.read(submissionId);
+                String eventid = req.params("eventid");
+                String submissionid = req.params("submissionid");
+                SongOfTheWeekEvent event = sotw_eventDao.read(eventid);
+                SongOfTheWeekSubmission submission = sotw_submissionDao.read(submissionid);
                 if (event == null){
                     throw new ApiError("Event Resource not found", 404);
                 }
@@ -926,7 +926,7 @@ public class ApiServer {
                     throw new ApiError("Submission Resource not found", 404);
                 }
 
-                event = sotw_eventDao.removeSubmissionFromEvent(eventId, submissionId);
+                event = sotw_eventDao.removeSubmissionFromEvent(eventid, submissionid);
                 if (event == null) {
                     throw new ApiError("Updated Event Resource not found", 404);
                 }
@@ -939,10 +939,10 @@ public class ApiServer {
         });
 
         // delete a sotw event
-        delete("/sotwevents/:eventId", (req, res) -> {
+        delete("/sotwevents/:eventid", (req, res) -> {
             try {
-                String eventId = req.params("eventId");
-                SongOfTheWeekEvent event = sotw_eventDao.deleteEvent(eventId);
+                String eventid = req.params("eventid");
+                SongOfTheWeekEvent event = sotw_eventDao.deleteEvent(eventid);
                 if (event == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
