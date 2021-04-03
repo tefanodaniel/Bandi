@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import {getBackendURL, getFrontendURL} from "../utils/api";
+import {getFriendsDataFromApi} from "../utils/api";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
@@ -9,7 +9,6 @@ import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../utils/BandApiService';
-
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../actions/band_actions';
@@ -25,40 +24,79 @@ class MyProfile extends React.Component {
             bands: [],
             name: 'Loading...',
             friendList: [],
+            pending_incoming_requests: [],
             pending_outgoing_requests: []
         }
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
-        
-        BandApiService.getUserFriendList(this.state.id)
-                    .then((result) => {
-                        this.state['friendList'] = result.data ({
-                            friendList: result.data
-                        })
-                    });
-        
-        BandApiService.getIncomingFriendRequests(this.state.id)
 
-        BandApiService.getOutgoingFriendRequests(this.state.id)
-
+        /*
+        Promise.all([
+            BandApiService.getIncomingFriendRequests(this.state.id)
+    
+          ]).then(responses => {
+                console.log(responses[0].data)
+                console.log(responses[1].data)
+          }).catch(error => {
+              console.log(error)
+          })
+          */
     }
 
-    componentDidMount() {
-      const { fetchBandsForMusician } = this.props;
-      fetchBandsForMusician({id: this.state.id});
+    getDataFromApi() {
+        BandApiService.getUserFriendList(this.state.id).then(res => {
+            const { data } = res;
+            this.setState({
+                friendList: data
+            })
+        });
+        BandApiService.getIncomingFriendRequests(this.state.id).then(res => {
+            const { data } = res;
+            this.setState({
+                pending_incoming_requests: data
+            })
+        });
+
     }
+    async componentDidMount() {
+        const { fetchBandsForMusician } = this.props;
+
+
+      // fetchBandsForMusician({id: this.state.id});
+        getFriendsDataFromApi(this.state.id)
+            .then(axios.spread((r1, r2, r3) => {
+                this.setState({
+                    friendList: r1.data,
+                    pending_incoming_requests: r2.data,
+                    pending_outgoing_requests: r3.data
+                });
+            })).catch((error) => console.log(error))
+    }
+        /*
+        this.setState({
+            friendList: responses[0].data,
+            pending_incoming_requests: responses[1].data,
+            pending_outgoing_requests: responses[2].data
+        })
+    }*/
 
     renderFriendListForMusician() {
         const listItems = this.state.friendList.map((friend) =>
-        <li key={friend.id}>{friend.name}</li>
+        <li key={friend["id"]}>{friend["name"]}</li>
         );
         return (
             <ul>{listItems}</ul>
         );
     }
 
-    renderPendingRequestList() {
-        const 
+    renderIncomingRequestList() {
+        console.log(this.state.pending_incoming_requests)
+        const listItems = this.state.pending_incoming_requests.map((request) => 
+        <li>{request.senderID}</li>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
     }
 
     renderCustomizeProfileHeader() {
@@ -87,6 +125,8 @@ class MyProfile extends React.Component {
         // Get user information from our central redux store, rather than the limited state of this component
         const userInfo = this.props.store.user_reducer;
         console.log('here here', userInfo);
+
+        console.log(this.state)
 
         if (this.state.bands) {
             return (
@@ -126,10 +166,10 @@ class MyProfile extends React.Component {
                         <TabPanel>
                             <h3>My friends ({userInfo.friends?.length})</h3>
                             {this.renderFriendListForMusician()}
-                            <h3>Friend requests ({this.state.friendRequests?.length})</h3>
-                            {this.renderFriendRequestList()}
-                            <h3>Pending friend requests  ({this.state.pendingFriendRequests?.length})</h3>
-                            {this.renderPendingRequestList()}
+                            <h3>Friend requests ({this.state.pending_incoming_requests?.length})</h3>
+                            {this.renderIncomingRequestList()}
+                            <h3>Pending friend requests</h3>
+
                         </TabPanel>
 
                     </Tabs>

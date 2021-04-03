@@ -29,12 +29,12 @@ class BandAPIService {
         return customhttp.get(`/friends/${id}`);
     }
 
-    getOutgoingFriendRequests(senderID) {
-        return customhttp.get(`/requests/out/${senderID}`);
-    }
-
     getIncomingFriendRequests(recipientID) {
         return customhttp.get(`/requests/in/${recipientID}`);
+    }
+
+    getOutgoingFriendRequests(senderID) {
+        return customhttp.get(`/requests/out/${senderID}`);
     }
 
     sendFriendRequest(senderID, recipientID) {

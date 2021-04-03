@@ -25,9 +25,9 @@ class Profile extends React.Component {
             instruments: [],
             genres: [],
             links: [],
-            friends: []
-            // pending_outgoing_requests: []
+            friends: [],
         }
+
         this.addFriend.bind(this)
 
         
@@ -38,16 +38,14 @@ class Profile extends React.Component {
         var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
         axios.get(userURL)
             .then((response) => {
-                this.setState(
+                this.state = 
                     {name: response.data.name, location: response.data.location,
                         experience: response.data.experience,
                         instruments: response.data.instruments,
                         genres: response.data.genres,
                         links: response.data.profileLinks,
                         friends: response.data.friends
-                        // pending_incoming_requests: response.data.pending_outgoing_requests
-                    })
-                // console.log(response.data)
+                    }
             });
     }
 

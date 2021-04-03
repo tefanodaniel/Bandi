@@ -27,6 +27,16 @@ export function logout() {
   Cookies.remove('id');
 }
 
+export function getFriendsDataFromApi(id) {
+    let backend_url = getBackendURL();
+    return axios.all([
+        axios.get(backend_url + `/friends/${id}`),
+        axios.get(backend_url + `/requests/in/${id}`),
+        axios.get(backend_url + `/requests/out/${id}`)
+    ])
+}
+
+
 export default axios.create({
   baseURL: getBackendURL(),
   headers: {
