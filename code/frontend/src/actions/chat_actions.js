@@ -23,7 +23,7 @@ export function chatLogin(userId, name) {
 export function chatLogout() {
   CometChat.logout().then(() => {
     console.log("Chat logout completed successfully");
-    dispatch({
+    store.dispatch({
       type: CHAT_LOGOUT
     });
   }, error => {

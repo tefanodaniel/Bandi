@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import { logout } from "../utils/api"; // logout is named export, needs brackets
 import Cookies from "js-cookie";
-import { Nav } from "react-bootstrap";
+import { Nav, NavDropdown } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
 import { USER_LOGOUT, CHAT_LOGOUT } from "../actions/types";
@@ -43,11 +43,12 @@ const Header = () => {
           <Navbar.Brand className="mx-auto">
               Welcome, {user.name}!
           </Navbar.Brand>
-            <Nav className="mr-sm-2">
-                <Nav.Link href="#myprofile">My Profile</Nav.Link>
-                <Nav.Link href="#mychats">My Chats</Nav.Link>
-            <Nav.Link href="/signin" onClick={handleLogout}>Log Out</Nav.Link>
-          </Nav>
+
+          <NavDropdown title="My Account" color="white">
+            <NavDropdown.Item href="#myprofile">Profile</NavDropdown.Item>
+            <NavDropdown.Item href="#mychats">Chats</NavDropdown.Item>
+            <NavDropdown.Item href="#signin" onClick={handleLogout}>Log Out</NavDropdown.Item>
+          </NavDropdown>
         </Navbar>
       </div>
   )

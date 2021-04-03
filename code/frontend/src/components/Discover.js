@@ -55,9 +55,8 @@ class Discover extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    let userName = this.props.store.user_reducer.name
-    if (userName !== prevProps.store.user_reducer.name) {
-      console.log("UPDATING COMPONENT")
+    let userName = this.props.store.user_reducer?.name
+    if (userName !== prevProps.store.user_reducer?.name) {
       let chatInitialized = this.props.store.chat_reducer.initialized;
       let loggedIntoChat = this.props.store.chat_reducer.loggedIn;
       if (chatInitialized && !loggedIntoChat) {
