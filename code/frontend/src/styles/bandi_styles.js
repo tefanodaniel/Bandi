@@ -71,5 +71,14 @@ export const bandi_styles = {
             marginTop: "20px",
             marginLeft: "100px",
             marginBottom:"80px"
+    },
+    submission_card: {
+        borderStyle: "dashed",
+        height: "180px",
+        width: "200px",
+        backgroundImage: `url(${card_bg})`,
+        backgroundPosition: "center",
+        backgroundSize:"cover",
+        color: "white"
     }
 }

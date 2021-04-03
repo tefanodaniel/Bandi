@@ -1,10 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
 import { newQuery, clearQuery } from "../actions/musician_actions";
 import {Button, Form} from "react-bootstrap";
+import {getCurrentEvent, getCurrentEventSong, getCurrentEventSubmissions} from "../actions/sotw_event_actions";
 var startOfWeek = require('date-fns/startOfWeek');
 var endOfWeek = require('date-fns/endOfWeek');
+
+const selectSongId = (state) => {
+    if(!state.sotw_event_reducer.chosen_event)
+        return -1;
+    else
+        return state.sotw_event_reducer.chosen_event.songId
+}
 
 
 const SoTWsearch = () => {
@@ -39,7 +47,12 @@ const SoTWsearch = () => {
     start = start.toString().split(' ').slice(0, 3).join(' ');
     var end = endOfWeek(new Date());
     end = end.toString().split(' ').slice(0, 3).join(' ');
+    let eventId = "00001fakeeventid";
+    dispatch(getCurrentEvent(eventId))
 
+    let songId = useSelector(selectSongId, shallowEqual);
+    dispatch(getCurrentEventSong(songId))
+    dispatch(getCurrentEventSubmissions(eventId))
 
     return (
         <Container fluid>
