@@ -51,37 +51,39 @@ const SoTWsearch = () => {
                     <Form.Group controlId="exampleForm.SelectCustom">
                         <Form.Control as="select" custom>
                             <option>{start} - {end}</option>
-                            <option>Last Week</option>
                         </Form.Control>
                     </Form.Group>
                 </Form>
-            </Row>
-            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-3">
-                    <h5> Instrument:</h5>
-                </Col>
-                <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
-                    <input onChange={e => {addinstrumentquery(e);}} style={{width: "120%"}} placeholder='Search by Instrument' type='text'/>
-                </div>
-            </Row>
-            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
-                <Col className="col-sm-3">
-                    <h5> Genre :</h5>
-                </Col>
-                <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
-                    <input onChange={e => {addgenrequery(e);}} style={{width: "120%"}} placeholder='Search by Genre' type='text'/>
-                </div>
-            </Row>
-            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-5">
-                </Col>
-                <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery} >Submit!</Button>
-                </div>
             </Row>
         </Container>
     )
 }
 
 export default SoTWsearch
+/*
+The search functionality for Song of the week hasn't been implemented yet.
+<Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
+<Col className="col-sm-3">
+    <h5> Instrument:</h5>
+</Col>
+<div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
+<input onChange={e => {addinstrumentquery(e);}} style={{width: "120%"}} placeholder='Search by Instrument' type='text'/>
+</div>
+</Row>
+<Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
+<Col className="col-sm-3">
+<h5> Genre :</h5>
+</Col>
+<div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
+<input onChange={e => {addgenrequery(e);}} style={{width: "120%"}} placeholder='Search by Genre' type='text'/>
+</div>
+</Row>
+<Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
+<Col className="col-sm-5">
+</Col>
+<div className="col-sm-7" style={{textAlign:"center"}}>
+<Button variant="primary" onClick={SubmitQuery} >Submit!</Button>
+</div>
+</Row>
 
+*/
