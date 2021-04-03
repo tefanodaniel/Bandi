@@ -2,7 +2,7 @@ import customhttp from "./api";
 
 class MusicianAPIService {
     getAll() {
-        return customhttp.get(`/musicians`);
+        return customhttp.get("/musicians");
     }
 
     get(id) {
