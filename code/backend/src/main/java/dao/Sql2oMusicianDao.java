@@ -195,7 +195,6 @@ public class Sql2oMusicianDao implements MusicianDao {
 
             addDefaultDistances(conn); // this will prevent a null distance val
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn, "");
-            System.out.println(musicians);
             return musicians;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from the database", ex);

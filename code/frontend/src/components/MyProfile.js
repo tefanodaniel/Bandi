@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from "axios";
-import {getFriendsDataFromApi} from "../utils/api";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../utils/BandApiService';
+import FriendApiService from '../utils/FriendApiService';
+import {getFriendsDataFromApi} from "../utils/api";
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../actions/band_actions';
@@ -30,39 +30,15 @@ class MyProfile extends React.Component {
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
 
-        /*
-        Promise.all([
-            BandApiService.getIncomingFriendRequests(this.state.id)
-    
-          ]).then(responses => {
-                console.log(responses[0].data)
-                console.log(responses[1].data)
-          }).catch(error => {
-              console.log(error)
-          })
-          */
     }
 
-    getDataFromApi() {
-        BandApiService.getUserFriendList(this.state.id).then(res => {
-            const { data } = res;
-            this.setState({
-                friendList: data
-            })
-        });
-        BandApiService.getIncomingFriendRequests(this.state.id).then(res => {
-            const { data } = res;
-            this.setState({
-                pending_incoming_requests: data
-            })
-        });
-
-    }
-    async componentDidMount() {
+    componentDidMount() {
         const { fetchBandsForMusician } = this.props;
 
 
       // fetchBandsForMusician({id: this.state.id});
+        getFriendsDataFromApi(this.state.id)
+        /*
         getFriendsDataFromApi(this.state.id)
             .then(axios.spread((r1, r2, r3) => {
                 this.setState({
@@ -70,15 +46,8 @@ class MyProfile extends React.Component {
                     pending_incoming_requests: r2.data,
                     pending_outgoing_requests: r3.data
                 });
-            })).catch((error) => console.log(error))
+            })).catch((error) => console.log(error)) */
     }
-        /*
-        this.setState({
-            friendList: responses[0].data,
-            pending_incoming_requests: responses[1].data,
-            pending_outgoing_requests: responses[2].data
-        })
-    }*/
 
     renderFriendListForMusician() {
         const listItems = this.state.friendList.map((friend) =>
@@ -89,10 +58,28 @@ class MyProfile extends React.Component {
         );
     }
 
+    takeActionOnFriendRequest(request, action) {
+        FriendApiService.respondToFriendRequest(request.recipientID, request.senderID, action);
+        window.location.reload();
+    }
+
+
     renderIncomingRequestList() {
         console.log(this.state.pending_incoming_requests)
         const listItems = this.state.pending_incoming_requests.map((request) => 
-        <li>{request.senderID}</li>
+        <div>
+            <li>{request.senderName}<Button onClick={this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
+            <Button onClick={this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
+        </div>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
+    }
+
+    renderOutgoingRequestList() {
+        const listItems = this.state.pending_outgoing_requests.map((request) => 
+        <li>{request.recipientName}</li>
         );
         return (
             <ul>{listItems}</ul>
@@ -168,7 +155,8 @@ class MyProfile extends React.Component {
                             {this.renderFriendListForMusician()}
                             <h3>Friend requests ({this.state.pending_incoming_requests?.length})</h3>
                             {this.renderIncomingRequestList()}
-                            <h3>Pending friend requests</h3>
+                            <h3>Pending friend requests ({this.state.pending_outgoing_requests?.length})</h3>
+                            {this.renderOutgoingRequestList()}
 
                         </TabPanel>
 

@@ -30,13 +30,17 @@ export function logout() {
   Cookies.remove('id');
 }
 
-export function getFriendsDataFromApi(id) {
+export async function getFriendsDataFromApi(id) {
     let backend_url = getBackendURL();
-    return axios.all([
-        axios.get(backend_url + `/friends/${id}`),
-        axios.get(backend_url + `/requests/in/${id}`),
-        axios.get(backend_url + `/requests/out/${id}`)
-    ])
+
+    let r1 = await axios.get(backend_url + `/friends/${id}`);
+    let r2 = await axios.get(backend_url + `/requests/in/${id}`)
+    let r3 = await axios.get(backend_url + `/requests/out/${id}`)
+    console.log("heeeloo")
+    console.log(r2.data)
+    return {'friends': r1, 'incoming': r2, 'outgoing': r3 }
+
+    
 }
 
 
