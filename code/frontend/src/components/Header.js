@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { Nav } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
+import { USER_LOGOUT, CHAT_LOGOUT } from "../actions/types";
+import { chatLogout } from "../actions/chat_actions";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)
@@ -22,12 +24,13 @@ const Header = () => {
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);
   const handleLogout = () => {
+    // Log out of chat
+    chatLogout();
+
+    // Log out of app
     logout()
     dispatch({
-      type: 'user/logout'
-    })
-    dispatch({
-      type: 'user/chatlogout'
+      type: USER_LOGOUT
     })
   }
 

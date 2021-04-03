@@ -10,7 +10,6 @@ import SubHeader from "./SubHeader";
 
 import { CometChat } from "@cometchat-pro/chat";
 import config from '../config';
-import ChatApi from "../utils/ChatApiService";
 import { connect } from 'react-redux';
 import { chatLogin } from '../actions/chat_actions';
 
@@ -25,12 +24,7 @@ class Discover extends React.Component {
   		first_view : true,
 	  }
 
-    this.loginInProgress = false;
-
     this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
-    this.createCometChatUser = this.createCometChatUser.bind(this);
-    this.logInCometChatUser = this.logInCometChatUser.bind(this);
-    this.doChatLogin = this.doChatLogin.bind(this);
   }
 
   viewMusicians = () => { this.props.history.push('/musicianview');}
@@ -60,68 +54,24 @@ class Discover extends React.Component {
     }
   }
 
-  createCometChatUser(uid, name) {
-    var user = new CometChat.User(uid);
-    user.setName(name);
-
-    CometChat.createUser(user, config.apiKey).then(
-      user => {
-        console.log("User was successfully created: ", user);
-      },error => {
-        console.log("Could not create user: ", error);
+  componentDidUpdate(prevProps) {
+    let userName = this.props.store.user_reducer.name
+    if (userName !== prevProps.store.user_reducer.name) {
+      console.log("UPDATING COMPONENT")
+      let chatInitialized = this.props.store.chat_reducer.initialized;
+      let loggedIntoChat = this.props.store.chat_reducer.loggedIn;
+      if (chatInitialized && !loggedIntoChat) {
+        this.props.chatLogin(Cookies.get('id'), userName);
       }
-    );
+    }
   }
 
-  logInCometChatUser(userAuthToken) {
-    console.log("USING AUTH: ", userAuthToken);
-    CometChat.login(userAuthToken).then(
-      user => {
-        console.log("Chat login was successful: ", Cookies.get('id'));
-        // Update redux state
-        this.props.chatLogin(user)
-      },
-      error => {
-        console.log("Login failed with exception:", { error });
-      }
-    );
-  }
-
-  doChatLogin() {
-    let userId = Cookies.get('id');
-    ChatApi.accountExists(userId).then((res) => {
-        // Check if account exists, and if so, delete any existing auth tokens
-        // If no account exists, create one
-        if (res) {
-          console.log("Found existing account for this user");
-        } else {
-          // Create account for this user
-          this.createCometChatUser(userId, this.props.store.user_reducer.name);
-        }
-
-        // Create new auth token for this user
-        ChatApi.createUserAuthToken(userId).then((res) => {
-          // Finally, log the user in
-          setTimeout(() => {this.logInCometChatUser(res.data.data.authToken);}, 1000);
-        });
-    });
-  }
 
   render() {
     this.setCookieOnLogin()
     if (!Cookies.get('id')) {
       console.log('redirecting since no cookie_id or user_id ');
       return (<Redirect to = '/signin'/>);
-    }
-
-    let chatInitialized = this.props.store.chat_reducer.initialized;
-    let loggedIntoChat = this.props.store.chat_reducer.loggedIn;
-
-    if (chatInitialized && !loggedIntoChat) {
-      if (!this.loginInProgress) {
-        this.loginInProgress = true;
-        this.doChatLogin();
-      }
     }
 
 	  return (

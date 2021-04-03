@@ -7,7 +7,7 @@ export default function chatReducer(state = {loggedIn: false, initialized: false
         case CHAT_LOGIN:
           return { ...state, loggedIn: true, ...action.payload };
         case CHAT_LOGOUT:
-            return { initialized: true, loggedIn: false };
+            return { initialized: state.initialized, loggedIn: false };
         default:
             return state;
     }
