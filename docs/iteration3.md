@@ -7,10 +7,16 @@ Team Lead - Matthew Ost
 ![](assets/Iteration3_UML.png)
 
 # Wireframe & Use-case
+
+<img src="assets/i3/discover.png" width="450" height="300"/>
+
 <img src="" width="10" height="10" />
 <img src="assets/chat-flow/chat-flow-1.png" width="450" height="300" />
 <img src="assets/chat-flow/chat-flow-2.png" width="450" height="300" />
 <img src="assets/chat-flow/chat-flow-3.png" width="450" height="300" />
+
+<img src="assets/i3/speeddate.png" width="450" height="300"/>
+<img src="assets/i3/eventview.png" width="450" height="300"/>
 
 User case: Adding a connection
 
@@ -32,9 +38,9 @@ Use Case: Creating song-of-the-week challenges
 4. The user observes a few candidate submissions and finally has the option to submit their own A/V link with tags on instrument and experience. 
 
 Use Case: Creating a speed-dating event
-1. An admin creates a new speed-dating event, setting the date, time, number of participants, and geographic eligibility.
-2. Users browse the "Events" section to find matching events.
-3. Once an event is found, a user can click register and will receive a confirmation email.
+1. An admin creates a new speed-dating event, setting the name, date, minimum number of participants, and link.
+2. Users browse the events list to find events.
+3. A user can click on an event to expand it. They can click to register, and click again to leave the event.
 
 # Iteration Backlog
 - As a user, I want to be able to save the profiles of people I meet in the app so that I can connect with them later.

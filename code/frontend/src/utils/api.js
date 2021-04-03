@@ -1,5 +1,8 @@
 import axios from 'axios';
+import config from '../config';
 import Cookies from "js-cookie";
+import MusicianApi from "./MusicianApiService";
+import { CometChat } from "@cometchat-pro/chat";
 
 export function loginWithSpotify() {
   //Test API call:
@@ -36,6 +39,18 @@ export function getFriendsDataFromApi(id) {
     ])
 }
 
+
+export function chatApiInstance() {
+  return axios.create({
+    baseURL: "https://api-us.cometchat.io/v2.0/users",
+    headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "appId": config.appId,
+        "apiKey": config.apiKey
+    }
+  })
+}
 
 export default axios.create({
   baseURL: getBackendURL(),
