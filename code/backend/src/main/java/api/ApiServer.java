@@ -323,7 +323,9 @@ public class ApiServer {
             try {
                 String senderID = req.params("senderid");
                 String recipientID = req.params("recipientid");
-                FriendRequest fr = requestDao.createRequest(senderID, recipientID);
+                String senderName = musicianDao.read(senderID).getName();
+                String recipientName = musicianDao.read(recipientID).getName();
+                FriendRequest fr = requestDao.createRequest(senderID, senderName, recipientID, recipientName);
                 if (fr == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }

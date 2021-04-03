@@ -27,13 +27,19 @@ public class Sql2oRequestDao implements RequestDao {
     }
 
     @Override
-    public FriendRequest createRequest(String senderID, String recipientID) throws DaoException {
-        String sql = "INSERT INTO Requests(senderid, recipientid) VALUES(:senderid, :recipientid);";
+    public FriendRequest createRequest(String senderID, String senderName, String recipientID, String recipientName) throws DaoException {
+        String sql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname) " +
+                "VALUES(:senderid, :sendername, :recipientid, :recipientname);";
 
         try (Connection conn = sql2o.open()) {
             FriendRequest result = this.read(senderID, recipientID);
             if (result == null) {
-                conn.createQuery(sql).addParameter("senderid", senderID).addParameter("recipientid", recipientID).executeUpdate();
+                conn.createQuery(sql)
+                        .addParameter("senderid", senderID)
+                        .addParameter("sendername", senderName)
+                        .addParameter("recipientid", recipientID)
+                        .addParameter("recipientname", recipientName)
+                        .executeUpdate();
                 return this.read(senderID, recipientID);
             }
             return result;
@@ -59,7 +65,10 @@ public class Sql2oRequestDao implements RequestDao {
                 return null;
             }
 
-            FriendRequest fr = new FriendRequest(senderID, recipientID);
+            String senderName = (String) queryResults.get(0).get("sendername");
+            String recipientName = (String) queryResults.get(0).get("recipientname");
+
+            FriendRequest fr = new FriendRequest(senderID, senderName, recipientID, recipientName);
             return fr;
 
         } catch (Sql2oException ex) {
@@ -84,7 +93,9 @@ public class Sql2oRequestDao implements RequestDao {
             List<FriendRequest> from = new ArrayList<>();
             for (Map row : queryResults) {
                 String recipientID = (String) row.get("recipientid");
-                from.add(new FriendRequest(senderID, recipientID));
+                String senderName = (String) row.get("sendername");
+                String recipientName = (String) row.get("recipientname");
+                from.add(new FriendRequest(senderID, senderName, recipientID, recipientName));
             }
 
             return from;
@@ -111,7 +122,9 @@ public class Sql2oRequestDao implements RequestDao {
             List<FriendRequest> to = new ArrayList<>();
             for (Map row : queryResults) {
                 String senderID = (String) row.get("senderid");
-                to.add(new FriendRequest(senderID, recipientID));
+                String senderName = (String) row.get("sendername");
+                String recipientName = (String) row.get("recipientname");
+                to.add(new FriendRequest(senderID, senderName, recipientID, recipientName));
             }
 
             return to;
@@ -135,7 +148,7 @@ public class Sql2oRequestDao implements RequestDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to accept friend request", ex);
         }
-        return new FriendRequest(senderID, recipientID);
+        return new FriendRequest(senderID, null,  recipientID, null);
     }
 
     @Override
@@ -147,7 +160,7 @@ public class Sql2oRequestDao implements RequestDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to decline friend request", ex);
         }
-        return new FriendRequest(senderID, recipientID);
+        return new FriendRequest(senderID, null,  recipientID, null);
     }
 
 }

@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface RequestDao {
 
-    FriendRequest createRequest(String senderID, String recipientID) throws DaoException;
+    FriendRequest createRequest(String senderID, String senderName,  String recipientID, String recipientName) throws DaoException;
 
     List<FriendRequest> readAllFrom(String senderID) throws DaoException;
 
