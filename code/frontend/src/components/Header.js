@@ -8,6 +8,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
 import { USER_LOGOUT, CHAT_LOGOUT } from "../actions/types";
 import { chatLogout } from "../actions/chat_actions";
+import styles from "../styles/navDropdown.module.css";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)
@@ -34,6 +35,7 @@ const Header = () => {
     })
   }
 
+
   return (
       <div>
         <Navbar expand="lg" variant="dark" bg="dark">
@@ -44,15 +46,22 @@ const Header = () => {
               Welcome, {user.name}!
           </Navbar.Brand>
 
-          <NavDropdown title="My Account" color="white">
-            <NavDropdown.Item href="#myprofile">Profile</NavDropdown.Item>
-            <NavDropdown.Item href="#mychats">Chats</NavDropdown.Item>
-            <NavDropdown.Item href="#signin" onClick={handleLogout}>Log Out</NavDropdown.Item>
-          </NavDropdown>
+          <div className={styles.navDropdownTitle}>
+            <NavDropdown title="My Account">
+              <div className={styles.navDropdownItems}>
+                <NavDropdown.Item href="#myprofile">Profile</NavDropdown.Item>
+                <NavDropdown.Item href="#mychats">Chats</NavDropdown.Item>
+                <NavDropdown.Item href="#signin" onClick={handleLogout}>Log Out</NavDropdown.Item>
+              </div>
+            </NavDropdown>
+          </div>
         </Navbar>
       </div>
   )
 }
 
+// const DropdownTitle = () => {
+//   return ();
+// }
 
 export default withRouter(Header);
