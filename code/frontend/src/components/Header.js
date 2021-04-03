@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { Nav } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
+import store from "../store";
+import {allMusiciansQuery} from "../actions/musician_actions";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)
@@ -21,6 +23,8 @@ const Header = () => {
     dispatch(getUser(id1))
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);
+
+
   const handleLogout = () => {
     logout()
     dispatch({

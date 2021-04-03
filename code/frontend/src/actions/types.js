@@ -1,5 +1,6 @@
 // Musician API action types
 export const LOAD_MUSICIANS_INITIAL = 'musicians/loadfirst';
+export const LOAD_MUSICIANS_INITIAL_SEARCH = 'musicians/loadfirstsearch';
 export const LOAD_MUSICIANS_QUERY = 'musicians/newquery';
 export const CLEAR_MUSICIANS_QUERY = 'musicians/clearquery';
 

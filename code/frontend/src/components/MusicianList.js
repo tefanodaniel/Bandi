@@ -3,7 +3,7 @@ import {useSelector, shallowEqual, useDispatch} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import {getFrontendURL} from "../utils/api";
 import { bandi_styles } from "../styles/bandi_styles";
-import {fetchMusicians} from "../actions/musician_actions";
+import {allMusiciansQuery} from "../actions/musician_actions";
 
 const selectMusicians = (state) => {
     if(!state.musician_reducer.filteredMusicians)
@@ -37,9 +37,13 @@ const FilteredMusicianItem = ( musician ) => {
 const MusicianList = () => {
     const dispatch = useDispatch();
     const fil_musicians = useSelector(selectMusicians, shallowEqual)
+    let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
+
     if(fil_musicians === -1)
     {
-        dispatch(fetchMusicians)
+        let queryparams = {};
+        queryparams.id = logged_user.id
+        dispatch(allMusiciansQuery(queryparams))
 
         return (
             <Container>

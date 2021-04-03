@@ -1,4 +1,9 @@
-import { LOAD_MUSICIANS_INITIAL, LOAD_MUSICIANS_QUERY, CLEAR_MUSICIANS_QUERY } from './types';
+import {
+    LOAD_MUSICIANS_INITIAL,
+    LOAD_MUSICIANS_QUERY,
+    CLEAR_MUSICIANS_QUERY,
+    LOAD_MUSICIANS_INITIAL_SEARCH
+} from './types';
 import MusicianApi from "../utils/MusicianApiService";
 
 
@@ -6,12 +11,23 @@ import MusicianApi from "../utils/MusicianApiService";
 // in the future this should be a list of contextual "featured" musicians pre-any user defined search.
 // also pagination or carousel.
 export async function fetchMusicians(dispatch, getState) {
-  console.log("Inside fetchMusicians action");
-  const response = await MusicianApi.getAll();
-  dispatch({
-    type : LOAD_MUSICIANS_INITIAL,
-    payload : response.data
-  })
+    console.log("Inside fetchMusicians action");
+    const response = await MusicianApi.getAll();
+    dispatch({
+        type : LOAD_MUSICIANS_INITIAL,
+        payload : response.data
+    })
+}
+
+export function allMusiciansQuery(queryparams) {
+    console.log("Inside all Musicians query");
+    return async function fetchAllMusicians(dispatch, getState) {
+        const response = await MusicianApi.getAll(); // the backend display of all musicians except logged in user needs to be implemented.
+        dispatch({
+            type : LOAD_MUSICIANS_INITIAL_SEARCH,
+            payload : response.data
+        })
+    }
 }
 
 export function newQuery(queryparams) {

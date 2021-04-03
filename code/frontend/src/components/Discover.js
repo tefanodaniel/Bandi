@@ -7,6 +7,8 @@ import Header from './Header'
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./SubHeader";
+import {allMusiciansQuery} from "../actions/musician_actions";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
 
 class Discover extends React.Component {
@@ -50,7 +52,8 @@ class Discover extends React.Component {
 			  return (<Redirect to = '/signin'/>);
 		  }
 	  }
-	return (
+
+	  return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
         	<SubHeader text={"We need a banDi tagline to insert here"}/>
