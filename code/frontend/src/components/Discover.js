@@ -3,12 +3,17 @@ import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
-import Header from './Header'
+import Header from './Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./SubHeader";
 import {allMusiciansQuery} from "../actions/musician_actions";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
+
+import { CometChat } from "@cometchat-pro/chat";
+import config from '../config';
+import { connect } from 'react-redux';
+import { chatLogin } from '../actions/chat_actions';
 
 
 class Discover extends React.Component {
@@ -18,8 +23,10 @@ class Discover extends React.Component {
 	  this.state = {
   		id : '',
   		u_id : null,
-  		first_view : true
+  		first_view : true,
 	  }
+
+    this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
   }
 
   viewMusicians = () => { this.props.history.push('/musicianview');}
@@ -30,30 +37,44 @@ class Discover extends React.Component {
 
   viewSOTW = () => {this.props.history.push('/sotw')}
 
-  render() {
-	  let cookie_id = Cookies.get('id');
+  setCookieOnLogin() {
+    let cookie_id = Cookies.get('id');
 	  console.log('are the cookies already set?', cookie_id);
-	  if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
-		  const params = new URLSearchParams(window.location.search);
-		  let user_id = params.get("id");
-		  console.log('the userid from url params', user_id);
-		  // id is in url
-		  if (user_id) {
-		  	  // so first log in
-			  // store id as a cookie
-			  Cookies.set('id', user_id);
-			  // remove id from url
-			  window.history.replaceState(null, '', '/')
-		  }
-		  else {
-		  	  // either beyond first login or unsuccessful login
-		  	  //shouldn't be here! so safe to redirect
-			  console.log('redirecting since no cookie_id or user_id ');
-			  return (<Redirect to = '/signin'/>);
-		  }
-	  }
+    if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
+      const params = new URLSearchParams(window.location.search);
+      let user_id = params.get("id");
+      console.log('the userid from url params', user_id);
+      // id is in url
+      if (user_id) {
+         // so first log in
+        // store id as a cookie
+        Cookies.set('id', user_id);
 
-	  return (
+        // remove id from url
+        window.history.replaceState(null, '', '/')
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let userName = this.props.store.user_reducer?.name
+    if (userName !== prevProps.store.user_reducer?.name) {
+      let chatInitialized = this.props.store.chat_reducer.initialized;
+      let loggedIntoChat = this.props.store.chat_reducer.loggedIn;
+      if (chatInitialized && !loggedIntoChat) {
+        this.props.chatLogin(Cookies.get('id'), userName);
+      }
+    }
+  }
+
+
+  render() {
+    this.setCookieOnLogin()
+    if (!Cookies.get('id')) {
+        console.log('redirecting since no cookie_id or user_id ');
+        return (<Redirect to='/signin'/>);
+    }
+	return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
         	<SubHeader text={"We need a banDi tagline to insert here"}/>
@@ -109,4 +130,11 @@ class Discover extends React.Component {
 
 }
 
-export default Discover;
+//export default Discover;
+
+function mapStateToProps(state) {
+  return {
+    store: state
+  };
+} // end mapStateToProps
+export default connect(mapStateToProps, { chatLogin })(Discover);

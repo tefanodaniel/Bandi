@@ -1,4 +1,4 @@
-import { USER_LOGIN, USER_LOGOUT, UPDATE_USER_PROFILE } from './types';
+import { USER_LOGIN, USER_LOGOUT, UPDATE_USER_PROFILE, USER_CHAT_LOGIN } from './types';
 import MusicianApi from "../utils/MusicianApiService";
 
 //thunk function to do user-login.
