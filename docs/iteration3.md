@@ -66,7 +66,36 @@ Use Case: Creating a speed-dating event
 # Retrospective
 
 #### What we have done
+
+- Refactored the frontend to make better use of Redux
+- Created an admin user role
+- Frontend views for admin creating events
+- Finished implementing search by location
+- Implemented backend framework for speed dating and SoTW challenges
+- Implemented backend framework for creating friend connections and began work on the frontend framework to display/make connections
+- Implemented basic chat functionality for friends
+- Wrote some unit tests for our backend
+- Resolved our CORS issues
+
 #### What we haven't done
+
+- Set up chat rooms for the execution of a speed dating event
+- Implemented a “save for later” functionality for browsing profiles
+- Finished debugging the frontend for sending and responding to friend requests
+- Automatic chat group creation for newly created bands (generally, we need more working friend stuff before we can really build up the chat)
+- Need to sync up our friend lists with the external Chat API
+- Frontend interface to add audio/video links to the user’s profile
+
 #### Difficulties
+
+- Working with redux correctly
+- Debugging errors with API requests
+- Ordering the tasks so that people always have something to do without needing to wait for others (we only had relatively minor issues with this, but it’s difficult and something we can always improve on)
+- Multiple people using the test database from their individual branches (database integrity issues)
+
 #### Looking forward
 
+- Debugging API requests from the frontend to our backend, including figuring out why some requests fail and why some are unnecessarily repeated
+- Refactor our API routes for cleaner code
+- Continue building out our core functionality
+- Continue improving the frontend style
