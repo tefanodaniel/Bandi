@@ -36,7 +36,8 @@ class MyProfile extends React.Component {
         const { fetchBandsForMusician } = this.props;
 
 
-      // fetchBandsForMusician({id: this.state.id});
+        fetchBandsForMusician({id: this.state.id});
+        
         getFriendsDataFromApi(this.state.id).then((res) => {
           console.log(res);
           this.setState({
