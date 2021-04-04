@@ -6,6 +6,8 @@ import Cookies from "js-cookie";
 import { Nav, NavDropdown } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../actions/user_actions";
+import store from "../store";
+import {allMusiciansQuery} from "../actions/musician_actions";
 import { USER_LOGOUT, CHAT_LOGOUT } from "../actions/types";
 import { chatLogout } from "../actions/chat_actions";
 import styles from "../styles/navDropdown.module.css";
@@ -24,6 +26,8 @@ const Header = () => {
     dispatch(getUser(id1))
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);
+
+
   const handleLogout = () => {
     // Log out of chat
     chatLogout();

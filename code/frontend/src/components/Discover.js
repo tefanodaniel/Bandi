@@ -7,6 +7,8 @@ import Header from './Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./SubHeader";
+import {allMusiciansQuery} from "../actions/musician_actions";
+import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
 import { CometChat } from "@cometchat-pro/chat";
 import config from '../config';
@@ -69,11 +71,10 @@ class Discover extends React.Component {
   render() {
     this.setCookieOnLogin()
     if (!Cookies.get('id')) {
-      console.log('redirecting since no cookie_id or user_id ');
-      return (<Redirect to = '/signin'/>);
+        console.log('redirecting since no cookie_id or user_id ');
+        return (<Redirect to='/signin'/>);
     }
-
-	  return (
+	return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
         	<SubHeader text={"We need a banDi tagline to insert here"}/>

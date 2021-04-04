@@ -8,9 +8,10 @@ import card_bg from "../images/card.jpg";
 export const bandi_styles = {
     discover_background : {
         backgroundImage:`url(${discover_bg})`,
-        height: "1000px",
+        height: '1500px', //handcrafting it for now.
         backgroundPosition: "center",
-        backgroundSize: "cover"
+        backgroundSize: "cover",
+        backgroundRepeat: "repeat-y"
     },
     jumbo_music: {
         backgroundAttachment: "static",
@@ -70,5 +71,14 @@ export const bandi_styles = {
             marginTop: "20px",
             marginLeft: "100px",
             marginBottom:"80px"
+    },
+    submission_card: {
+        borderStyle: "dashed",
+        height: "180px",
+        width: "200px",
+        backgroundImage: `url(${card_bg})`,
+        backgroundPosition: "center",
+        backgroundSize:"cover",
+        color: "white"
     }
 }

@@ -1,11 +1,15 @@
 import React from 'react';
-import { useSelector, shallowEqual } from "react-redux";
+import {useSelector, shallowEqual, useDispatch} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import {getFrontendURL} from "../utils/api";
 import { bandi_styles } from "../styles/bandi_styles";
+import {allMusiciansQuery} from "../actions/musician_actions";
 
 const selectMusicians = (state) => {
-    return state.musician_reducer.filteredMusicians.map(user => user)
+    if(!state.musician_reducer.filteredMusicians)
+        return -1;
+    else
+        return state.musician_reducer.filteredMusicians.map(user => user)
 }
 
 
@@ -31,23 +35,40 @@ const FilteredMusicianItem = ( musician ) => {
 
 
 const MusicianList = () => {
+    const dispatch = useDispatch();
     const fil_musicians = useSelector(selectMusicians, shallowEqual)
-    const fil_musicians_chunk = chunk(fil_musicians,4)
-    const rows = fil_musicians_chunk.map((user_chunk, index) => {
-        const fil_musicians_cols = user_chunk.map((user, index) => {
-            return (
-                <Col key={index} style={{height: "180px" , columnWidth: "500px"}}>
-                    <FilteredMusicianItem id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres}/>
-                </Col>
-            );
+    let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
+
+    if(fil_musicians === -1)
+    {
+        let queryparams = {};
+        queryparams.id = logged_user.id
+        dispatch(allMusiciansQuery(queryparams))
+
+        return (
+            <Container>
+                <h5 style={{marginTop:"50px", marginLeft:"50px"}}> Loading some of our featured musicians!</h5>
+            </Container>
+        )
+    }
+    else {
+        const fil_musicians_chunk = chunk(fil_musicians,4)
+        const rows = fil_musicians_chunk.map((user_chunk, index) => {
+            const fil_musicians_cols = user_chunk.map((user, index) => {
+                return (
+                    <Col key={index} style={{height: "180px" , columnWidth: "500px"}}>
+                        <FilteredMusicianItem id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres}/>
+                    </Col>
+                );
+            });
+            return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
         });
-        return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
-    });
-    return (
-        <Container>
-            {rows}
-        </Container>
-    )
+        return (
+            <Container>
+                {rows}
+            </Container>
+        )
+    }
 }
 
 export default MusicianList

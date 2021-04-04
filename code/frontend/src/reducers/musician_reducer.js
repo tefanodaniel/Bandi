@@ -1,4 +1,9 @@
-import { LOAD_MUSICIANS_INITIAL, LOAD_MUSICIANS_QUERY, CLEAR_MUSICIANS_QUERY } from '../actions/types';
+import {
+    LOAD_MUSICIANS_INITIAL,
+    LOAD_MUSICIANS_QUERY,
+    CLEAR_MUSICIANS_QUERY,
+    LOAD_MUSICIANS_INITIAL_SEARCH
+} from '../actions/types';
 
 export default function musicianReducer (state = {}, action) {
     switch (action.type) {
@@ -6,6 +11,11 @@ export default function musicianReducer (state = {}, action) {
             return {
                 ...state,
                 musicians: action.payload,
+                filteredMusicians: null
+            }
+        case LOAD_MUSICIANS_INITIAL_SEARCH:
+            return {
+                ...state,
                 filteredMusicians: action.payload
             }
         case LOAD_MUSICIANS_QUERY:

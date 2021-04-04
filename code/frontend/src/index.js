@@ -15,6 +15,7 @@ import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
 
 import {fetchSDEvents} from "./actions/sd_event_actions";
+import {fetchSotwEvents} from "./actions/sotw_event_actions";
 
 // Redux store
 console.log('Initial state: ', store.getState())
@@ -24,6 +25,8 @@ const unsubscribe = store.subscribe(() =>
 store.dispatch(fetchMusicians)
 
 store.dispatch(fetchSDEvents)
+
+store.dispatch(fetchSotwEvents)
 
 // Init CometChat
 var appID = config.appId;
