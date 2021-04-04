@@ -1,5 +1,8 @@
 package model;
 
+import kong.unirest.Unirest;
+import kong.unirest.json.JSONObject;
+
 import java.util.*;
 
 public class Musician extends Client {
@@ -8,24 +11,82 @@ public class Musician extends Client {
     private Set<String> genres;
     private Set<String> instruments;
     private String experience;
-    private String location;
     private Set<String> profileLinks;
+    private String location;
+    private String zipCode;
+    private double latitude;
+    private double longitude;
+    private double distance;
+    private Set<String> friends;
+    private boolean admin;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
         this.name = name;
         this.genres = genres;
+
+        // false by default
+        admin = false;
     }
 
-    public Musician(String id, String name, Set<String> genres,
-                    Set<String> instruments, String experience, String location, Set<String> profileLinks) {
+    public Musician(String id, String name, Set<String> genres, Set<String> instruments,
+                    String experience, Set<String> profileLinks, String location,
+                    String zipCode, Set<String> friends, boolean isAdmin) {
         super(id);
         this.name = name;
         this.genres = genres;
         this.instruments = instruments;
         this.experience = experience;
-        this.location = location;
         this.profileLinks = profileLinks;
+        this.zipCode = zipCode;
+        this.location = location;
+        setLatitudeLongitude(zipCode);
+        this.distance = 9999;
+        this.friends = friends;
+        this.admin = isAdmin;
+    }
+
+    public Musician(String id, String name, Set<String> genres, Set<String> instruments,
+                    String experience, Set<String> profileLinks, String location,
+                    String zipCode, double distance, Set<String> friends, boolean isAdmin) {
+        super(id);
+        this.name = name;
+        this.genres = genres;
+        this.instruments = instruments;
+        this.experience = experience;
+        this.profileLinks = profileLinks;
+        this.zipCode = zipCode;
+        this.location = location;
+        setLatitudeLongitude(zipCode);
+        this.distance = distance;
+        this.friends = friends;
+        this.admin = isAdmin;
+    }
+
+    private void setLatitudeLongitude(String zipCode) {
+        if(zipCode == null || zipCode.equals("NULL")) {
+            this.latitude = 0;
+            this.longitude = 0;
+        } else {
+            final String BASE_URL = "https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude";
+            final String QUERY_PARAMS = "&facet=state&facet=timezone&facet=dst";
+            final String ZIP_CODE = "&q=" + zipCode;
+            String endpoint = BASE_URL + ZIP_CODE + QUERY_PARAMS;
+            JSONObject fields = Unirest.get(endpoint).asJson().getBody().getObject()
+                    .getJSONArray("records")
+                    .getJSONObject(0)
+                    .getJSONObject("fields");
+            this.latitude = fields.getDouble("latitude");
+            this.longitude = fields.getDouble("longitude");
+        }
+    }
+
+    public boolean getAdmin() {
+        return this.admin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.admin = isAdmin;
     }
 
     public String getName() {
@@ -51,6 +112,7 @@ public class Musician extends Client {
         this.genres.add(genre);
     }
 
+
     public Set<String> getInstruments() {
         return instruments;
     }
@@ -74,14 +136,6 @@ public class Musician extends Client {
         this.experience = experience;
     }
 
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
     public Set<String> getProfileLinks() {
         return profileLinks;
     }
@@ -97,6 +151,45 @@ public class Musician extends Client {
         this.profileLinks.add(link);
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public Set<String> getFriends() { return friends; }
+
+    public void setFriends(Set<String> friends) { this.friends = friends; }
+
+    public void addFriend(String friendID) {
+        if (this.friends == null) {
+            this.friends = new HashSet<String>();
+        }
+        this.friends.add(friendID);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,22 +199,30 @@ public class Musician extends Client {
                 genres.equals(musician.genres) &&
                 Objects.equals(instruments, musician.instruments) &&
                 Objects.equals(experience, musician.experience) &&
-                Objects.equals(location, musician.location);
+                Objects.equals(location, musician.location) &&
+                Objects.equals(friends, musician.friends) &&
+                this.admin == musician.admin;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, genres, instruments, experience, location);
+        return Objects.hash(name, genres, instruments, experience, location, zipCode, friends, admin);
     }
 
     @Override
     public String toString() {
+        // TODO: update with new fields
         return "Musician{" +
                 "name='" + name + '\'' +
                 ", genre='" + genres.toString() + '\'' +
                 ", instrument='" + instruments.toString() + '\'' +
                 ", experience='" + experience + '\'' +
                 ", location=' " + location + '\'' +
+                ", distance=' " + distance + '\'' +
+                ", friends=' " + friends + '\'' +
+                ", admin=' " + admin + '\'' +
                 '}';
     }
+
+
 }

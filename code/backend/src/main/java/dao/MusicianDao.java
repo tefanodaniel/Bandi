@@ -20,10 +20,16 @@ public interface MusicianDao {
      * @param instruments The associated instruments
      * @param experience Self-declared level of expertise
      * @param location The location of a musician.
+     * @param friends The musician ids of this musician's friends.
+     * @param admin flag for if musician is an admin or not.
      * @return The client object created.
      * @throws DaoException A generic exception for CRUD operations.
      */
-    Musician create(String id, String name, Set<String> genres, Set<String> instruments, String experience, String location, Set<String> profileLinks) throws DaoException;
+
+    Musician create(String id, String name, Set<String> genres, Set<String> instruments,
+                    String experience, String location, String zipCode,
+                    Set<String> profileLinks, Set<String> friends, boolean admin) throws DaoException;
+
 
     /**
      * Create a Musician.
@@ -62,6 +68,13 @@ public interface MusicianDao {
      */
     List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
+    /**
+     * Gets all of a musician's friends from the database.
+     *
+     * @return All the Musicians that are friends with this user.
+     * @throws DaoException A generic exception for CRUD operations.
+     */
+    List<Musician> getAllFriendsOf(String id) throws DaoException;
 
     /**
      * Update the name of a Musicians provided the id.
@@ -81,7 +94,13 @@ public interface MusicianDao {
 
     Musician updateLocation(String id, String name) throws DaoException;
 
+    Musician updateZipCode(String id, String zipCode) throws DaoException;
+
+    Musician updateAdmin(String id, boolean admin) throws DaoException;
+
     Musician updateProfileLinks(String id, Set<String> links) throws DaoException;
+
+    // TODO: add function for adding friends
 
     /**
      * Delete a Musician provided its offeringName.

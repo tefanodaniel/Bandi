@@ -5,8 +5,9 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
-import Header from "./Header/Header";
+import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
+import BandApiService from '../utils/BandApiService';
 
 class Profile extends React.Component {
     constructor(props) {
@@ -23,27 +24,52 @@ class Profile extends React.Component {
             experience: '',
             instruments: [],
             genres: [],
-            links: []
+            links: [],
+            friends: [],
         }
-    }
 
-    goBack = () => {this.props.history.goBack()}
+        this.addFriend.bind(this)
 
-    render() {
-
+        
         const params = new URLSearchParams(this.props.location.search);
         this.state.us_id = params.get("view");
         this.state.my_id = Cookies.get("id");
 
         var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
         axios.get(userURL)
-            .then((response) =>
-                this.setState(
+            .then((response) => {
+                this.state = 
                     {name: response.data.name, location: response.data.location,
                         experience: response.data.experience,
                         instruments: response.data.instruments,
                         genres: response.data.genres,
-                        links: response.data.profileLinks}));
+                        links: response.data.profileLinks,
+                        friends: response.data.friends
+                    }
+            });
+    }
+
+    goBack = () => {this.props.history.goBack()};
+
+    
+    addFriend = () => {
+        BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
+            alert("A request to connect was sent to " + this.state.name + ".")
+        );
+    }
+
+    renderConnectButton = () => {
+        // remove question mark once pending_outgoing_requests confirmed to exist 
+        /*
+        if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
+            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
+        } else { return <Button disabled>Pending...</Button> };*/
+        if (true) {
+            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
+        } else { return <Button disabled>Pending...</Button> };
+    }
+
+    render() {
 
         if (this.state.name) {
             return (
@@ -66,6 +92,7 @@ class Profile extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
+                    {this.renderConnectButton()}
                 </div>
             );
         } else {
