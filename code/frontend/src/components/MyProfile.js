@@ -37,7 +37,14 @@ class MyProfile extends React.Component {
 
 
       // fetchBandsForMusician({id: this.state.id});
-        getFriendsDataFromApi(this.state.id)
+        getFriendsDataFromApi(this.state.id).then((res) => {
+          console.log(res);
+          this.setState({
+            friendList: res.friends,
+            pending_incoming_requests: res.incoming,
+            pending_outgoing_requests: res.outgoing
+          });
+        });
         /*
         getFriendsDataFromApi(this.state.id)
             .then(axios.spread((r1, r2, r3) => {
@@ -66,10 +73,10 @@ class MyProfile extends React.Component {
 
     renderIncomingRequestList() {
         console.log(this.state.pending_incoming_requests)
-        const listItems = this.state.pending_incoming_requests.map((request) => 
+        const listItems = this.state.pending_incoming_requests.map((request) =>
         <div>
-            <li>{request.senderName}<Button onClick={this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
-            <Button onClick={this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
+            <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
+            <Button onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
         </div>
         );
         return (
@@ -78,7 +85,7 @@ class MyProfile extends React.Component {
     }
 
     renderOutgoingRequestList() {
-        const listItems = this.state.pending_outgoing_requests.map((request) => 
+        const listItems = this.state.pending_outgoing_requests.map((request) =>
         <li>{request.recipientName}</li>
         );
         return (
@@ -125,7 +132,7 @@ class MyProfile extends React.Component {
                         <TabList>
                             <Tab>My Profile</Tab>
                             <Tab>My Bands</Tab>
-                            <Tab>My Friends</Tab> 
+                            <Tab>My Friends</Tab>
                         </TabList>
 
                         <TabPanel>

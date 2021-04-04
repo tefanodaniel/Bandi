@@ -33,14 +33,16 @@ export function logout() {
 export async function getFriendsDataFromApi(id) {
     let backend_url = getBackendURL();
 
+    setTimeout(() => {console.log("Delaying 1...");}, 1000)
     let r1 = await axios.get(backend_url + `/friends/${id}`);
+    setTimeout(() => {console.log("Delaying 2...");}, 1000)
     let r2 = await axios.get(backend_url + `/requests/in/${id}`)
+    setTimeout(() => {console.log("Delaying 3...");}, 1000)
     let r3 = await axios.get(backend_url + `/requests/out/${id}`)
-    console.log("heeeloo")
-    console.log(r2.data)
-    return {'friends': r1, 'incoming': r2, 'outgoing': r3 }
 
-    
+    return {'friends': r1.data, 'incoming': r2.data, 'outgoing': r3.data }
+
+
 }
 
 
