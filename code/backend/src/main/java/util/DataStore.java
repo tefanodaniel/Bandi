@@ -32,11 +32,11 @@ public final class DataStore {
         Set<String> profileLinks = new HashSet<String>();
 
         // Create lists of friends for the test musicians
-        Set<String> davidFriends = new HashSet<String>(Arrays.asList());
+        Set<String> davidFriends = new HashSet<String>(Arrays.asList("00002fakeid", "22zcnk76clvox7mifcwgz3tha", "thegreatbelow1"));
         Set<String> ericFriends = new HashSet<String>(Arrays.asList("00001fakeid"));
-        Set<String> kennyFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid"));
-        Set<String> rogerFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid"));
-        Set<String> nickFriends = new HashSet<String>(Arrays.asList("00001fakeid", "00002fakeid", "00003fakeid", "00004fakeid"));
+        Set<String> kennyFriends = new HashSet<String>(Arrays.asList("00004fakeid", "00005fakeid"));
+        Set<String> rogerFriends = new HashSet<String>(Arrays.asList("00003fakeid", "00005fakeid"));
+        Set<String> nickFriends = new HashSet<String>(Arrays.asList("00003fakeid", "00004fakeid"));
 
         List<Musician> samples = new ArrayList<>();
         samples.add(new Musician("00001fakeid","David Gilmour", genres1, instruments1, "Expert",
@@ -50,42 +50,46 @@ public final class DataStore {
         samples.add(new Musician("00005fakeid","Nick Mason", genres1, instruments4, "Expert",
                                         profileLinks,"Cambridge, MA", "02138", nickFriends, false));
 
+
         samples.add(new Musician("00006fakeid","Michael Jackson", genres3, instruments4, "Expert",
-                profileLinks,"Cambridge, MA", "02138", rogerFriends, false));
+                profileLinks,"Cambridge, MA", "02138", new HashSet<String>(), false));
 
         samples.add(new Musician("00007fakeid","George Michael", genres1, instruments2, "Expert",
-                profileLinks,"San Diego, CA", "92168", nickFriends, false));
+                profileLinks,"San Diego, CA", "92168", new HashSet<String>(), false));
 
         samples.add(new Musician("00008fakeid","Mariah Carey", genres2, instruments1, "Expert",
-                profileLinks,"San Diego, CA", "92168", kennyFriends, false));
+                profileLinks,"San Diego, CA", "92168", new HashSet<String>(), false));
 
         samples.add(new Musician("00009fakeid","Robin Williams", genres1, instruments3, "Expert",
-                profileLinks,"Grand Praire, TX", "75050", davidFriends, false));
+                profileLinks,"Grand Praire, TX", "75050", new HashSet<String>(), false));
 
         samples.add(new Musician("000010fakeid","Prince", genres1, instruments1, "Expert",
-                profileLinks,"Cambridge, MA", "02138", nickFriends, false));
+                profileLinks,"Cambridge, MA", "02138", new HashSet<String>(), false));
 
 
         // To Do : Add all Bandi Admins to enable testing admin functionality
         Set<String> maxLinks = new HashSet<String>();
+        Set<String> maxFriends = new HashSet<String>();
         maxLinks.add("https://www.youtube.com/watch?v=NPBCbTZWnq0");
+
+
+        Set<String> stefanoFriends = new HashSet<String>(Arrays.asList("00001fakeid"));
 
         Set<String> og_link = new HashSet<String>();
         og_link.add("https://youtu.be/dQw4w9WgXcQ");
 
         samples.add(new Musician("22zcnk76clvox7mifcwgz3tha","Max Torres", genres2, instruments2, "Expert",
-                maxLinks, "Freehold, NJ", "07728",  kennyFriends,true)); // Max and Kenny G are best friends
+                maxLinks, "Freehold, NJ", "07728",  new HashSet<String>(),true)); // Max and Kenny G are best friends
       
         samples.add(new Musician("thegreatbelow1","Stefano Tusa", genres2, instruments2, "Intermediate",
-                new HashSet<String>(),  "Orlando, FL", "32825", kennyFriends, true)); // Max, Kenny G, and I are all best friends.
+                new HashSet<String>(),  "Orlando, FL", "32825", stefanoFriends, true)); // Max, Kenny G, and I are all best friends.
 
         Musician Nick = new Musician("12101628937","Nick Xitco",
-                genres2, instruments2, "Expert", maxLinks, "New York, NY", "32825", kennyFriends, true);
+                genres2, instruments2, "Expert", maxLinks, "New York, NY", "32825", new HashSet<String>(), true);
         samples.add(Nick);
 
         samples.add(new Musician("22xpmsx47uendfh4kafp3zjmi", "Ramchandran Muthukumar", genres3, instruments3, "Expert",
-                og_link, "Baltimore, MD", "21218", kennyFriends, true));
-
+                og_link, "Baltimore, MD", "21218", new HashSet<String>(), true));
 
 
         return samples;

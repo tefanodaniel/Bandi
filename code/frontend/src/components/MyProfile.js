@@ -1,44 +1,17 @@
 import React from 'react';
 import axios from "axios";
-import {getBackendURL, getFrontendURL} from "../utils/api";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Form from "react-bootstrap/Form";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
+import BandApiService from '../utils/BandApiService';
+import FriendApiService from '../utils/FriendApiService';
+import {getFriendsDataFromApi} from "../utils/api";
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../actions/band_actions';
-function makeFriendMap(list) {
-    let friendMap = new Map();
-    list.forEach(friendID => {
-        let friendURL = getBackendURL() + "/musicians/" + friendID;
-        axios.get(friendURL)
-            .then(response => friendMap.set(response.data.name, friendURL));
-    });
-    console.log(friendMap.size);
-    return friendMap;
-}
-
-function DisplayFriendsList(props) {
-
-    let friends = makeFriendMap(props.list)
-    if (friends.size > 0) {
-        const friendItems = friends.map((name, url) => {
-                <li> <a href={url}>{name}</a> </li>
-        });
-        return (
-          <ul>{friendItems}</ul>
-        );
-    } else {
-        return (<p>No friends to display :(</p>);
-    }
-}
-
-
-
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -50,21 +23,75 @@ class MyProfile extends React.Component {
             id: Cookies.get('id'),
             bands: [],
             name: 'Loading...',
-            location: '',
-            experience: '',
-            instruments: [],
-            genres: [],
-            links: [],
-            friends: [],
-            pending_outgoing_requests: [],
+            friendList: [],
+            pending_incoming_requests: [],
+            pending_outgoing_requests: []
         }
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
+
     }
 
     componentDidMount() {
-      const { fetchBandsForMusician } = this.props;
-      fetchBandsForMusician({id: this.state.id});
+        const { fetchBandsForMusician } = this.props;
+
+
+        fetchBandsForMusician({id: this.state.id});
+        
+        getFriendsDataFromApi(this.state.id).then((res) => {
+          console.log(res);
+          this.setState({
+            friendList: res.friends,
+            pending_incoming_requests: res.incoming,
+            pending_outgoing_requests: res.outgoing
+          });
+        });
+        /*
+        getFriendsDataFromApi(this.state.id)
+            .then(axios.spread((r1, r2, r3) => {
+                this.setState({
+                    friendList: r1.data,
+                    pending_incoming_requests: r2.data,
+                    pending_outgoing_requests: r3.data
+                });
+            })).catch((error) => console.log(error)) */
+    }
+
+    renderFriendListForMusician() {
+        const listItems = this.state.friendList.map((friend) =>
+        <li key={friend["id"]}>{friend["name"]}</li>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
+    }
+
+    takeActionOnFriendRequest(request, action) {
+        FriendApiService.respondToFriendRequest(request.recipientID, request.senderID, action);
+        window.location.reload();
+    }
+
+
+    renderIncomingRequestList() {
+        console.log(this.state.pending_incoming_requests)
+        const listItems = this.state.pending_incoming_requests.map((request) =>
+        <div>
+            <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
+            <Button onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
+        </div>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
+    }
+
+    renderOutgoingRequestList() {
+        const listItems = this.state.pending_outgoing_requests.map((request) =>
+        <li>{request.recipientName}</li>
+        );
+        return (
+            <ul>{listItems}</ul>
+        );
     }
 
     renderCustomizeProfileHeader() {
@@ -94,6 +121,8 @@ class MyProfile extends React.Component {
         const userInfo = this.props.store.user_reducer;
         console.log('here here', userInfo);
 
+        console.log(this.state)
+
         if (this.state.bands) {
             return (
                 <div>
@@ -104,7 +133,7 @@ class MyProfile extends React.Component {
                         <TabList>
                             <Tab>My Profile</Tab>
                             <Tab>My Bands</Tab>
-                            <Tab>My Friends</Tab> 
+                            <Tab>My Friends</Tab>
                         </TabList>
 
                         <TabPanel>
@@ -120,7 +149,7 @@ class MyProfile extends React.Component {
                             <div>
                                 <h4>Links: {userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
                             </div>
-                            <Button onClick={() => {; this.props.history.push('/editprofile');}}>Edit Profile</Button>
+                            <Button onClick={() => { this.props.history.push('/editprofile');}}>Edit Profile</Button>
                         </TabPanel>
 
                         <TabPanel>
@@ -130,10 +159,13 @@ class MyProfile extends React.Component {
 
 
                         <TabPanel>
-                            <h3>My friends ({this.state.friends.length})</h3>
-                            <DisplayFriendsList list={this.state.friends}/>
-                            <h3>Pending friend requests ({this.state.pending_outgoing_requests.length})</h3>
-                            <DisplayFriendsList list={this.state.pending_outgoing_requests}/>
+                            <h3>My friends ({userInfo.friends?.length})</h3>
+                            {this.renderFriendListForMusician()}
+                            <h3>Friend requests ({this.state.pending_incoming_requests?.length})</h3>
+                            {this.renderIncomingRequestList()}
+                            <h3>Pending friend requests ({this.state.pending_outgoing_requests?.length})</h3>
+                            {this.renderOutgoingRequestList()}
+
                         </TabPanel>
 
                     </Tabs>

@@ -69,6 +69,14 @@ public interface MusicianDao {
     List<Musician> readAll(Map<String, String[]> query) throws DaoException;
 
     /**
+     * Gets all of a musician's friends from the database.
+     *
+     * @return All the Musicians that are friends with this user.
+     * @throws DaoException A generic exception for CRUD operations.
+     */
+    List<Musician> getAllFriendsOf(String id) throws DaoException;
+
+    /**
      * Update the name of a Musicians provided the id.
      *
      * @param id The unique identifier for each Musician object.

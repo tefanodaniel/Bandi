@@ -24,6 +24,7 @@ class BandAPIService {
     findByQuery(queryParams) {
         return customhttp.get(`/bands`, { params: queryParams });
     }
+
 }
 
 export default new BandAPIService();

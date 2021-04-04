@@ -233,8 +233,7 @@ public class ApiServer {
                 String location = musician.getLocation();
                 String zipCode = musician.getZipCode();
                 Set<String> profileLinks = musician.getProfileLinks();
-                // TODO: add updateFriends method
-                Set<String> friends = musician.getFriends();
+
                 // no check for admin flag. We don't want to change admin on and off,
                 // and since ints default to 0, we might accidentally take admin
                 // permissions away.
@@ -289,8 +288,32 @@ public class ApiServer {
             }
         });
 
-        // get all of user's pending friend requests
-        get("/friend/:senderid", (req, res) -> {
+        // get all of user's friends
+        get("/friends/:id", (req, res) -> {
+            try {
+                String id = req.params("id");
+                List<Musician> musicians = musicianDao.getAllFriendsOf(id);
+                res.type("application/json");
+                return gson.toJson(musicians);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // get all of user's pending incoming friend requests
+        get("/requests/in/:recipientid", (req, res) -> {
+            try {
+                String recipientID = req.params("recipientid");
+                List<FriendRequest> requests = requestDao.readAllTo(recipientID);
+                res.type("application/json");
+                return gson.toJson(requests);
+            } catch (DaoException ex) {
+                throw new ApiError(ex.getMessage(), 500);
+            }
+        });
+
+        // get all of user's pending outgoing friend requests
+        get("/requests/out/:senderid", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 List<FriendRequest> requests = requestDao.readAllFrom(senderID);
@@ -302,11 +325,13 @@ public class ApiServer {
         });
 
         // send friend request
-        post("/friend/:senderid/:recipientid", (req, res) -> {
+        post("/request/:senderid/:recipientid", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 String recipientID = req.params("recipientid");
-                FriendRequest fr = requestDao.createRequest(senderID, recipientID);
+                String senderName = musicianDao.read(senderID).getName();
+                String recipientName = musicianDao.read(recipientID).getName();
+                FriendRequest fr = requestDao.createRequest(senderID, senderName, recipientID, recipientName);
                 if (fr == null) {
                     throw new ApiError("Resource not found", 404); // Bad request
                 }
@@ -318,7 +343,7 @@ public class ApiServer {
         });
 
         // respond (accept or decline) friend request
-        delete("friend/:senderid/:recipientid/:action", (req, res) -> {
+        delete("request/:senderid/:recipientid/:action", (req, res) -> {
             try {
                 String senderID = req.params("senderid");
                 String recipientID = req.params("recipientid");

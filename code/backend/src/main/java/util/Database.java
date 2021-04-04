@@ -109,7 +109,7 @@ public final class Database {
 
             sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "friendID VARCHAR(30) REFERENCES Musicians"
+                    + "friendID VARCHAR(30)" // TODO: Make reference musician.
                     + ");";
 
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
@@ -170,18 +170,22 @@ public final class Database {
 
             String sql = "CREATE TABLE IF NOT EXISTS Requests("
                     + "senderid VARCHAR(30) REFERENCES Musicians,"
+                    + "senderName VARCHAR(50),"
                     + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientName VARCHAR(50),"
                     + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
                     + ");";
 
             conn.createQuery(sql).executeUpdate();
 
-            String requestSql = "INSERT INTO Requests(senderid, recipientid) VALUES (:senderid, :recipientid);";
+            String requestSql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
 
             for (FriendRequest fr : samples) {
                 conn.createQuery(requestSql)
                         .addParameter("senderid", fr.getSenderID())
+                        .addParameter("sendername", fr.getSenderName())
                         .addParameter("recipientid", fr.getRecipientID())
+                        .addParameter("recipientname", fr.getRecipientName())
                         .executeUpdate();
             }
 

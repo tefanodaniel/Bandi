@@ -7,56 +7,7 @@ import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
 import Header from "./Header";
 import {Container, Navbar} from "react-bootstrap";
-
-function makeFriendMap(list) {
-    console.log("making a map for list")
-    console.log(list)
-    let friendMap = new Map();
-    if (list.length > 0) {
-        list.forEach(friendID => {
-            let friendURL = getBackendURL() + "/musicians/" + friendID;
-            axios.get(friendURL)
-                .then(response => friendMap.set(response.data.name, friendURL));
-        });
-    }
-    console.log("final map")
-    console.log(friendMap)
-    return friendMap;
-}
-
-function getMapSize(x) {
-    var len = 0;
-    for (var count in x) {
-            len++;
-    }
-    console.log("map size")
-    console.log(len)
-    return len;
-}
-
-function DisplayFriendsList(props) {
-    /*
-    let friends = makeFriendMap(props.list)
-    console.log("map to display")
-    console.log(friends)
-    if (getMapSize(friends) > 0) {
-        const friendItems = friends.map((name, url) => {
-                <li> <a href={url}>{name}</a> </li>
-        });
-        return (
-          <ul>{friendItems}</ul>
-        );
-    } else {
-        return (<p>No friends to display :(</p>);
-    }
-    */
-    return (
-        <div>
-            <h4>Friends:</h4>
-            {props.list.map(friendID => <p>{friendID}</p>)}
-        </div>
-    )
-}
+import BandApiService from '../utils/BandApiService';
 
 class Profile extends React.Component {
     constructor(props) {
@@ -74,9 +25,9 @@ class Profile extends React.Component {
             instruments: [],
             genres: [],
             links: [],
-            friends: []
-            // pending_outgoing_requests: []
+            friends: [],
         }
+
         this.addFriend.bind(this)
 
         
@@ -87,16 +38,14 @@ class Profile extends React.Component {
         var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
         axios.get(userURL)
             .then((response) => {
-                this.setState(
+                this.state = 
                     {name: response.data.name, location: response.data.location,
                         experience: response.data.experience,
                         instruments: response.data.instruments,
                         genres: response.data.genres,
                         links: response.data.profileLinks,
                         friends: response.data.friends
-                        // pending_incoming_requests: response.data.pending_outgoing_requests
-                    })
-                // console.log(response.data)
+                    }
             });
     }
 
@@ -104,13 +53,18 @@ class Profile extends React.Component {
 
     
     addFriend = () => {
-        this.state.pending_outgoing_requests.push(this.state.userId); // TODO: store pending outgoing requests in database as part of Musician
-        // alert("A request to connect was sent to " + this.state.name + ".");
+        BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
+            alert("A request to connect was sent to " + this.state.name + ".")
+        );
     }
 
     renderConnectButton = () => {
         // remove question mark once pending_outgoing_requests confirmed to exist 
+        /*
         if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
+            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
+        } else { return <Button disabled>Pending...</Button> };*/
+        if (true) {
             return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
         } else { return <Button disabled>Pending...</Button> };
     }
@@ -137,9 +91,6 @@ class Profile extends React.Component {
                     </div>
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
-                    </div>
-                    <div>
-                        <DisplayFriendsList list={this.state.friends}/>
                     </div>
                     {this.renderConnectButton()}
                 </div>
