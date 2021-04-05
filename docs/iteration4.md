@@ -12,10 +12,10 @@ Team Lead - Noah Johnson
 # Tasks
 
 # Retrospective
-### What we have done
+#### What we have done
 
-### What we haven't done
+#### What we haven't done
 
-### Difficulties
+#### Difficulties
 
-### Looking Forward
+#### Looking Forward
