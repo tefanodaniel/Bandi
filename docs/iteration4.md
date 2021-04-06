@@ -6,7 +6,7 @@ Team Lead - Noah Johnson
 # OO Design
 
 # Wireframe & Use-case
-<img src="invite to band save for later wireframe.png" width="450" height="300"/>
+<img src="s4l.png" width="450" height="300"/>
 
 User Case: Invite to Band
   1. A user browses through the profiles of other musicians and selects one to view in more depth.
