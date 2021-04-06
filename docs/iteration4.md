@@ -4,6 +4,7 @@ Team Lead - Elizabeth Aguirre
 [Team Availability](https://www.when2meet.com/?11552488-qjqrX)
 
 # OO Design
+![](assets/I4/I4_UML.png)
 
 # Wireframe & Use-case
 <img src="s4l.png" width="450" height="300"/>
