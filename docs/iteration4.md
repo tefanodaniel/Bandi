@@ -8,6 +8,10 @@ Team Lead - Noah Johnson
 # Wireframe & Use-case
 <img src="invite to band save for later wireframe.png" width="450" height="300"/>
 
+User Case: Invite to Band
+  1. A user browses through the profiles of other musicians and selects one to view in more depth.
+  2. The user clicks the "Invite to Band!" button and waits for the request to be accepted by the other user.
+  3. Once accepted, the invited user will display as a member of the band.
 # Iteration Backlog
 - As a user, I want to be able to browse and register for speed-dating events that are happening in my area so that I can quickly meet a lot of people with similar interests and see if we might be a good match.
 - As a user, I want to browse song-of-the-week events by genre and make submissions.
