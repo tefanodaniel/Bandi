@@ -16,9 +16,8 @@ Team Lead - Noah Johnson
 # Tasks
 - Design UML class diagrams for implementing User Stories
 - Design wireframes for:  
-  1. Chat rooms
-  2. Save-for-later feature
-  3. Invite to band feature
+  1. Save-for-later feature
+  2. Invite to band feature
 - Set up chat rooms for speed dating events
 - Continue improving friend features
 - Continue improving frontend styling
