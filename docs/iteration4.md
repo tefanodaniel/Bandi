@@ -1,5 +1,5 @@
 # Teamwork  
-Team Lead - Noah Johnson
+Team Lead - Elizabeth Aguirre
 
 [Team Availability](https://www.when2meet.com/?11552488-qjqrX)
 
