@@ -1,9 +1,9 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
-import { newQuery, clearQuery } from "../actions/musician_actions";
+import { newQuery, clearQuery } from "../../actions/musician_actions";
 import {Button, Form} from "react-bootstrap";
-import {getCurrentEvent, getCurrentEventSong, getCurrentEventSubmissions} from "../actions/sotw_event_actions";
+import {getCurrentEvent, getCurrentEventSong, getCurrentEventSubmissions} from "../../actions/sotw_event_actions";
 var startOfWeek = require('date-fns/startOfWeek');
 var endOfWeek = require('date-fns/endOfWeek');
 

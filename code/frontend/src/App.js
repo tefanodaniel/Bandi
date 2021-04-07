@@ -11,11 +11,11 @@ import CreateBand from "./components/CreateBand";
 import MusicianView from "./components/MusicianView";
 import BandView from "./components/BandView";
 import Profile from "./components/Profile";
-import SongOfTheWeek from "./components/SongOfTheWeek";
+import SongOfTheWeek from "./components/SongOfTheWeek/SongOfTheWeek";
 import SpeedDate from "./components/SpeedDate";
 import SpeedDateEvent from "./components/SpeedDateEvent";
 import MyChats from "./components/MyChats";
-import SotwUserSubmission from "./components/SotwUserSubmission";
+import SotwUserSubmission from "./components/SongOfTheWeek/SotwUserSubmission";
 
 function App() {
   return (
