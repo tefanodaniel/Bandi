@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import {Container, Row, Col, Navbar} from "react-bootstrap";
 import MusicianList from "./MusicianList";
 import MusicianSearch from "./MusicianSearch";
-import Header from "./Header";
-import SubHeader from "./SubHeader";
+import Header from "./Header/Header";
+import SubHeader from "./Header/SubHeader";
 import {bandi_styles} from "../styles/bandi_styles";
 
 class SearchMusician extends Component {

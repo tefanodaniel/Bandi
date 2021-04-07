@@ -5,7 +5,7 @@ import { Route, HashRouter, Switch } from 'react-router-dom';
 import Signin from './components/Signin';
 import Discover from './components/Discover';
 import EditProfile from './components/EditProfile';
-import MyProfile from './components/MyProfile'
+import MyProfile from './components/UserProfile/MyProfile';
 import Band from "./components/Band";
 import CreateBand from "./components/CreateBand";
 import MusicianView from "./components/MusicianView";

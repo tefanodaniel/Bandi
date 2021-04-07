@@ -5,7 +5,7 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Cookies from "js-cookie";
-import Header from "./Header";
+import Header from "./Header/Header";
 import {Nav, Navbar} from "react-bootstrap";
 
 import BandApi from "../utils/BandApiService";

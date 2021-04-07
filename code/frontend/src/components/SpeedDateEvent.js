@@ -1,7 +1,7 @@
 import React from 'react';
 import {bandi_styles} from "../styles/bandi_styles";
-import Header from "./Header";
-import SubHeader from "./SubHeader";
+import Header from "./Header/Header";
+import SubHeader from "./Header/SubHeader";
 import Cookies from "js-cookie";
 
 import { connect } from 'react-redux';

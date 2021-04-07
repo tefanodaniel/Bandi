@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
 import {getBackendURL} from "../utils/api";
-import Header from "./Header";
+import Header from "./Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 
 import BandApi from "../utils/BandApiService";

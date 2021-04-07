@@ -4,14 +4,14 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Header from "./Header";
+import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
-import BandApiService from '../utils/BandApiService';
-import FriendApiService from '../utils/FriendApiService';
-import {getFriendsDataFromApi} from "../utils/api";
+import BandApiService from '../../utils/BandApiService';
+import FriendApiService from '../../utils/FriendApiService';
+import {getFriendsDataFromApi} from "../../utils/api";
 
 import { connect } from 'react-redux';
-import { fetchBandsForMusician } from '../actions/band_actions';
+import { fetchBandsForMusician } from '../../actions/band_actions';
 
 class MyProfile extends React.Component {
     constructor(props) {
@@ -37,7 +37,7 @@ class MyProfile extends React.Component {
 
 
         fetchBandsForMusician({id: this.state.id});
-        
+
         getFriendsDataFromApi(this.state.id).then((res) => {
           console.log(res);
           this.setState({

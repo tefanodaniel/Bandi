@@ -1,16 +1,16 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
-import { logout } from "../utils/api"; // logout is named export, needs brackets
+import { logout } from "../../utils/api"; // logout is named export, needs brackets
 import Cookies from "js-cookie";
 import { Nav, NavDropdown } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { getUser } from "../actions/user_actions";
-import store from "../store";
-import {allMusiciansQuery} from "../actions/musician_actions";
-import { USER_LOGOUT, CHAT_LOGOUT } from "../actions/types";
-import { chatLogout } from "../actions/chat_actions";
-import styles from "../styles/navDropdown.module.css";
+import { getUser } from "../../actions/user_actions";
+import store from "../../store";
+import {allMusiciansQuery} from "../../actions/musician_actions";
+import { USER_LOGOUT, CHAT_LOGOUT } from "../../actions/types";
+import { chatLogout } from "../../actions/chat_actions";
+import styles from "../../styles/navDropdown.module.css";
 
 const selectUserData = (state) => {
   return state.user_reducer.user//.find((it) => it.id === id)

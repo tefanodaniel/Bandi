@@ -5,8 +5,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Header from "./Header";
-import SubHeader from "./SubHeader";
+import Header from "./Header/Header";
+import SubHeader from "./Header/SubHeader";
 import { bandi_styles } from "../styles/bandi_styles"
 import {Card} from "react-bootstrap";
 

@@ -5,7 +5,7 @@ import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
-import Header from "./Header";
+import Header from "./Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../utils/BandApiService';
 
@@ -30,7 +30,7 @@ class Profile extends React.Component {
 
         this.addFriend.bind(this)
 
-        
+
         const params = new URLSearchParams(this.props.location.search);
         this.state.us_id = params.get("view");
         this.state.my_id = Cookies.get("id");
@@ -38,7 +38,7 @@ class Profile extends React.Component {
         var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
         axios.get(userURL)
             .then((response) => {
-                this.state = 
+                this.state =
                     {name: response.data.name, location: response.data.location,
                         experience: response.data.experience,
                         instruments: response.data.instruments,
@@ -51,7 +51,7 @@ class Profile extends React.Component {
 
     goBack = () => {this.props.history.goBack()};
 
-    
+
     addFriend = () => {
         BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
             alert("A request to connect was sent to " + this.state.name + ".")
@@ -59,7 +59,7 @@ class Profile extends React.Component {
     }
 
     renderConnectButton = () => {
-        // remove question mark once pending_outgoing_requests confirmed to exist 
+        // remove question mark once pending_outgoing_requests confirmed to exist
         /*
         if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
             return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
