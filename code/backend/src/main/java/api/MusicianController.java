@@ -6,10 +6,7 @@ import exceptions.DaoException;
 import model.Musician;
 import spark.Route;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -151,6 +148,36 @@ public class MusicianController {
             }
             res.type("application/json");
             return gson.toJson(musician);
+        } catch (DaoException ex) {
+            throw new ApiError(ex.getMessage(), 500);
+        }
+    };
+
+    // get the admin status of a Musician
+    public static Route getAdminStatus = (req, res) -> {
+        try {
+            String id = req.params("id");
+            Musician musician = musicianDao.read(id);
+            if (musician == null) {
+                throw new ApiError("Resource not found", 404); // Bad request
+            }
+            boolean isAdmin = musician.getAdmin();
+            res.type("application/json");
+            return "{\"isAdmin\":"+ isAdmin +"}";
+        } catch (DaoException ex) {
+            throw new ApiError(ex.getMessage(), 500);
+        }
+    };
+
+    // update the admin status of a Musician
+    public static Route putAdminStatus = (req, res) -> {
+        try {
+            String id = req.params("id");
+            Map map = gson.fromJson(req.body(), HashMap.class);
+            boolean isAdmin = (boolean) map.get("isAdmin");
+            Musician m = musicianDao.updateAdmin(id, isAdmin);
+            res.type("application/json");
+            return gson.toJson(m);
         } catch (DaoException ex) {
             throw new ApiError(ex.getMessage(), 500);
         }

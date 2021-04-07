@@ -160,6 +160,8 @@ public class ApiServer {
         post("/musicians", MusicianController.postMusician);
         put("/musicians/:id", MusicianController.putMusician);
         delete("/musicians/:id", MusicianController.deleteMusician);
+        get("/adminstatus/:id", MusicianController.getAdminStatus);
+        put("/adminstatus/:id", MusicianController.putAdminStatus);
 
         // Friend Request routes
         get("/friends/:id", RequestController.getMusicianFriends);
@@ -167,38 +169,6 @@ public class ApiServer {
         get("/requests/out/:senderid", RequestController.getOutgoingPendingRequests);
         post("/request/:senderid/:recipientid", RequestController.postFriendRequest);
         delete("request/:senderid/:recipientid/:action", RequestController.respondToRequest);
-
-        // get the admin status of a musician
-        get("/adminstatus/:id", (req, res) -> {
-                    try {
-                        String id = req.params("id");
-                        Musician musician = musicianDao.read(id);
-                        if (musician == null) {
-                            throw new ApiError("Resource not found", 404); // Bad request
-                        }
-                        boolean isAdmin = musician.getAdmin();
-                        res.type("application/json");
-                        return "{\"isAdmin\":"+ isAdmin +"}";
-                    } catch (DaoException ex) {
-                        throw new ApiError(ex.getMessage(), 500);
-                    }
-                }
-        );
-
-        // update the admin status of a musician
-        put("/adminstatus/:id", (req, res) -> {
-                    try {
-                        String id = req.params("id");
-                        Map map = gson.fromJson(req.body(),HashMap.class);
-                        boolean isAdmin = (boolean) map.get("isAdmin");
-                        Musician m = musicianDao.updateAdmin(id, isAdmin);
-                        res.type("application/json");
-                        return gson.toJson(m);
-                    } catch (DaoException ex) {
-                        throw new ApiError(ex.getMessage(), 500);
-                    }
-                }
-        );
 
         // Get all bands (optional query parameters)
         // if searching for id, only pass 1 parameter
