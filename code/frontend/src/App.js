@@ -12,8 +12,8 @@ import MusicianView from "./components/MusicianView";
 import BandView from "./components/BandView";
 import Profile from "./components/UserProfile/Profile";
 import SongOfTheWeek from "./components/SongOfTheWeek/SongOfTheWeek";
-import SpeedDate from "./components/SpeedDate";
-import SpeedDateEvent from "./components/SpeedDateEvent";
+import SpeedDate from "./components/SpeedDating/SpeedDate";
+import SpeedDateEvent from "./components/SpeedDating/SpeedDateEvent";
 import MyChats from "./components/MyChats";
 import SotwUserSubmission from "./components/SongOfTheWeek/SotwUserSubmission";
 
