@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from "axios";
-import {getBackendURL, getFrontendURL} from "../utils/api";
+import {getBackendURL, getFrontendURL} from "../../utils/api";
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
-import Header from "./Header/Header";
+import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
-import BandApiService from '../utils/BandApiService';
+import BandApiService from '../../utils/BandApiService';
 
 class Profile extends React.Component {
     constructor(props) {

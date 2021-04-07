@@ -3,10 +3,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
-import {getBackendURL} from "../utils/api";
+import {getBackendURL} from "../../utils/api";
 
 import { connect } from 'react-redux';
-import { updateUserProfile, getUser } from '../actions/user_actions';
+import { updateUserProfile, getUser } from '../../actions/user_actions';
 
 class EditProfile extends React.Component {
     constructor(props) {
