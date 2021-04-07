@@ -29,7 +29,12 @@ public class ApiServer {
 
     public static Gson gson;
     public static MusicianDao musicianDao;
-
+    public static BandDao bandDao;
+    public static Sql2oSpeedDateEventDao speedDateEventDao;
+    public static RequestDao requestDao;
+    public static SongDao songDao;
+    public static SotwSubmissionDao sotw_submissionDao;
+    public static SotwEventDao sotw_eventDao;
 
     // flag for testing locally vs. deploying
     private static final boolean isLocalTest =
@@ -58,12 +63,12 @@ public class ApiServer {
         gson = new GsonBuilder().disableHtmlEscaping().create();
         // Dao objects
         musicianDao = getMusicianDao();
-        BandDao bandDao = getBandDao();
-        Sql2oSpeedDateEventDao speedDateEventDao = getSpeedDateEventDao();
-        RequestDao requestDao = getRequestDao();
-        SongDao songDao = getSongDao();
-        SotwSubmissionDao sotw_submissionDao = getSubmissionDao();
-        SotwEventDao sotw_eventDao = getEventDao();
+        bandDao = getBandDao();
+        speedDateEventDao = getSpeedDateEventDao();
+        requestDao = getRequestDao();
+        songDao = getSongDao();
+        sotw_submissionDao = getSubmissionDao();
+        sotw_eventDao = getEventDao();
 
         exception(ApiError.class, (ex, req, res) -> {
             // Handle the exception here
@@ -101,7 +106,7 @@ public class ApiServer {
                         .show_dialog(true)
                         .build();
 
-        // Redirects to Spotify login
+        // Redirects the window to Spotify login
         get("/login", (req, res) -> {
             URI uri_for_code = auth_code_uri_req.execute();
             String uriString = uri_for_code.toString();
@@ -109,8 +114,7 @@ public class ApiServer {
             return null;
             //return new JSONObject("{\"link\": \""+uriString+"\"}");
         });
-
-        // Gets user info following login
+        // Where Spotify redirects after login dialog
         get("/callback", (req, res) -> {
 
             String error = req.queryParams("error");
@@ -157,86 +161,12 @@ public class ApiServer {
         put("/musicians/:id", MusicianController.putMusician);
         delete("/musicians/:id", MusicianController.deleteMusician);
 
-        // get all of user's friends
-        get("/friends/:id", (req, res) -> {
-            try {
-                String id = req.params("id");
-                List<Musician> musicians = musicianDao.getAllFriendsOf(id);
-                res.type("application/json");
-                return gson.toJson(musicians);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // get all of user's pending incoming friend requests
-        get("/requests/in/:recipientid", (req, res) -> {
-            try {
-                String recipientID = req.params("recipientid");
-                List<FriendRequest> requests = requestDao.readAllTo(recipientID);
-                res.type("application/json");
-                return gson.toJson(requests);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // get all of user's pending outgoing friend requests
-        get("/requests/out/:senderid", (req, res) -> {
-            try {
-                String senderID = req.params("senderid");
-                List<FriendRequest> requests = requestDao.readAllFrom(senderID);
-                res.type("application/json");
-                return gson.toJson(requests);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // send friend request
-        post("/request/:senderid/:recipientid", (req, res) -> {
-            try {
-                String senderID = req.params("senderid");
-                String recipientID = req.params("recipientid");
-                String senderName = musicianDao.read(senderID).getName();
-                String recipientName = musicianDao.read(recipientID).getName();
-                FriendRequest fr = requestDao.createRequest(senderID, senderName, recipientID, recipientName);
-                if (fr == null) {
-                    throw new ApiError("Resource not found", 404); // Bad request
-                }
-                res.type("application/json");
-                return gson.toJson(fr);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // respond (accept or decline) friend request
-        delete("request/:senderid/:recipientid/:action", (req, res) -> {
-            try {
-                String senderID = req.params("senderid");
-                String recipientID = req.params("recipientid");
-                String action = req.params("action");
-
-                FriendRequest fr = null;
-
-                if (action.equals("accept"))  {
-                    fr = requestDao.acceptRequest(senderID, recipientID);
-                } else if (action.equals("decline")) {
-                    fr = requestDao.declineRequest(senderID, recipientID);
-                } else {
-                    throw new ApiError("Invalid action to perform on request", 505);
-                }
-
-                if (fr == null) {
-                    throw new ApiError("Resource not found", 404); // Bad request
-                }
-                res.type("application/json");
-                return gson.toJson(fr);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
+        // Friend Request routes
+        get("/friends/:id", RequestController.getMusicianFriends);
+        get("/requests/in/:recipientid", RequestController.getIncomingPendingRequests);
+        get("/requests/out/:senderid", RequestController.getOutgoingPendingRequests);
+        post("/request/:senderid/:recipientid", RequestController.postFriendRequest);
+        delete("request/:senderid/:recipientid/:action", RequestController.respondToRequest);
 
         // get the admin status of a musician
         get("/adminstatus/:id", (req, res) -> {
