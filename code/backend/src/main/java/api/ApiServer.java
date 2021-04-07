@@ -14,7 +14,6 @@ import static spark.Spark.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
-
 import dao.MusicianDao;
 import org.sql2o.Sql2o;
 
@@ -28,10 +27,13 @@ import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileReq
 
 public class ApiServer {
 
+    public static Gson gson;
+    public static MusicianDao musicianDao;
+
+
     // flag for testing locally vs. deploying
     private static final boolean isLocalTest =
             Boolean.parseBoolean(System.getenv("isLocal"));
-
     // client id for Spotify
     private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
     // Client Secret for using Spotify API (should never push to VCS)
@@ -52,8 +54,10 @@ public class ApiServer {
         port(myPort);
         staticFiles.location("/public");
 
+        // static Gson object
+        gson = new GsonBuilder().disableHtmlEscaping().create();
         // Dao objects
-        MusicianDao musicianDao = getMusicianDao();
+        musicianDao = getMusicianDao();
         BandDao bandDao = getBandDao();
         Sql2oSpeedDateEventDao speedDateEventDao = getSpeedDateEventDao();
         RequestDao requestDao = getRequestDao();
@@ -61,7 +65,6 @@ public class ApiServer {
         SotwSubmissionDao sotw_submissionDao = getSubmissionDao();
         SotwEventDao sotw_eventDao = getEventDao();
 
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         exception(ApiError.class, (ex, req, res) -> {
             // Handle the exception here
             Map<String, String> map = Map.of("status", ex.getStatus() + "",
@@ -150,37 +153,9 @@ public class ApiServer {
             //return new JSONObject("{\"id\": \"" + id + "\"}");
         });
 
-        // Get musicians given the id
-        get("/musicians/:id", (req, res) -> {
-            try {
-                String id = req.params("id");
-                Musician musician = musicianDao.read(id);
-                if (musician == null) {
-                    throw new ApiError("Resource not found", 404); // Bad request
-                }
-                res.type("application/json");
-                return gson.toJson(musician);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // Get all musicians (with optional query parameters)
-        get("/musicians", (req, res) -> {
-            try {
-                List<Musician> musicians;
-                Map<String, String[]> query = req.queryMap().toMap();
-                if(query.size() > 0) {
-                    musicians = musicianDao.readAll(query);
-                }
-                else {
-                    musicians = musicianDao.readAll();
-                }
-                return gson.toJson(musicians);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
+        // Musician routes
+        get("/musicians/:id", MusicianController.getMusicianById);
+        get("/musicians", MusicianController.getAllMusicians);
 
         // post musicians
         post("/musicians", (req, res) -> {
