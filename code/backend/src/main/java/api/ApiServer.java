@@ -4,7 +4,6 @@ import dao.*;
 import exceptions.ApiError;
 import exceptions.DaoException;
 import model.*;
-import spark.QueryParamsMap;
 import spark.Spark;
 import util.Database;
 import com.google.gson.JsonSyntaxException;
@@ -184,111 +183,12 @@ public class ApiServer {
         delete("/speeddateevents/:eid/:mid", SpeedDateController.deleteSpeedDateEventParticipant);
         post("/speeddateevents", SpeedDateController.postSpeedDateEvent);
 
-        // Song Api Routes
-        // get (read) all songs
-        get("/songs", (req, res) -> {
-            try {
-                List<Song> songs = songDao.readAll();
-                return gson.toJson(songs);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // get (read) a song given songId
-        get("/songs/:songid", (req, res) -> {
-            try {
-                String songid = req.params("songid");
-                Song s = songDao.read(songid);
-                if (s == null) {
-                    throw new ApiError("Resource not found", 404); // Bad request
-                }
-                res.type("application/json");
-                return gson.toJson(s);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // post (create) a song
-        post("/songs", (req, res) -> {
-            try {
-                Song song = gson.fromJson(req.body(), Song.class);
-                Set<String> genres = song.getGenres();
-
-                if (genres == null) { genres = new HashSet<String>(); }
-                songDao.create(song.getSongId(), song.getSongName(), song.getArtistName(), song.getAlbumName(), song.getReleaseYear(), genres);
-                res.status(201);
-                return gson.toJson(song);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // put (updated) a song with info
-        put("/songs/:songid", (req, res) -> {
-
-            try {
-
-                String songid = req.params("songid");
-                Song song = gson.fromJson(req.body(), Song.class);
-                if (song == null) {
-                    throw new ApiError("Resource not found", 404);
-                }
-
-                if (! (song.getSongId().equals(songid))) {
-                    throw new ApiError("song ID does not match the resource identifier", 400);
-                }
-
-                String songName = song.getSongName();
-                String artistName = song.getArtistName();
-                String albumName = song.getAlbumName();
-                Integer releaseYear = song.getReleaseYear();
-                Set<String> genres = song.getGenres();
-
-                // Update specific fields:
-                boolean flag = false;
-                if (songName != null) {
-                    flag = true;
-                    song = songDao.updateSongName(songid, songName);
-                } if (artistName != null) {
-                    flag = true;
-                    song = songDao.updateArtistName(songid, artistName);
-                } if (albumName != null) {
-                    flag = true;
-                    song = songDao.updateAlbumName(songid, albumName);
-                } if (releaseYear != 0) {
-                    flag = true;
-                    song = songDao.updateReleaseYear(songid, releaseYear);
-                } if (genres != null) {
-                    flag = true;
-                    song = songDao.updateGenres(songid, genres);
-                } if (!flag) {
-                    throw new ApiError("Nothing to update", 400);
-                } if (song == null) {
-                    throw new ApiError("Resource not found", 404);
-                }
-
-                return gson.toJson(song);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
-
-        // delete (remove) a song
-        delete("/songs/:songId", (req, res) -> {
-            try {
-                String songId = req.params("songId");
-                Song song = songDao.deleteSong(songId);
-                if (song == null) {
-                    throw new ApiError("Resource not found", 404); // Bad request
-                }
-                res.type("application/json");
-                return gson.toJson(song);
-            } catch (DaoException ex) {
-                throw new ApiError(ex.getMessage(), 500);
-            }
-        });
+        // Song routes
+        get("/songs", SongController.getAllSongs);
+        get("/songs/:songid", SongController.getSongById);
+        post("/songs", SongController.postSong);
+        put("/songs/:songid", SongController.putSong);
+        delete("/songs/:songId", SongController.deleteSong);
 
         // Song of the Week Submission Api Routes
         // get (read) all submissions
