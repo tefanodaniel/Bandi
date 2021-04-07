@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
-import { newQuery, clearQuery } from "../actions/musician_actions";
+import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
 
 const MusicianSearch = () => {

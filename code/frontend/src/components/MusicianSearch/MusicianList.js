@@ -1,9 +1,9 @@
 import React from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
-import {getFrontendURL} from "../utils/api";
-import { bandi_styles } from "../styles/bandi_styles";
-import {allMusiciansQuery} from "../actions/musician_actions";
+import {getFrontendURL} from "../../utils/api";
+import { bandi_styles } from "../../styles/bandi_styles";
+import {allMusiciansQuery} from "../../actions/musician_actions";
 
 const selectMusicians = (state) => {
     if(!state.musician_reducer.filteredMusicians)
@@ -72,4 +72,3 @@ const MusicianList = () => {
 }
 
 export default MusicianList
-

@@ -8,7 +8,7 @@ import EditProfile from './components/UserProfile/EditProfile';
 import MyProfile from './components/UserProfile/MyProfile';
 import Band from "./components/Band";
 import CreateBand from "./components/CreateBand";
-import MusicianView from "./components/MusicianView";
+import MusicianView from "./components/MusicianSearch/MusicianView";
 import BandView from "./components/BandView";
 import Profile from "./components/UserProfile/Profile";
 import SongOfTheWeek from "./components/SongOfTheWeek/SongOfTheWeek";
