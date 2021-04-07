@@ -1,15 +1,15 @@
 import React from 'react';
 import axios from "axios";
-import {getBackendURL, getFrontendURL} from "../utils/api";
+import {getBackendURL, getFrontendURL} from "../../utils/api";
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Cookies from "js-cookie";
-import Header from "./Header/Header";
+import Header from "../Header/Header";
 import {Nav, Navbar} from "react-bootstrap";
 
-import BandApi from "../utils/BandApiService";
-import MusicianApi from "../utils/MusicianApiService";
+import BandApi from "../../utils/BandApiService";
+import MusicianApi from "../../utils/MusicianApiService";
 
 class Band extends React.Component {
     constructor(props) {

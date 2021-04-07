@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from "axios";
-import {getBackendURL, getFrontendURL} from "../utils/api";
+import {getBackendURL, getFrontendURL} from "../../utils/api";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Header from "./Header/Header";
-import SubHeader from "./Header/SubHeader";
-import { bandi_styles } from "../styles/bandi_styles"
+import Header from "../Header/Header";
+import SubHeader from "../Header/SubHeader";
+import { bandi_styles } from "../../styles/bandi_styles"
 import {Card} from "react-bootstrap";
 
 class BandView extends React.Component {
