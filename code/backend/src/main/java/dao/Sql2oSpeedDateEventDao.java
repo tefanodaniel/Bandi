@@ -97,10 +97,11 @@ public class Sql2oSpeedDateEventDao {
     }
 
     public SpeedDateEvent remove(String eventId, String musId) throws DaoException {
-        String sql = "DELETE FROM SpeedDateParticipants WHERE participant=:musId;";
+        String sql = "DELETE FROM SpeedDateParticipants WHERE participant=:musId AND event=:eventId;";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql)
                     .addParameter("musId", musId)
+                    .addParameter("eventId", eventId)
                     .executeUpdate();
             return this.read(eventId);
         } catch (Sql2oException ex) {
