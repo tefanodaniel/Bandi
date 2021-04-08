@@ -1,9 +1,9 @@
 import React from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
-import {getFrontendURL} from "../utils/api";
-import { bandi_styles } from "../styles/bandi_styles";
-import {allMusiciansQuery} from "../actions/musician_actions";
+import {getFrontendURL} from "../../utils/api";
+import { bandi_styles } from "../../styles/bandi_styles";
+import {allMusiciansQuery} from "../../actions/musician_actions";
 
 const selectMusicians = (state) => {
     if(!state.musician_reducer.filteredMusicians)
@@ -27,14 +27,14 @@ const FilteredMusicianItem = ( musician ) => {
                     <Card.Title><b>{musician.name}</b></Card.Title>
                     <Card.Text className="small font-italic" style={{textColor:"white"}}>Genres: {musician.genres.join(', ')}</Card.Text>
                     <Card.Text className="small font-italic" style={{color:"white"}}>Instruments: {musician.instruments.join(', ')}</Card.Text>
-                    <Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/profile?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
+                    <Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/musiciandetails?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
                 </Card.Body>
             </Card>
     )
 }
 
 
-const MusicianList = () => {
+const MusicianSearchResults = () => {
     const dispatch = useDispatch();
     const fil_musicians = useSelector(selectMusicians, shallowEqual)
     let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
@@ -71,5 +71,4 @@ const MusicianList = () => {
     }
 }
 
-export default MusicianList
-
+export default MusicianSearchResults;

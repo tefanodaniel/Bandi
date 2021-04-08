@@ -2,13 +2,13 @@ import 'react-tabs/style/react-tabs.css';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Container, Row, Col, Navbar} from "react-bootstrap";
-import MusicianList from "./MusicianList";
-import MusicianSearch from "./MusicianSearch";
-import Header from "./Header";
-import SubHeader from "./SubHeader";
-import {bandi_styles} from "../styles/bandi_styles";
+import MusicianSearchResults from "./MusicianSearchResults";
+import MusicianSearchControls from "./MusicianSearchControls";
+import Header from "../Header/Header";
+import SubHeader from "../Header/SubHeader";
+import {bandi_styles} from "../../styles/bandi_styles";
 
-class SearchMusician extends Component {
+class MusicianSearch extends Component {
     constructor(props) {
         super(props);
 
@@ -23,10 +23,10 @@ class SearchMusician extends Component {
                     <Container className="mx-auto" fluid>
                         <Row>
                             <Col className="col-sm-3">
-                                <MusicianSearch />
+                                <MusicianSearchControls />
                             </Col>
                             <Col className="col-sm-9">
-                                <MusicianList />
+                                <MusicianSearchResults />
                             </Col>
                         </Row>
                     </Container>
@@ -51,4 +51,4 @@ function mapStateToProps(state) {
     return {state};
 }
 
-export default connect(mapStateToProps)(SearchMusician);
+export default connect(mapStateToProps)(MusicianSearch);

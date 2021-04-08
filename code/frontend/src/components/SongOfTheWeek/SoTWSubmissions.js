@@ -1,9 +1,9 @@
 import React from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
-import card_bg from "../images/card.jpg";
-import {bandi_styles} from "../styles/bandi_styles";
-import MusicianApiService from "../utils/MusicianApiService";
+import card_bg from "../../images/card.jpg";
+import {bandi_styles} from "../../styles/bandi_styles";
+import MusicianApiService from "../../utils/MusicianApiService";
 import Button from "react-bootstrap/Button";
 
 const selectEventSubmissions = (state) => {

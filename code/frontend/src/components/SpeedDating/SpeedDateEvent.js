@@ -1,19 +1,19 @@
 import React from 'react';
-import {bandi_styles} from "../styles/bandi_styles";
-import Header from "./Header";
-import SubHeader from "./SubHeader";
+import {bandi_styles} from "../../styles/bandi_styles";
+import Header from "../Header/Header";
+import SubHeader from "../Header/SubHeader";
 import Cookies from "js-cookie";
 
 import { connect } from 'react-redux';
-import { fetchSDEvents } from '../actions/sd_event_actions';
-import SDEventApi from "../utils/SDEventApiService";
+import { fetchSDEvents } from '../../actions/sd_event_actions';
+import SDEventApi from "../../utils/SDEventApiService";
 import Button from "react-bootstrap/Button";
-import {fetchBandsForMusician} from "../actions/band_actions";
+import {fetchBandsForMusician} from "../../actions/band_actions";
 import Form from "react-bootstrap/Form";
 import FormGroup from "react-bootstrap/FormGroup";
 import Jumbotron from "react-bootstrap/Jumbotron";
-import BandApi from "../utils/BandApiService";
-import MusicianApi from "../utils/MusicianApiService";
+import BandApi from "../../utils/BandApiService";
+import MusicianApi from "../../utils/MusicianApiService";
 
 class SpeedDateEvent extends React.Component {
     constructor(props) {

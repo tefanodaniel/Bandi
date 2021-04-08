@@ -4,16 +4,16 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import Header from "./Header";
+import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
-import BandApiService from '../utils/BandApiService';
-import FriendApiService from '../utils/FriendApiService';
-import {getFriendsDataFromApi} from "../utils/api";
+import BandApiService from '../../utils/BandApiService';
+import FriendApiService from '../../utils/FriendApiService';
+import {getFriendsDataFromApi} from "../../utils/api";
 
 import { connect } from 'react-redux';
-import { fetchBandsForMusician } from '../actions/band_actions';
+import { fetchBandsForMusician } from '../../actions/band_actions';
 
-class MyProfile extends React.Component {
+class UserDashboard extends React.Component {
     constructor(props) {
         super(props)
 
@@ -37,7 +37,7 @@ class MyProfile extends React.Component {
 
 
         fetchBandsForMusician({id: this.state.id});
-        
+
         getFriendsDataFromApi(this.state.id).then((res) => {
           console.log(res);
           this.setState({
@@ -149,7 +149,7 @@ class MyProfile extends React.Component {
                             <div>
                                 <h4>Links: {userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
                             </div>
-                            <Button onClick={() => { this.props.history.push('/editprofile');}}>Edit Profile</Button>
+                            <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
                         </TabPanel>
 
                         <TabPanel>
@@ -191,4 +191,4 @@ function mapStateToProps(state) {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, {fetchBandsForMusician})(MyProfile);
+export default connect(mapStateToProps, {fetchBandsForMusician})(UserDashboard);

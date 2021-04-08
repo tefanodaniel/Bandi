@@ -1,8 +1,8 @@
 import React from "react";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 import {Card, Container} from "react-bootstrap";
-import "../styles/neon.scss"
-import {bandi_styles} from "../styles/bandi_styles";
+import "../../styles/neon.scss"
+import {bandi_styles} from "../../styles/bandi_styles";
 import Button from "react-bootstrap/Button";
 
 // this will be a state selector for the sotw info.
@@ -56,4 +56,3 @@ const SoTWDesc = () => {
     )
 }
 export default SoTWDesc
-

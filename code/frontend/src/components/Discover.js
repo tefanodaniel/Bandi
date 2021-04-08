@@ -3,10 +3,10 @@ import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
-import Header from './Header';
+import Header from './Header/Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
-import SubHeader from "./SubHeader";
+import SubHeader from "./Header/SubHeader";
 import {allMusiciansQuery} from "../actions/musician_actions";
 import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
@@ -29,7 +29,7 @@ class Discover extends React.Component {
     this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
   }
 
-  viewMusicians = () => { this.props.history.push('/musicianview');}
+  viewMusicians = () => { this.props.history.push('/musiciansearch');}
 
   viewBands = () => {this.props.history.push('/bandview')}
 
