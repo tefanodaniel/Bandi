@@ -12,9 +12,9 @@ import MusicianDetails from "./components/UserDashboard/MusicianDetails";
 
 import MusicianSearch from "./components/MusicianSearch/MusicianSearch";
 
-import Band from "./components/Bands/Band";
+import BandDetails from "./components/Bands/BandDetails";
 import CreateBand from "./components/Bands/CreateBand";
-import BandView from "./components/Bands/BandView";
+import BandList from "./components/Bands/BandList";
 
 import SongOfTheWeek from "./components/SongOfTheWeek/SongOfTheWeek";
 import SotwUserSubmission from "./components/SongOfTheWeek/SotwUserSubmission";
@@ -34,10 +34,10 @@ function App() {
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/edit-user-info" component={EditUserInfo} />
           <Route exact path="/myprofile" component={UserDashboard} />
-          <Route exact path="/band" component={Band} />
+          <Route exact path="/band" component={BandDetails} />
           <Route exact path="/createband" component={CreateBand} />
           <Route exact path="/musiciansearch" component={MusicianSearch} />
-          <Route exact path="/bandview" component={BandView} />
+          <Route exact path="/bandview" component={BandList} />
           <Route exact path="/sotw" component={SongOfTheWeek} />
           <Route exact path="/musiciandetails" component={MusicianDetails} />
           <Route exact path="/speeddate" component={SpeedDate} />

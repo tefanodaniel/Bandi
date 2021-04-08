@@ -11,7 +11,7 @@ import {Nav, Navbar} from "react-bootstrap";
 import BandApi from "../../utils/BandApiService";
 import MusicianApi from "../../utils/MusicianApiService";
 
-class Band extends React.Component {
+class BandDetails extends React.Component {
     constructor(props) {
         super(props)
 
@@ -137,4 +137,4 @@ class Band extends React.Component {
 
 }
 
-export default Band;
+export default BandDetails;

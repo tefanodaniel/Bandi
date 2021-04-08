@@ -10,7 +10,7 @@ import SubHeader from "../Header/SubHeader";
 import { bandi_styles } from "../../styles/bandi_styles"
 import {Card} from "react-bootstrap";
 
-class BandView extends React.Component {
+class BandList extends React.Component {
     constructor(props) {
         super(props)
 
@@ -64,4 +64,4 @@ class BandView extends React.Component {
     }
 
 }
-export default BandView;
+export default BandList;
