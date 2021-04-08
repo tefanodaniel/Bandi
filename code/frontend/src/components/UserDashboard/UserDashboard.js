@@ -149,7 +149,7 @@ class UserDashboard extends React.Component {
                             <div>
                                 <h4>Links: {userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
                             </div>
-                            <Button onClick={() => { this.props.history.push('/edit-user-dashboard');}}>Edit Profile</Button>
+                            <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
                         </TabPanel>
 
                         <TabPanel>

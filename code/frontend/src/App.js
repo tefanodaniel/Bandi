@@ -6,9 +6,9 @@ import Signin from './components/Signin';
 import Discover from './components/Discover';
 import MyChats from "./components/MyChats";
 
-import EditUserDashboard from './components/UserProfile/EditUserDashboard';
-import UserDashboard from './components/UserProfile/UserDashboard';
-import MusicianDetails from "./components/UserProfile/MusicianDetails";
+import EditUserInfo from './components/UserDashboard/EditUserInfo';
+import UserDashboard from './components/UserDashboard/UserDashboard';
+import MusicianDetails from "./components/UserDashboard/MusicianDetails";
 
 import MusicianSearch from "./components/MusicianSearch/MusicianSearch";
 
@@ -32,7 +32,7 @@ function App() {
           <Route exact path="/" component={Discover} />
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/signin" component={Signin} />
-          <Route exact path="/edit-user-dashboard" component={EditUserDashboard} />
+          <Route exact path="/edit-user-info" component={EditUserInfo} />
           <Route exact path="/myprofile" component={UserDashboard} />
           <Route exact path="/band" component={Band} />
           <Route exact path="/createband" component={CreateBand} />
