@@ -7,7 +7,22 @@ Team Lead - Elizabeth Aguirre
 ![](assets/I4/I4_UML.png)
 
 # Wireframe & Use-case
-<img src="s4l.png" width="450" height="300"/>
+<img src="assets/i3/discover.png" width="450" height="300"/>
+<img src="assets/create_profile.png" width="450" height="300"/>
+<img src="assets/i3/speeddate.png" width="450" height="300"/>
+<img src="assets/i3/eventview.png" width="450" height="300"/>
+
+Use Case: Using Advanced Search
+1. A user accessing the Bandi homepage lands on the Discover page, where they can see different tiles representing users and bands in a given area.
+2. Deciding to narrow down the pool of options, the user clicks on the Advanced Search option.
+3. A list of criterion appears on the left side of the screen, similar to a shopping interface, and musicians / bands appear to the right as cards; appearing and disappearing as different filters are selected and applied.
+4. If a user is logged in, clicking on a card will show the user's publicly visible profile information.
+
+Use Case: Making a song-of-the-week challenge submission  
+
+
+Use Case: Editing a speed-dating event  
+
 
 User Case: Invite to Band
   1. A user browses through the profiles of other musicians and selects one to view in more depth.
