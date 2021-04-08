@@ -8,8 +8,8 @@ import MyChats from "./components/MyChats";
 
 import EditUserInfo from './components/UserDashboard/EditUserInfo';
 import UserDashboard from './components/UserDashboard/UserDashboard';
-import MusicianDetails from "./components/UserDashboard/MusicianDetails";
 
+import MusicianDetails from "./components/MusicianSearch/MusicianDetails";
 import MusicianSearch from "./components/MusicianSearch/MusicianSearch";
 
 import BandDetails from "./components/Bands/BandDetails";
