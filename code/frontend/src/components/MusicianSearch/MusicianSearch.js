@@ -2,7 +2,7 @@ import 'react-tabs/style/react-tabs.css';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Container, Row, Col, Navbar} from "react-bootstrap";
-import MusicianList from "./MusicianList";
+import MusicianSearchResults from "./MusicianSearchResults";
 import MusicianSearchControls from "./MusicianSearchControls";
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
@@ -26,7 +26,7 @@ class MusicianSearch extends Component {
                                 <MusicianSearchControls />
                             </Col>
                             <Col className="col-sm-9">
-                                <MusicianList />
+                                <MusicianSearchResults />
                             </Col>
                         </Row>
                     </Container>

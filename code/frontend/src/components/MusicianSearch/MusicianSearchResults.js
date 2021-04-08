@@ -34,7 +34,7 @@ const FilteredMusicianItem = ( musician ) => {
 }
 
 
-const MusicianList = () => {
+const MusicianSearchResults = () => {
     const dispatch = useDispatch();
     const fil_musicians = useSelector(selectMusicians, shallowEqual)
     let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
@@ -71,4 +71,4 @@ const MusicianList = () => {
     }
 }
 
-export default MusicianList
+export default MusicianSearchResults;
