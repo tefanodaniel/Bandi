@@ -175,10 +175,11 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     public Band remove(String bandId, String musicianId) throws DaoException {
-        String sql = "DELETE FROM BandMembers WHERE member=:musicianId;";
+        String sql = "DELETE FROM BandMembers WHERE member=:musicianId AND band=:bandId;";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql)
                     .addParameter("musicianId", musicianId)
+                    .addParameter("bandId", bandId)
                     .executeUpdate();
             return this.read(bandId);
         } catch (Sql2oException ex) {
