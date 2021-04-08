@@ -29,7 +29,7 @@ class Discover extends React.Component {
     this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
   }
 
-  viewMusicians = () => { this.props.history.push('/musicianview');}
+  viewMusicians = () => { this.props.history.push('/musiciansearch');}
 
   viewBands = () => {this.props.history.push('/bandview')}
 

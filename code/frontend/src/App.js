@@ -4,18 +4,25 @@ import { Route, HashRouter, Switch } from 'react-router-dom';
 
 import Signin from './components/Signin';
 import Discover from './components/Discover';
+import MyChats from "./components/MyChats";
+
 import EditProfile from './components/UserProfile/EditProfile';
 import MyProfile from './components/UserProfile/MyProfile';
+import Profile from "./components/UserProfile/Profile";
+
+import MusicianSearch from "./components/MusicianSearch/MusicianSearch";
+
 import Band from "./components/Bands/Band";
 import CreateBand from "./components/Bands/CreateBand";
-import MusicianView from "./components/MusicianSearch/MusicianView";
 import BandView from "./components/Bands/BandView";
-import Profile from "./components/UserProfile/Profile";
+
 import SongOfTheWeek from "./components/SongOfTheWeek/SongOfTheWeek";
+import SotwUserSubmission from "./components/SongOfTheWeek/SotwUserSubmission";
+
 import SpeedDate from "./components/SpeedDating/SpeedDate";
 import SpeedDateEvent from "./components/SpeedDating/SpeedDateEvent";
-import MyChats from "./components/MyChats";
-import SotwUserSubmission from "./components/SongOfTheWeek/SotwUserSubmission";
+
+
 
 function App() {
   return (
@@ -29,7 +36,7 @@ function App() {
           <Route exact path="/myprofile" component={MyProfile} />
           <Route exact path="/band" component={Band} />
           <Route exact path="/createband" component={CreateBand} />
-          <Route exact path="/musicianview" component={MusicianView} />
+          <Route exact path="/musiciansearch" component={MusicianSearch} />
           <Route exact path="/bandview" component={BandView} />
           <Route exact path="/sotw" component={SongOfTheWeek} />
           <Route exact path="/profile" component={Profile} />
