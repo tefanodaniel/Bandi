@@ -9,7 +9,7 @@ import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../../utils/BandApiService';
 
-class Profile extends React.Component {
+class MusicianDetails extends React.Component {
     constructor(props) {
         super(props)
 
@@ -110,4 +110,4 @@ class Profile extends React.Component {
 
 }
 
-export default Profile;
+export default MusicianDetails;

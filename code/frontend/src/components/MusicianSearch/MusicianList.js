@@ -27,7 +27,7 @@ const FilteredMusicianItem = ( musician ) => {
                     <Card.Title><b>{musician.name}</b></Card.Title>
                     <Card.Text className="small font-italic" style={{textColor:"white"}}>Genres: {musician.genres.join(', ')}</Card.Text>
                     <Card.Text className="small font-italic" style={{color:"white"}}>Instruments: {musician.instruments.join(', ')}</Card.Text>
-                    <Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/profile?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
+                    <Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/musiciandetails?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
                 </Card.Body>
             </Card>
     )

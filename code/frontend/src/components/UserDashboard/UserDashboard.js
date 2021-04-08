@@ -13,7 +13,7 @@ import {getFriendsDataFromApi} from "../../utils/api";
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../../actions/band_actions';
 
-class MyProfile extends React.Component {
+class UserDashboard extends React.Component {
     constructor(props) {
         super(props)
 
@@ -149,7 +149,7 @@ class MyProfile extends React.Component {
                             <div>
                                 <h4>Links: {userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
                             </div>
-                            <Button onClick={() => { this.props.history.push('/editprofile');}}>Edit Profile</Button>
+                            <Button onClick={() => { this.props.history.push('/edit-user-dashboard');}}>Edit Profile</Button>
                         </TabPanel>
 
                         <TabPanel>
@@ -191,4 +191,4 @@ function mapStateToProps(state) {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, {fetchBandsForMusician})(MyProfile);
+export default connect(mapStateToProps, {fetchBandsForMusician})(UserDashboard);

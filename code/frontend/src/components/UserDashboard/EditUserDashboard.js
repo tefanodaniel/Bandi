@@ -8,7 +8,7 @@ import {getBackendURL} from "../../utils/api";
 import { connect } from 'react-redux';
 import { updateUserProfile, getUser } from '../../actions/user_actions';
 
-class EditProfile extends React.Component {
+class EditUserDashboard extends React.Component {
     constructor(props) {
       super(props);
 
@@ -193,11 +193,9 @@ class EditProfile extends React.Component {
     }
   }
 
-//  export default EditProfile;
-
 function mapStateToProps(state) {
   return {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, {updateUserProfile, getUser})(EditProfile);
+export default connect(mapStateToProps, {updateUserProfile, getUser})(EditUserDashboard);
