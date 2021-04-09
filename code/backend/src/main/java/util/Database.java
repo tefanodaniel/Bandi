@@ -35,7 +35,7 @@ public final class Database {
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
         createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
-        createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
+        createFriendRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
         createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
         createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
         createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
@@ -165,11 +165,11 @@ public final class Database {
         }
     }
 
-    public static void createRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
+    public static void createFriendRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS Requests;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS FriendRequests;").executeUpdate();
 
-            String sql = "CREATE TABLE IF NOT EXISTS Requests("
+            String sql = "CREATE TABLE IF NOT EXISTS FriendRequests("
                     + "senderid VARCHAR(30) REFERENCES Musicians,"
                     + "senderName VARCHAR(50),"
                     + "recipientid VARCHAR(30) REFERENCES Musicians,"
@@ -179,7 +179,7 @@ public final class Database {
 
             conn.createQuery(sql).executeUpdate();
 
-            String requestSql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
+            String requestSql = "INSERT INTO FriendRequests(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
 
             for (FriendRequest fr : samples) {
                 conn.createQuery(requestSql)
