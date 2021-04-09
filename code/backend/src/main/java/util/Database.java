@@ -195,6 +195,7 @@ public final class Database {
         }
     }
 
+
     /**
      * Create Bands table schema and add sample CS Musicians to it.
      *
@@ -265,6 +266,38 @@ public final class Database {
             throw new Sql2oException(ex.getMessage());
         }
     }
+
+
+    public static void createBandInviteTableWithSamples(Sql2o sql2o, List<BandInvite> samples) {
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery("DROP TABLE IF EXISTS BandInvites;").executeUpdate();
+
+            String sql = "CREATE TABLE IF NOT EXISTS BandInvites("
+                    + "senderid VARCHAR(30) REFERENCES Musicians,"
+                    + "senderName VARCHAR(50),"
+                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientName VARCHAR(50),"
+                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
+                    + ");";
+
+            conn.createQuery(sql).executeUpdate();
+
+            String requestSql = "INSERT INTO BandInvites(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
+
+            for (BandInvite bi : samples) {
+                conn.createQuery(requestSql)
+                        .addParameter("senderid", bi.getSenderID())
+                        .addParameter("sendername", bi.getSenderName())
+                        .addParameter("recipientid", bi.getRecipientID())
+                        .addParameter("recipientname", bi.getRecipientName())
+                        .executeUpdate();
+            }
+
+        } catch (Sql2oException ex) {
+            throw new Sql2oException(ex.getMessage());
+        }
+    }
+
 
 
     /**

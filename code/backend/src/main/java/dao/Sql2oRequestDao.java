@@ -2,6 +2,7 @@ package dao;
 
 import exceptions.DaoException;
 import model.FriendRequest;
+import model.Request;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import org.sql2o.Sql2oException;
@@ -78,7 +79,7 @@ public class Sql2oRequestDao implements RequestDao {
     }
 
     @Override
-    public List<FriendRequest> readAllFrom(String senderID) throws DaoException {
+    public List<Request> readAllFrom(String senderID) throws DaoException {
         try (Connection conn = sql2o.open()) {
 
             String sql = "SELECT * FROM friendrequests AS fr " +
@@ -88,10 +89,10 @@ public class Sql2oRequestDao implements RequestDao {
                     .executeAndFetchTable().asList();
 
             if (queryResults.size() == 0) { // user has no sent out friend request
-                return new ArrayList<FriendRequest>();
+                return new ArrayList<>();
             }
 
-            List<FriendRequest> from = new ArrayList<>();
+            List<Request> from = new ArrayList<>();
             for (Map row : queryResults) {
                 String recipientID = (String) row.get("recipientid");
                 String senderName = (String) row.get("sendername");
@@ -107,7 +108,7 @@ public class Sql2oRequestDao implements RequestDao {
     }
 
     @Override
-    public List<FriendRequest> readAllTo(String recipientID) throws DaoException {
+    public List<Request> readAllTo(String recipientID) throws DaoException {
         try (Connection conn = sql2o.open()) {
 
             String sql = "SELECT * FROM friendrequests AS fr " +
@@ -117,10 +118,10 @@ public class Sql2oRequestDao implements RequestDao {
                     .executeAndFetchTable().asList();
 
             if (queryResults.size() == 0) { // user has no incoming friend requests
-                return new ArrayList<FriendRequest>();
+                return new ArrayList<>();
             }
 
-            List<FriendRequest> to = new ArrayList<>();
+            List<Request> to = new ArrayList<>();
             for (Map row : queryResults) {
                 String senderID = (String) row.get("senderid");
                 String senderName = (String) row.get("sendername");

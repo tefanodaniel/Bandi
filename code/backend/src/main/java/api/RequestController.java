@@ -4,6 +4,7 @@ import exceptions.ApiError;
 import exceptions.DaoException;
 import model.FriendRequest;
 import model.Musician;
+import model.Request;
 import spark.Route;
 
 import java.util.List;
@@ -30,7 +31,7 @@ public class RequestController {
     public static Route getIncomingPendingRequests = (req, res) -> {
         try {
             String recipientID = req.params("recipientid");
-            List<FriendRequest> requests = requestDao.readAllTo(recipientID);
+            List<Request> requests = requestDao.readAllTo(recipientID);
             res.type("application/json");
             return gson.toJson(requests);
         } catch (DaoException ex) {
@@ -42,7 +43,7 @@ public class RequestController {
     public static Route getOutgoingPendingRequests = (req, res) -> {
         try {
             String senderID = req.params("senderid");
-            List<FriendRequest> requests = requestDao.readAllFrom(senderID);
+            List<Request> requests = requestDao.readAllFrom(senderID);
             res.type("application/json");
             return gson.toJson(requests);
         } catch (DaoException ex) {
@@ -57,7 +58,7 @@ public class RequestController {
             String recipientID = req.params("recipientid");
             String senderName = musicianDao.read(senderID).getName();
             String recipientName = musicianDao.read(recipientID).getName();
-            FriendRequest fr = requestDao.createRequest(senderID, senderName, recipientID, recipientName);
+            FriendRequest fr = (FriendRequest) requestDao.createRequest(senderID, senderName, recipientID, recipientName);
             if (fr == null) {
                 throw new ApiError("Resource not found", 404); // Bad request
             }
@@ -78,9 +79,9 @@ public class RequestController {
             FriendRequest fr = null;
 
             if (action.equals("accept"))  {
-                fr = requestDao.acceptRequest(senderID, recipientID);
+                fr = (FriendRequest) requestDao.acceptRequest(senderID, recipientID);
             } else if (action.equals("decline")) {
-                fr = requestDao.declineRequest(senderID, recipientID);
+                fr = (FriendRequest) requestDao.declineRequest(senderID, recipientID);
             } else {
                 throw new ApiError("Invalid action to perform on request", 505);
             }
