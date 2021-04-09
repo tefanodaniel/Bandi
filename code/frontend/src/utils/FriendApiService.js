@@ -7,19 +7,19 @@ class FriendApiService {
     }
 
     getIncomingFriendRequests(recipientID) {
-        return customhttp.get(`/requests/friend/in/${recipientID}`);
+        return customhttp.get(`/requests/in/${recipientID}`);
     }
 
     getOutgoingFriendRequests(senderID) {
-        return customhttp.get(`/requests/friend/out/${senderID}`);
+        return customhttp.get(`/requests/out/${senderID}`);
     }
 
     sendFriendRequest(senderID, recipientID) {
-        return customhttp.post(`/request/friend/${senderID}/${recipientID}`);
+        return customhttp.post(`/request/${senderID}/${recipientID}`);
     }
 
     respondToFriendRequest(senderID, recipientID, action) {
-        return customhttp.delete(`/request/friend/${senderID}/${recipientID}/${action}`);
+        return customhttp.delete(`/request/${senderID}/${recipientID}/${action}`);
     }
 
 } 
