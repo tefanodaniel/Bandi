@@ -72,6 +72,7 @@ public class Sql2oRequestDao implements RequestDao {
             return fr;
 
         } catch (Sql2oException ex) {
+            System.out.println(ex.getMessage());
             throw new DaoException("Unable to read a friend request from " + senderID + "to " + recipientID, ex);
         }
     }

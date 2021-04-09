@@ -30,22 +30,15 @@ class UserDashboard extends React.Component {
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
 
+
     }
 
     componentDidMount() {
         const { fetchBandsForMusician } = this.props;
 
-
         fetchBandsForMusician({id: this.state.id});
+        this.updateFriendPanel();
 
-        getFriendsDataFromApi(this.state.id).then((res) => {
-          console.log(res);
-          this.setState({
-            friendList: res.friends,
-            pending_incoming_requests: res.incoming,
-            pending_outgoing_requests: res.outgoing
-          });
-        });
         /*
         getFriendsDataFromApi(this.state.id)
             .then(axios.spread((r1, r2, r3) => {
@@ -57,6 +50,18 @@ class UserDashboard extends React.Component {
             })).catch((error) => console.log(error)) */
     }
 
+    updateFriendPanel() {
+        getFriendsDataFromApi(this.state.id).then((res) => {
+            console.log(res);
+            this.setState({
+              friendList: res.friends,
+              pending_incoming_requests: res.incoming,
+              pending_outgoing_requests: res.outgoing
+            });
+          });
+    }
+
+
     renderFriendListForMusician() {
         const listItems = this.state.friendList.map((friend) =>
         <li key={friend["id"]}>{friend["name"]}</li>
@@ -66,9 +71,15 @@ class UserDashboard extends React.Component {
         );
     }
 
-    takeActionOnFriendRequest(request, action) {
-        FriendApiService.respondToFriendRequest(request.recipientID, request.senderID, action);
-        window.location.reload();
+    async takeActionOnFriendRequest(request, action) {
+        const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
+        console.log("Response from action on friend request ", response)
+        this.updateFriendPanel();
+        if (action === "accept") {
+            alert("You accepted " + request.senderName + "'s friend request!");
+        } else if (action === "decline") {
+            alert("You declined " + request.senderName + "'s friend request!");
+        }
     }
 
 
@@ -159,7 +170,7 @@ class UserDashboard extends React.Component {
 
 
                         <TabPanel>
-                            <h3>My friends ({userInfo.friends?.length})</h3>
+                            <h3>My friends ({this.state.friendList.length})</h3>
                             {this.renderFriendListForMusician()}
                             <h3>Friend requests ({this.state.pending_incoming_requests?.length})</h3>
                             {this.renderIncomingRequestList()}

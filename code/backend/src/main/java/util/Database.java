@@ -109,7 +109,8 @@ public final class Database {
 
             sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "friendID VARCHAR(30)" // TODO: Make reference musician.
+                    + "friendID VARCHAR(30)," // TODO: Make reference musician.
+                    + "CONSTRAINT unique_friends UNIQUE(id, friendid)"
                     + ");";
 
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
