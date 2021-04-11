@@ -35,7 +35,7 @@ public final class Database {
         createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
         createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
-        createFriendRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
+        createRequestTableWithSamples(sql2o, new ArrayList<Request>());
         createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
         createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
         createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
@@ -165,28 +165,36 @@ public final class Database {
         }
     }
 
-    public static void createFriendRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
+    public static void createRequestTableWithSamples(Sql2o sql2o, List<Request> samples) {
         try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS FriendRequests;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS Requests;").executeUpdate();
 
-            String sql = "CREATE TABLE IF NOT EXISTS FriendRequests("
-                    + "senderid VARCHAR(30) REFERENCES Musicians,"
+            String sql = "CREATE TABLE IF NOT EXISTS Requests("
+                    + "senderid VARCHAR(50),"
                     + "senderName VARCHAR(50),"
-                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientid VARCHAR(50),"
                     + "recipientName VARCHAR(50),"
-                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
+                    + "type VARCHAR(10),"
+                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid, type)"
                     + ");";
 
             conn.createQuery(sql).executeUpdate();
 
-            String requestSql = "INSERT INTO FriendRequests(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
+            String requestSql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname, type) VALUES (:senderid, :sendername, :recipientid, :recipientname, :type);";
 
-            for (FriendRequest fr : samples) {
+            for (Request r : samples) {
+                String type;
+                if (r instanceof FriendRequest) {
+                    type = "friend";
+                } else {
+                    type = "band";
+                }
                 conn.createQuery(requestSql)
-                        .addParameter("senderid", fr.getSenderID())
-                        .addParameter("sendername", fr.getSenderName())
-                        .addParameter("recipientid", fr.getRecipientID())
-                        .addParameter("recipientname", fr.getRecipientName())
+                        .addParameter("senderid", r.getSenderID())
+                        .addParameter("sendername", r.getSenderName())
+                        .addParameter("recipientid", r.getRecipientID())
+                        .addParameter("recipientname", r.getRecipientName())
+                        .addParameter("type", type)
                         .executeUpdate();
             }
 
@@ -266,38 +274,6 @@ public final class Database {
             throw new Sql2oException(ex.getMessage());
         }
     }
-
-
-    public static void createBandInviteTableWithSamples(Sql2o sql2o, List<BandInvite> samples) {
-        try (Connection conn = sql2o.open()) {
-            conn.createQuery("DROP TABLE IF EXISTS BandInvites;").executeUpdate();
-
-            String sql = "CREATE TABLE IF NOT EXISTS BandInvites("
-                    + "senderid VARCHAR(30) REFERENCES Musicians,"
-                    + "senderName VARCHAR(50),"
-                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
-                    + "recipientName VARCHAR(50),"
-                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
-                    + ");";
-
-            conn.createQuery(sql).executeUpdate();
-
-            String requestSql = "INSERT INTO BandInvites(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
-
-            for (BandInvite bi : samples) {
-                conn.createQuery(requestSql)
-                        .addParameter("senderid", bi.getSenderID())
-                        .addParameter("sendername", bi.getSenderName())
-                        .addParameter("recipientid", bi.getRecipientID())
-                        .addParameter("recipientname", bi.getRecipientName())
-                        .executeUpdate();
-            }
-
-        } catch (Sql2oException ex) {
-            throw new Sql2oException(ex.getMessage());
-        }
-    }
-
 
 
     /**

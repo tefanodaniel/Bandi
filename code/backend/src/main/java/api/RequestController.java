@@ -2,6 +2,7 @@ package api;
 
 import exceptions.ApiError;
 import exceptions.DaoException;
+import model.BandInvite;
 import model.FriendRequest;
 import model.Musician;
 import model.Request;
@@ -9,9 +10,7 @@ import spark.Route;
 
 import java.util.List;
 
-import static api.ApiServer.musicianDao;
-import static api.ApiServer.requestDao;
-import static api.ApiServer.gson;
+import static api.ApiServer.*;
 
 public class RequestController {
 
@@ -31,7 +30,8 @@ public class RequestController {
     public static Route getIncomingPendingRequests = (req, res) -> {
         try {
             String recipientID = req.params("recipientid");
-            List<Request> requests = requestDao.readAllTo(recipientID);
+            String type = req.params("type");
+            List<Request> requests = requestDao.readAllTo(recipientID, type);
             res.type("application/json");
             return gson.toJson(requests);
         } catch (DaoException ex) {
@@ -43,7 +43,8 @@ public class RequestController {
     public static Route getOutgoingPendingRequests = (req, res) -> {
         try {
             String senderID = req.params("senderid");
-            List<Request> requests = requestDao.readAllFrom(senderID);
+            String type = req.params("type");
+            List<Request> requests = requestDao.readAllFrom(senderID, type);
             res.type("application/json");
             return gson.toJson(requests);
         } catch (DaoException ex) {
@@ -51,19 +52,31 @@ public class RequestController {
         }
     };
 
-    // send friend request
-    public static Route postFriendRequest = (req, res) -> {
+    // send request
+    public static Route postRequest = (req, res) -> {
         try {
+
             String senderID = req.params("senderid");
             String recipientID = req.params("recipientid");
-            String senderName = musicianDao.read(senderID).getName();
+            String type = req.params("type");
             String recipientName = musicianDao.read(recipientID).getName();
-            FriendRequest fr = (FriendRequest) requestDao.createRequest(senderID, senderName, recipientID, recipientName);
-            if (fr == null) {
+            String senderName;
+            Request r;
+            if (type.equals("friend")) {
+                senderName = musicianDao.read(senderID).getName();
+                r = (FriendRequest) requestDao.createRequest(senderID, senderName, recipientID, recipientName, "friend");
+            } else {
+                System.out.println("Here to read before posting");
+                senderName = bandDao.read(senderID).getName();
+
+                r = (BandInvite) requestDao.createRequest(senderID, senderName, recipientID, recipientName, "band");
+            }
+
+            if (r == null) {
                 throw new ApiError("Resource not found", 404); // Bad request
             }
             res.type("application/json");
-            return gson.toJson(fr);
+            return gson.toJson(r);
         } catch (DaoException ex) {
             throw new ApiError(ex.getMessage(), 500);
         }
@@ -74,25 +87,26 @@ public class RequestController {
         try {
             String senderID = req.params("senderid");
             String recipientID = req.params("recipientid");
+            String type = req.params("type");
             String action = req.params("action");
 
-            FriendRequest fr = null;
-
+            Request r;
             if (action.equals("accept"))  {
-                fr = (FriendRequest) requestDao.acceptRequest(senderID, recipientID);
+                r = requestDao.acceptRequest(senderID, recipientID, type);
             } else if (action.equals("decline")) {
-                fr = (FriendRequest) requestDao.declineRequest(senderID, recipientID);
+                r = requestDao.declineRequest(senderID, recipientID, type);
             } else {
                 throw new ApiError("Invalid action to perform on request", 505);
             }
 
-            if (fr == null) {
+            if (r == null) {
                 throw new ApiError("Resource not found", 404); // Bad request
             }
             res.type("application/json");
-            return gson.toJson(fr);
+            return gson.toJson(r);
         } catch (DaoException ex) {
             throw new ApiError(ex.getMessage(), 500);
         }
     };
+
 }
