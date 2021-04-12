@@ -38,12 +38,12 @@ export function newQuery(queryparams) {
         //console.log(response);
         dispatch({
             type : LOAD_MUSICIANS_QUERY,
-            payload : response.data
+            payload : {res_data : response.data, query: queryparams}
         })
     }
 }
 
 export const clearQuery = {
     type : CLEAR_MUSICIANS_QUERY,
-    payload : []
+    payload : {res_data: null, query: null}
 }
