@@ -20,14 +20,14 @@ import {fetchSotwEvents} from "./actions/sotw_event_actions";
 // Redux store
 console.log('Initial state: ', store.getState())
 const unsubscribe = store.subscribe(() =>
-    console.log('State after dispatch: ', store.getState())
+    console.log('Subscriber: State has possibly changed after a dispatched action, ', store.getState())
 )
+console.log("Fetching initial list of musicians")
 store.dispatch(fetchMusicians)
-
+console.log("Fetching initial list of speed dating events")
 store.dispatch(fetchSDEvents)
-
+console.log("Fetching initial list of song of the week events")
 store.dispatch(fetchSotwEvents)
-
 // Init CometChat
 var appID = config.appId;
 var region = config.region;

@@ -6,6 +6,7 @@ import {getFrontendURL} from "../../utils/api";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import FriendApiService from "../../utils/FriendApiService";
+import SotwEventsApi from "../../utils/SotwEventsApiService";
 
 const selectMusicians = (state) => {
     if(!state.musician_reducer.filteredMusicians)
@@ -22,10 +23,11 @@ const chunk = (arr, chunkSize = 1, cache = []) => {
     return cache
 }
 
-const addFriend = (temp) => {
-    FriendApiService.sendFriendRequest(temp.logged_id, temp.id).then((response) =>
+async function addFriend (temp) {
+    const response = await FriendApiService.sendFriendRequest(temp.logged_id, temp.id);
+    if(response) {
         alert("A request to connect was sent to " + temp.name + ".")
-    );
+    }
 }
 
 const RenderConnectButton = (temp) => {
@@ -34,9 +36,9 @@ const RenderConnectButton = (temp) => {
     if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
         return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
     } else { return <Button disabled>Pending...</Button> };*/
-    if (true) {
-        return <Button variant="primary" onClick={addFriend(temp)}>Connect!</Button>
-    } else { return <Button disabled>Pending...</Button> };
+    //if (true) {
+        return <Button variant="primary" onClick={temp => addFriend(temp)}>Connect!</Button>
+    //} else { return <Button disabled>Pending...</Button> };
 }
 
 const FilteredMusicianItem = React.forwardRef((musician, ref) => {
@@ -57,7 +59,7 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                         View More
                     </Button>
                     </Card.Text>
-                    <Modal show={show} onHide={handleClose}>
+                    <Modal key={musician.name} show={show} onHide={handleClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>{musician.name}</Modal.Title>
                         </Modal.Header>
@@ -112,29 +114,24 @@ const MusicianSearchResults = () => {
         let index = null;
         index = fil_musicians_mod.findIndex(user => {
             if(user.id === logged_user.id) {
-                console.log("logged user is ", logged_user.id);
-                console.log("this other user is ", user.id);
                 return user
             }
         });
-        console.log(index)
         if ((index !== null) && index !== -1) fil_musicians_mod.splice(index, 1);
-        console.log(fil_musicians_mod)
         const fil_musicians_chunk = chunk(fil_musicians_mod,3)
         const rows = fil_musicians_chunk.map((user_chunk, index) => {
             const fil_musicians_cols = user_chunk.map((user, index) => {
-                // You can now get a ref directly to the DOM button:
                 const ref = React.createRef();
                 return (
                     <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem ref={ref} logged_id = {logged_user.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
+                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
                     </Col>
                 );
             });
             return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
         });
         return (
-            <Container>
+            <Container key="musiciansearchresults">
                 {rows}
             </Container>
         )
