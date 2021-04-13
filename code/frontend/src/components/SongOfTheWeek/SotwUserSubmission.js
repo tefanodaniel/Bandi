@@ -5,8 +5,7 @@ import "../../styles/neon.scss"
 import {bandi_styles} from "../../styles/bandi_styles";
 import Button from "react-bootstrap/Button";
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
-import {clearQuery, newQuery} from "../../actions/musician_actions";
-
+import {newUserSubmission} from "../../actions/sotw_event_actions";
 // this will be a state selector for the sotw info.
 //const selectSongOfTheWeekById = (state, user_id) => {
 //    return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
@@ -44,7 +43,7 @@ const SotwUserSubmission = () => {
     }
 
     const addSubmission = () => {
-        if(!Object.keys(queryparams)===0) {
+        if(!Object.keys(submission_data)===0) {
             submission_data.submission_id = uuid.v4();
             dispatch(newUserSubmission(submission_data))
 

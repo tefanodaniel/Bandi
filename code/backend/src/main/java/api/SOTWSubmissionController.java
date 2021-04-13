@@ -47,7 +47,7 @@ public class SOTWSubmissionController {
             Set<String> instruments = submission.getInstruments();
 
             if (instruments == null) { instruments = new HashSet<String>(); }
-            sotw_submissionDao.create(submission.getSubmission_id(), submission.getMusician_id(), submission.getAVSubmission(), instruments);
+            sotw_submissionDao.create(submission.getSubmission_id(), submission.getMusician_id(), submission.getMusician_name(), submission.getAVSubmission(), instruments);
             res.status(201);
             return gson.toJson(submission);
         } catch (DaoException ex) {

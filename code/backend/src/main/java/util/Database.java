@@ -375,6 +375,7 @@ public final class Database {
                 String sql = "CREATE TABLE IF NOT EXISTS SotwSubmissions("
                         + "submissionid VARCHAR(50) PRIMARY KEY,"
                         + "musicianid VARCHAR(50) REFERENCES Musicians,"
+                        + "musicianname VARCHAR(50),"
                         + "avsubmission VARCHAR(50) NOT NULL"
                         + ");";
 
@@ -387,13 +388,14 @@ public final class Database {
 
                 conn.createQuery(sql).executeUpdate();
 
-                String sotw_submissions_sql = "INSERT INTO SotwSubmissions(submissionid, musicianid, avsubmission) VALUES(:submissionid, :musicianid, :avsubmission);";
+                String sotw_submissions_sql = "INSERT INTO SotwSubmissions(submissionid, musicianid, musicianname, avsubmission) VALUES(:submissionid, :musicianid, :musicianname, :avsubmission);";
                 String sotw_submissions_instruments_sql = "INSERT INTO SotwSubmissionsInstruments(submissionid, instrument) VALUES (:submissionid, :instrument);";
 
                 for (SongOfTheWeekSubmission s: sample_submissions) {
                     conn.createQuery(sotw_submissions_sql)
                             .addParameter("submissionid", s.getSubmission_id())
                             .addParameter("musicianid", s.getMusician_id())
+                            .addParameter("musicianname", s.getMusician_name())
                             .addParameter("avsubmission", s.getAVSubmission())
                             .executeUpdate();
 

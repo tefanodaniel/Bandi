@@ -251,30 +251,30 @@ public final class DataStore {
 
         String avLink = "https://youtu.be/dQw4w9WgXcQ";
 
-        sample_submissions.add(new SongOfTheWeekSubmission("00001fakesubmissionid","00001fakeid", avLink, instruments1));
-        sample_submissions.add(new SongOfTheWeekSubmission("00002fakesubmissionid","00002fakeid", avLink, instruments2));
-        sample_submissions.add(new SongOfTheWeekSubmission("00003fakesubmissionid","00003fakeid", avLink, instruments3));
-        sample_submissions.add(new SongOfTheWeekSubmission("00004fakesubmissionid","00004fakeid", avLink, instruments4));
-        sample_submissions.add(new SongOfTheWeekSubmission("00005fakesubmissionid","00005fakeid", avLink, instruments1));
-        sample_submissions.add(new SongOfTheWeekSubmission("00006fakesubmissionid","00006fakeid", avLink, instruments2));
-        sample_submissions.add(new SongOfTheWeekSubmission("00007fakesubmissionid","00007fakeid", avLink, instruments3));
-        sample_submissions.add(new SongOfTheWeekSubmission("00008fakesubmissionid","00008fakeid", avLink, instruments4));
-        sample_submissions.add(new SongOfTheWeekSubmission("00009fakesubmissionid","00009fakeid", avLink, instruments1));
-        sample_submissions.add(new SongOfTheWeekSubmission("000010fakesubmissionid","000010fakeid", avLink, instruments2));
-        sample_submissions.add(new SongOfTheWeekSubmission("000011fakesubmissionid","00001fakeid", avLink, instruments3));
-        sample_submissions.add(new SongOfTheWeekSubmission("000012fakesubmissionid","00002fakeid", avLink, instruments4));
-        sample_submissions.add(new SongOfTheWeekSubmission("000013fakesubmissionid","00003fakeid", avLink, instruments1));
-        sample_submissions.add(new SongOfTheWeekSubmission("000014fakesubmissionid","00004fakeid", avLink, instruments2));
-        sample_submissions.add(new SongOfTheWeekSubmission("000015fakesubmissionid","00005fakeid", avLink, instruments3));
-        sample_submissions.add(new SongOfTheWeekSubmission("000016fakesubmissionid","00006fakeid", avLink, instruments4));
-        sample_submissions.add(new SongOfTheWeekSubmission("000017fakesubmissionid","00007fakeid", avLink, instruments1));
-        sample_submissions.add(new SongOfTheWeekSubmission("000018fakesubmissionid","00008fakeid", avLink, instruments2));
-        sample_submissions.add(new SongOfTheWeekSubmission("000019fakesubmissionid","00009fakeid", avLink, instruments3));
-        sample_submissions.add(new SongOfTheWeekSubmission("000020fakesubmissionid","000010fakeid", avLink, instruments4));
-        sample_submissions.add(new SongOfTheWeekSubmission("000021fakesubmissionid","00001fakeid", avLink, instruments1));
-        sample_submissions.add(new SongOfTheWeekSubmission("000022fakesubmissionid","00002fakeid", avLink, instruments2));
-        sample_submissions.add(new SongOfTheWeekSubmission("000023fakesubmissionid","00003fakeid", avLink, instruments3));
-        sample_submissions.add(new SongOfTheWeekSubmission("000024fakesubmissionid","00004fakeid", avLink, instruments4));
+        sample_submissions.add(new SongOfTheWeekSubmission("00001fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1));
+        sample_submissions.add(new SongOfTheWeekSubmission("00002fakesubmissionid","00002fakeid", "Eric Clapton", avLink, instruments2));
+        sample_submissions.add(new SongOfTheWeekSubmission("00003fakesubmissionid","00003fakeid", "Kenny G", avLink, instruments3));
+        sample_submissions.add(new SongOfTheWeekSubmission("00004fakesubmissionid","00004fakeid", "Roger Waters", avLink, instruments4));
+        sample_submissions.add(new SongOfTheWeekSubmission("00005fakesubmissionid","00005fakeid", "Nick Mason", avLink, instruments1));
+        sample_submissions.add(new SongOfTheWeekSubmission("00006fakesubmissionid","00006fakeid", "Michael Jackson", avLink, instruments2));
+        sample_submissions.add(new SongOfTheWeekSubmission("00007fakesubmissionid","00007fakeid", "George Michael", avLink, instruments3));
+        sample_submissions.add(new SongOfTheWeekSubmission("00008fakesubmissionid","00008fakeid", "Mariah Carey", avLink, instruments4));
+        sample_submissions.add(new SongOfTheWeekSubmission("00009fakesubmissionid","00009fakeid", "Robin Williams", avLink, instruments1));
+        sample_submissions.add(new SongOfTheWeekSubmission("000010fakesubmissionid","000010fakeid", "Prince", avLink, instruments2));
+        sample_submissions.add(new SongOfTheWeekSubmission("000011fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments3));
+        sample_submissions.add(new SongOfTheWeekSubmission("000012fakesubmissionid","00002fakeid", "Eric Clapton", avLink, instruments4));
+        sample_submissions.add(new SongOfTheWeekSubmission("000013fakesubmissionid","00003fakeid","Kenny G",  avLink, instruments1));
+        sample_submissions.add(new SongOfTheWeekSubmission("000014fakesubmissionid","00004fakeid", "Roger Waters", avLink, instruments2));
+        sample_submissions.add(new SongOfTheWeekSubmission("000015fakesubmissionid","00005fakeid", "Nick Mason", avLink, instruments3));
+        sample_submissions.add(new SongOfTheWeekSubmission("000016fakesubmissionid","00006fakeid", "Michael Jackson", avLink, instruments4));
+        sample_submissions.add(new SongOfTheWeekSubmission("000017fakesubmissionid","00007fakeid", "George Michael", avLink, instruments1));
+        sample_submissions.add(new SongOfTheWeekSubmission("000018fakesubmissionid","00008fakeid", "Mariah Carey", avLink, instruments2));
+        sample_submissions.add(new SongOfTheWeekSubmission("000019fakesubmissionid","00009fakeid", "Robin Williams", avLink, instruments3));
+        sample_submissions.add(new SongOfTheWeekSubmission("000020fakesubmissionid","000010fakeid", "Prince", avLink, instruments4));
+        sample_submissions.add(new SongOfTheWeekSubmission("000021fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1));
+        sample_submissions.add(new SongOfTheWeekSubmission("000022fakesubmissionid","00002fakeid", "Eric Clapton", avLink, instruments2));
+        sample_submissions.add(new SongOfTheWeekSubmission("000023fakesubmissionid","00003fakeid", "Kenny G", avLink, instruments3));
+        sample_submissions.add(new SongOfTheWeekSubmission("000024fakesubmissionid","00004fakeid", "Roger Waters", avLink, instruments4));
 
         return sample_submissions;
     }

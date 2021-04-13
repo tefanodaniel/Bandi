@@ -2,7 +2,9 @@ import {
     LOAD_SOTW_EVENTS_INITIAL,
     LOAD_SOTW_EVENTS_CURRENT,
     LOAD_SOTW_EVENTS_CURRENT_SONG,
-    LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS, LOAD_MUSICIANS_QUERY
+    LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS,
+    CREATE_NEW_USER_SUBMISSION,
+    ADD_SUBMISSION_TO_EVENT
 } from './types';
 import SotwEventsApi from "../utils/SotwEventsApiService";
 import SotwSubmissionsApi from "../utils/SotwSubmissionsApiService";
