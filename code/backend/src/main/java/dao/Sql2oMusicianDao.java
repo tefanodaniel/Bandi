@@ -234,8 +234,11 @@ public class Sql2oMusicianDao implements MusicianDao {
             String[] keyArray = keys.toArray(new String[keys.size()]);
             String filterOn = "";
 
-            String genreSQL = "";
-            boolean genreFlag = false;
+            String tableSQL = "";
+            boolean tableFlag = false;
+
+            String instrumentSQL = "";
+            boolean instrumentFlag = false;
 
             // Locate first query parameter that is not distance or id:
             int firstKeyIndex;
@@ -245,25 +248,31 @@ public class Sql2oMusicianDao implements MusicianDao {
                     additionalQFlag = true;
                     if (key.equals("admin")) {
                         // Create SQL query expression for admin boolean:
-                        filterOn = key + " = " + query.get(key)[0];
+                        filterOn = key + " = " + query.get(key)[0] + "\n";
                     }
-                    else if (key.equals("genre")) {
-                        genreFlag = true;
+                    else if (key.equals("genre") || key.equals("instrument")) {
+                        tableFlag = true;
+                        String table;
+                        String newTable;
+
+                        if (key.equals("genre")) { table = "musiciangenres"; newTable = "manyGenres";}
+                        else { table = "instruments"; newTable = "manyInstruments";}
+
                         for (int k = 0; k < query.get(key).length; k++) {
                             if (k == 0) {
-                                genreSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
-                                        "INNER JOIN musiciangenres AS g0\n" +
+                                tableSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
+                                        "INNER JOIN " + table + " AS g0\n" +
                                         "ON  g0.id = Rt.gid \n" +
-                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
                             } else {
                                 // Process queries with multiple values for the same query param:
-                                genreSQL = genreSQL + "\nINNER JOIN musiciangenres AS g" + k + "\n" +
+                                tableSQL = tableSQL + "INNER JOIN " + table + " AS g" + k + "\n" +
                                         "ON  g" + k + ".id = Rt.gid \n" +
-                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
                             }
                         }
-                        genreSQL = "WITH manyGenres AS (" + genreSQL + ")\n";
-                        filterOn = filterOn + "\nR.mid IN (SELECT gid FROM manyGenres)";
+                        tableSQL = "WITH " + newTable + " AS (" + tableSQL + ")\n";
+                        filterOn = "R.mid IN (SELECT gid FROM " + newTable + ")\n";
                     }
                     else {
                         // Create SQL query expression for String attributes:
@@ -285,31 +294,39 @@ public class Sql2oMusicianDao implements MusicianDao {
                 if (!key.equals("distance") && !key.equals("id")) {
                     if (key.equals("admin")) {
                         // Append SQL query expression for admin boolean:
-                        filterOn = filterOn + " AND " + key + " = " + query.get(key)[0];
+                        filterOn = filterOn + " AND " + key + " = " + query.get(key)[0] + "\n";
                     }
-                    else if (key.equals("genre")) {
-                        genreFlag = true;
+                    else if (key.equals("genre")|| key.equals("instrument")) {
+                        String table;
+                        String newTable;
+                        String tempSQL = "";
+
+                        if (key.equals("genre")) { table = "musiciangenres"; newTable = "manyGenres";}
+                        else { table = "instruments"; newTable = "manyInstruments";}
+
                         for (int k = 0; k < query.get(key).length; k++) {
                             if (k == 0) {
-                                genreSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
-                                        "INNER JOIN musiciangenres AS g0\n" +
+                                tempSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
+                                        "INNER JOIN " + table + " AS g0\n" +
                                         "ON  g0.id = Rt.gid \n" +
-                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
                             } else {
                                 // Process queries with multiple values for the same query param:
-                                genreSQL = genreSQL + "\nINNER JOIN musiciangenres AS g" + k + "\n" +
+                                tempSQL = tempSQL + "INNER JOIN " + table + " AS g" + k + "\n" +
                                         "ON  g" + k + ".id = Rt.gid \n" +
-                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
                             }
                         }
-                        genreSQL = "WITH manyGenres AS (" + genreSQL + ")\n";
-                        filterOn = filterOn + "\n AND R.mid IN (SELECT gid FROM manyGenres)";
+                        if (tableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
+                        else { tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n"; tableFlag = true; }
+
+                        filterOn = filterOn + "AND R.mid IN (SELECT gid FROM " + newTable + ")\n";
                     }
                     else {
                         // Append SQL query expression for String attributes:
                         for (int k = 0; k < query.get(key).length; k++) {
                             // process queries with multiple values for the same query param
-                            filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                            filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
                         }
                     }
                 }
@@ -318,17 +335,17 @@ public class Sql2oMusicianDao implements MusicianDao {
             String filterSQL;
             // Create final SQL query expression based on advanced search query parameters:
             if(distFlag && additionalQFlag) {
-                filterSQL = genreSQL + distFilter + " AND " + filterOn + "\nORDER BY distance;";
+                filterSQL = tableSQL + distFilter + "AND " + filterOn + "ORDER BY distance;";
             }
             else if (distFlag && !additionalQFlag){
-                filterSQL = distFilter + " ORDER BY distance;";
+                filterSQL = distFilter + "ORDER BY distance;";
             }
             else {
                 addDefaultDistances(conn);
-                filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                filterSQL = tableSQL + "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
                         "LEFT JOIN instruments as I ON R.MID=I.id\n" +
                         "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
-                        "WHERE " + filterOn + " AND R.MID <> '" + sourceID + "';";
+                        "WHERE " + filterOn + "AND R.MID <> '" + sourceID + "';";
             }
             String resultSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
                     "LEFT JOIN instruments as I ON R.MID=I.id\n" +
@@ -700,7 +717,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                 "WHERE distance <=" + miles ;
 
-        return distFilter;
+        return distFilter + "\n";
     }
 
     private void addDefaultDistances(Connection conn) throws DaoException {
