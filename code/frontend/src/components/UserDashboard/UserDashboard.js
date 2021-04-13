@@ -24,8 +24,8 @@ class UserDashboard extends React.Component {
             bands: [],
             name: 'Loading...',
             friendList: [],
-            pending_incoming_requests: [],
-            pending_outgoing_requests: []
+            incoming_friend_requests: [],
+            outgoing_friend_requests: []
         }
 
         this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
@@ -44,8 +44,8 @@ class UserDashboard extends React.Component {
             .then(axios.spread((r1, r2, r3) => {
                 this.setState({
                     friendList: r1.data,
-                    pending_incoming_requests: r2.data,
-                    pending_outgoing_requests: r3.data
+                    incoming_friend_requests: r2.data,
+                    outgoing_friend_requests: r3.data
                 });
             })).catch((error) => console.log(error)) */
     }
@@ -55,8 +55,8 @@ class UserDashboard extends React.Component {
             console.log(res);
             this.setState({
               friendList: res.friends,
-              pending_incoming_requests: res.incoming,
-              pending_outgoing_requests: res.outgoing
+              incoming_friend_requests: res.incoming,
+              outgoing_friend_requests: res.outgoing
             });
           });
     }
@@ -84,8 +84,8 @@ class UserDashboard extends React.Component {
 
 
     renderIncomingRequestList() {
-        console.log(this.state.pending_incoming_requests)
-        const listItems = this.state.pending_incoming_requests.map((request) =>
+        console.log(this.state.incoming_friend_requests)
+        const listItems = this.state.incoming_friend_requests.map((request) =>
         <div>
             <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
             <Button onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
@@ -97,7 +97,7 @@ class UserDashboard extends React.Component {
     }
 
     renderOutgoingRequestList() {
-        const listItems = this.state.pending_outgoing_requests.map((request) =>
+        const listItems = this.state.outgoing_friend_requests.map((request) =>
         <li>{request.recipientName}</li>
         );
         return (
@@ -172,9 +172,9 @@ class UserDashboard extends React.Component {
                         <TabPanel>
                             <h3>My friends ({this.state.friendList.length})</h3>
                             {this.renderFriendListForMusician()}
-                            <h3>Friend requests ({this.state.pending_incoming_requests?.length})</h3>
+                            <h3>Friend requests ({this.state.incoming_friend_requests?.length})</h3>
                             {this.renderIncomingRequestList()}
-                            <h3>Pending friend requests ({this.state.pending_outgoing_requests?.length})</h3>
+                            <h3>Pending friend requests ({this.state.outgoing_friend_requests?.length})</h3>
                             {this.renderOutgoingRequestList()}
 
                         </TabPanel>

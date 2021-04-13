@@ -4,6 +4,11 @@ export const LOAD_MUSICIANS_INITIAL_SEARCH = 'musicians/loadfirstsearch';
 export const LOAD_MUSICIANS_QUERY = 'musicians/newquery';
 export const CLEAR_MUSICIANS_QUERY = 'musicians/clearquery';
 
+// Friend API action action types
+export const GET_USER_FRIENDS = 'user/friends';
+export const GET_INCOMING_FRIEND_REQUESTS = 'requests/friend/in';
+export const GET_OUTGOING_FRIEND_REQUESTS = 'requests/friend/out';
+
 // Band API action types
 export const LOAD_BANDS_FOR_MUSICIAN = '/bands/loadmusicianbands';
 
