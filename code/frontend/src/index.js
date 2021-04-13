@@ -31,7 +31,7 @@ store.dispatch(fetchSotwEvents)
 // Init CometChat
 var appID = config.appId;
 var region = config.region;
-var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(region).build();
+var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForFriends().setRegion(region).build();
 CometChat.init(appID, appSetting).then(
   () => {
     console.log("CometChat initialization completed successfully");
