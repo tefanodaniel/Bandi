@@ -81,9 +81,6 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                                 Close
                             </Button>
                             <RenderConnectButton logged_id = {musician.logged_id} id = {musician.id} name={musician.name}/>
-                            <Button variant="primary" onClick={handleClose}>
-                                Save Changes
-                            </Button>
                         </Modal.Footer>
                     </Modal>
                 </Card.Body>
