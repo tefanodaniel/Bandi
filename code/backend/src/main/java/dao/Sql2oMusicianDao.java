@@ -263,7 +263,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                             }
                         }
                         genreSQL = "WITH manyGenres AS (" + genreSQL + ")\n";
-                        filterOn = filterOn + "\nR.mid IN (SELECT gid FROM manyGenres)\n";
+                        filterOn = filterOn + "\nR.mid IN (SELECT gid FROM manyGenres)";
                     }
                     else {
                         // Create SQL query expression for String attributes:
@@ -286,7 +286,26 @@ public class Sql2oMusicianDao implements MusicianDao {
                     if (key.equals("admin")) {
                         // Append SQL query expression for admin boolean:
                         filterOn = filterOn + " AND " + key + " = " + query.get(key)[0];
-                    } else {
+                    }
+                    else if (key.equals("genre")) {
+                        genreFlag = true;
+                        for (int k = 0; k < query.get(key).length; k++) {
+                            if (k == 0) {
+                                genreSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
+                                        "INNER JOIN musiciangenres AS g0\n" +
+                                        "ON  g0.id = Rt.gid \n" +
+                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+                            } else {
+                                // Process queries with multiple values for the same query param:
+                                genreSQL = genreSQL + "\nINNER JOIN musiciangenres AS g" + k + "\n" +
+                                        "ON  g" + k + ".id = Rt.gid \n" +
+                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'";
+                            }
+                        }
+                        genreSQL = "WITH manyGenres AS (" + genreSQL + ")\n";
+                        filterOn = filterOn + "\n AND R.mid IN (SELECT gid FROM manyGenres)";
+                    }
+                    else {
                         // Append SQL query expression for String attributes:
                         for (int k = 0; k < query.get(key).length; k++) {
                             // process queries with multiple values for the same query param
