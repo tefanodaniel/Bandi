@@ -4,7 +4,7 @@ import {
     LOAD_OUTGOING_FRIEND_REQUESTS
 } from '../actions/types';
 
-export default function friend_reducer(state = {}, action) {
+export default function friendReducer(state = {}, action) {
     switch (action.type) {
         case LOAD_USER_FRIENDS:
             return {

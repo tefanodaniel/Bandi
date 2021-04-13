@@ -9,6 +9,8 @@ import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../../utils/BandApiService';
 import FriendApiService from '../../utils/FriendApiService';
 import {getFriendsDataFromApi} from "../../utils/api";
+import { bandi_styles } from "../../styles/bandi_styles";
+
 
 import { connect } from 'react-redux';
 import { fetchBandsForMusician } from '../../actions/band_actions';
@@ -136,7 +138,7 @@ class UserDashboard extends React.Component {
 
         if (this.state.bands) {
             return (
-                <div>
+                <div style={bandi_styles.discover_background}>
                     <Header/>
                     {this.renderCustomizeProfileHeader()}
 

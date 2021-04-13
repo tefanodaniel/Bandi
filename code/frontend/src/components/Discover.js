@@ -67,13 +67,15 @@ class Discover extends React.Component {
     }
   }
 
-
   render() {
     this.setCookieOnLogin()
     if (!Cookies.get('id')) {
         console.log('redirecting since no cookie_id or user_id ');
         return (<Redirect to='/signin'/>);
-    }
+	}
+	
+
+
 	return (
   		<div style={bandi_styles.discover_background}>
         	<Header />

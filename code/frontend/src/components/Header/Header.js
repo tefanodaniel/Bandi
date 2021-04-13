@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { Nav, NavDropdown } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../actions/user_actions";
+import { getUserFriends } from "../../actions/friend_actions";
 import store from "../../store";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import { USER_LOGOUT, CHAT_LOGOUT } from "../../actions/types";
@@ -24,6 +25,7 @@ const Header = () => {
   if(Object.keys(user).length === 0) {
     console.log("getting user here")
     dispatch(getUser(id1))
+    dispatch(getUserFriends(id1))
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);
 
