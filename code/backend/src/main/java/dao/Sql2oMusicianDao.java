@@ -207,6 +207,7 @@ public class Sql2oMusicianDao implements MusicianDao {
         /* TODO Note that this method creates sql queries for search queries with parameters of multiple values
             (genre: "jazz", "blues"), but throws SQL Dao exception. Need to edit to properly handle this case.
             Functions properly for single value search query parameters (genre: "blues", distance: "20").
+            Note that this function returns an empty list if no Musicians match query.
          */
         try (Connection conn = sql2o.open()) {
             // Ensure that the user performing the advanced search provided their user ID
@@ -260,19 +261,19 @@ public class Sql2oMusicianDao implements MusicianDao {
 
                         for (int k = 0; k < query.get(key).length; k++) {
                             if (k == 0) {
-                                tableSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
-                                        "INNER JOIN " + table + " AS g0\n" +
-                                        "ON  g0.id = Rt.gid \n" +
-                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
+                                tableSQL = "SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt\n" +
+                                        "INNER JOIN " + table + " AS t0\n" +
+                                        "ON  t0.id = Rt.tid \n" +
+                                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
                             } else {
                                 // Process queries with multiple values for the same query param:
-                                tableSQL = tableSQL + "INNER JOIN " + table + " AS g" + k + "\n" +
-                                        "ON  g" + k + ".id = Rt.gid \n" +
-                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+                                tableSQL = tableSQL + "INNER JOIN " + table + " AS t" + k + "\n" +
+                                        "ON  t" + k + ".id = Rt.tid \n" +
+                                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
                             }
                         }
                         tableSQL = "WITH " + newTable + " AS (" + tableSQL + ")\n";
-                        filterOn = "R.mid IN (SELECT gid FROM " + newTable + ")\n";
+                        filterOn = "R.mid IN (SELECT tid FROM " + newTable + ")\n";
                     }
                     else {
                         // Create SQL query expression for String attributes:
@@ -306,21 +307,21 @@ public class Sql2oMusicianDao implements MusicianDao {
 
                         for (int k = 0; k < query.get(key).length; k++) {
                             if (k == 0) {
-                                tempSQL = "SELECT rt.gid FROM (SELECT m.id as gID FROM musicians as m) as Rt\n" +
-                                        "INNER JOIN " + table + " AS g0\n" +
-                                        "ON  g0.id = Rt.gid \n" +
-                                        "AND " + "UPPER(g0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
+                                tempSQL = "SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt\n" +
+                                        "INNER JOIN " + table + " AS t0\n" +
+                                        "ON  t0.id = Rt.tid \n" +
+                                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
                             } else {
                                 // Process queries with multiple values for the same query param:
-                                tempSQL = tempSQL + "INNER JOIN " + table + " AS g" + k + "\n" +
-                                        "ON  g" + k + ".id = Rt.gid \n" +
-                                        "AND " + "UPPER(g" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+                                tempSQL = tempSQL + "INNER JOIN " + table + " AS t" + k + "\n" +
+                                        "ON  t" + k + ".id = Rt.tid \n" +
+                                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
                             }
                         }
                         if (tableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
                         else { tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n"; tableFlag = true; }
 
-                        filterOn = filterOn + "AND R.mid IN (SELECT gid FROM " + newTable + ")\n";
+                        filterOn = filterOn + "AND R.mid IN (SELECT tid FROM " + newTable + ")\n";
                     }
                     else {
                         // Append SQL query expression for String attributes:
@@ -675,7 +676,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 resultSQL += "'" + partialMusicians.get(i).getId() + "', ";
             }
         }
-
+        if (partialMusicians.size() == 0) { return partialMusicians; }
         return this.extractMusiciansFromDatabase(resultSQL, conn, "");
     }
 
