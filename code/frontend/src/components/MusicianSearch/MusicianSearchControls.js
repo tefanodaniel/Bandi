@@ -8,7 +8,7 @@ const selectPlaceholderQuery = (state) => {
     let query = {};
 
     if(!state.musician_reducer.query){
-        query.name = 'Search by Name yo';
+        query.name = 'Search by Name';
         query.instrument = 'Search by Instrument';
         query.genre = 'Search by Genre';
         query.distance = 'Search by Distance';
