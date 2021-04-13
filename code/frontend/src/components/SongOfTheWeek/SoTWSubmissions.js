@@ -93,7 +93,7 @@ const SoTWSubmissions = () => {
             return <Row key={index} style={{width: "1000px",marginTop:"50px", height: "200px"}} >{cols}</Row>
             });
         return (
-            <div style={{marginTop:"150px", marginLeft:"100px"}}>
+            <div style={{marginTop:"250px", marginLeft:"100px"}}>
             <Container fluid>
                 {rows}
             </Container>

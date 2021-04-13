@@ -8,6 +8,7 @@ import SoTWSubmissions from "./SoTWSubmissions";
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 import {bandi_styles} from "../../styles/bandi_styles"
+import SotwUserSubmission from "./SotwUserSubmission";
 
 class SongOfTheWeek extends Component {
     constructor(props) {
@@ -27,6 +28,7 @@ class SongOfTheWeek extends Component {
                             </Col>
                             <Col className="col-sm-9 bg-transparent">
                                 <SoTWDesc />
+                                <SotwUserSubmission />
                                 <SoTWSubmissions />
                             </Col>
                         </Row>

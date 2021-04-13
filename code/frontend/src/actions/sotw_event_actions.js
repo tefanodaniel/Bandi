@@ -2,9 +2,10 @@ import {
     LOAD_SOTW_EVENTS_INITIAL,
     LOAD_SOTW_EVENTS_CURRENT,
     LOAD_SOTW_EVENTS_CURRENT_SONG,
-    LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS
+    LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS, LOAD_MUSICIANS_QUERY
 } from './types';
 import SotwEventsApi from "../utils/SotwEventsApiService";
+import SotwSubmissionsApi from "../utils/SotwSubmissionsApiService";
 import SongApi from "../utils/SongApiService";
 
 
@@ -62,3 +63,24 @@ export function getCurrentEventSubmissions(eventId) {
     }
 }
 
+export function newUserSubmission(submission_data) {
+    console.log("Inside newUserSubmission action");
+    return async function createUserSubmission(dispatch, getState) {
+        const response = await SotwSubmissionsApi.create(submission_data)
+        //console.log(response);
+        dispatch({
+            type : CREATE_NEW_USER_SUBMISSION,
+            payload : response.data
+        })
+    }
+}
+
+export function addSubmissionToEvent(info) {
+    return async function linkUserSubmissionToEvent(dispatch, getState) {
+        const response = await SotwEventsApi.addSubmissiontoEvent(info.event_id, info.submission_id);
+        dispatch({
+          type : ADD_SUBMISSION_TO_EVENT,
+          payload : response.data
+        })
+    }
+}
