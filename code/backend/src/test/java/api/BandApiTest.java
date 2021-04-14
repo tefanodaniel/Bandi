@@ -11,27 +11,19 @@ import org.junit.jupiter.api.BeforeAll;
 import java.net.URISyntaxException;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ApiServerTest {
+class BandApiTest {
 
     private final static String BASE_URL = "http://localhost:4567";
     private static final Gson gson = new Gson();
 
     @BeforeAll
     static void runApiServer() throws URISyntaxException {
-        ApiServer.main(null); // run the server
+        ApiServer.main(null);
     }
 
     @AfterAll
     static void stopApiServer() {
         ApiServer.stop();
-    }
-
-    @Test
-    public void getMusiciansWorks() throws UnirestException {
-        final String URL = BASE_URL + "/musicians";
-        HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
-        assertEquals(200, jsonResponse.getStatus());
-        assertNotEquals(0, jsonResponse.getBody().getArray().length());
     }
 
 }
