@@ -12,7 +12,7 @@ import SongApi from "../utils/SongApiService";
 // in the future this should be a list of contextual "featured" musicians pre-any user defined search.
 // also pagination or carousel.
 export async function fetchSotwEvents(dispatch, getState) {
-    console.log("Inside fetchSotwEvents action");
+    //console.log("Inside fetchSotwEvents action");
     const response = await SotwEventsApi.getAll();
     dispatch({
         type : LOAD_SOTW_EVENTS_INITIAL,
@@ -21,11 +21,11 @@ export async function fetchSotwEvents(dispatch, getState) {
 }
 
 export function getCurrentEvent(eventid) {
-    console.log("Inside getCurrentEvent");
+    //console.log("Inside getCurrentEvent");
     return async function fetchSotwEventCurrent(dispatch, getState) {
         //for this iteration I'm hardcoding which event to show.
         //let eventid = "00001fakeeventid";
-        console.log("Inside fetchSotwEventCurrent action");
+        //console.log("Inside fetchSotwEventCurrent action");
         const response = await SotwEventsApi.get(eventid);
         dispatch({
             type : LOAD_SOTW_EVENTS_CURRENT,
@@ -35,14 +35,14 @@ export function getCurrentEvent(eventid) {
 }
 
 export function getCurrentEventSong(songId) {
-    console.log("Inside getCurrentEventSong");
+    //console.log("Inside getCurrentEventSong");
     if(songId===1) {
         return null
     }
     return async function fetchSotwEventCurrentSong(dispatch, getState) {
         //for this iteration I'm hardcoding which event to show.
         //let eventid = "00001fakeeventid";
-        console.log("Inside fetchSotwEventCurrentSong action");
+        //console.log("Inside fetchSotwEventCurrentSong action");
         const response = await SongApi.get(songId);
         dispatch({
             type : LOAD_SOTW_EVENTS_CURRENT_SONG,
@@ -52,7 +52,7 @@ export function getCurrentEventSong(songId) {
 }
 
 export function getCurrentEventSubmissions(eventId) {
-    console.log("Inside getCurrentEventSubmissions");
+    //console.log("Inside getCurrentEventSubmissions");
     return async function fetchSotwEventCurrentSubmissions(dispatch, getState) {
         const response = await SotwEventsApi.readAllSubmissions(eventId);
         dispatch({
