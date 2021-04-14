@@ -28,12 +28,14 @@ class SpeedDateEventApiTest {
     }
 
     @Test
-    @DisplayName("Test that...")
-    public void getMusiciansWorks() throws UnirestException {
-        final String URL = BASE_URL + "/musicians";
+    @DisplayName("Test: get all SDEvents")
+    public void getAllSDEventsWorks() throws UnirestException {
+        final String URL = BASE_URL + "/speeddateevents";
         HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
         assertEquals(200, jsonResponse.getStatus());
         assertNotEquals(0, jsonResponse.getBody().getArray().length());
+
+        System.out.println(jsonResponse.getBody());
     }
 
 }

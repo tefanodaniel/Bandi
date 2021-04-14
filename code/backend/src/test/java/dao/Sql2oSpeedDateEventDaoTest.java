@@ -1,6 +1,8 @@
 package dao;
 
 import model.FriendRequest;
+import model.Musician;
+import model.SpeedDateEvent;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,22 +17,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class Sql2oSpeedDateEventDaoTest {
 
-    // url for the database to use
-    private static String databaseUrl = "";
+    // url for the test database to use
     private static Sql2o sql2o;
+    private static Sql2oSpeedDateEventDao speedDateEventDao;
 
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
+
+        String databaseUrl = System.getenv("TEST_DATABASE_URL");
+
         URI dbUri = new URI(databaseUrl);
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
         String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
                 + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
         sql2o = new Sql2o(dbUrl, username, password);
+
+        speedDateEventDao = new Sql2oSpeedDateEventDao(sql2o);
     }
 
     @BeforeAll
     static void createSampleData() {
+        /*
         Database.createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
         Database.createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
         Database.createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
@@ -38,17 +46,14 @@ public class Sql2oSpeedDateEventDaoTest {
         Database.createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
         Database.createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
         Database.createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
-    }
-
-    @BeforeEach
-    void injectDependency() {
-
+         */
     }
 
     @Test
-    @DisplayName("Test that...")
-    void test() {
-        assertTrue(true);
+    @DisplayName("Test: read all SpeedDateEvents")
+    void testReadAllSDEventsWorks() {
+        List<SpeedDateEvent> SDEvents = speedDateEventDao.readAll();
+        assertNotEquals(0, SDEvents.size());
     }
 
 }
