@@ -41,6 +41,7 @@ class UserDashboard extends React.Component {
     async takeActionOnFriendRequest(request, action) {
         const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
         this.props.fetchFriends(this.props.userInfo.id)
+        this.props.fetchIncoming(this.props.userInfo.id)
         if (action === "accept") {
             alert("You accepted " + request.senderName + "'s friend request!");
         } else if (action === "decline") {
@@ -194,11 +195,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetchFriends: (id) => {
-            console.log("fetching friends after friend request action!")
-            dispatch(getUserFriends(id))
-        },
-        fetchIncoming: () => dispatch(getIncomingFriendRequests("1")),
+        fetchFriends: (id) => dispatch(getUserFriends(id)),
+        fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
         fetchBands: () => dispatch(fetchBandsForMusician("1"))
     }
 }
