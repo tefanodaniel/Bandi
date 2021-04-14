@@ -26,6 +26,8 @@ const Header = () => {
   console.log('user is', user)
   if(Object.keys(user).length === 0) {
     console.log("getting user here")
+    
+    // This should not be located in the header component, but it will be moved later
     dispatch(getUser(id1))
     dispatch(getUserFriends(id1))
     dispatch(getIncomingFriendRequests(id1))

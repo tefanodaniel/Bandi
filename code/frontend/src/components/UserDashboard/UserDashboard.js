@@ -3,7 +3,10 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
+
 import Header from "../Header/Header";
+import SubHeader from "../Header/SubHeader";
+
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../../utils/BandApiService';
 import FriendApiService from '../../utils/FriendApiService';
@@ -21,21 +24,11 @@ class UserDashboard extends React.Component {
         // Define the state for this component
         this.state = {
             id: Cookies.get('id'),
-            bands: []
         }
-
-        const id = Cookies.get("id");
-        this.renderCustomizeProfileHeader = this.renderCustomizeProfileHeader.bind(this);
-
-
     }
 
     componentDidMount() {
-        //const { fetchBandsForMusician } = this.props;
-
-        // fetchBandsForMusician({id: this.state.id});
-        // this.updateFriendPanel();
-
+        this.props.fetchBands(this.state.id);
     }
     
     async takeActionOnFriendRequest(request, action) {
@@ -91,19 +84,9 @@ class UserDashboard extends React.Component {
         }
     }
 
-    renderCustomizeProfileHeader() {
-      return (
-        <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-            <Navbar.Brand className="mx-auto">
-                Customize your Profile
-            </Navbar.Brand>
-        </Navbar>
-      );
-    }
-
-    render() {
-        // Generate a list of band views
-        var bandsList = this.state.bands.map((band) =>
+    renderBandList(bands) {
+        if (bands && bands.length > 0) {
+            var bandsList = bands.map((band) =>
             <div className="card">
                 <div className="card-body">
                     <h5 className="card-title">{band.name}</h5>
@@ -111,21 +94,27 @@ class UserDashboard extends React.Component {
                     <p className="card-text"></p>
                     <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
                 </div>
-            </div>
-        );
+            </div>);
+            return bandsList;
+        } else {
+            return <div/>
+        }
+    }
+
+    render() {
 
         // Get user information from our central redux store, rather than the limited state of this component
         const userInfo = this.props.userInfo;
         const friends = this.props.friends;
         const incoming = this.props.incoming_friend_requests;
         const outgoing = this.props.outgoing_friend_requests;
+        const bands = this.props.bands;
 
-        if (this.state.bands) {
+        if (userInfo) {
             return (
                 <div style={bandi_styles.discover_background}>
                     <Header/>
-                    {this.renderCustomizeProfileHeader()}
-
+                    <SubHeader text="Customize your profile"/>
                     <Tabs>
                         <TabList>
                             <Tab>My Profile</Tab>
@@ -150,7 +139,7 @@ class UserDashboard extends React.Component {
                         </TabPanel>
 
                         <TabPanel>
-                            {bandsList}
+                            {this.renderBandList(bands)}
                             <Button onClick={() => this.props.history.push('/createband')}>Create Band</Button>
                         </TabPanel>
 
@@ -173,20 +162,29 @@ class UserDashboard extends React.Component {
             return (
                 <div>
                     <Header/>
-                    {this.renderCustomizeProfileHeader()}
+                    <SubHeader text="Customize your profile"/>
                     <h3>Coming Soon...</h3>
                 </div>
-
             );
         }
     }
 
 }
 
+/* Redux stuff
+ *
+ * This is how we:
+ *      1) get access to the global store (state shared over the entire app)
+ *      2) get access to the dispatch objects (functions) we can use to modify the global store
+ */
+
+
 function mapStateToProps(state) {
   return {
-    //store: state,
+    // changed so that we only keep the parts of the store that are relevant to UserDashboard
+    // can still access whole store using 'state'
     userInfo: state.user_reducer,
+    bands: state.band_reducer,
     friends: state.friend_reducer.friend_info,
     incoming_friend_requests: state.friend_reducer.incoming_friend_requests,
     outgoing_friend_requests: state.friend_reducer.outgoing_friend_requests
@@ -197,7 +195,7 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchFriends: (id) => dispatch(getUserFriends(id)),
         fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
-        fetchBands: () => dispatch(fetchBandsForMusician("1"))
+        fetchBands: (userID) => dispatch(fetchBandsForMusician({id: userID}))
     }
 }
 

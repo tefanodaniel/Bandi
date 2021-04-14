@@ -30,22 +30,6 @@ export function logout() {
   Cookies.remove('id');
 }
 
-export async function getFriendsDataFromApi(id) {
-    let backend_url = getBackendURL();
-    let type = "friend";
-    setTimeout(() => {console.log("Delaying 1...");}, 1000)
-    let r1 = await axios.get(backend_url + `/friends/${id}`);
-    setTimeout(() => {console.log("Delaying 2...");}, 1000)
-    let r2 = await axios.get(backend_url + `/requests/${type}/in/${id}`)
-    setTimeout(() => {console.log("Delaying 3...");}, 1000)
-    let r3 = await axios.get(backend_url + `/requests/${type}/out/${id}`)
-
-    return {'friends': r1.data, 'incoming': r2.data, 'outgoing': r3.data }
-
-
-}
-
-
 export function chatApiInstance() {
   return axios.create({
     baseURL: "https://api-us.cometchat.io/v2.0/users",
