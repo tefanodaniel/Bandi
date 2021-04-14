@@ -87,4 +87,29 @@ public class Sql2oSpeedDateEventDaoTest {
         assertThrows(DaoException.class, () -> {speedDateEventDao.read(id);});
     }
 
+    @Test
+    @DisplayName("Test: add SpeedDateEvent participant")
+    void addParticipantWorks() {
+        String id = UUID.randomUUID().toString();
+        String musId = "22zcnk76clvox7mifcwgz3tha";
+        SpeedDateEvent SDEvent = speedDateEventDao.create(id, "My Event", "",
+                "", 4, new HashSet<String>());
+        SpeedDateEvent event = speedDateEventDao.add(id, musId);
+        assertTrue(event.getParticipants().contains(musId));
+        speedDateEventDao.delete(id);
+    }
+
+    @Test
+    @DisplayName("Test: remove SpeedDateEvent participant")
+    void removeParticipantWorks() {
+        String id = UUID.randomUUID().toString();
+        String musId = "22zcnk76clvox7mifcwgz3tha";
+        SpeedDateEvent SDEvent = speedDateEventDao.create(id, "My Event", "",
+                "", 4, new HashSet<String>());
+        SpeedDateEvent event = speedDateEventDao.add(id, musId);
+
+        SpeedDateEvent updatedEvent = speedDateEventDao.remove(id, musId);
+        assertFalse(updatedEvent.getParticipants().contains(musId));
+        speedDateEventDao.delete(id);
+    }
 }
