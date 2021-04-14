@@ -7,7 +7,6 @@ import FriendApiService from '../utils/FriendApiService';
 
 
 export function getUserFriends(id) {
-    console.log("Getting user friends");
     return async function fetchFriends(dispatch, getState) {
         const response = await FriendApiService.getUserFriendList(id);
         return dispatch({
@@ -15,25 +14,26 @@ export function getUserFriends(id) {
             payload : response.data
         })
     }
-
 }
 
-export async function fetchIncomingFriendRequests(dispatch, getState) {
-    const recipientID = getState().id;
-    const response = await FriendApiService.getIncomingFriendRequests(recipientID);
-    dispatch({
-        type : LOAD_INCOMING_FRIEND_REQUESTS,
-        payload : response.data
-    })
+export function getIncomingFriendRequests(recipientID) {
+    return async function fetchIncomingFriendRequests(dispatch, getState) {
+        const response = await FriendApiService.getIncomingFriendRequests(recipientID);
+        return dispatch({
+            type : LOAD_INCOMING_FRIEND_REQUESTS,
+            payload : response.data
+        })
+    }
 }
 
-
-export async function fetchOutgoingFriendRequests(dispatch, getState) {
-    const senderID = getState().id;
-    const response = await FriendApiService.getOutgoingFriendRequests(senderID);
-    dispatch({
-        type : LOAD_OUTGOING_FRIEND_REQUESTS,
-        payload : response.data
-    })
+export function getOutgoingFriendRequests(senderID) {
+    return async function fetchOutgoingFriendRequests(dispatch, getState) {
+        const response = await FriendApiService.getOutgoingFriendRequests(senderID);
+        return dispatch({
+            type : LOAD_OUTGOING_FRIEND_REQUESTS,
+            payload : response.data
+        })
+    }
 }
+
 

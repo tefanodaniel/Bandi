@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
@@ -8,7 +7,6 @@ import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 import BandApiService from '../../utils/BandApiService';
 import FriendApiService from '../../utils/FriendApiService';
-import {getFriendsDataFromApi} from "../../utils/api";
 import { bandi_styles } from "../../styles/bandi_styles";
 
 
@@ -43,17 +41,6 @@ class UserDashboard extends React.Component {
 
     }
 
-    updateFriendPanel() {
-        getFriendsDataFromApi(this.state.id).then((res) => {
-            this.setState({
-              friendList: res.friends,
-              incoming_friend_requests: res.incoming,
-              outgoing_friend_requests: res.outgoing
-            });
-          });
-    }
-
-
     renderFriendListForMusician(friends) {
         if (friends.length > 0) {            
             const listItems = friends.map((friend) =>
@@ -78,8 +65,8 @@ class UserDashboard extends React.Component {
     }
 
 
-    renderIncomingRequestList() {
-        const listItems = this.state.incoming_friend_requests.map((request) =>
+    renderIncomingRequestList(incoming) {
+        const listItems = incoming.map((request) =>
         <div>
             <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
             <Button onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
@@ -90,8 +77,8 @@ class UserDashboard extends React.Component {
         );
     }
 
-    renderOutgoingRequestList() {
-        const listItems = this.state.outgoing_friend_requests.map((request) =>
+    renderOutgoingRequestList(outgoing) {
+        const listItems = outgoing.map((request) =>
         <li>{request.recipientName}</li>
         );
         return (
@@ -125,6 +112,8 @@ class UserDashboard extends React.Component {
         // Get user information from our central redux store, rather than the limited state of this component
         const userInfo = this.props.store.user_reducer;
         const friends = this.props.store.friend_reducer.friend_info;
+        const incoming = this.props.store.friend_reducer.incoming_friend_requests;
+        const outgoing = this.props.store.friend_reducer.outgoing_friend_requests;
 
         if (this.state.bands) {
             return (
@@ -162,12 +151,12 @@ class UserDashboard extends React.Component {
 
 
                         <TabPanel>
-                            <h3>My friends ({this.state.friendList.length})</h3>
+                            <h3>My friends ({friends?.length})</h3>
                             {this.renderFriendListForMusician(friends)}
-                            <h3>Friend requests ({this.state.incoming_friend_requests?.length})</h3>
-                            {this.renderIncomingRequestList()}
-                            <h3>Pending friend requests ({this.state.outgoing_friend_requests?.length})</h3>
-                            {this.renderOutgoingRequestList()}
+                            <h3>Friend requests ({incoming?.length})</h3>
+                            {this.renderIncomingRequestList(incoming)}
+                            <h3>Pending friend requests ({outgoing?.length})</h3>
+                            {this.renderOutgoingRequestList(outgoing)}
 
                         </TabPanel>
 
