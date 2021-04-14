@@ -65,4 +65,14 @@ public class Sql2oSpeedDateEventDaoTest {
         assertEquals("Speed-Dating Part 1", SDEvent.getName());
     }
 
+    @Test
+    @DisplayName("Test: Create SpeedDateEvent")
+    void testCreateSDEventWorks() {
+        String id = UUID.randomUUID().toString();
+        SpeedDateEvent SDEvent = speedDateEventDao.create(id, "Test Event", "",
+                "", 4, new HashSet<String>());
+        assertEquals("Test Event", SDEvent.getName());
+        speedDateEventDao.delete(id);
+    }
+
 }

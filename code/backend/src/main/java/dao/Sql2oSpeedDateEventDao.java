@@ -1,6 +1,7 @@
 package dao;
 
 import exceptions.DaoException;
+import model.Band;
 import model.SpeedDateEvent;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
@@ -130,6 +131,19 @@ public class Sql2oSpeedDateEventDao {
             return e;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read an Event with id " + id, ex);
+        }
+    }
+
+    public SpeedDateEvent delete(String id) throws DaoException {
+        String sql = "WITH deleted AS("
+                +"DELETE FROM SpeedDateEvents WHERE id = :id RETURNING *"
+                + ") SELECT * FROM deleted;";
+        try (Connection conn = sql2o.open()) {
+            return conn.createQuery(sql)
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(SpeedDateEvent.class);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to delete SpeedDateEvent", ex);
         }
     }
 
