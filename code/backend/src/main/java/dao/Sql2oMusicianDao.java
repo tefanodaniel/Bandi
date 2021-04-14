@@ -287,7 +287,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                         String tempSQL = tableQueries[1];
 
                         if (multiValTableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
-                        else { tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n"; tableFlag = true; }
+                        else { tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n"; multiValTableFlag = true; }
 
                         filterOn = filterOn + "AND R.mid IN (SELECT tid FROM " + newTable + ")\n";
                     }
@@ -326,11 +326,19 @@ public class Sql2oMusicianDao implements MusicianDao {
 
             // Example final filterSQL queries:
             // case: distFlag && additionalQFlag
-            // filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
-            //                "LEFT JOIN instruments as I ON R.MID=I.id\n" +
-            //                "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
-            //                "WHERE distance <=" 5000 AND UPPER(genre) LIKE '%ROCK%' AND UPPER(experience) " +
-            //                "LIKE '%EXPERT%' AND admin = false ORDER BY distance;";
+            //filterSQL = "WITH manyInstruments AS (SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt
+            //              INNER JOIN instruments AS t0
+            //              ON  t0.id = Rt.tid
+            //              AND UPPER(t0.instrument) LIKE '%VOCALS%'
+            //              INNER JOIN instruments AS t1
+            //              ON  t1.id = Rt.tid
+            //              AND UPPER(t1.instrument) LIKE '%GUITAR%')
+            //              SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R
+            //              LEFT JOIN instruments as I ON R.MID=I.id
+            //              LEFT JOIN musiciangenres as G ON R.MID=G.id
+            //              WHERE distance <=1500
+            //              AND R.mid IN (SELECT tid FROM manyInstruments)
+            //              ORDER BY distance;";
             //
             // case: distFlag && !additionalQFlag
             // filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
@@ -339,11 +347,25 @@ public class Sql2oMusicianDao implements MusicianDao {
             //                "WHERE distance <=" 5000 ORDER BY distance;";
             //
             // case: no distance advanced search query
-            // filterSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
-            //                        "LEFT JOIN instruments as I ON R.MID=I.id\n" +
-            //                        "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
-            //                        "WHERE UPPER(genre) LIKE '%ROCK%' AND UPPER(experience) LIKE '%EXPERT%'" +
-            //                        " AND admin = false AND R.MID <> '00001fakeid';";
+            // filterSQL = "WITH manyGenres AS (SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt
+            //              INNER JOIN musiciangenres AS t0 ON  t0.id = Rt.tid
+            //              AND UPPER(t0.genre) LIKE '%ROCK%'
+            //              INNER JOIN musiciangenres AS t1 ON  t1.id = Rt.tid
+            //              AND UPPER(t1.genre) LIKE '%PROGRESSIVE%')
+            //              , manyInstruments AS (SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt
+            //              INNER JOIN instruments AS t0
+            //              ON  t0.id = Rt.tid
+            //              AND UPPER(t0.instrument) LIKE '%VOCALS%'
+            //              INNER JOIN instruments AS t1
+            //              ON  t1.id = Rt.tid
+            //              AND UPPER(t1.instrument) LIKE '%GUITAR%')
+            //              SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R
+            //              LEFT JOIN instruments as I ON R.MID=I.id
+            //              LEFT JOIN musiciangenres as G ON R.MID=G.id
+            //              WHERE R.mid IN (SELECT tid FROM manyGenres)
+            //              AND admin = true
+            //              AND R.mid IN (SELECT tid FROM manyInstruments)
+            //              AND R.MID <> '00001fakeid';";
 
             return getCorrespondingMusicians(conn, filterSQL, resultSQL);
 
