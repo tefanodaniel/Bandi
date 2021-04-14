@@ -203,10 +203,9 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     @Override
     public List<Musician> readAll(Map<String, String[]> query) throws DaoException, ApiError {
-        // TODO: re-implement? Yes -- DONE FOR NOW. See comment below.
-        /* TODO Note that this method creates sql queries for search queries with parameters of multiple values
-            (genre: "jazz", "blues"), but throws SQL Dao exception. Need to edit to properly handle this case.
-            Functions properly for single value search query parameters (genre: "blues", distance: "20").
+        // TODO: re-implement? DONE. See comment below.
+        /*  This method can now handle creating sql queries for search queries with parameters of multiple
+            values (genre: "jazz", "blues").
             Note that this function returns an empty list if no Musicians match query.
          */
         try (Connection conn = sql2o.open()) {
@@ -236,10 +235,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             String filterOn = "";
 
             String tableSQL = "";
-            boolean tableFlag = false;
-
-            String instrumentSQL = "";
-            boolean instrumentFlag = false;
+            boolean multiValTableFlag = false;
 
             // Locate first query parameter that is not distance or id:
             int firstKeyIndex;
@@ -252,26 +248,13 @@ public class Sql2oMusicianDao implements MusicianDao {
                         filterOn = key + " = " + query.get(key)[0] + "\n";
                     }
                     else if (key.equals("genre") || key.equals("instrument")) {
-                        tableFlag = true;
-                        String table;
-                        String newTable;
+                        // Create SQL query expression for tables with multiple values
+                        multiValTableFlag = true;
 
-                        if (key.equals("genre")) { table = "musiciangenres"; newTable = "manyGenres";}
-                        else { table = "instruments"; newTable = "manyInstruments";}
+                        String[] tableQueries = multiValTableQueries(key, query);
+                        String newTable = tableQueries[0];
+                        tableSQL = tableQueries[1];
 
-                        for (int k = 0; k < query.get(key).length; k++) {
-                            if (k == 0) {
-                                tableSQL = "SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt\n" +
-                                        "INNER JOIN " + table + " AS t0\n" +
-                                        "ON  t0.id = Rt.tid \n" +
-                                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
-                            } else {
-                                // Process queries with multiple values for the same query param:
-                                tableSQL = tableSQL + "INNER JOIN " + table + " AS t" + k + "\n" +
-                                        "ON  t" + k + ".id = Rt.tid \n" +
-                                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
-                            }
-                        }
                         tableSQL = "WITH " + newTable + " AS (" + tableSQL + ")\n";
                         filterOn = "R.mid IN (SELECT tid FROM " + newTable + ")\n";
                     }
@@ -298,27 +281,12 @@ public class Sql2oMusicianDao implements MusicianDao {
                         filterOn = filterOn + " AND " + key + " = " + query.get(key)[0] + "\n";
                     }
                     else if (key.equals("genre")|| key.equals("instrument")) {
-                        String table;
-                        String newTable;
-                        String tempSQL = "";
+                        // Create SQL query expression for tables with multiple values
+                        String[] tableQueries = multiValTableQueries(key, query);
+                        String newTable = tableQueries[0];
+                        String tempSQL = tableQueries[1];
 
-                        if (key.equals("genre")) { table = "musiciangenres"; newTable = "manyGenres";}
-                        else { table = "instruments"; newTable = "manyInstruments";}
-
-                        for (int k = 0; k < query.get(key).length; k++) {
-                            if (k == 0) {
-                                tempSQL = "SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt\n" +
-                                        "INNER JOIN " + table + " AS t0\n" +
-                                        "ON  t0.id = Rt.tid \n" +
-                                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
-                            } else {
-                                // Process queries with multiple values for the same query param:
-                                tempSQL = tempSQL + "INNER JOIN " + table + " AS t" + k + "\n" +
-                                        "ON  t" + k + ".id = Rt.tid \n" +
-                                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
-                            }
-                        }
-                        if (tableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
+                        if (multiValTableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
                         else { tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n"; tableFlag = true; }
 
                         filterOn = filterOn + "AND R.mid IN (SELECT tid FROM " + newTable + ")\n";
