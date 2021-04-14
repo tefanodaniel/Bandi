@@ -39,22 +39,12 @@ class UserDashboard extends React.Component {
         const { fetchBandsForMusician } = this.props;
 
         fetchBandsForMusician({id: this.state.id});
-        this.updateFriendPanel();
+        // this.updateFriendPanel();
 
-        /*
-        getFriendsDataFromApi(this.state.id)
-            .then(axios.spread((r1, r2, r3) => {
-                this.setState({
-                    friendList: r1.data,
-                    incoming_friend_requests: r2.data,
-                    outgoing_friend_requests: r3.data
-                });
-            })).catch((error) => console.log(error)) */
     }
 
     updateFriendPanel() {
         getFriendsDataFromApi(this.state.id).then((res) => {
-            console.log(res);
             this.setState({
               friendList: res.friends,
               incoming_friend_requests: res.incoming,
@@ -64,18 +54,21 @@ class UserDashboard extends React.Component {
     }
 
 
-    renderFriendListForMusician() {
-        const listItems = this.state.friendList.map((friend) =>
-        <li key={friend["id"]}>{friend["name"]}</li>
-        );
-        return (
-            <ul>{listItems}</ul>
-        );
+    renderFriendListForMusician(friends) {
+        if (friends.length > 0) {            
+            const listItems = friends.map((friend) =>
+            <li key={friend["id"]}>{friend["name"]}</li>
+            );
+            return (
+                <ul>{listItems}</ul>
+            );
+        } else {
+            return <ul></ul>
+        }
     }
 
     async takeActionOnFriendRequest(request, action) {
         const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
-        console.log("Response from action on friend request ", response)
         this.updateFriendPanel();
         if (action === "accept") {
             alert("You accepted " + request.senderName + "'s friend request!");
@@ -86,7 +79,6 @@ class UserDashboard extends React.Component {
 
 
     renderIncomingRequestList() {
-        console.log(this.state.incoming_friend_requests)
         const listItems = this.state.incoming_friend_requests.map((request) =>
         <div>
             <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
@@ -132,9 +124,7 @@ class UserDashboard extends React.Component {
 
         // Get user information from our central redux store, rather than the limited state of this component
         const userInfo = this.props.store.user_reducer;
-        console.log('here here', userInfo);
-
-        console.log(this.state)
+        const friends = this.props.store.friend_reducer.friend_info;
 
         if (this.state.bands) {
             return (
@@ -173,7 +163,7 @@ class UserDashboard extends React.Component {
 
                         <TabPanel>
                             <h3>My friends ({this.state.friendList.length})</h3>
-                            {this.renderFriendListForMusician()}
+                            {this.renderFriendListForMusician(friends)}
                             <h3>Friend requests ({this.state.incoming_friend_requests?.length})</h3>
                             {this.renderIncomingRequestList()}
                             <h3>Pending friend requests ({this.state.outgoing_friend_requests?.length})</h3>
