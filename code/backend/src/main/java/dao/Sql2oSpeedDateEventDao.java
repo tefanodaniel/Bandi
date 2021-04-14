@@ -118,6 +118,10 @@ public class Sql2oSpeedDateEventDao {
             List<Map<String, Object>> queryResults =
                     conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
+            if (queryResults.size() == 0) {
+                throw new Sql2oException();
+            }
+
             String eventId = (String) queryResults.get(0).get("id");
             String name = (String) queryResults.get(0).get("name");
             String link = (String) queryResults.get(0).get("link");

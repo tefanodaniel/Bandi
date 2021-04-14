@@ -1,5 +1,6 @@
 package dao;
 
+import exceptions.DaoException;
 import model.FriendRequest;
 import model.Musician;
 import model.SpeedDateEvent;
@@ -73,6 +74,17 @@ public class Sql2oSpeedDateEventDaoTest {
                 "", 4, new HashSet<String>());
         assertEquals("Test Event", SDEvent.getName());
         speedDateEventDao.delete(id);
+    }
+
+    @Test
+    @DisplayName("Test: Delete SpeedDateEvent")
+    void testDeleteSDEventWorks() {
+        String id = UUID.randomUUID().toString();
+        SpeedDateEvent SDEvent = speedDateEventDao.create(id, "Delete Event", "",
+                "", 4, new HashSet<String>());
+
+        speedDateEventDao.delete(id);
+        assertThrows(DaoException.class, () -> {speedDateEventDao.read(id);});
     }
 
 }

@@ -47,4 +47,16 @@ class SpeedDateEventApiTest {
         assertNotEquals(0, jsonResponse.getBody().getArray().length());
     }
 
+    @Test
+    @DisplayName("Test: Put participant in SDEvent")
+    public void putParticipantWorks() throws UnirestException {
+        // event ids are randomly generated, so set manually
+        String eventId = "7edbe0e7-8daf-4e73-8918-95766bd87183";
+        String musId = "22zcnk76clvox7mifcwgz3tha";
+        final String URL = BASE_URL + "/speeddateevents/" + eventId + "/" + musId;
+        HttpResponse<JsonNode> jsonResponse = Unirest.put(URL).asJson();
+        assertEquals(200, jsonResponse.getStatus());
+        assertNotEquals(0, jsonResponse.getBody().getArray().length());
+    }
+
 }
