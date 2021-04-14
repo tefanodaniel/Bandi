@@ -5,11 +5,15 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
+import model.SpeedDateEvent;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpeedDateEventApiTest {
@@ -71,6 +75,25 @@ class SpeedDateEventApiTest {
         HttpResponse<JsonNode> jsonResponse = Unirest.delete(URL).asJson();
         assertEquals(200, jsonResponse.getStatus());
         assertNotEquals(0, jsonResponse.getBody().getArray().length());
+    }
+
+    @Test
+    @DisplayName("Test: Post and Delete SDEvent")
+    public void postDeleteSDEventWorks() throws UnirestException {
+        // event ids are randomly generated, so set manually
+        String eventId = UUID.randomUUID().toString();
+        SpeedDateEvent SDEvent = new SpeedDateEvent(eventId, "Posted Event!");
+
+        final String URL = BASE_URL + "/speeddateevents";
+        HttpResponse<JsonNode> jsonResponse = Unirest.post(URL)
+                .body(gson.toJson(SDEvent))
+                .asJson();
+        assertEquals(201, jsonResponse.getStatus());
+        assertNotEquals(0, jsonResponse.getBody().getArray().length());
+
+        final String deleteURL = BASE_URL + "/speeddateevents/" + eventId;
+        HttpResponse<JsonNode> deleteResponse = Unirest.delete(deleteURL).asJson();
+        assertNotEquals(0, deleteResponse.getBody().getArray().length());
     }
 
 }
