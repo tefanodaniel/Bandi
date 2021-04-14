@@ -56,4 +56,13 @@ public class Sql2oSpeedDateEventDaoTest {
         assertNotEquals(0, SDEvents.size());
     }
 
+    @Test
+    @DisplayName("Test: read SpeedDateEvent")
+    void testReadSDEventWorks() {
+        // ids are randomly generated, so be sure to set manually
+        String id = "7edbe0e7-8daf-4e73-8918-95766bd87183";
+        SpeedDateEvent SDEvent = speedDateEventDao.read(id);
+        assertEquals("Speed-Dating Part 1", SDEvent.getName());
+    }
+
 }

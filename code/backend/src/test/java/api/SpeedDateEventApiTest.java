@@ -34,8 +34,17 @@ class SpeedDateEventApiTest {
         HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
         assertEquals(200, jsonResponse.getStatus());
         assertNotEquals(0, jsonResponse.getBody().getArray().length());
+    }
 
-        System.out.println(jsonResponse.getBody());
+    @Test
+    @DisplayName("Test: get SDEvent by id")
+    public void getSDEventWorks() throws UnirestException {
+        // ids are randomly generated, so set manually
+        String eventId = "7edbe0e7-8daf-4e73-8918-95766bd87183";
+        final String URL = BASE_URL + "/speeddateevents/" + eventId;
+        HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
+        assertEquals(200, jsonResponse.getStatus());
+        assertNotEquals(0, jsonResponse.getBody().getArray().length());
     }
 
 }
