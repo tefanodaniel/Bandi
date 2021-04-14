@@ -5,13 +5,14 @@ import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import java.net.URISyntaxException;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ApiServerTest {
+class SpeedDateEventApiTest {
 
     private final static String BASE_URL = "http://localhost:4567";
     private static final Gson gson = new Gson();
@@ -27,6 +28,7 @@ class ApiServerTest {
     }
 
     @Test
+    @DisplayName("Test that...")
     public void getMusiciansWorks() throws UnirestException {
         final String URL = BASE_URL + "/musicians";
         HttpResponse<JsonNode> jsonResponse = Unirest.get(URL).asJson();
