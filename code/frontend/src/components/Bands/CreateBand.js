@@ -17,7 +17,8 @@ class CreateBand extends React.Component {
             name: '',
             capacity: 0,
             genres: [],
-            members: []
+            members: [],
+            errorText: ''
         }
 
         this.submit_form = this.submit_form.bind(this);
@@ -27,6 +28,12 @@ class CreateBand extends React.Component {
 
     submit_form() {
         // post band
+
+        if (this.state.name == '' || this.state.genres.length == 0) {
+            this.setState({errorText : 'Error: Please fill out all fields'})
+            return;
+        }
+
         BandApi.create({
                 id : "foo",
                 name: this.state.name,
@@ -36,12 +43,10 @@ class CreateBand extends React.Component {
             .then(res => {
                 console.log(`statusCode: ${res.statusCode}`)
                 console.log(res)
-
             })
             .catch(error => {
                 console.error(error)
             })
-
         this.props.history.push('/myprofile')
     }
 
@@ -85,6 +90,8 @@ class CreateBand extends React.Component {
                             Create a new Band!
                         </Navbar.Brand>
                     </Navbar>
+
+                    <h3>{this.state.errorText}</h3>
 
                     <Form onSubmit={"nothing"}>
                         <Form.Group controlId="profileForm.name">
