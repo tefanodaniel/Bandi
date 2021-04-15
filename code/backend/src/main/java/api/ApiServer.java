@@ -119,12 +119,12 @@ public class ApiServer {
         get("/adminstatus/:id", MusicianController.getAdminStatus);
         put("/adminstatus/:id", MusicianController.putAdminStatus);
 
-        // Friend Request routes
         get("/friends/:id", RequestController.getMusicianFriends);
-        get("/requests/in/:recipientid", RequestController.getIncomingPendingRequests);
-        get("/requests/out/:senderid", RequestController.getOutgoingPendingRequests);
-        post("/request/:senderid/:recipientid", RequestController.postFriendRequest);
-        delete("request/:senderid/:recipientid/:action", RequestController.respondToRequest);
+        // (Friend, Band) request routes
+        get("/requests/:type/in/:recipientid", RequestController.getIncomingPendingRequests);
+        get("/requests/:type/out/:senderid", RequestController.getOutgoingPendingRequests);
+        post("/request/:type/:senderid/:recipientid", RequestController.postRequest);
+        delete("request/:type/:senderid/:recipientid/:action", RequestController.respondToRequest);
 
         // Band routes
         get("/bands", BandController.getAllBands);

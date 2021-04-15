@@ -110,7 +110,7 @@ const MusicianSearchResults = () => {
         let fil_musicians_mod =JSON.parse(JSON.stringify(fil_musicians));
         let index = null;
         index = fil_musicians_mod.findIndex(user => {
-            if(user.id === logged_user.id) {
+            if(user.id === logged_user?.id) {
                 return user
             }
         });
@@ -121,7 +121,7 @@ const MusicianSearchResults = () => {
                 const ref = React.createRef();
                 return (
                     <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
+                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
                     </Col>
                 );
             });

@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
 import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
-import BandApiService from '../../utils/BandApiService';
+import FriendApiService from '../../utils/FriendApiService';
 
 class MusicianDetails extends React.Component {
     constructor(props) {
@@ -53,17 +53,15 @@ class MusicianDetails extends React.Component {
 
 
     addFriend = () => {
-        BandApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
+        FriendApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
             alert("A request to connect was sent to " + this.state.name + ".")
         );
     }
 
     renderConnectButton = () => {
-        // remove question mark once pending_outgoing_requests confirmed to exist
-        /*
-        if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
-            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
-        } else { return <Button disabled>Pending...</Button> };*/
+        // TODO: Configure global store to hold pending friend request information. That way, we can determine
+        // whether we need to allow the user to send a friend request to this musician or not.
+
         if (true) {
             return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
         } else { return <Button disabled>Pending...</Button> };

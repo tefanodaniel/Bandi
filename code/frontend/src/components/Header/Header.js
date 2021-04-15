@@ -12,7 +12,6 @@ const Header = () => {
   const dispatch = useDispatch();
   let user = useSelector((state) => state.user_reducer, shallowEqual);
 
-
   const handleLogout = () => {
     // Log out of chat
     chatLogout();
@@ -32,7 +31,7 @@ const Header = () => {
               banDi
             </Navbar.Brand>
             <Navbar.Brand className="mx-auto">
-              Welcome, {user.name}!
+              Welcome, {user?.name}!
             </Navbar.Brand>
 
             <div className={styles.navDropdownTitle}>

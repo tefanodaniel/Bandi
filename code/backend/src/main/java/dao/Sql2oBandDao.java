@@ -70,7 +70,6 @@ public class Sql2oBandDao implements BandDao {
                 + "WHERE R.uBID=:id";
         try (Connection conn = sql2o.open()) {
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
-
             // Extract non-list attributes
             String bandId = (String) queryResults.get(0).get("id");
             String name = (String) queryResults.get(0).get("name");
@@ -81,7 +80,6 @@ public class Sql2oBandDao implements BandDao {
                 b.addGenre((String) row.get("genre"));
                 b.addMember((String) row.get("member"));
             }
-
             return b;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read a Band with id " + id, ex);
