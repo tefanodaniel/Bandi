@@ -50,7 +50,7 @@ public interface BandDao {
     List<Band> readAll(String musicianId) throws DaoException;
 
     /**
-     * Read all bands from the database with genre containing query map.
+     * Read all bands from the database with search filters containing query map.
      *
      * @param query map of query parameters
      * @return all Bands retrieved

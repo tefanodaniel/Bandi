@@ -112,6 +112,11 @@ public class Sql2oBandDao implements BandDao {
         }
     }
 
+    /**
+     * Note:
+     * This method returns an empty list when no bands match the search filters.
+     * This method processes "capacity" filter as band max capacity.
+     **/
     @Override
     public List<Band> readAll(Map<String, String[]> query) throws DaoException {
         try (Connection conn = sql2o.open()) {
@@ -138,7 +143,10 @@ public class Sql2oBandDao implements BandDao {
                     String newTable = tableQueries[0];
                     String tempSQL = tableQueries[1];
 
-                    if (multiValTableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
+                    // create new table alias
+                    if (multiValTableFlag) {
+                            tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n";
+                    }
                     else {
                         tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n";
                         multiValTableFlag = true;
@@ -170,9 +178,7 @@ public class Sql2oBandDao implements BandDao {
                     }
                 }
             }
-            //fixing^
 
-            //String sql = "SELECT id, name, genre, size, capacity FROM Bands WHERE " + filterOn;
             String filterSQL = tableSQL + "SELECT * FROM (SELECT b.id as uBID, * FROM bands as b) as R\n"
                     + "LEFT JOIN BandMembers as BM ON R.uBID=BM.band\n"
                     + "LEFT JOIN BandGenres as BG ON R.uBID=BG.id\n"
@@ -184,6 +190,8 @@ public class Sql2oBandDao implements BandDao {
                     + "WHERE R.uBID IN (";
 
             List<Band> partialBands = this.extractBandsFromDatabase(filterSQL, conn);
+            if (partialBands.size() == 0) { return partialBands; }
+
             for (int i=0; i < partialBands.size(); i++) {
                 if (i == partialBands.size() - 1) {
                     resultSQL += "'" + partialBands.get(i).getId() + "');";
@@ -195,38 +203,6 @@ public class Sql2oBandDao implements BandDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read bands from the database by filters", ex);
         }
-    }
-
-    private String[] multiValTableQueries(String key, Map<String, String[]> query) {
-        String table;
-        String newTable;
-        String field;
-        String newTableSQL = "";
-
-        if (key.equals("genre")) {
-            table = "bandgenres";  // table from database
-            newTable = "manyGenres";
-            field = "id";
-        }
-        else {
-            table = "bandmembers";
-            newTable = "manymembers";
-            field = "band";
-        }
-
-        for (int k = 0; k < query.get(key).length; k++) {
-            if (k == 0) {
-                newTableSQL = "SELECT tbid FROM (SELECT b.id as tBID FROM bands as b) as Rt\n" +
-                        "INNER JOIN " + table + " AS t0 ON  t0." + field + "= Rt.tbid\n" +
-                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
-            } else {
-                // Process queries with multiple values for the same query param:
-                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + " ON  t" + k + "." + field + " = Rt.tbid\n" +
-                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
-            }
-        }
-
-        return new String[]{newTable, newTableSQL};
     }
 
     @Override
@@ -317,6 +293,44 @@ public class Sql2oBandDao implements BandDao {
             b.addMember(member);
         }
         return new ArrayList<Band>(bands.values());
+    }
+
+    /**
+     * Join tables and create aliases for multi-value attribute tables.
+     * @param key The SQL search query filter
+     * @param query The user's search query map
+     * @return the new alias name and sql query
+     */
+    private String[] multiValTableQueries(String key, Map<String, String[]> query) {
+        String table;
+        String newTable;
+        String field;
+        String newTableSQL = "";
+
+        if (key.equals("genre")) {
+            table = "bandgenres";  // table from database
+            newTable = "manyGenres";
+            field = "id";
+        }
+        else {
+            table = "bandmembers";
+            newTable = "manymembers";
+            field = "band"; // band id field
+        }
+
+        for (int k = 0; k < query.get(key).length; k++) {
+            if (k == 0) {
+                newTableSQL = "SELECT tbid FROM (SELECT b.id as tBID FROM bands as b) as Rt\n" +
+                        "INNER JOIN " + table + " AS t0 ON  t0." + field + "= Rt.tbid\n" +
+                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
+            } else {
+                // Process queries with multiple values for the same query param:
+                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + " ON  t" + k + "." + field + " = Rt.tbid\n" +
+                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+            }
+        }
+
+        return new String[]{newTable, newTableSQL};
     }
 
 }
