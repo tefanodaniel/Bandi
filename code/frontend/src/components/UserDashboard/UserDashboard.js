@@ -23,7 +23,7 @@ class UserDashboard extends React.Component {
             id: Cookies.get('id'),
         }
     }
-    
+
     async takeActionOnFriendRequest(request, action) {
         const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
         this.props.fetchFriends(this.props.userInfo.id)
@@ -34,9 +34,9 @@ class UserDashboard extends React.Component {
             alert("You declined " + request.senderName + "'s friend request!");
         }
     }
-    
+
     renderFriendListForMusician(friends) {
-        if (friends && friends.length > 0) {            
+        if (friends && friends.length > 0) {
             const listItems = friends.map((friend) =>
             <li key={friend["id"]}>{friend["name"]}</li>
             );
@@ -116,17 +116,17 @@ class UserDashboard extends React.Component {
                         </TabList>
 
                         <TabPanel>
-                            <h2>Name: {userInfo.name}</h2>
-                            <h4>Location: {userInfo.location === "NULL" ? "" : userInfo.location}</h4>
-                            <h4>Experience: {userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
+                            <h2>Name: {userInfo?.name}</h2>
+                            <h4>Location: {userInfo?.location === "NULL" ? "" : userInfo?.location}</h4>
+                            <h4>Experience: {userInfo?.experience === "NULL" ? "" : userInfo?.experience}</h4>
                             <div>
-                                <h4>Instruments: {userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
+                                <h4>Instruments: {userInfo?.instruments ? userInfo.instruments.join(", ") : ""}</h4>
                             </div>
                             <div>
-                                <h4>Genres: {userInfo.genres ? userInfo.genres.join(", ") : ""}</h4>
+                                <h4>Genres: {userInfo?.genres ? userInfo.genres.join(", ") : ""}</h4>
                             </div>
                             <div>
-                                <h4>Links: {userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
+                                <h4>Links: {userInfo?.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
                             </div>
                             <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
                         </TabPanel>
