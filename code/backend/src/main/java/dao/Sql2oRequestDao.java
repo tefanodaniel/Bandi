@@ -40,7 +40,7 @@ public class Sql2oRequestDao implements RequestDao {
             sql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname, type) " +
                     "VALUES(:senderid, :sendername, :recipientid, :recipientname, :type);";
         } else {
-            sql = ""; // should never happen
+            sql = null;
         }
 
         try (Connection conn = sql2o.open()) {
