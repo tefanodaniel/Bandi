@@ -326,12 +326,10 @@ public class Sql2oMusicianDao implements MusicianDao {
 
             // Example final filterSQL queries:
             // case: distFlag && additionalQFlag
-            //filterSQL = "WITH manyInstruments AS (SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt
-            //              INNER JOIN instruments AS t0
-            //              ON  t0.id = Rt.tid
+            // filterSQL = "WITH manyInstruments AS (SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt
+            //              INNER JOIN instruments AS t0 ON  t0.id = Rt.tid
             //              AND UPPER(t0.instrument) LIKE '%VOCALS%'
-            //              INNER JOIN instruments AS t1
-            //              ON  t1.id = Rt.tid
+            //              INNER JOIN instruments AS t1 ON  t1.id = Rt.tid
             //              AND UPPER(t1.instrument) LIKE '%GUITAR%')
             //              SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R
             //              LEFT JOIN instruments as I ON R.MID=I.id
@@ -353,11 +351,9 @@ public class Sql2oMusicianDao implements MusicianDao {
             //              INNER JOIN musiciangenres AS t1 ON  t1.id = Rt.tid
             //              AND UPPER(t1.genre) LIKE '%PROGRESSIVE%')
             //              , manyInstruments AS (SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt
-            //              INNER JOIN instruments AS t0
-            //              ON  t0.id = Rt.tid
+            //              INNER JOIN instruments AS t0 ON  t0.id = Rt.tid
             //              AND UPPER(t0.instrument) LIKE '%VOCALS%'
-            //              INNER JOIN instruments AS t1
-            //              ON  t1.id = Rt.tid
+            //              INNER JOIN instruments AS t1 ON  t1.id = Rt.tid
             //              AND UPPER(t1.instrument) LIKE '%GUITAR%')
             //              SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R
             //              LEFT JOIN instruments as I ON R.MID=I.id
