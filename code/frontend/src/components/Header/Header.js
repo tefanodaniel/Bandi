@@ -12,7 +12,6 @@ const Header = () => {
   const dispatch = useDispatch();
   let user = useSelector((state) => state.user_reducer, shallowEqual);
 
-
   const handleLogout = () => {
     // Log out of chat
     chatLogout();

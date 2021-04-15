@@ -13,7 +13,6 @@ import config from './config';
 
 import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
-
 import {fetchSDEvents} from "./actions/sd_event_actions";
 import {fetchSotwEvents} from "./actions/sotw_event_actions";
 

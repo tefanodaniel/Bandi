@@ -1,21 +1,22 @@
 package dao;
 import exceptions.DaoException;
-import model.FriendRequest;
+import model.Request;
+import model.Request;
 
 import java.util.List;
 
 public interface RequestDao {
 
-    FriendRequest createRequest(String senderID, String senderName,  String recipientID, String recipientName) throws DaoException;
+    Request createRequest(String senderID, String senderName, String recipientID, String recipientName, String type) throws DaoException;
 
-    List<FriendRequest> readAllFrom(String senderID) throws DaoException;
+    List<Request> readAllFrom(String senderID, String type) throws DaoException;
 
-    List<FriendRequest> readAllTo(String recipientID) throws DaoException;
+    List<Request> readAllTo(String recipientID, String type) throws DaoException;
 
-    FriendRequest read(String senderID, String recipientID) throws DaoException;
+    Request read(String senderID, String recipientID, String type) throws DaoException;
 
-    FriendRequest acceptRequest(String senderID, String recipientID) throws DaoException;
+    Request acceptRequest(String senderID, String recipientID, String type) throws DaoException;
 
-    FriendRequest declineRequest(String senderID, String recipientID) throws DaoException;
+    Request declineRequest(String senderID, String recipientID, String type) throws DaoException;
 
 }
