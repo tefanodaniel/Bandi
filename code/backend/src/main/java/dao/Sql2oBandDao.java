@@ -321,11 +321,11 @@ public class Sql2oBandDao implements BandDao {
         for (int k = 0; k < query.get(key).length; k++) {
             if (k == 0) {
                 newTableSQL = "SELECT tbid FROM (SELECT b.id as tBID FROM bands as b) as Rt\n" +
-                        "INNER JOIN " + table + " AS t0 ON  t0." + field + "= Rt.tbid\n" +
+                        "INNER JOIN " + table + " AS t0 ON t0." + field + "= Rt.tbid\n" +
                         "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
             } else {
                 // Process queries with multiple values for the same query param:
-                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + " ON  t" + k + "." + field + " = Rt.tbid\n" +
+                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + " ON t" + k + "." + field + " = Rt.tbid\n" +
                         "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
             }
         }

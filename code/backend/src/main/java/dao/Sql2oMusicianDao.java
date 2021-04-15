@@ -387,13 +387,11 @@ public class Sql2oMusicianDao implements MusicianDao {
         for (int k = 0; k < query.get(key).length; k++) {
             if (k == 0) {
                 newTableSQL = "SELECT rt.tid FROM (SELECT m.id as tID FROM musicians as m) as Rt\n" +
-                        "INNER JOIN " + table + " AS t0\n" +
-                        "ON  t0.id = Rt.tid \n" +
+                        "INNER JOIN " + table + " AS t0 ON t0.id = Rt.tid \n" +
                         "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
             } else {
                 // Process queries with multiple values for the same query param:
-                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + "\n" +
-                        "ON  t" + k + ".id = Rt.tid \n" +
+                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + " ON t" + k + ".id = Rt.tid \n" +
                         "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
             }
         }
