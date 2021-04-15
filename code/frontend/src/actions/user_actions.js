@@ -5,7 +5,7 @@ import MusicianApi from "../utils/MusicianApiService";
 export function getUser(id) {
     return async function fetchUserData(dispatch, getState) {
         const response = await MusicianApi.get(id)
-        console.log('the response is ', response);
+        //console.log('the response is ', response);
         dispatch({
             type: USER_LOGIN,
             payload : response.data

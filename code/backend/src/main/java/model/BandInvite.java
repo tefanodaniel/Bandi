@@ -1,13 +1,13 @@
 package model;
 
-public class FriendRequest implements Request {
+public class BandInvite implements Request {
 
     private String senderID;
     private String senderName;
     private String recipientID;
     private String recipientName;
 
-    public FriendRequest(String senderID, String senderName, String recipientID, String recipientName) {
+    public BandInvite(String senderID, String senderName, String recipientID, String recipientName) {
         this.senderID = senderID;
         this.senderName = senderName;
         this.recipientID = recipientID;
