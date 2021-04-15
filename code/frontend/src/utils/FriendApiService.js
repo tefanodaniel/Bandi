@@ -2,24 +2,29 @@ import customhttp from "./api";
 
 class FriendApiService {
 
+
     getUserFriendList(id) {
         return customhttp.get(`/friends/${id}`);
     }
 
     getIncomingFriendRequests(recipientID) {
-        return customhttp.get(`/requests/in/${recipientID}`);
+        let type = "friend";
+        return customhttp.get(`/requests/${type}/in/${recipientID}`);
     }
-
+    
     getOutgoingFriendRequests(senderID) {
-        return customhttp.get(`/requests/out/${senderID}`);
+        let type = "friend";
+        return customhttp.get(`/requests/${type}/out/${senderID}`);
     }
-
+    
     sendFriendRequest(senderID, recipientID) {
-        return customhttp.post(`/request/${senderID}/${recipientID}`);
+        let type = "friend";
+        return customhttp.post(`/request/${type}/${senderID}/${recipientID}`);
     }
-
+    
     respondToFriendRequest(senderID, recipientID, action) {
-        return customhttp.delete(`/request/${senderID}/${recipientID}/${action}`);
+        let type = "friend";
+        return customhttp.delete(`/request/${type}/${senderID}/${recipientID}/${action}`);
     }
 
 } 

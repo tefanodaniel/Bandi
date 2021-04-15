@@ -15,6 +15,8 @@ import config from '../config';
 import { connect } from 'react-redux';
 import { chatLogin } from '../actions/chat_actions';
 import {getUser} from "../actions/user_actions";
+import { fetchBandsForMusician } from "../actions/band_actions";
+import { getIncomingFriendRequests, getOutgoingFriendRequests, getUserFriends } from '../actions/friend_actions';
 
 
 class Discover extends React.Component {
@@ -74,15 +76,22 @@ class Discover extends React.Component {
 		  console.log("Not getting yet in componentDidMount")
 		  this.props.getUser(id1)
 	  }
+	  // Load friends and bands for usage throughout the rest of app
+	  this.props.fetchFriends(id1);
+	  this.props.fetchIncoming(id1);
+	  this.props.fetchOutgoing(id1);
+	  this.props.fetchBands(id1);
   }
 
 
 	render() {
+
     this.setCookieOnLogin()
     if (!Cookies.get('id')) {
         //console.log('redirecting since no cookie_id or user_id ');
         return (<Redirect to='/signin'/>);
-    }
+	}
+	
 	return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
@@ -145,5 +154,15 @@ function mapStateToProps(state) {
   };
 } // end mapStateToProps
 
+function mapDispatchToProps(dispatch) {
+    return {
+		chatLogin: (id, userName) => dispatch(chatLogin(id, userName)),
+		getUser: (id) => dispatch(getUser(id)),
+        fetchFriends: (id) => dispatch(getUserFriends(id)),
+		fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
+		fetchOutgoing: (id) => dispatch(getOutgoingFriendRequests(id)),
+        fetchBands: (userID) => dispatch(fetchBandsForMusician({id: userID}))
+    }
+}
 
-export default connect(mapStateToProps, { chatLogin, getUser })(Discover);
+export default connect(mapStateToProps, mapDispatchToProps)(Discover);
