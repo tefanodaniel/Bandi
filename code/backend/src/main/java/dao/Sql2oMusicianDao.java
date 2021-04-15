@@ -379,8 +379,14 @@ public class Sql2oMusicianDao implements MusicianDao {
         String newTable;
         String newTableSQL = "";
 
-        if (key.equals("genre")) { table = "musiciangenres"; newTable = "manyGenres";}
-        else { table = "instruments"; newTable = "manyInstruments";}
+        if (key.equals("genre")) {
+            table = "musiciangenres";
+            newTable = "manyGenres";
+        }
+        else {
+            table = "instruments";
+            newTable = "manyInstruments";
+        }
 
         for (int k = 0; k < query.get(key).length; k++) {
             if (k == 0) {

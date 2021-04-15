@@ -118,29 +118,93 @@ public class Sql2oBandDao implements BandDao {
     public List<Band> readAll(Map<String, String[]> query) throws DaoException {
         try (Connection conn = sql2o.open()) {
             Set<String> keys = query.keySet();
-            Iterator<String> iter = keys.iterator();
-            String key = iter.next();
-            String filterOn;
-            if (key.equals("members")) {
-                filterOn = "'\"" + query.get(key)[0] + "\"'" + " = ANY (" + key + ");";
-            }
-            else {
-                filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
-                if (query.size() > 1) {
-                    while (iter.hasNext()) {
-                        String attribute = iter.next();
-                        String filter = query.get(attribute)[0];
-                        filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
-                                filter.toUpperCase() + "%'";
+            boolean multiValTableFlag = false;
+            String tableSQL = "";
+            String filterOn = "";
+//old draft
+//            Iterator<String> iter = keys.iterator();
+//            String key = iter.next();
+//
+//            if (key.equals("member")) {
+//                filterOn = "'\"" + query.get(key)[0] + "\"'" + " = ANY (" + key + ");";
+//            }
+//            else if (key.equals("genre")) {
+//
+//                String[] tableQueries = multiValTableQueries(key, query);
+//                String newTable = tableQueries[0];
+//                String tempSQL = tableQueries[1];
+//
+//                if (multiValTableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
+//                else {
+//                    tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n";
+//                    multiValTableFlag = true;
+//                }
+//
+//                tableSQL = "WITH " + newTable + " AS (" + tableSQL + ")\n";
+//                filterOn = "R.mid IN (SELECT tid FROM " + newTable + ")\n";
+//            }
+//            else {
+//                filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
+//                if (query.size() > 1) {
+//                    while (iter.hasNext()) {
+//                        String attribute = iter.next();
+//                        String filter = query.get(attribute)[0];
+//                        filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
+//                                filter.toUpperCase() + "%'";
+//                    }
+//                }
+//                filterOn = filterOn + ";";
+//            }
+            //old draft
+
+            // Process search query parameters
+            String[] keyArray = keys.toArray(new String[keys.size()]);
+
+            for (int i = 0; i < keyArray.length; i++) {
+                String key = keyArray[i];
+                if (key.equals("genre") || key.equals("member")) {
+                    String[] tableQueries = multiValTableQueries(key, query);
+                    String newTable = tableQueries[0];
+                    String tempSQL = tableQueries[1];
+
+                    if (multiValTableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
+                    else {
+                        tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n";
+                        multiValTableFlag = true;
+                    }
+                    if (i == 0) {
+                        filterOn = "R.ubid IN (SELECT tbid FROM " + newTable + ")\n";
+                    } else {
+                        filterOn = filterOn + "AND R.ubid IN (SELECT tbid FROM " + newTable + ")\n";
                     }
                 }
-                filterOn = filterOn + ";";
+                else {
+                    // Create SQL query expression for other attributes:
+                    if (i == 0) {
+                        for (int k = 0; k < query.get(key).length; k++) {
+                            if (k == 0) {
+                                filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
+                            } else {
+                                // Process queries with multiple values for the same query param:
+                                filterOn = filterOn + "AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+                            }
+                        }
+                    }
+                    else {
+                        for (int k = 0; k < query.get(key).length; k++) {
+                            // process queries with multiple values for the same query param
+                            filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+                        }
+                    }
+                }
             }
+            //fixing^
+
             //String sql = "SELECT id, name, genre, size, capacity FROM Bands WHERE " + filterOn;
-            String filterSQL = "SELECT * FROM (SELECT b.id as uBID, * FROM bands as b) as R\n"
+            String filterSQL = tableSQL + "SELECT * FROM (SELECT b.id as uBID, * FROM bands as b) as R\n"
                     + "LEFT JOIN BandMembers as BM ON R.uBID=BM.band\n"
                     + "LEFT JOIN BandGenres as BG ON R.uBID=BG.id\n"
-                    + "WHERE " + filterOn;
+                    + "WHERE " + filterOn + ";";
 
             String resultSQL = "SELECT * FROM (SELECT b.id as uBID, * FROM bands as b) as R\n"
                     + "LEFT JOIN BandMembers as BM ON R.uBID=BM.band\n"
@@ -159,6 +223,38 @@ public class Sql2oBandDao implements BandDao {
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read bands from the database by filters", ex);
         }
+    }
+
+    private String[] multiValTableQueries(String key, Map<String, String[]> query) {
+        String table;
+        String newTable;
+        String field;
+        String newTableSQL = "";
+
+        if (key.equals("genre")) {
+            table = "bandgenres";  // table from database
+            newTable = "manyGenres";
+            field = "id";
+        }
+        else {
+            table = "bandmembers";
+            newTable = "manymembers";
+            field = "band";
+        }
+
+        for (int k = 0; k < query.get(key).length; k++) {
+            if (k == 0) {
+                newTableSQL = "SELECT tbid FROM (SELECT b.id as tBID FROM bands as b) as Rt\n" +
+                        "INNER JOIN " + table + " AS t0 ON  t0." + field + "= Rt.tbid\n" +
+                        "AND " + "UPPER(t0." + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'\n";
+            } else {
+                // Process queries with multiple values for the same query param:
+                newTableSQL = newTableSQL + "INNER JOIN " + table + " AS t" + k + " ON  t" + k + "." + field + " = Rt.tbid\n" +
+                        "AND " + "UPPER(t" + k + "." + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+            }
+        }
+
+        return new String[]{newTable, newTableSQL};
     }
 
     @Override
