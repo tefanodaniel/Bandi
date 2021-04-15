@@ -36,10 +36,13 @@ class CreateBand extends React.Component {
             .then(res => {
                 console.log(`statusCode: ${res.statusCode}`)
                 console.log(res)
+
             })
             .catch(error => {
                 console.error(error)
             })
+
+        this.props.history.push('/myprofile')
     }
 
     handleChange(event) {
