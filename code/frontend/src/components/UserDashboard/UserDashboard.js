@@ -8,6 +8,7 @@ import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 
 import FriendApiService from '../../utils/FriendApiService';
+import ChatApi from "../../utils/ChatApiService";
 import { bandi_styles } from "../../styles/bandi_styles";
 
 
@@ -23,20 +24,21 @@ class UserDashboard extends React.Component {
             id: Cookies.get('id'),
         }
     }
-    
+
     async takeActionOnFriendRequest(request, action) {
         const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
         this.props.fetchFriends(this.props.userInfo.id)
         this.props.fetchIncoming(this.props.userInfo.id)
         if (action === "accept") {
-            alert("You accepted " + request.senderName + "'s friend request!");
+            await ChatApi.addChatFriend(this.props.userInfo.id, request.senderID);
+            alert("You accepted " + request.senderName + "'s friend request! You can now chat with each other.");
         } else if (action === "decline") {
             alert("You declined " + request.senderName + "'s friend request!");
         }
     }
-    
+
     renderFriendListForMusician(friends) {
-        if (friends && friends.length > 0) {            
+        if (friends && friends.length > 0) {
             const listItems = friends.map((friend) =>
             <li key={friend["id"]}>{friend["name"]}</li>
             );
