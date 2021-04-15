@@ -32,7 +32,7 @@ const Header = () => {
               banDi
             </Navbar.Brand>
             <Navbar.Brand className="mx-auto">
-              Welcome, {user.name}!
+              Welcome, {user?.name}!
             </Navbar.Brand>
 
             <div className={styles.navDropdownTitle}>
