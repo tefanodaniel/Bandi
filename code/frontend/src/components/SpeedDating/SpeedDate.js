@@ -79,7 +79,7 @@ class SpeedDate extends React.Component {
         console.log(this.state.sdEvents);
 
         const userInfo = this.props.store.user_reducer;
-        const isAdmin = userInfo.admin;
+        const isAdmin = userInfo?.admin;
         console.log('here here', userInfo);
 
         var eventList = this.state.sdEvents.map((event) =>
