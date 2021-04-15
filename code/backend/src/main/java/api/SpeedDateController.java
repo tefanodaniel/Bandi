@@ -84,7 +84,7 @@ public class SpeedDateController {
         try {
             SpeedDateEvent event = gson.fromJson(req.body(), SpeedDateEvent.class);
 
-            String id = UUID.randomUUID().toString();
+            String id = event.getId();
             String name = event.getName();
             String link = event.getLink();
             String date = event.getDate();
@@ -100,6 +100,21 @@ public class SpeedDateController {
             speedDateEventDao.create(id, name, link, date, minusers, participants);
 
             res.status(201);
+            return gson.toJson(event);
+        } catch (DaoException ex) {
+            throw new ApiError(ex.getMessage(), 500);
+        }
+    };
+
+    // Delete SpeedDateEvent by id
+    public static Route deleteSpeedDateEvent = (req, res) -> {
+        try {
+            String id = req.params("id");
+            SpeedDateEvent event = speedDateEventDao.delete(id);
+            if (event == null) {
+                throw new ApiError("Resource not found", 404);
+            }
+            res.type("application/json");
             return gson.toJson(event);
         } catch (DaoException ex) {
             throw new ApiError(ex.getMessage(), 500);

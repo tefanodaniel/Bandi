@@ -139,6 +139,7 @@ public class ApiServer {
         put("/speeddateevents/:eid/:mid", SpeedDateController.putSpeedDateEventParticipant);
         delete("/speeddateevents/:eid/:mid", SpeedDateController.deleteSpeedDateEventParticipant);
         post("/speeddateevents", SpeedDateController.postSpeedDateEvent);
+        delete("/speeddateevents/:id", SpeedDateController.deleteSpeedDateEvent);
 
         // Song routes
         get("/songs", SongController.getAllSongs);

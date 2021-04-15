@@ -187,9 +187,9 @@ public class Sql2oBandDao implements BandDao {
 
     @Override
     public Band delete(String id) throws DaoException {
-        String sql = "WITH deleted AS(+"
+        String sql = "WITH deleted AS("
                 +"DELETE FROM Bands WHERE id = :id RETURNING *"
-                + ") SELECTED * FROM deleted;";
+                + ") SELECT * FROM deleted;";
         try (Connection conn = sql2o.open()) {
             return conn.createQuery(sql)
                     .addParameter("id", id)

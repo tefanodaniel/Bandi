@@ -7,14 +7,11 @@ import Cookies from "js-cookie";
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 
-import {Container, Navbar} from "react-bootstrap";
-import BandApiService from '../../utils/BandApiService';
 import FriendApiService from '../../utils/FriendApiService';
 import { bandi_styles } from "../../styles/bandi_styles";
 
 
 import { connect } from 'react-redux';
-import { fetchBandsForMusician } from '../../actions/band_actions';
 import { getIncomingFriendRequests, getUserFriends } from '../../actions/friend_actions';
 
 class UserDashboard extends React.Component {
@@ -25,10 +22,6 @@ class UserDashboard extends React.Component {
         this.state = {
             id: Cookies.get('id'),
         }
-    }
-
-    componentDidMount() {
-        this.props.fetchBands(this.state.id);
     }
     
     async takeActionOnFriendRequest(request, action) {
@@ -195,7 +188,6 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchFriends: (id) => dispatch(getUserFriends(id)),
         fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
-        fetchBands: (userID) => dispatch(fetchBandsForMusician({id: userID}))
     }
 }
 
