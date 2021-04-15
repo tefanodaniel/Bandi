@@ -119,48 +119,21 @@ public class Sql2oBandDao implements BandDao {
             boolean multiValTableFlag = false;
             String tableSQL = "";
             String filterOn = "";
-//old draft
-//            Iterator<String> iter = keys.iterator();
-//            String key = iter.next();
-//
-//            if (key.equals("member")) {
-//                filterOn = "'\"" + query.get(key)[0] + "\"'" + " = ANY (" + key + ");";
-//            }
-//            else if (key.equals("genre")) {
-//
-//                String[] tableQueries = multiValTableQueries(key, query);
-//                String newTable = tableQueries[0];
-//                String tempSQL = tableQueries[1];
-//
-//                if (multiValTableFlag) { tableSQL = tableSQL + ", " + newTable + " AS (" + tempSQL + ")\n"; }
-//                else {
-//                    tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n";
-//                    multiValTableFlag = true;
-//                }
-//
-//                tableSQL = "WITH " + newTable + " AS (" + tableSQL + ")\n";
-//                filterOn = "R.mid IN (SELECT tid FROM " + newTable + ")\n";
-//            }
-//            else {
-//                filterOn = "UPPER(" + key + ") LIKE '%" + query.get(key)[0].toUpperCase() + "%'";
-//                if (query.size() > 1) {
-//                    while (iter.hasNext()) {
-//                        String attribute = iter.next();
-//                        String filter = query.get(attribute)[0];
-//                        filterOn = filterOn + " AND UPPER(" + attribute + ") LIKE '%" +
-//                                filter.toUpperCase() + "%'";
-//                    }
-//                }
-//                filterOn = filterOn + ";";
-//            }
-            //old draft
 
             // Process search query parameters
             String[] keyArray = keys.toArray(new String[keys.size()]);
 
             for (int i = 0; i < keyArray.length; i++) {
                 String key = keyArray[i];
-                if (key.equals("genre") || key.equals("member")) {
+                if (key.equals("capacity")) {
+                    if (i==0) {
+                        filterOn = key + " <= " + query.get(key)[0] + "\n";
+                    }
+                    else {
+                        filterOn = filterOn + " AND " + key + " <= " + query.get(key)[0] + "\n";
+                    }
+                }
+                else if (key.equals("genre") || key.equals("member")) {
                     String[] tableQueries = multiValTableQueries(key, query);
                     String newTable = tableQueries[0];
                     String tempSQL = tableQueries[1];
@@ -170,6 +143,7 @@ public class Sql2oBandDao implements BandDao {
                         tableSQL = tableSQL + "WITH " + newTable + " AS (" + tempSQL + ")\n";
                         multiValTableFlag = true;
                     }
+
                     if (i == 0) {
                         filterOn = "R.ubid IN (SELECT tbid FROM " + newTable + ")\n";
                     } else {
@@ -191,7 +165,7 @@ public class Sql2oBandDao implements BandDao {
                     else {
                         for (int k = 0; k < query.get(key).length; k++) {
                             // process queries with multiple values for the same query param
-                            filterOn = filterOn + " AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
+                            filterOn = filterOn + "AND UPPER(" + key + ") LIKE '%" + query.get(key)[k].toUpperCase() + "%'\n";
                         }
                     }
                 }
