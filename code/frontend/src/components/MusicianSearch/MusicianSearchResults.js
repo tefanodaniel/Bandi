@@ -23,27 +23,35 @@ const chunk = (arr, chunkSize = 1, cache = []) => {
     return cache
 }
 
-async function addFriend (temp) {
-    const response = await FriendApiService.sendFriendRequest(temp.logged_id, temp.id);
-    if(response) {
-        alert("A request to connect was sent to " + temp.name + ".")
+async function sendFriendRequest (senderID, recipientID, recipientName) {
+    if (senderID && recipientID && recipientName) {
+        const response = await FriendApiService.sendFriendRequest(senderID, recipientID);
+        if(response) {
+            alert("Friend request sent to " + recipientName + "!")
+        }
+    } else {
+        alert("Unable to send friend request.")
     }
 }
 
-const RenderConnectButton = (temp) => {
+const RenderConnectButton = (props) => {
+    const senderID = props.logged_id;
+    const recipientID = props.id;
+    const recipientName = props.name;
     // remove question mark once pending_outgoing_requests confirmed to exist
     /*
     if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
         return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
     } else { return <Button disabled>Pending...</Button> };*/
     //if (true) {
-        return <Button variant="primary" onClick={temp => addFriend(temp)}>Connect!</Button>
+        return <Button variant="primary" onClick={() => sendFriendRequest(senderID, recipientID, recipientName)}>Connect!</Button>
     //} else { return <Button disabled>Pending...</Button> };
 }
 
-const FilteredMusicianItem = React.forwardRef((musician, ref) => {
+const FilteredMusicianItem = React.forwardRef((props, ref) => {
+    const logged_id = props.logged_id;
+    const musician = props.musician;
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     //<Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/musiciandetails?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
@@ -73,14 +81,14 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                                 <h5>Genres: {musician.genres.join(", ")}</h5>
                             </div>
                             <div>
-                                <h5>Links: {musician.links}</h5>
+                                <h5>Links: {musician.profileLinks.map((link, i) => <a key={i} href={link}>{link}</a>)}</h5>
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <RenderConnectButton logged_id = {musician.logged_id} id = {musician.id} name={musician.name}/>
+                            <RenderConnectButton logged_id = {logged_id} id = {musician.id} name={musician.name}/>
                         </Modal.Footer>
                     </Modal>
                 </Card.Body>
@@ -93,6 +101,7 @@ const MusicianSearchResults = () => {
     const dispatch = useDispatch();
     const fil_musicians = useSelector(selectMusicians, shallowEqual)
     let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
+    let logged_user_friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
 
     if(fil_musicians === -1)
     {
@@ -121,7 +130,7 @@ const MusicianSearchResults = () => {
                 const ref = React.createRef();
                 return (
                     <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
+                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} musician={user}/>
                     </Col>
                 );
             });
