@@ -15,6 +15,7 @@ import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
 import {fetchSDEvents} from "./actions/sd_event_actions";
 import {fetchSotwEvents} from "./actions/sotw_event_actions";
+import { CHAT_INITIALIZE } from './actions/types';
 
 // Redux store
 console.log('Initial state: ', store.getState())
@@ -36,7 +37,7 @@ CometChat.init(appID, appSetting).then(
     console.log("CometChat initialization completed successfully");
     //Cookies.set('chatInitialized', true);
     store.dispatch({
-      type: 'chat/initialize'
+      type: CHAT_INITIALIZE
     });
   },
   error => {
