@@ -8,6 +8,7 @@ import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 
 import BandApi from "../../utils/BandApiService";
+import ChatApi from "../../utils/ChatApiService";
 
 class CreateBand extends React.Component {
     constructor(props) {
@@ -21,12 +22,12 @@ class CreateBand extends React.Component {
             errorText: ''
         }
 
-        this.submit_form = this.submit_form.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleGenreSelection = this.handleGenreSelection.bind(this);
     }
 
-    submit_form() {
+    handleSubmit() {
         // post band
 
         if (this.state.name == '' || this.state.genres.length == 0) {
@@ -35,7 +36,7 @@ class CreateBand extends React.Component {
         }
 
         BandApi.create({
-                id : "foo",
+                id: "foo",
                 name: this.state.name,
                 members: this.state.members,
                 genres: this.state.genres
@@ -43,6 +44,22 @@ class CreateBand extends React.Component {
             .then(res => {
                 console.log(`statusCode: ${res.statusCode}`)
                 console.log(res)
+
+                // create group chat for the newly created band
+                ChatApi.createBandGroupChat(res.data.id, res.data.name, "private")
+                  .then(() => {
+                    console.log("Successfuly created group chat for ", res.data.name)
+                    ChatApi.addMembersToGroupChat(res.data.id, {admins: [Cookies.get("id")]})
+                      .then(() => {
+                        console.log("Added current user as admin")
+                      })
+                      .catch(error => {
+                        console.log(error)
+                      })
+                  })
+                  .catch(error => {
+                    console.log(error)
+                  })
             })
             .catch(error => {
                 console.error(error)
@@ -93,7 +110,7 @@ class CreateBand extends React.Component {
 
                     <h3>{this.state.errorText}</h3>
 
-                    <Form onSubmit={"nothing"}>
+                    <Form onSubmit={() => this.handleSubmit()}>
                         <Form.Group controlId="profileForm.name">
                             <Form.Label>Band Name:</Form.Label>
                             <Form.Control name="name" type="input"
@@ -109,9 +126,10 @@ class CreateBand extends React.Component {
                             <Form.Check inline name="classical" label="Classical" type="checkbox" onChange={this.handleGenreSelection}/>
                         </FormGroup>
 
+                        <Button type="submit">Create</Button>
+
                     </Form>
 
-                    <Button onClick={this.submit_form}>Create</Button>
 
                     <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
 

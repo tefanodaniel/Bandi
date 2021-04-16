@@ -32,7 +32,7 @@ export function logout() {
 
 export function chatApiInstance() {
   return axios.create({
-    baseURL: "https://api-us.cometchat.io/v2.0/users",
+    baseURL: "https://api-us.cometchat.io/v2.0",
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
