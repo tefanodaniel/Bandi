@@ -48,6 +48,7 @@ class Discover extends React.Component {
       }
     }
   }
+
   componentDidMount() {
 	  const id1 = Cookies.get("id");
 	  let user = this.props.store.user_reducer;
@@ -61,7 +62,6 @@ class Discover extends React.Component {
 	  this.props.fetchOutgoing(id1);
 	  this.props.fetchBands(id1);
   }
-
 
 	render() {
 
