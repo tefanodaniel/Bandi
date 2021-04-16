@@ -6,7 +6,6 @@ import Cookies from "js-cookie";
 import {getBackendURL} from "../../utils/api";
 import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
-import uuid from "react-uuid";
 
 import BandApi from "../../utils/BandApiService";
 import ChatApi from "../../utils/ChatApiService";
