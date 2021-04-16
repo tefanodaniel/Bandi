@@ -19,7 +19,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
     @Override
     public SongOfTheWeekSubmission create(String submissionid, String musicianid, String musician_name,
                                           String avsubmission, Set<String> instruments) throws DaoException {
-        String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionid, musicianid, musician_name, avsubmission)" +
+        String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionid, musicianid, musicianname, avsubmission)" +
                 "VALUES (:submissionid, :musicianid, :musicianname, :avsubmission)";
         String sotw_submissions_instruments_sql = "INSERT INTO sotwsubmissionsinstruments (submissionid, instrument) VALUES (:submissionid, :instrument)";
         try (Connection conn = sql2o.open()) {

@@ -24,14 +24,15 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         for (Map row : queryResults) {
             String eventid = (String) row.get("eventid");
             String adminid = (String) row.get("adminid");
-            String start_week = (String) row.get("start_week");
-            String end_week = (String) row.get("end_week");
+            String startDay = (String) row.get("startday");
+            String endDay = (String) row.get("endday");
             String songid = (String) row.get("songid");
+            String genre = (String) row.get("genre");
             String submission = (String) row.get("submission");
 
             if (!alreadyAdded.contains(eventid)) {
                 alreadyAdded.add(eventid);
-                sotwEvents.put(eventid, new SongOfTheWeekEvent(eventid, adminid, start_week, end_week, songid));
+                sotwEvents.put(eventid, new SongOfTheWeekEvent(eventid, adminid, startDay, endDay, songid, genre));
             }
 
             SongOfTheWeekEvent e = sotwEvents.get(eventid);
@@ -43,16 +44,17 @@ public class Sql2oSotwEventDao implements SotwEventDao {
     }
 
     @Override
-    public SongOfTheWeekEvent create(String eventid, String adminid, String start_week, String end_week, String songid) throws DaoException {
-        String sotw_event_sql = "INSERT INTO sotwevents (eventid, adminid, start_week, end_week, songid)" +
-                "VALUES (:eventid, :adminid, :start_week, :end_week, :songid)";
+    public SongOfTheWeekEvent create(String eventid, String adminid, String startday, String endday, String songid, String genre) throws DaoException {
+        String sotw_event_sql = "INSERT INTO sotwevents (eventid, adminid, startday, endday, songid, genre)" +
+                "VALUES (:eventid, :adminid, :startday, :endday, :songid, genre)";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sotw_event_sql)
                     .addParameter("eventid", eventid)
                     .addParameter("adminid", adminid)
-                    .addParameter("start_week", start_week)
-                    .addParameter("end_week", end_week)
+                    .addParameter("startday", startday)
+                    .addParameter("endday", endday)
                     .addParameter("songid", songid)
+                    .addParameter("genre", genre)
                     .executeUpdate();
 
             return this.read(eventid);
@@ -64,17 +66,18 @@ public class Sql2oSotwEventDao implements SotwEventDao {
 
 
     @Override
-    public SongOfTheWeekEvent create(String eventid, String adminid, String start_week, String end_week, String songid, Set<String> submissions) throws DaoException {
-        String sotw_event_sql = "INSERT INTO sotwevents (eventid, adminid, start_week, end_week, songid)" +
-                "VALUES (:eventid, :adminid, :start_week, :end_week, :songid)";
+    public SongOfTheWeekEvent create(String eventid, String adminid, String startday, String endday, String songid, String genre, Set<String> submissions) throws DaoException {
+        String sotw_event_sql = "INSERT INTO sotwevents (eventid, adminid, startday, endday, songid, genre)" +
+                "VALUES (:eventid, :adminid, :startday, :endday, :songid)";
         String sotw_event_submissions_sql = "INSERT INTO sotweventssubmissions (eventid, submission) VALUES (:eventid, :submission)";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sotw_event_sql)
                     .addParameter("eventid", eventid)
                     .addParameter("adminid", adminid)
-                    .addParameter("start_week", start_week)
-                    .addParameter("end_week", end_week)
+                    .addParameter("startday", startday)
+                    .addParameter("endday", endday)
                     .addParameter("songid", songid)
+                    .addParameter("genre", genre)
                     .executeUpdate();
 
             for (String submissionId : submissions) {
@@ -104,11 +107,12 @@ public class Sql2oSotwEventDao implements SotwEventDao {
             }
 
             String adminid = (String) queryResults.get(0).get("adminid");
-            String start_week = (String) queryResults.get(0).get("start_week");
-            String end_week = (String) queryResults.get(0).get("end_week");
+            String startDay = (String) queryResults.get(0).get("startday");
+            String endDay = (String) queryResults.get(0).get("endday");
             String songid = (String) queryResults.get(0).get("songid");
+            String genre = (String) queryResults.get(0).get("genre");
 
-            SongOfTheWeekEvent e = new SongOfTheWeekEvent(eventid, adminid, start_week, end_week, songid);
+            SongOfTheWeekEvent e = new SongOfTheWeekEvent(eventid, adminid, startDay, endDay, songid, genre);
             for (Map row : queryResults) {
                 if (row.get("submission") != null) {
                     e.addSubmissions((String) row.get("submission"));
@@ -118,6 +122,47 @@ public class Sql2oSotwEventDao implements SotwEventDao {
             return e;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read event with id " + eventid, ex);
+        }
+    };
+
+    @Override
+    public SongOfTheWeekEvent findEvent(String startDay, String endDay, String genre) throws DaoException {
+        try (Connection conn = sql2o.open()) {
+
+            //SELECT * FROM (SELECT S.eventid as EID, * FROM sotwevents as S) as R LEFT JOIN sotweventssubmissions as G ON R.EID=G.eventid WHERE (R.EID='00001fakeeventid' AND start_week='Sunday 28th March' AND end_week='Saturday 3rd March')
+
+
+            String sql = "SELECT * FROM (SELECT S.eventid as EID, * FROM sotwevents as S) as R\n"
+                    + "LEFT JOIN sotweventssubmissions as G ON R.EID=G.eventid\n"
+                    + "WHERE (R.genre=:genre AND R.startday=:startday AND R.endday=:endday);";
+
+            List<Map<String, Object>> queryResults = conn.createQuery(sql)
+                    .addParameter("genre", genre)
+                    .addParameter("startday", startDay)
+                    .addParameter("endday", endDay)
+                    .executeAndFetchTable().asList();
+
+            if (queryResults.size() == 0) {
+                return null;
+            }
+
+            String eventid = (String) queryResults.get(0).get("eventid");
+            String adminid = (String) queryResults.get(0).get("adminid");
+            //String startDay = (String) queryResults.get(0).get("startday");
+            //String endDay = (String) queryResults.get(0).get("endday");
+            String songid = (String) queryResults.get(0).get("songid");
+            //String genre = (String) queryResults.get(0).get("genre");
+
+            SongOfTheWeekEvent e = new SongOfTheWeekEvent(eventid, adminid, startDay, endDay, songid, genre);
+            for (Map row : queryResults) {
+                if (row.get("submission") != null) {
+                    e.addSubmissions((String) row.get("submission"));
+                }
+            }
+
+            return e;
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to read event with genre " + genre + " starting on " + startDay + " and ending on " + endDay, ex);
         }
     };
 
@@ -148,26 +193,26 @@ public class Sql2oSotwEventDao implements SotwEventDao {
     };
 
     @Override
-    public SongOfTheWeekEvent updateStartWeek(String eventid, String new_week) throws DaoException{
-        String sql = "UPDATE sotwevents SET start_week=:start_week WHERE eventid=:eventid;";
+    public SongOfTheWeekEvent updateStartDay(String eventid, String newDay) throws DaoException{
+        String sql = "UPDATE sotwevents SET startDay=:startDay WHERE eventid=:eventid;";
 
         try (Connection conn = sql2o.open()) {
-            conn.createQuery(sql).addParameter("eventid", eventid).addParameter("start_week", new_week).executeUpdate();
+            conn.createQuery(sql).addParameter("eventid", eventid).addParameter("startday", newDay).executeUpdate();
             return this.read(eventid);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to update the start_week of event", ex);
+            throw new DaoException("Unable to update the startDay of event", ex);
         }
     };
 
     @Override
-    public SongOfTheWeekEvent updateEndWeek(String eventid, String new_week) throws DaoException {
-        String sql = "UPDATE sotwevents SET end_week=:end_week WHERE eventid=:eventid;";
+    public SongOfTheWeekEvent updateEndDay(String eventid, String newDay) throws DaoException {
+        String sql = "UPDATE sotwevents SET endDay=:endDay WHERE eventid=:eventid;";
 
         try (Connection conn = sql2o.open()) {
-            conn.createQuery(sql).addParameter("eventid", eventid).addParameter("end_week", new_week).executeUpdate();
+            conn.createQuery(sql).addParameter("eventid", eventid).addParameter("endday", newDay).executeUpdate();
             return this.read(eventid);
         } catch (Sql2oException ex) {
-            throw new DaoException("Unable to update the end_week of event", ex);
+            throw new DaoException("Unable to update the endDay of event", ex);
         }
     };
 

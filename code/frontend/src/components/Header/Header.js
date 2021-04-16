@@ -20,9 +20,9 @@ const Header = () => {
   const dispatch = useDispatch();
   const id1 = Cookies.get("id");
   let user = useSelector((state) => state.user_reducer, shallowEqual);
-  console.log('user is', user)
+  //console.log('user is', user)
   if(Object.keys(user).length === 0) {
-    console.log("getting user here")
+    //console.log("getting user here")
     dispatch(getUser(id1))
   }
   user = useSelector((state) => state.user_reducer, shallowEqual);

@@ -423,9 +423,10 @@ public final class Database {
                 String sql = "CREATE TABLE IF NOT EXISTS SotwEvents("
                         + "eventid VARCHAR(50) PRIMARY KEY,"
                         + "adminid VARCHAR(50) REFERENCES Musicians,"
-                        + "start_week VARCHAR(50) NOT NULL,"
-                        + "end_week VARCHAR(50) NOT NULL,"
-                        + "songid VARCHAR(50) NOT NULL"
+                        + "startday VARCHAR(50) NOT NULL,"
+                        + "endday VARCHAR(50) NOT NULL,"
+                        + "songid VARCHAR(50) NOT NULL,"
+                        + "genre VARCHAR(50) NOT NULL"
                         + ");";
 
                 conn.createQuery(sql).executeUpdate();
@@ -437,16 +438,17 @@ public final class Database {
 
                 conn.createQuery(sql).executeUpdate();
 
-                String sotw_events_sql = "INSERT INTO SotwEvents(eventid, adminid, start_week, end_week, songid) VALUES(:eventid, :adminid, :start_week, :end_week, :songid);";
+                String sotw_events_sql = "INSERT INTO SotwEvents(eventid, adminid, startday, endday, songid, genre) VALUES(:eventid, :adminid, :startday, :endday, :songid, :genre);";
                 String sotw_events_submissions_sql = "INSERT INTO SotwEventsSubmissions(eventid, submission) VALUES (:eventid, :submission);";
 
                 for (SongOfTheWeekEvent s: sample_events) {
                     conn.createQuery(sotw_events_sql)
                             .addParameter("eventid", s.getEventId())
                             .addParameter("adminid", s.getAdminId())
-                            .addParameter("start_week", s.getStart_week())
-                            .addParameter("end_week", s.getEnd_week())
+                            .addParameter("startday", s.getStartDay())
+                            .addParameter("endday", s.getEndDay())
                             .addParameter("songid", s.getSongId())
+                            .addParameter("genre", s.getGenre())
                             .executeUpdate();
 
                     // Insert sotw-events-submissions info.

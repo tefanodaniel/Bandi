@@ -27,9 +27,17 @@ class SongOfTheWeek extends Component {
                                 <SoTWsearch />
                             </Col>
                             <Col className="col-sm-9 bg-transparent">
-                                <SoTWDesc />
-                                <SotwUserSubmission />
+                                <Row>
+                                    <Col className="col-sm-6 bg-transparent">
+                                        <SoTWDesc />
+                                    </Col>
+                                    <Col className="col-sm-6 bg-transparent">
+                                        <SotwUserSubmission />
+                                    </Col>
+                                </Row>
+                                <Row>
                                 <SoTWSubmissions />
+                                </Row>
                             </Col>
                         </Row>
                     </Container>

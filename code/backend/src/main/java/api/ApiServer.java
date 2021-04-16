@@ -157,6 +157,7 @@ public class ApiServer {
         // SOTW Event Routes
         get("/sotwevents", SOTWEventController.getAllSOTWEvents);
         get("/sotwevents/:eventid", SOTWEventController.getSOTWEventById);
+        get("/sotwevents/desc/:genre/:startday/:endday", SOTWEventController.findSOTWEventByDesc);
         post("/sotwevents", SOTWEventController.postSOTWEvent);
         put("/sotwevents/:eventid", SOTWEventController.putSOTWEvent);
         get("/sotwevents/submissions/:eventid", SOTWEventController.getSOTWEventSubmissions);

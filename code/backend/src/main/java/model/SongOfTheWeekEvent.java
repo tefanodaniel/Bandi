@@ -6,27 +6,30 @@ import java.util.Set;
 public class SongOfTheWeekEvent {
     private String eventId;
     private String adminId;
-    private String start_week;
-    private String end_week;
+    private String startDay; // style : Sunday April 18, 2021
+    private String endDay;
     private String songId;
+    private String genre;
     private Set<String> submissions;
 
 
-    public SongOfTheWeekEvent(String eventId, String adminId, String start_week, String end_week, String songId){
+    public SongOfTheWeekEvent(String eventId, String adminId, String startDay, String endDay, String songId, String genre){
         this.eventId = eventId;
         this.adminId = adminId;
-        this.start_week = start_week;
-        this.end_week = end_week;
+        this.startDay = startDay;
+        this.endDay = endDay;
         this.songId = songId;
+        this.genre = genre;
     }
 
-    public SongOfTheWeekEvent(String eventId, String adminId, String start_week, String end_week, String songId, Set<String> submissions){
+    public SongOfTheWeekEvent(String eventId, String adminId, String startDay, String endDay, String songId, String genre, Set<String> submissions){
         this.eventId = eventId;
         this.adminId = adminId;
-        this.start_week = start_week;
-        this.end_week = end_week;
+        this.startDay = startDay;
+        this.endDay = endDay;
         this.songId = songId;
         this.submissions = submissions;
+        this.genre = genre;
     }
 
     public String getEventId() {
@@ -37,16 +40,20 @@ public class SongOfTheWeekEvent {
         return this.adminId;
     }
 
-    public String getStart_week() {
-        return this.start_week;
+    public String getStartDay() {
+        return this.startDay;
     }
 
-    public String getEnd_week() {
-        return this.end_week;
+    public String getEndDay() {
+        return this.endDay;
     }
 
     public String getSongId() {
         return this.songId;
+    }
+
+    public String getGenre() {
+        return this.genre;
     }
 
     public Set<String> getSubmissions() {
@@ -69,7 +76,10 @@ public class SongOfTheWeekEvent {
         return "SongOfTheWeek Event {" +
                 ", eventId = '" + this.eventId + '\''+
                 ", adminId = '" + this.adminId + '\''+
+                ", startDay = '" + this.startDay + '\''+
+                ", endDay = '" + this.endDay + '\''+
                 ", songId = '" + this.songId + '\''+
+                ", genre = '" + this.genre + '\''+
                 ", submissions = '" + this.submissions.toString() + '\''+
                 '}';
     }

@@ -20,7 +20,8 @@ import {fetchSotwEvents} from "./actions/sotw_event_actions";
 // Redux store
 console.log('Initial state: ', store.getState())
 const unsubscribe = store.subscribe(() =>
-    console.log('State after dispatch: ', store.getState())
+    console.log('')
+//    console.log('State after dispatch: ', store.getState())
 )
 store.dispatch(fetchMusicians)
 

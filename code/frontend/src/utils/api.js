@@ -41,8 +41,6 @@ export async function getFriendsDataFromApi(id) {
     let r3 = await axios.get(backend_url + `/requests/out/${id}`)
 
     return {'friends': r1.data, 'incoming': r2.data, 'outgoing': r3.data }
-
-
 }
 
 
@@ -57,6 +55,18 @@ export function chatApiInstance() {
     }
   })
 }
+
+//https://www.shazam.com/services/charts/csv/genre/world/afrobeats
+
+export function shazamChartApiInstance() {
+    return axios.create({
+        baseURL: "https://www.shazam.com/services/charts/csv/genre/world",
+        headers: {
+            "Content-Type": "text/plain"
+        }
+    })
+}
+
 
 export default axios.create({
   baseURL: getBackendURL(),

@@ -292,10 +292,13 @@ public final class DataStore {
         Set<String> submissions5 = new HashSet<String>(Arrays.asList("000017fakesubmissionid", "000018fakesubmissionid", "000019fakesubmissionid", "000020fakesubmissionid"));
         Set<String> submissions6 = new HashSet<String>(Arrays.asList("000021fakesubmissionid", "000022fakesubmissionid", "000023fakesubmissionid", "000024fakesubmissionid"));
         // get current week and choose a song from the billboard hot-100?
-        Set<String> instruments2 = new HashSet<String>(Arrays.asList("Guitar", "Vocals"));
+        //Set<String> instruments2 = new HashSet<String>(Arrays.asList("Guitar", "Vocals"));
 
-        String start_week = "Sunday 28th March";
-        String end_week = "Saturday 3rd March";
+        String startday1 = "April 4, 2021";
+        String endday1 = "April 10, 2021";
+
+        String startday2 = "April 11, 2021";
+        String endday2 = "April 17, 2021";
 
         String admin1 = "22zcnk76clvox7mifcwgz3tha";
         String admin2 = "22xpmsx47uendfh4kafp3zjmi";
@@ -306,13 +309,16 @@ public final class DataStore {
         String songid4 = "00004fakesongid";
         String songid5 = "00005fakesongid";
         String songid6 = "00006fakesongid";
+        String genre1 = "pop";
+        String genre2 = "dance";
+        String genre3 = "rock";
 
-        sample_events.add(new SongOfTheWeekEvent("00001fakeeventid", admin1, start_week, end_week, songid1, submissions1));
-        sample_events.add(new SongOfTheWeekEvent("00002fakeeventid", admin2, start_week, end_week, songid2, submissions2));
-        sample_events.add(new SongOfTheWeekEvent("00003fakeeventid", admin1, start_week, end_week, songid3, submissions3));
-        sample_events.add(new SongOfTheWeekEvent("00004fakeeventid", admin2, start_week, end_week, songid4, submissions4));
-        sample_events.add(new SongOfTheWeekEvent("00005fakeeventid", admin1, start_week, end_week, songid5, submissions5));
-        sample_events.add(new SongOfTheWeekEvent("00006fakeeventid", admin2, start_week, end_week, songid6, submissions6));
+        sample_events.add(new SongOfTheWeekEvent("00001fakeeventid", admin1, startday1, endday1, songid1, genre1, submissions1));
+        sample_events.add(new SongOfTheWeekEvent("00002fakeeventid", admin2, startday1, endday1, songid2, genre2, submissions2));
+        sample_events.add(new SongOfTheWeekEvent("00003fakeeventid", admin1, startday1, endday1, songid3, genre3, submissions3));
+        sample_events.add(new SongOfTheWeekEvent("00004fakeeventid", admin2, startday2, endday2, songid4, genre1, submissions4));
+        sample_events.add(new SongOfTheWeekEvent("00005fakeeventid", admin1, startday2, endday2, songid5, genre2, submissions5));
+        sample_events.add(new SongOfTheWeekEvent("00006fakeeventid", admin2, startday2, endday2, songid6, genre3, submissions6));
 
         return sample_events;
     }

@@ -1,10 +1,8 @@
 import React from 'react';
-import {useSelector, shallowEqual, useDispatch} from "react-redux";
+import {useSelector, shallowEqual} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import card_bg from "../../images/card.jpg";
 import {bandi_styles} from "../../styles/bandi_styles";
-import MusicianApiService from "../../utils/MusicianApiService";
-import Button from "react-bootstrap/Button";
 
 const selectEventSubmissions = (state) => {
     if(!state.sotw_event_reducer.chosen_event_submissions)
@@ -49,9 +47,7 @@ const SubmissionItem = ( entry ) => {
 
 
 const SoTWSubmissions = () => {
-    const dispatch = useDispatch();
-    let submissions = useSelector(selectEventSubmissions)
-    let all_musicians = useSelector((state) => state.musician_reducer.musicians,shallowEqual);
+    let submissions = useSelector(selectEventSubmissions, shallowEqual)
 
     if(submissions === -1)
     {
@@ -62,25 +58,7 @@ const SoTWSubmissions = () => {
         )
     }
     else {
-
-        let submissions_mod =JSON.parse(JSON.stringify(submissions));
-
-        // add the musisican name to submissions
-        submissions_mod = submissions_mod.map(item => {
-            let id = item.musician_id;            //super hacky fix need to make backend api changes to remove this
-            let musician_name;
-            for (const key in all_musicians) {
-                if (all_musicians[key].id === id) {
-                    musician_name = all_musicians[key].name
-                    break
-                }
-            }
-            let item_mod = item;
-            item_mod.musician_name = musician_name;
-            return item_mod;
-        });
-
-        const submissions_chunk = chunk(submissions_mod,4);
+        const submissions_chunk = chunk(submissions,4);
 
         const rows = submissions_chunk.map((sub_chunk, index) => {
             const cols = sub_chunk.map((entry, index) => {
@@ -90,10 +68,10 @@ const SoTWSubmissions = () => {
                     </Col>
                 );
             });
-            return <Row key={index} style={{width: "1000px",marginTop:"50px", height: "200px"}} >{cols}</Row>
+            return <Row key={index} style={{width: "1000px",marginTop:"50px", height: "250px"}} >{cols}</Row>
             });
         return (
-            <div style={{marginTop:"250px", marginLeft:"100px"}}>
+            <div style={{marginTop:"50px", marginLeft:"100px", height: "1000px"}}>
             <Container fluid>
                 {rows}
             </Container>
