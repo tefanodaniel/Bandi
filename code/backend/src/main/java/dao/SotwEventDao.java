@@ -54,7 +54,7 @@ public interface SotwEventDao {
      * @param startDay
      * @param endDay
      * @param genre
-     * @return
+     * @return SongOfTheWeekEvent (if found) null otherwise
      * @throws DaoException
      */
     SongOfTheWeekEvent findEvent(String startDay, String endDay, String genre) throws DaoException;
@@ -64,7 +64,7 @@ public interface SotwEventDao {
      *
      * @param eventId
      * @param adminId
-     * @return SongOfTheWeekEvent (if found) null otherwise
+     * @return Event with updated admin
      * @throws DaoException
      */
     SongOfTheWeekEvent updateAdmin(String eventId, String adminId) throws DaoException;
