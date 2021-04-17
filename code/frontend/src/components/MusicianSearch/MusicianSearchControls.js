@@ -11,6 +11,8 @@ const selectPlaceholderQuery = (state) => {
         query.name = 'Search by Name';
         query.instrument = 'Search by Instrument';
         query.genre = 'Search by Genre';
+        query.experience = 'Search by Experience Level';
+        query.location = 'Search by State';
         query.distance = 'Search by Distance';
         return query;
     }
@@ -38,9 +40,19 @@ const MusicianSearchControls = () => {
         queryparams.genre = input
     }
 
+    const addexperiencequery = (e) => {
+        let input = e.target.value;
+        queryparams.experience = input
+    }
+
     const addinstrumentquery = (e) => {
         let input = e.target.value;
         queryparams.instrument = input
+    }
+
+    const addlocationquery = (e) => {
+        let input = e.target.value;
+        queryparams.location = input
     }
 
     const adddistancequery = (e) => {
@@ -86,6 +98,22 @@ const MusicianSearchControls = () => {
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
+                    <h5> Genre :</h5>
+                </Col>
+                <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
+                    <input onChange={e => {addexperiencequery(e);}} style={{width: "120%"}} placeholder={placeholder_query.experience} type='text'/>
+                </div>
+            </Row>
+            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
+                <Col className="col-sm-5">
+                    <h5> Genre :</h5>
+                </Col>
+                <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
+                    <input onChange={e => {addlocationquery(e);}} style={{width: "120%"}} placeholder={placeholder_query.location} type='text'/>
+                </div>
+            </Row>
+            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
+                <Col className="col-sm-5">
                     <h5> Within Distance (miles) :</h5>
                 </Col>
                 <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
@@ -96,7 +124,7 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                 </Col>
                 <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery} >Submit!</Button>
+                    <Button variant="primary" onClick={SubmitQuery} >Find Musicians!</Button>
                 </div>
             </Row>
         </Container>
