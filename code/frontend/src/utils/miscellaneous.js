@@ -55,6 +55,7 @@ export function genre_data() {
 export const createGenreSelectItems = () => {
     let items = [];
     let genres = genre_data();
+    items.push(<option key={-1} value={'Select a Genre'}>Select a Genre</option>);
     for (let i = 0; i < 13; i++) {
         items.push(<option key={i} value={genres[i].apiname}>{genres[i].name}</option>);
     }

@@ -62,15 +62,17 @@ const SotwSearchControls = () => {
     }
 
     const SubmitEventQuery = async () => {
-        eventparams.genre = genre
-        eventparams.startday = moment(selectedDays[0]).format('LL')
-        eventparams.endday = moment(selectedDays[6]).format('LL')
-        //console.log('Eventparams', eventparams);
-        dispatch(findSotwEventQueryWrapper(eventparams));
-        await delay(5000);
-        dispatch(getCurrentEventSubmissions(chosen_eventId))
-        await delay(5000);
-        //console.log(checkEventFlag)
+        if((genre!=='Select a Genre') && (genre !== undefined)) {
+            eventparams.genre = genre
+            eventparams.startday = moment(selectedDays[0]).format('LL')
+            eventparams.endday = moment(selectedDays[6]).format('LL')
+            //console.log('Eventparams', eventparams);
+            dispatch(findSotwEventQueryWrapper(eventparams));
+            await delay(5000);
+            dispatch(getCurrentEventSubmissions(chosen_eventId))
+            await delay(5000);
+            //console.log(checkEventFlag)
+        }
     }
 
     const modifiers = {

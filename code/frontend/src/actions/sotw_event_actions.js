@@ -44,6 +44,10 @@ export function findSotwEventQueryWrapper(eventparams) {
         //console.log(eventparams.startday)
         //console.log(eventparams.endday)
         const response1 = await SotwEventsApi.findEvent(eventparams.genre, eventparams.startday, eventparams.endday)
+        if(!response1.data){
+            alert('No such event, please choose a different genre and(or) week');
+            return
+        }
         const songId = response1.data.songId
         const response2 = await SongApi.get(songId);
         dispatch({
@@ -88,6 +92,9 @@ export function getCurrentEventSong(songId) {
 
 export function getCurrentEventSubmissions(eventId) {
     return async function fetchSotwEventCurrentSubmissions(dispatch, getState) {
+        if(eventId === -1){
+            return;
+        }
         const response = await SotwEventsApi.readAllSubmissions(eventId);
         dispatch({
             type : LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS,
