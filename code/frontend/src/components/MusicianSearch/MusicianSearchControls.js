@@ -124,7 +124,7 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                 </Col>
                 <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery}>Find Musicians!</Button>
+                    <Button variant="primary" onClick={SubmitQuery}>Find Musicians</Button>
                 </div>
             </Row>
         </Container>
