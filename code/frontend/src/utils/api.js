@@ -34,17 +34,6 @@ export function chatApiInstance() {
   })
 }
 
-//https://www.shazam.com/services/charts/csv/genre/world/afrobeats
-
-export function shazamChartApiInstance() {
-    return axios.create({
-        baseURL: "https://www.shazam.com/services/charts/csv/genre/world",
-        headers: {
-            "Content-Type": "text/plain"
-        }
-    })
-}
-
 
 export default axios.create({
   baseURL: getBackendURL(),
