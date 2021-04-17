@@ -60,16 +60,13 @@ const MusicianSearchControls = () => {
         queryparams.distance = input
     }
 
-    const SubmitQuery = (event) => {
-        this.setState({ isLoading: true });
+    const SubmitQuery = () => {
         if(Object.keys(queryparams)===0) {
             dispatch(clearQuery)
-            this.setState({ isLoading: false });
         }
         else {
             queryparams.id = user.id
             dispatch(newQuery(queryparams))
-            this.setState({ isLoading: false });
         }
     }
 
@@ -127,16 +124,7 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                 </Col>
                 <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery}>Find Musicians!
-                    {this.state.isLoading ? <Spinner
-                                                            as="span"
-                                                            animation="grow"
-                                                            size="sm"
-                                                            role="status"
-                                                            aria-hidden="true"
-                                                            /> : "Find Musicians!"}
-                    
-                    </Button>
+                    <Button variant="primary" onClick={SubmitQuery}>Find Musicians!</Button>
                 </div>
             </Row>
         </Container>
