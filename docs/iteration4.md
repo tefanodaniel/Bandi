@@ -73,13 +73,13 @@ Postponed:
 
 #### What we haven't done
 - Write test files for other DAO classes such as Band, FriendRequests, and Song of the Week.
-- There is a slight delay when making a SOTW event submission.
 - Implemented a “save for later” functionality for browsing profiles.
 
 #### Difficulties
 - Debugging errors with API requests.
 - Running the updated backend server and the updated frontend server at the same time.
-
+- Api calls from the frontend functional components seem to be slower than they should be. 
+ 
 #### Looking Forward
 - Collecting feedback from users new to navigating our banDi app.
 - Using Spotify API to display listening history insights on user profiles.
