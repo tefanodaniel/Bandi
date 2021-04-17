@@ -32,12 +32,12 @@ public final class Database {
      */
     public static void main(String[] args) throws URISyntaxException {
         Sql2o sql2o = getSql2o();
-        //createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
-        //createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-        //createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
-        //createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
-        //createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
-        //createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
+        createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
+        createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
+        createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
+        createRequestTableWithSamples(sql2o, new ArrayList<Request>());
+        createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
+        createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
         createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
     }
 
@@ -109,7 +109,8 @@ public final class Database {
 
             sql = "CREATE TABLE IF NOT EXISTS MusicianFriends("
                     + "id VARCHAR(30) REFERENCES Musicians, " // TODO: Add ON DELETE CASCADE somehow. Was getting weird error
-                    + "friendID VARCHAR(30)" // TODO: Make reference musician.
+                    + "friendID VARCHAR(30)," // TODO: Make reference musician.
+                    + "CONSTRAINT unique_friends UNIQUE(id, friendid)"
                     + ");";
 
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
@@ -164,28 +165,36 @@ public final class Database {
         }
     }
 
-    public static void createRequestTableWithSamples(Sql2o sql2o, List<FriendRequest> samples) {
+    public static void createRequestTableWithSamples(Sql2o sql2o, List<Request> samples) {
         try (Connection conn = sql2o.open()) {
             conn.createQuery("DROP TABLE IF EXISTS Requests;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Requests("
-                    + "senderid VARCHAR(30) REFERENCES Musicians,"
+                    + "senderid VARCHAR(50),"
                     + "senderName VARCHAR(50),"
-                    + "recipientid VARCHAR(30) REFERENCES Musicians,"
+                    + "recipientid VARCHAR(50),"
                     + "recipientName VARCHAR(50),"
-                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid)"
+                    + "type VARCHAR(10),"
+                    + "CONSTRAINT unique_message UNIQUE(senderid, recipientid, type)"
                     + ");";
 
             conn.createQuery(sql).executeUpdate();
 
-            String requestSql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname) VALUES (:senderid, :sendername, :recipientid, :recipientname);";
+            String requestSql = "INSERT INTO Requests(senderid, sendername, recipientid, recipientname, type) VALUES (:senderid, :sendername, :recipientid, :recipientname, :type);";
 
-            for (FriendRequest fr : samples) {
+            for (Request r : samples) {
+                String type;
+                if (r instanceof FriendRequest) {
+                    type = "friend";
+                } else {
+                    type = "band";
+                }
                 conn.createQuery(requestSql)
-                        .addParameter("senderid", fr.getSenderID())
-                        .addParameter("sendername", fr.getSenderName())
-                        .addParameter("recipientid", fr.getRecipientID())
-                        .addParameter("recipientname", fr.getRecipientName())
+                        .addParameter("senderid", r.getSenderID())
+                        .addParameter("sendername", r.getSenderName())
+                        .addParameter("recipientid", r.getRecipientID())
+                        .addParameter("recipientname", r.getRecipientName())
+                        .addParameter("type", type)
                         .executeUpdate();
             }
 
@@ -193,6 +202,7 @@ public final class Database {
             throw new Sql2oException(ex.getMessage());
         }
     }
+
 
     /**
      * Create Bands table schema and add sample CS Musicians to it.

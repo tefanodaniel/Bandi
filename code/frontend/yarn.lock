@@ -1299,9 +1299,9 @@
     minimist "^1.2.0"
 
 "@cometchat-pro/chat@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/@cometchat-pro/chat/-/chat-2.3.0.tgz#d54b2db8ace69d375b2aac5c5644e39339f8d8e2"
-  integrity sha512-jXvfsUkv69wnnOk53HeoBO1JECPCzxPrK9Hs9cJfrjhEJscWjKy4PyYb0VmD4o+olxZk81enLbCB5dseYtkosw==
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@cometchat-pro/chat/-/chat-2.3.1.tgz#130d94bc67835f807b200874cd8c2872a1db45f4"
+  integrity sha512-Rmfo/9GDo+qa+TokXhW7ATjkWdtTfysyPsiIXWGUAPIavQ84/1N7+jbVhuDvYCYi8dmYkZy7yK6h3iXypTohvQ==
 
 "@csstools/convert-colors@^1.4.0":
   version "1.4.0"

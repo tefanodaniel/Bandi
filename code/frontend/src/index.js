@@ -1,22 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider, useDispatch} from 'react-redux';
+import {Provider} from 'react-redux';
 import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Cookies from "js-cookie";
 import { CometChat } from "@cometchat-pro/chat"
 import config from './config';
-import {CreateSotwEvents} from "./utils/miscellaneous";
-//import { useDispatch } from "react-redux";
 
 
 import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
-
 import {fetchSDEvents} from "./actions/sd_event_actions";
 import {fetchSotwEvents, newEventByGenreWrapper} from "./actions/sotw_event_actions";
-import {createSotwEvents} from "./utils/miscellaneous";
+import { CHAT_INITIALIZE } from './actions/types';
 
 import {CronJob} from 'cron';
 import {endOfWeek, format, startOfWeek} from "date-fns";
@@ -24,13 +20,13 @@ import {shazam_genre_api_names} from "./utils/miscellaneous";
 // Redux store
 console.log('Initial state: ', store.getState())
 const unsubscribe = store.subscribe(() =>
-    console.log('')
-//    console.log('State after dispatch: ', store.getState())
+    console.log('Subscriber: State has possibly changed after a dispatched action, ', store.getState())
 )
+console.log("Fetching initial list of musicians")
 store.dispatch(fetchMusicians)
-
+console.log("Fetching initial list of speed dating events")
 store.dispatch(fetchSDEvents)
-
+console.log("Fetching initial list of song of the week events")
 store.dispatch(fetchSotwEvents)
 
 console.log('Before job instantiation');
@@ -59,13 +55,13 @@ job.start();
 // Init CometChat
 var appID = config.appId;
 var region = config.region;
-var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(region).build();
+var appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForFriends().setRegion(region).build();
 CometChat.init(appID, appSetting).then(
   () => {
     console.log("CometChat initialization completed successfully");
     //Cookies.set('chatInitialized', true);
     store.dispatch({
-      type: 'chat/initialize'
+      type: CHAT_INITIALIZE
     });
   },
   error => {

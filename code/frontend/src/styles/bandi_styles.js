@@ -47,8 +47,8 @@ export const bandi_styles = {
     },
     musician_card: {
         borderStyle: "dashed",
-        height: "180px",
-        width: "200px",
+        height: "190px",
+        width: "275px",
         backgroundImage: `url(${card_bg})`,
         backgroundPosition: "center",
         backgroundSize:"cover",

@@ -7,13 +7,12 @@ import Header from './Header/Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./Header/SubHeader";
-import {allMusiciansQuery} from "../actions/musician_actions";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
 
-import { CometChat } from "@cometchat-pro/chat";
-import config from '../config';
 import { connect } from 'react-redux';
 import { chatLogin } from '../actions/chat_actions';
+import {getUser} from "../actions/user_actions";
+import { fetchBandsForMusician } from "../actions/band_actions";
+import { getIncomingFriendRequests, getOutgoingFriendRequests, getUserFriends } from '../actions/friend_actions';
 
 
 class Discover extends React.Component {
@@ -25,8 +24,6 @@ class Discover extends React.Component {
   		u_id : null,
   		first_view : true,
 	  }
-
-    this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
   }
 
   viewMusicians = () => { this.props.history.push('/musiciansearch');}
@@ -36,25 +33,6 @@ class Discover extends React.Component {
   viewSpeedDating = () => {this.props.history.push('/speeddate')} // To Do.. implement a speed-dating component that lets users browse events and register for them.
 
   viewSOTW = () => {this.props.history.push('/sotw')}
-
-  setCookieOnLogin() {
-    let cookie_id = Cookies.get('id');
-	  //console.log('are the cookies already set?', cookie_id);
-    if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
-      const params = new URLSearchParams(window.location.search);
-      let user_id = params.get("id");
-      //console.log('the userid from url params', user_id);
-      // id is in url
-      if (user_id) {
-         // so first log in
-        // store id as a cookie
-        Cookies.set('id', user_id);
-
-        // remove id from url
-        window.history.replaceState(null, '', '/')
-      }
-    }
-  }
 
   componentDidUpdate(prevProps) {
     let userName = this.props.store.user_reducer?.name
@@ -67,14 +45,28 @@ class Discover extends React.Component {
     }
   }
 
+  componentDidMount() {
+	  const id1 = Cookies.get("id");
+	  let user = this.props.store.user_reducer;
+	  if(Object.keys(user).length === 0) {
+		  console.log("Not getting yet in componentDidMount")
+		  this.props.getUser(id1)
+	  }
+	  // Load friends and bands for usage throughout the rest of app
+	  this.props.fetchFriends(id1);
+	  this.props.fetchIncoming(id1);
+	  this.props.fetchOutgoing(id1);
+	  this.props.fetchBands(id1);
+  }
 
-  render() {
-    this.setCookieOnLogin()
+	render() {
+
     if (!Cookies.get('id')) {
-        console.log('redirecting since no cookie_id or user_id ');
+        //console.log('redirecting since no cookie_id or user_id ');
         return (<Redirect to='/signin'/>);
-    }
-	return (
+	  }
+
+	  return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
         	<SubHeader text={"We need a banDi tagline to insert here"}/>
@@ -130,11 +122,21 @@ class Discover extends React.Component {
 
 }
 
-//export default Discover;
-
 function mapStateToProps(state) {
   return {
     store: state
   };
 } // end mapStateToProps
-export default connect(mapStateToProps, { chatLogin })(Discover);
+
+function mapDispatchToProps(dispatch) {
+    return {
+		chatLogin: (id, userName) => dispatch(chatLogin(id, userName)),
+		getUser: (id) => dispatch(getUser(id)),
+        fetchFriends: (id) => dispatch(getUserFriends(id)),
+		fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
+		fetchOutgoing: (id) => dispatch(getOutgoingFriendRequests(id)),
+        fetchBands: (userID) => dispatch(fetchBandsForMusician({id: userID}))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Discover);
