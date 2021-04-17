@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
-import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
+import {Container, Row, Col, Card, Modal, Button, Spinner } from "react-bootstrap";
 import {getFrontendURL} from "../../utils/api";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
@@ -65,6 +65,7 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                         </Modal.Header>
                         <Modal.Body>
                             <h5>Location: {musician.location}</h5>
+                            <h5>Distance: {musician.distance}</h5>
                             <h5>Experience: {musician.experience}</h5>
                             <div>
                                 <h5>Instruments: {musician.instruments.join(", ")}</h5>
@@ -103,6 +104,7 @@ const MusicianSearchResults = () => {
         return (
             <Container>
                 <h5 style={{marginTop:"50px", marginLeft:"50px"}}> Loading some of our featured musicians!</h5>
+                <Spinner style={{marginTop:"50px", marginLeft:"200px"}} animation="grow" variant="info" />
             </Container>
         )
     }
@@ -121,7 +123,9 @@ const MusicianSearchResults = () => {
                 const ref = React.createRef();
                 return (
                     <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
+                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} name={user.name} 
+                            instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} distance={user.distance} 
+                            links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
                     </Col>
                 );
             });

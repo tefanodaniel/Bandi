@@ -26,7 +26,7 @@ class Discover extends React.Component {
 	  this.state = {
   		id : '',
   		u_id : null,
-  		first_view : true,
+  		first_view : true
 	  }
 
     this.setCookieOnLogin = this.setCookieOnLogin.bind(this);

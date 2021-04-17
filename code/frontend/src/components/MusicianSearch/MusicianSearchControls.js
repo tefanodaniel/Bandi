@@ -1,6 +1,6 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {Container, Row, Col} from "react-bootstrap";
+import {Container, Row, Col, Spinner} from "react-bootstrap";
 import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
 
@@ -60,13 +60,16 @@ const MusicianSearchControls = () => {
         queryparams.distance = input
     }
 
-    const SubmitQuery = () => {
+    const SubmitQuery = (event) => {
+        this.setState({ isLoading: true });
         if(Object.keys(queryparams)===0) {
             dispatch(clearQuery)
+            this.setState({ isLoading: false });
         }
         else {
             queryparams.id = user.id
             dispatch(newQuery(queryparams))
+            this.setState({ isLoading: false });
         }
     }
 
@@ -98,7 +101,7 @@ const MusicianSearchControls = () => {
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
-                    <h5> Genre :</h5>
+                    <h5> Experience :</h5>
                 </Col>
                 <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
                     <input onChange={e => {addexperiencequery(e);}} style={{width: "120%"}} placeholder={placeholder_query.experience} type='text'/>
@@ -106,7 +109,7 @@ const MusicianSearchControls = () => {
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
-                    <h5> Genre :</h5>
+                    <h5> State :</h5>
                 </Col>
                 <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
                     <input onChange={e => {addlocationquery(e);}} style={{width: "120%"}} placeholder={placeholder_query.location} type='text'/>
@@ -124,7 +127,16 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                 </Col>
                 <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery} >Find Musicians!</Button>
+                    <Button variant="primary" onClick={SubmitQuery}>Find Musicians!
+                    {this.state.isLoading ? <Spinner
+                                                            as="span"
+                                                            animation="grow"
+                                                            size="sm"
+                                                            role="status"
+                                                            aria-hidden="true"
+                                                            /> : "Find Musicians!"}
+                    
+                    </Button>
                 </div>
             </Row>
         </Container>
