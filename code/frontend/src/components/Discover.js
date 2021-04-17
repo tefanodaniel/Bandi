@@ -28,8 +28,6 @@ class Discover extends React.Component {
   		u_id : null,
   		first_view : true
 	  }
-
-    this.setCookieOnLogin = this.setCookieOnLogin.bind(this);
   }
 
   viewMusicians = () => { this.props.history.push('/musiciansearch');}
@@ -39,25 +37,6 @@ class Discover extends React.Component {
   viewSpeedDating = () => {this.props.history.push('/speeddate')} // To Do.. implement a speed-dating component that lets users browse events and register for them.
 
   viewSOTW = () => {this.props.history.push('/sotw')}
-
-  setCookieOnLogin() {
-    let cookie_id = Cookies.get('id');
-	//  console.log('are the cookies already set?', cookie_id);
-    if (!cookie_id) { // not logged in or cookie got deleted OR first login so redirect
-      const params = new URLSearchParams(window.location.search);
-      let user_id = params.get("id");
-      //console.log('the userid from url params', user_id);
-      // id is in url
-      if (user_id) {
-         // so first log in
-        // store id as a cookie
-        Cookies.set('id', user_id);
-
-        // remove id from url
-        window.history.replaceState(null, '', '/')
-      }
-    }
-  }
 
   componentDidUpdate(prevProps) {
     let userName = this.props.store.user_reducer?.name
@@ -69,6 +48,7 @@ class Discover extends React.Component {
       }
     }
   }
+
   componentDidMount() {
 	  const id1 = Cookies.get("id");
 	  let user = this.props.store.user_reducer;
@@ -83,16 +63,14 @@ class Discover extends React.Component {
 	  this.props.fetchBands(id1);
   }
 
-
 	render() {
 
-    this.setCookieOnLogin()
     if (!Cookies.get('id')) {
         //console.log('redirecting since no cookie_id or user_id ');
         return (<Redirect to='/signin'/>);
-	}
-	
-	return (
+	  }
+
+	  return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
         	<SubHeader text={"We need a banDi tagline to insert here"}/>
