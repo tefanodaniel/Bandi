@@ -4,12 +4,6 @@ import Cookies from "js-cookie";
 import MusicianApi from "./MusicianApiService";
 import { CometChat } from "@cometchat-pro/chat";
 
-export function loginWithSpotify() {
-  //Test API call:
-  //return axios.get('https://dog.ceo/api/breeds/list/all');
-  return axios.get('http://localhost:4567');
-}
-
 export function getFrontendURL() {
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
   const url =
