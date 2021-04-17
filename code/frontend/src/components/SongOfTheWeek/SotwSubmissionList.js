@@ -1,37 +1,9 @@
 import React from 'react';
 import {useSelector, shallowEqual} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
-import card_bg from "../../images/card.jpg";
 import {bandi_styles} from "../../styles/bandi_styles";
-
-const selectEventSubmissions = (state) => {
-    if(!state.sotw_event_reducer.chosen_event_submissions)
-        return -1;
-    else
-        return state.sotw_event_reducer.chosen_event_submissions.map(item => item)
-}
-
-
-const chunk = (arr, chunkSize = 1, cache = []) => {
-    const tmp = [...arr]
-    if (chunkSize <= 0) return cache
-    while (tmp.length) cache.push(tmp.splice(0, chunkSize))
-    return cache
-}
-
-
-const styles = {
-    card: {
-        borderStyle: "dashed",
-        height: "180px",
-        width: "200px",
-        backgroundImage: `url(${card_bg})`,
-        backgroundPosition: "center",
-        backgroundSize:"cover",
-        color: "white"
-    }
-}
-
+import {chunk} from "../../utils/miscellaneous";
+import {selectSotwEventSubmissions} from "../../selectors/sotw_selector";
 
 const SubmissionItem = ( entry ) => {
     return (
@@ -46,8 +18,8 @@ const SubmissionItem = ( entry ) => {
 }
 
 
-const SoTWSubmissions = () => {
-    let submissions = useSelector(selectEventSubmissions, shallowEqual)
+const SotwSubmissionList = () => {
+    let submissions = useSelector(selectSotwEventSubmissions)
 
     if(submissions === -1)
     {
@@ -80,4 +52,4 @@ const SoTWSubmissions = () => {
     }
 }
 
-export default SoTWSubmissions
+export default SotwSubmissionList

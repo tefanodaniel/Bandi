@@ -2,9 +2,9 @@ import 'react-tabs/style/react-tabs.css';
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
-import SoTWsearch from "./SoTWsearch";
-import SoTWDesc from "./SoTWDesc";
-import SoTWSubmissions from "./SoTWSubmissions";
+import SotwSearchControls from "./SotwSearchControls";
+import SotwEventDesc from "./SotwEventDesc";
+import SotwSubmissionList from "./SotwSubmissionList";
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 import {bandi_styles} from "../../styles/bandi_styles"
@@ -24,19 +24,19 @@ class SongOfTheWeek extends Component {
                     <Container className="mx-auto" fluid>
                         <Row>
                             <Col className="col-sm-3">
-                                <SoTWsearch />
+                                <SotwSearchControls />
                             </Col>
                             <Col className="col-sm-9 bg-transparent">
                                 <Row>
                                     <Col className="col-sm-6 bg-transparent">
-                                        <SoTWDesc />
+                                        <SotwEventDesc />
                                     </Col>
                                     <Col className="col-sm-6 bg-transparent">
                                         <SotwUserSubmission />
                                     </Col>
                                 </Row>
                                 <Row>
-                                <SoTWSubmissions />
+                                <SotwSubmissionList />
                                 </Row>
                             </Col>
                         </Row>

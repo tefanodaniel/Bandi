@@ -11,7 +11,7 @@ import {
 import SotwEventsApi from "../utils/SotwEventsApiService";
 import SotwSubmissionsApi from "../utils/SotwSubmissionsApiService";
 import SongApi from "../utils/SongApiService";
-
+import {delay} from "../utils/miscellaneous";
 
 // thunk function to load list of all musicians.
 // in the future this should be a list of contextual "featured" musicians pre-any user defined search.
@@ -28,8 +28,6 @@ export async function fetchSotwEvents(dispatch, getState) {
 export function getCurrentEvent(eventid) {
     //console.log("Inside getCurrentEvent");
     return async function fetchSotwEventCurrent(dispatch, getState) {
-        //for this iteration I'm hardcoding which event to show.
-        //let eventid = "00001fakeeventid";
         //console.log("Inside fetchSotwEventCurrent action");
         const response = await SotwEventsApi.get(eventid);
         dispatch({
@@ -81,7 +79,6 @@ export function getCurrentEventSong(songId) {
     }
     return async function fetchSotwEventCurrentSong(dispatch, getState) {
         //for this iteration I'm hardcoding which event to show.
-        //let eventid = "00001fakeeventid";
         //console.log("Inside fetchSotwEventCurrentSong action");
         const response = await SongApi.get(songId);
         dispatch({
@@ -106,6 +103,9 @@ export function newUserSubmission(event_id, submission_data) {
     return async function createUserSubmission(dispatch, getState) {
         const submission_id = submission_data.submission_id;
         const response1 = await SotwSubmissionsApi.create(submission_data)
+        await delay(1000);
+        if(response1.data === null)
+            return
         const response2 = await SotwEventsApi.addSubmissiontoEvent(event_id, submission_id);
         //console.log(response);
         dispatch({
@@ -114,7 +114,6 @@ export function newUserSubmission(event_id, submission_data) {
         })
     }
 }
-const delay = ms => new Promise(res => setTimeout(res, ms));
 
 export function newEventByGenreWrapper(eventId, genre, startDay, endDay) {
     console.log("Inside newEventByGenre action");
@@ -127,13 +126,14 @@ export function newEventByGenreWrapper(eventId, genre, startDay, endDay) {
         eventparams.adminId = "22xpmsx47uendfh4kafp3zjmi";
 
         const response = await SotwEventsApi.findEvent(eventparams.genre, eventparams.startDay, eventparams.endDay)
-        console.log("MY RESPONSE IS ", response)
         if(response.data !== null){
             return
         }
         await delay(1000);
-        console.log("NO EVENT YET FOR GENRE ", genre);
+        //console.log("NO EVENT YET FOR GENRE ", genre);
         const response1 = await SongApi.generate(genre);
+        await delay(1000);
+
         eventparams.songId = response1.data.songId;
         const response2 = await SotwEventsApi.create(eventparams);
         dispatch({

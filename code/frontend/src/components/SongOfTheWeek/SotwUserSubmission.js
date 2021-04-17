@@ -6,47 +6,19 @@ import {bandi_styles} from "../../styles/bandi_styles";
 import Button from "react-bootstrap/Button";
 import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 import {getCurrentEventSubmissions, newUserSubmission} from "../../actions/sotw_event_actions";
-// this will be a state selector for the sotw info.
-//const selectSongOfTheWeekById = (state, user_id) => {
-//    return state.musician_reducer.filteredMusicians.find((user) => user.id === user_id)
-//}
-const selectSongInfo = (state) => {
-    if(!state.sotw_event_reducer.chosen_event_song)
-        return -1;
-    else
-        return state.sotw_event_reducer.chosen_event_song
-}
-
-const selectClockState = (state) => {
-    if(!state.sotw_event_reducer.chosen_event_clock) {
-        var temp = {}
-        temp.total_time_left = -1;
-        temp.days_left = -1;
-        temp.hours_left = -1;
-        temp.minutes_left = -1;
-        temp.seconds_left = -1;
-        return temp;
-    }
-    else
-        return state.sotw_event_reducer.chosen_event_clock;
-}
-
-const selectEventId = (state) => {
-    if(!state.sotw_event_reducer.chosen_event)
-        return -1;
-    else
-        return state.sotw_event_reducer.chosen_event.eventId
-}
+import {selectSotwSongInfo, selectSotwEventClockState, selectChosenSotwEventId} from "../../selectors/sotw_selector";
+import {getLoggedInUser} from "../../selectors/user_selector";
+import {delay} from "../../utils/miscellaneous";
 
 const SotwUserSubmission = () => {
     const dispatch = useDispatch();
-    let song = useSelector(selectSongInfo, shallowEqual);
-    let clock_state = useSelector(selectClockState, shallowEqual);
-    let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
-    let eventId = useSelector(selectEventId, shallowEqual);
+    let song = useSelector(selectSotwSongInfo, shallowEqual);
+    let clock_state = useSelector(selectSotwEventClockState, shallowEqual);
+    let logged_user = useSelector(getLoggedInUser, shallowEqual);
+    let eventId = useSelector(selectChosenSotwEventId, shallowEqual);
+
     const [open, setOpen] = useState(false);
     var uuid = require("uuid");
-    //let [musician_id, setMusicianId] = useState(undefined);
     let [instruments, setInstruments] = useState(undefined);
     let [avLink, setAVLink] = useState(undefined);
     let submission_data = {};
@@ -75,35 +47,14 @@ const SotwUserSubmission = () => {
     }
     submission_data.musician_id=logged_user.id;
     submission_data.musician_name=logged_user.name;
-    //setMusicianId(logged_user.id);
-
-    const addInstrumentsToSubmission = (selected_instruments, submission_data) => {
-        //setInstruments(selected_instruments);
-        submission_data.instruments = selected_instruments;
-        console.log("adding these instruments", selected_instruments);
-        console.log("submission_data is now ", submission_data);
-    }
-
-    const addAVLinkToSubmission = (e, submission_data) => {
-        //setAVLink(selected_link);
-        console.log(e.target.value);
-        submission_data.avSubmission = e.target.value;
-        console.log("submission_data is now ", submission_data);
-    }
-
-    const delay = ms => new Promise(res => setTimeout(res, ms));
 
     const addSubmission = async (eventId, submission_data) => {
-//        let submission_data = {};
-        console.log('what am I submitting', submission_data);
+        //console.log('what am I submitting', submission_data);
         submission_data.instruments = instruments;
         submission_data.avSubmission = avLink;
 
         if((submission_data.musician_id !== undefined) && (submission_data.instruments !== undefined) && (submission_data.avSubmission !== undefined)) {
-            //alert('Please ensure all parameters are provided');
-
             submission_data.submission_id = uuid.v4();
-
             dispatch(newUserSubmission(eventId, submission_data));
             //console.log('have I got eventid', eventId)
             dispatch(getCurrentEventSubmissions(eventId))
