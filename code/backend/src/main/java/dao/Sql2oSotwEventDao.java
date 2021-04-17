@@ -39,7 +39,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
             e.addSubmissions(submission);
 
         }
-        System.out.println("SOTW Event Extraction successful");
+        //System.out.println("SOTW Event Extraction successful");
         return new ArrayList<SongOfTheWeekEvent>(sotwEvents.values());
     }
 
@@ -68,7 +68,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
     @Override
     public SongOfTheWeekEvent create(String eventid, String adminid, String startday, String endday, String songid, String genre, Set<String> submissions) throws DaoException {
         String sotw_event_sql = "INSERT INTO sotwevents (eventid, adminid, startday, endday, songid, genre)" +
-                "VALUES (:eventid, :adminid, :startday, :endday, :songid)";
+                "VALUES (:eventid, :adminid, :startday, :endday, :songid, :genre)";
         String sotw_event_submissions_sql = "INSERT INTO sotweventssubmissions (eventid, submission) VALUES (:eventid, :submission)";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sotw_event_sql)
@@ -173,7 +173,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
 
         try (Connection conn = sql2o.open()) {
             List<SongOfTheWeekEvent> events = this.extractSOTWEventsFromDatabase(sql, conn);
-            System.out.println(events);
+            //System.out.println(events);
             return events;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read events from database", ex);

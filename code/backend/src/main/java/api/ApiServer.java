@@ -143,6 +143,7 @@ public class ApiServer {
         // Song routes
         get("/songs", SongController.getAllSongs);
         get("/songs/:songid", SongController.getSongById);
+        post("/songs/generate/:genre", SongController.generateSongByGenre);
         post("/songs", SongController.postSong);
         put("/songs/:songid", SongController.putSong);
         delete("/songs/:songId", SongController.deleteSong);

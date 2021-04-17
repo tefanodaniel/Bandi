@@ -1,4 +1,6 @@
-const shazam_genre_display_names = () => {
+import api from "./api";
+
+export const shazam_genre_display_names = () => {
     return ([
         'Pop',
         'Hip-Hop/Rap',
@@ -16,7 +18,7 @@ const shazam_genre_display_names = () => {
     ]);
 };
 
-const shazam_genre_api_names = () => {
+export const shazam_genre_api_names = () => {
     return ([
         'pop',
         'hip-hop-rap',
@@ -45,5 +47,18 @@ export function genre_data() {
         });
     }
     return data;
+}
+
+export function convert_genre(genres) {
+    let api_genre = genres.join(', ') //only expecting one genre since that's how sotw song posting works.
+    const displaynames = shazam_genre_display_names();
+    const apinames = shazam_genre_api_names();
+    let display_genre = null;
+    for(let i = 0; i < 13; i++){
+        if(apinames[i] == api_genre) {
+            display_genre = displaynames[i];
+        }
+    }
+    return display_genre;
 }
 

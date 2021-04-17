@@ -6,6 +6,7 @@ import "../../styles/clock.css"
 import {bandi_styles} from "../../styles/bandi_styles";
 import moment from "moment";
 import {updateClockStateWrapper} from "../../actions/sotw_event_actions";
+import {convert_genre} from "../../utils/miscellaneous";
 
 // this will be a state selector for the sotw info.
 //const selectSongOfTheWeekById = (state, user_id) => {
@@ -114,8 +115,7 @@ const SoTWDesc = () => {
             <Card.Body className="gradient1" fluid="true" style={{marginBottom:"40px"}}>
                 <Card.Text><b>Song Of The Week: {song.songName}</b></Card.Text>
                 <Card.Text >Artist : {song.artistName}</Card.Text>
-                <Card.Text> Year : {song.releaseYear}</Card.Text>
-                <Card.Text className="small font-italic">Genres: {song.genres.join(', ')}</Card.Text>
+                <Card.Text className="font-italic">Genre: {convert_genre(song.genres)}</Card.Text>
             </Card.Body>
         </section>
         </Card>
@@ -145,3 +145,5 @@ const SoTWDesc = () => {
             )};
 
 export default SoTWDesc;
+/**                <Card.Text> Year : {song.releaseYear}</Card.Text>
+*/

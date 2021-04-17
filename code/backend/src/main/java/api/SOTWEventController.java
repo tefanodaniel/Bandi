@@ -46,10 +46,7 @@ public class SOTWEventController {
             String genre = req.params("genre");
             String startday = req.params("startday");
             String endday = req.params("endday");
-            System.out.println("Attempting to find event");
-            System.out.println("Found possible genre : " + genre);
-            System.out.println("Found possible start day : " + startday);
-            System.out.println("Found possible day : " + endday);
+            System.out.println("Attempting to find event for genre : "+ genre);
 
             if((genre != null) && (startday != null) && (endday != null)) {
                 event = sotw_eventDao.findEvent(startday, endday, genre);
@@ -57,12 +54,15 @@ public class SOTWEventController {
             else {
                 throw new ApiError("Bad request insufficient query parameters", 404);
             }
+            res.type("application/json");
+
 
             if (event == null) {
-                throw new ApiError("Resource not found for parameters, genre : " + genre + " start day :  " + startday
-                        + " end day : " + endday, 404); // Bad request
+                return gson.toJson(null);
+//                throw new ApiError("Resource not found for parameters, genre : " + genre + " start day :  " + startday
+//                        + " end day : " + endday, 404); // Bad request
             }
-            res.type("application/json");
+            System.out.println("Found an event :" + event);
             return gson.toJson(event);
         } catch (DaoException ex) {
             throw new ApiError(ex.getMessage(), 500);
@@ -73,9 +73,16 @@ public class SOTWEventController {
     public static Route postSOTWEvent = (req, res) -> {
         try {
             SongOfTheWeekEvent event = gson.fromJson(req.body(), SongOfTheWeekEvent.class);
+            System.out.println(event);
             Set<String> submissions = event.getSubmissions();
 
             if (submissions == null) { submissions = new HashSet<String>(); }
+            //check if an event already exists for this genre, startday, endday
+            SongOfTheWeekEvent check = sotw_eventDao.findEvent(event.getStartDay(), event.getEndDay(), event.getGenre());
+            if(check != null){
+                return null;
+            }
+
             sotw_eventDao.create(event.getEventId(), event.getAdminId(), event.getStartDay(), event.getEndDay(), event.getSongId(), event.getGenre(), submissions);
             res.status(201);
             return gson.toJson(event);

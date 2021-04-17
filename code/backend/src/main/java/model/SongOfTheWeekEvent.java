@@ -80,7 +80,6 @@ public class SongOfTheWeekEvent {
                 ", endDay = '" + this.endDay + '\''+
                 ", songId = '" + this.songId + '\''+
                 ", genre = '" + this.genre + '\''+
-                ", submissions = '" + this.submissions.toString() + '\''+
                 '}';
     }
 

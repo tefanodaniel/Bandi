@@ -33,4 +33,5 @@ export const CREATE_NEW_USER_SUBMISSION = '/events/submissions/create-new-submis
 export const ADD_SUBMISSION_TO_EVENT = '/events/submissions/add-submission-to-event'
 export const LOAD_SOTW_EVENTS_QUERY = 'events/load-sotw-events-query';
 export const UPDATE_CLOCK_STATE = 'events/update-clock-state';
+export const CREATE_NEW_SOTW_EVENT_GIVEN_GENRE = 'events/new-sotw-given-genre';
 export const CLEAR_SOTW_EVENTS_QUERY = 'events/load-sotw-events-query';

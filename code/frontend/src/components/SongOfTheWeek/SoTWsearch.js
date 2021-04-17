@@ -162,12 +162,6 @@ const SoTWsearch = () => {
         //console.log('Eventparams', eventparams);
         dispatch(findSotwEventQueryWrapper(eventparams));
         await delay(5000);
-        //let eventId = "00001fakeeventid";
-        //dispatch(getCurrentEvent(eventId))
-        console.log('have I got songid', chosen_songId)
-        //dispatch(getCurrentEventSong(chosen_songId))
-        //await delay(5000);
-        console.log('have I got eventid', chosen_eventId)
         dispatch(getCurrentEventSubmissions(chosen_eventId))
         await delay(5000);
         //console.log(checkEventFlag)

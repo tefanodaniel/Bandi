@@ -32,12 +32,12 @@ public final class Database {
      */
     public static void main(String[] args) throws URISyntaxException {
         Sql2o sql2o = getSql2o();
-        createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
-        createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-        createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
-        createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
-        createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
-        createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
+        //createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
+        //createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
+        //createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
+        //createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
+        //createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
+        //createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
         createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
     }
 

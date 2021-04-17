@@ -312,13 +312,16 @@ public final class DataStore {
         String genre1 = "pop";
         String genre2 = "dance";
         String genre3 = "rock";
+        String genre4 = "house";
+        String genre5 = "hip-hop-rap";
+        String genre6 = "alternative";
 
         sample_events.add(new SongOfTheWeekEvent("00001fakeeventid", admin1, startday1, endday1, songid1, genre1, submissions1));
         sample_events.add(new SongOfTheWeekEvent("00002fakeeventid", admin2, startday1, endday1, songid2, genre2, submissions2));
         sample_events.add(new SongOfTheWeekEvent("00003fakeeventid", admin1, startday1, endday1, songid3, genre3, submissions3));
-        sample_events.add(new SongOfTheWeekEvent("00004fakeeventid", admin2, startday2, endday2, songid4, genre1, submissions4));
-        sample_events.add(new SongOfTheWeekEvent("00005fakeeventid", admin1, startday2, endday2, songid5, genre2, submissions5));
-        sample_events.add(new SongOfTheWeekEvent("00006fakeeventid", admin2, startday2, endday2, songid6, genre3, submissions6));
+        sample_events.add(new SongOfTheWeekEvent("00004fakeeventid", admin2, startday1, endday1, songid4, genre4, submissions4));
+        sample_events.add(new SongOfTheWeekEvent("00005fakeeventid", admin1, startday1, endday1, songid5, genre5, submissions5));
+        sample_events.add(new SongOfTheWeekEvent("00006fakeeventid", admin2, startday1, endday1, songid6, genre6, submissions6));
 
         return sample_events;
     }

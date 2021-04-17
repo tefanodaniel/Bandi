@@ -5,12 +5,14 @@ import {
     LOAD_SOTW_EVENTS_CURRENT_SONG,
     LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS,
     CREATE_NEW_USER_SUBMISSION,
+    CREATE_NEW_SOTW_EVENT_GIVEN_GENRE,
     UPDATE_CLOCK_STATE,
     ADD_SUBMISSION_TO_EVENT
 } from './types';
 import SotwEventsApi from "../utils/SotwEventsApiService";
 import SotwSubmissionsApi from "../utils/SotwSubmissionsApiService";
 import SongApi from "../utils/SongApiService";
+import store from "../store";
 
 
 // thunk function to load list of all musicians.
@@ -113,6 +115,35 @@ export function newUserSubmission(event_id, submission_data) {
             type : CREATE_NEW_USER_SUBMISSION,
             payload : response2.data
         })
+    }
+}
+const delay = ms => new Promise(res => setTimeout(res, ms));
+
+export function newEventByGenreWrapper(eventId, genre, startDay, endDay) {
+    console.log("Inside newEventByGenre action");
+    return async function newEventGenre(dispatch, getState) {
+        let eventparams = {}
+        eventparams.eventId = eventId;
+        eventparams.genre = genre;
+        eventparams.startDay = startDay;
+        eventparams.endDay = endDay;
+        eventparams.adminId = "22xpmsx47uendfh4kafp3zjmi";
+
+        const response = await SotwEventsApi.findEvent(eventparams.genre, eventparams.startDay, eventparams.endDay)
+        console.log("MY RESPONSE IS ", response)
+        if(response.data !== null){
+            return
+        }
+        await delay(1000);
+        console.log("NO EVENT YET FOR GENRE ", genre);
+        const response1 = await SongApi.generate(genre);
+        eventparams.songId = response1.data.songId;
+        const response2 = await SotwEventsApi.create(eventparams);
+        dispatch({
+            type : CREATE_NEW_SOTW_EVENT_GIVEN_GENRE,
+            payload : []
+        })
+        dispatch(fetchSotwEvents)
     }
 }
 
