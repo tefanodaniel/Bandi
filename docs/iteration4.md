@@ -37,7 +37,8 @@ User Case: Invite to Band
 
 # Iteration Backlog
 - As a user, I want to be able to browse and register for speed-dating events that are happening in my area so that I can quickly meet a lot of people with similar interests and see if we might be a good match.
-- As a user, I want to browse song-of-the-week events by genre and make submissions.
+- As a user, I want to upload my SOTW submission to this week's event so I can view my submission on the event's dashboard.
+- As a user, I want to be able to filter through Bands so I can browse and discover new bands.
 - As a band member, I want to be able to send an invite to other registered users to join my band profile.  
 
 Postponed:
@@ -56,9 +57,31 @@ Postponed:
 
 # Retrospective
 #### What we have done
+- Refactored the musician frontend, and updated search to save previous query.
+- Refactored Friends frontend for proper use of Redux.
+- Refactored backend ApiServer file to divide and organize API routes. 
+- Band members can send connection requests to other users to join their band.
+- Updated backend to allow band and musician search by multiple genres.
+- Musician profiles are now properly displayed after navigating to a user profile.
+- Added tests for speed dating events.
+- Users can chat with their friends list.
+- Users can communicate with band members using groupchats.
+- Updated styling and branding of app homepage and user profiles.
+- Added browse functionality to SOTW (Song of the Week) events.
+- Users can make a submission to the SOTW event.
+- SOTW events are automatically created based on songs from Shazam Top 100 Weekly charts.
 
 #### What we haven't done
+- Write test files for other DAO classes such as Band, FriendRequests, and Song of the Week.
+- There is a slight delay when making a SOTW event submission.
+- Implemented a “save for later” functionality for browsing profiles.
 
 #### Difficulties
+- Debugging errors with API requests.
+- Running the updated backend server and the updated frontend server at the same time.
 
 #### Looking Forward
+- Collecting feedback from users new to navigating our banDi app.
+- Using Spotify API to display listening history insights on user profiles.
+- Continue improving the frontend style for a smooter user experience.
+- Adding student verification through .edu emails.
