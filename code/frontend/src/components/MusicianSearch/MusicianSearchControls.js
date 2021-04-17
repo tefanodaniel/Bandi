@@ -3,26 +3,12 @@ import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
 import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
-
-const selectPlaceholderQuery = (state) => {
-    let query = {};
-
-    if(!state.musician_reducer.query){
-        query.name = 'Search by Name';
-        query.instrument = 'Search by Instrument';
-        query.genre = 'Search by Genre';
-        query.distance = 'Search by Distance';
-        return query;
-    }
-    else{
-        Object.assign(query, state.musician_reducer.query);
-        return query
-    }
-}
+import {selectPlaceholderQuery} from "../../selectors/musician_selector";
+import { getLoggedInUser } from "../../selectors/user_selector";
 
 const MusicianSearchControls = () => {
     const dispatch = useDispatch();
-    let user = useSelector((state) => state.user_reducer, shallowEqual);
+    let user = useSelector(getLoggedInUser, shallowEqual);
     let placeholder_query = useSelector(selectPlaceholderQuery, shallowEqual);
 
     let queryparams = {};

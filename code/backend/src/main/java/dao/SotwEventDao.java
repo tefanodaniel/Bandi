@@ -10,26 +10,28 @@ public interface SotwEventDao {
      *
      * @param eventId A unique event Id.
      * @param adminId The admin who creates the event.
-     * @param start_week The start day of the event week.
-     * @param end_week The end day of the event week.
+     * @param startDay The start day of the event week.
+     * @param endDay The end day of the event week.
      * @param songId The unique Id of song associated with the event.
+     * @param genre The genre associated with the event
      * @return created SongOfTheWeekEvent object
      * @throws DaoException
      */
-    SongOfTheWeekEvent create(String eventId, String adminId, String start_week, String end_week, String songId) throws DaoException;
+    SongOfTheWeekEvent create(String eventId, String adminId, String startDay, String endDay, String songId, String genre) throws DaoException;
 
     /** Create a new Song of the Week Event with the following necessary parameters.
      *
      * @param eventId A unique event Id.
      * @param adminId The admin who creates the event.
-     * @param start_week The start day of the event week.
-     * @param end_week The end day of the event week.
+     * @param startDay The start day of the event week.
+     * @param endDay The end day of the event week.
      * @param songId The unique Id of song associated with the event.
+     * @param genre The genre associated with the event.
      * @param submissions
      * @return created SongOfTheWeekEvent object
      * @throws DaoException
      */
-    SongOfTheWeekEvent create(String eventId, String adminId, String start_week, String end_week, String songId, Set<String> submissions) throws DaoException;
+    SongOfTheWeekEvent create(String eventId, String adminId, String startDay, String endDay, String songId, String genre, Set<String> submissions) throws DaoException;
 
 
     /** Read a Song of the Week event given its unique event id.
@@ -47,11 +49,22 @@ public interface SotwEventDao {
      */
     List<SongOfTheWeekEvent> readAll() throws DaoException;
 
+    /** Read event with a matching startDay, endDay (and) genre
+     *
+     * @param startDay
+     * @param endDay
+     * @param genre
+     * @return SongOfTheWeekEvent (if found) null otherwise
+     * @throws DaoException
+     */
+    SongOfTheWeekEvent findEvent(String startDay, String endDay, String genre) throws DaoException;
+
+
     /** Update the admin associated with a specific event.
      *
      * @param eventId
      * @param adminId
-     * @return
+     * @return Event with updated admin
      * @throws DaoException
      */
     SongOfTheWeekEvent updateAdmin(String eventId, String adminId) throws DaoException;
@@ -60,20 +73,20 @@ public interface SotwEventDao {
     /** Update the Start Week of specific Event.
      *
      * @param eventId
-     * @param new_week
+     * @param newDay
      * @return Updated SongOfTheWeekEvent object
      * @throws DaoException
      */
-    SongOfTheWeekEvent updateStartWeek(String eventId, String new_week) throws DaoException;
+    SongOfTheWeekEvent updateStartDay(String eventId, String newDay) throws DaoException;
 
     /** Update the End Week of a specific Event.
      *
      * @param eventId
-     * @param new_week
+     * @param newDay
      * @return Updated SongOfTheWeekEvent object
      * @throws DaoException
      */
-    SongOfTheWeekEvent updateEndWeek(String eventId, String new_week) throws DaoException;
+    SongOfTheWeekEvent updateEndDay(String eventId, String newDay) throws DaoException;
 
     /** Update the Song associated with a specific event via unique id.
      *

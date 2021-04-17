@@ -9,6 +9,10 @@ class SotwEventsApiService {
         return customhttp.get(`/sotwevents/${eventid}`);
     }
 
+    findEvent(genre, startday, endday) {
+        return customhttp.get(`/sotwevents/desc/${genre}/${startday}/${endday}`);
+    }
+
     create(data) {
         return customhttp.post("/sotwevents", data);
     }

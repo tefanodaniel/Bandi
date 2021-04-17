@@ -8,12 +8,8 @@ import { connect } from 'react-redux';
 import { fetchSDEvents } from '../../actions/sd_event_actions';
 import SDEventApi from "../../utils/SDEventApiService";
 import Button from "react-bootstrap/Button";
-import {fetchBandsForMusician} from "../../actions/band_actions";
 import Form from "react-bootstrap/Form";
-import FormGroup from "react-bootstrap/FormGroup";
 import Jumbotron from "react-bootstrap/Jumbotron";
-import BandApi from "../../utils/BandApiService";
-import MusicianApi from "../../utils/MusicianApiService";
 
 class SpeedDate extends React.Component {
     constructor(props) {
