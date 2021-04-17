@@ -49,12 +49,13 @@ const SotwUserSubmission = () => {
     submission_data.musician_id=logged_user.id;
     submission_data.musician_name=logged_user.name;
 
-    const addSubmission = async (eventId, submission_data) => {
+    const addSubmission = async (submission_data) => {
         //console.log('what am I submitting', submission_data);
         submission_data.instruments = instruments;
         submission_data.avSubmission = avLink;
+        console.log("what is my event id :  ", eventId);
 
-        if((submission_data.musician_id !== undefined) && (submission_data.instruments !== undefined) && (submission_data.avSubmission !== undefined)) {
+        if((eventId !== undefined) && (submission_data.musician_id !== undefined) && (submission_data.instruments !== undefined) && (submission_data.avSubmission !== undefined)) {
             submission_data.submission_id = uuidv4();
             dispatch(newUserSubmission(eventId, submission_data));
             //console.log('have I got eventid', eventId)
@@ -97,7 +98,7 @@ const SotwUserSubmission = () => {
                                     <Col className="col-sm-5">
                                     </Col>
                                     <div className="col-sm-7" style={{textAlign:"center"}}>
-                                        <Button variant="primary" onClick={() => addSubmission(eventId, submission_data)} >Submit!</Button>
+                                        <Button variant="primary" onClick={() => addSubmission(submission_data)} >Submit!</Button>
                                     </div>
                                 </Row>
                             </Container>

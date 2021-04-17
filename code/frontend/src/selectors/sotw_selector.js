@@ -50,6 +50,16 @@ export const selectSotwEventClockState = (state) => {
         return state.sotw_event_reducer.chosen_event_clock;
 }
 
+export const selectSotwEventSubmissionIds = (state) => {
+    if(!state.sotw_event_reducer.chosen_event)
+        return -1;
+    else if(!state.sotw_event_reducer.chosen_event.submissions)
+        return -1;
+    else
+        return state.sotw_event_reducer.chosen_event.submissions.map(item => item)
+}
+
+
 export const selectSotwEventSubmissions = (state) => {
     if(!state.sotw_event_reducer.chosen_event_submissions)
         return -1;

@@ -22,7 +22,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         Map<String, SongOfTheWeekEvent> sotwEvents = new HashMap<String, SongOfTheWeekEvent>();
 
         for (Map row : queryResults) {
-            String eventid = (String) row.get("eventid");
+            String eventid = (String) row.get("eid");
             String adminid = (String) row.get("adminid");
             String startDay = (String) row.get("startday");
             String endDay = (String) row.get("endday");
@@ -141,12 +141,11 @@ public class Sql2oSotwEventDao implements SotwEventDao {
                     .addParameter("startday", startDay)
                     .addParameter("endday", endDay)
                     .executeAndFetchTable().asList();
-
-            if (queryResults.size() == 0) {
+            if (queryResults.isEmpty()) {
                 return null;
             }
-
-            String eventid = (String) queryResults.get(0).get("eventid");
+            else {
+            String eventid = (String) queryResults.get(0).get("eid");
             String adminid = (String) queryResults.get(0).get("adminid");
             //String startDay = (String) queryResults.get(0).get("startday");
             //String endDay = (String) queryResults.get(0).get("endday");
@@ -161,6 +160,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
             }
 
             return e;
+            }
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read event with genre " + genre + " starting on " + startDay + " and ending on " + endDay, ex);
         }
@@ -170,10 +170,9 @@ public class Sql2oSotwEventDao implements SotwEventDao {
     public List<SongOfTheWeekEvent> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT S.eventid as EID, * FROM sotwevents as S) as R\n"
                 + "LEFT JOIN sotweventssubmissions as G ON R.EID=G.eventid;";
-
         try (Connection conn = sql2o.open()) {
             List<SongOfTheWeekEvent> events = this.extractSOTWEventsFromDatabase(sql, conn);
-            //System.out.println(events);
+            System.out.println(events);
             return events;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read events from database", ex);

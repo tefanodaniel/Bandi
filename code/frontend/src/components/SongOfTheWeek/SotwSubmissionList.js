@@ -1,9 +1,10 @@
 import React from 'react';
-import {useSelector, shallowEqual} from "react-redux";
+import {useSelector, useDispatch, shallowEqual} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import {bandi_styles} from "../../styles/bandi_styles";
 import {chunk} from "../../utils/miscellaneous";
-import {selectSotwEventSubmissions} from "../../selectors/sotw_selector";
+import {selectChosenSotwEventId, selectSotwEventSubmissions, selectSotwEventSubmissionIds} from "../../selectors/sotw_selector";
+import {getSubmissionsWrapper} from "../../actions/sotw_event_actions";
 
 const SubmissionItem = ( entry ) => {
     return (
@@ -19,8 +20,17 @@ const SubmissionItem = ( entry ) => {
 
 
 const SotwSubmissionList = () => {
-    let submissions = useSelector(selectSotwEventSubmissions)
+    const dispatch = useDispatch();
+    let submission_ids = useSelector(selectSotwEventSubmissionIds);
+    let event_id = useSelector(selectChosenSotwEventId);
 
+    if(event_id !== -1) {
+        if(submission_ids !== -1) {
+            dispatch(getSubmissionsWrapper(submission_ids, event_id));
+        }
+    }
+
+    let submissions = useSelector(selectSotwEventSubmissions)
     if(submissions === -1)
     {
         return (

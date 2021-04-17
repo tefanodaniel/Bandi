@@ -74,7 +74,7 @@ public class SongOfTheWeekEvent {
     @Override
     public String toString() {
         return "SongOfTheWeek Event {" +
-                ", eventId = '" + this.eventId + '\''+
+                "eventId = '" + this.eventId + '\''+
                 ", adminId = '" + this.adminId + '\''+
                 ", startDay = '" + this.startDay + '\''+
                 ", endDay = '" + this.endDay + '\''+

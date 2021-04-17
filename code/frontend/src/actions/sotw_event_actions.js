@@ -95,6 +95,7 @@ export function getCurrentEventSubmissions(eventId) {
         if(eventId === -1){
             return;
         }
+        console.log('fetching submissions for current event');
         const response = await SotwEventsApi.readAllSubmissions(eventId);
         dispatch({
             type : LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS,
@@ -109,14 +110,18 @@ export function newUserSubmission(event_id, submission_data) {
         const submission_id = submission_data.submission_id;
         const response1 = await SotwSubmissionsApi.create(submission_data)
         await delay(1000);
-        if(response1.data === null)
-            return
+        //if(response1.data === null)
+        //    console.log('could not create submission')
+        //    return
+        console.log('going to add submission to event')
         const response2 = await SotwEventsApi.addSubmissiontoEvent(event_id, submission_id);
         //console.log(response);
+        alert('Thank you for your submission!')
         dispatch({
             type : CREATE_NEW_USER_SUBMISSION,
             payload : response2.data
         })
+        dispatch(getCurrentEventSubmissions(event_id))
     }
 }
 
@@ -148,3 +153,12 @@ export function newEventByGenreWrapper(eventId, genre, startDay, endDay) {
         dispatch(fetchSotwEvents)
     }
 }
+
+export function getSubmissionsWrapper(submissions_ids, eventId) {
+    console.log("Inside getSubmissionsWrapper");
+    return async function getSubmissions(dispatch, getState) {
+        dispatch(getCurrentEventSubmissions(eventId))
+    }
+}
+
+
