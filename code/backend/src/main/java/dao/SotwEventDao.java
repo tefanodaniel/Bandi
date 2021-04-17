@@ -64,7 +64,7 @@ public interface SotwEventDao {
      *
      * @param eventId
      * @param adminId
-     * @return
+     * @return SongOfTheWeekEvent (if found) null otherwise
      * @throws DaoException
      */
     SongOfTheWeekEvent updateAdmin(String eventId, String adminId) throws DaoException;
