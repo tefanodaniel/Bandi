@@ -9,6 +9,8 @@ import {getCurrentEventSubmissions, newUserSubmission} from "../../actions/sotw_
 import {selectSotwSongInfo, selectSotwEventClockState, selectChosenSotwEventId} from "../../selectors/sotw_selector";
 import {getLoggedInUser} from "../../selectors/user_selector";
 import {delay} from "../../utils/miscellaneous";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const SotwUserSubmission = () => {
     const dispatch = useDispatch();
@@ -18,7 +20,6 @@ const SotwUserSubmission = () => {
     let eventId = useSelector(selectChosenSotwEventId, shallowEqual);
 
     const [open, setOpen] = useState(false);
-    var uuid = require("uuid");
     let [instruments, setInstruments] = useState(undefined);
     let [avLink, setAVLink] = useState(undefined);
     let submission_data = {};
@@ -54,7 +55,7 @@ const SotwUserSubmission = () => {
         submission_data.avSubmission = avLink;
 
         if((submission_data.musician_id !== undefined) && (submission_data.instruments !== undefined) && (submission_data.avSubmission !== undefined)) {
-            submission_data.submission_id = uuid.v4();
+            submission_data.submission_id = uuidv4();
             dispatch(newUserSubmission(eventId, submission_data));
             //console.log('have I got eventid', eventId)
             dispatch(getCurrentEventSubmissions(eventId))

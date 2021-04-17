@@ -13,9 +13,7 @@ import SotwSubmissionsApi from "../utils/SotwSubmissionsApiService";
 import SongApi from "../utils/SongApiService";
 import {delay} from "../utils/miscellaneous";
 
-// thunk function to load list of all musicians.
-// in the future this should be a list of contextual "featured" musicians pre-any user defined search.
-// also pagination or carousel.
+// the action creators below are thunk functions.
 export async function fetchSotwEvents(dispatch, getState) {
     //console.log("Inside fetchSotwEvents action");
     const response = await SotwEventsApi.getAll();

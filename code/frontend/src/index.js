@@ -14,7 +14,7 @@ import { CHAT_INITIALIZE } from './actions/types';
 import {CronJob} from 'cron';
 import {endOfWeek, format, startOfWeek} from "date-fns";
 import {shazam_genre_api_names} from "./utils/miscellaneous";
-
+import { v4 as uuidv4 } from 'uuid';
 // Redux store
 console.log('Initial state: ', store.getState())
 const unsubscribe = store.subscribe(() =>
@@ -43,10 +43,9 @@ const job = new CronJob('0 */10 6 * * 0', function() {
     endDay = endDay.replace(/st|nd|rd|th/,'');
 
     const genres = shazam_genre_api_names();
-    const uuid = require("uuid");
 
     for(let i=0; i < 13; i++) {
-        let eventId = uuid.v4();
+        let eventId = uuidv4();
         store.dispatch(newEventByGenreWrapper(eventId, genres[i], startDay, endDay));
     }
 });
