@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
 import {getBackendURL} from "../../utils/api";
+import Header from "./Header";
+import Footer from "./Footer";
 
 import { connect } from 'react-redux';
 import { updateUserProfile, getUser } from '../../actions/user_actions';
