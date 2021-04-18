@@ -4,6 +4,11 @@ export const LOAD_MUSICIANS_INITIAL_SEARCH = 'musicians/loadfirstsearch';
 export const LOAD_MUSICIANS_QUERY = 'musicians/newquery';
 export const CLEAR_MUSICIANS_QUERY = 'musicians/clearquery';
 
+// Friend API action action types
+export const LOAD_USER_FRIENDS = 'user/friends';
+export const LOAD_INCOMING_FRIEND_REQUESTS = 'requests/friend/in';
+export const LOAD_OUTGOING_FRIEND_REQUESTS = 'requests/friend/out';
+
 // Band API action types
 export const LOAD_BANDS_FOR_MUSICIAN = '/bands/loadmusicianbands';
 
@@ -29,5 +34,9 @@ export const LOAD_SOTW_EVENTS_INITIAL = '/events/load-sotw-events-first';
 export const LOAD_SOTW_EVENTS_CURRENT = '/events/load-sotw-event-current'
 export const LOAD_SOTW_EVENTS_CURRENT_SONG = '/events/load-sotw-event-current-song'
 export const LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS = '/events/load-sotw-event-current-submissions'
+export const CREATE_NEW_USER_SUBMISSION = '/events/submissions/create-new-submission'
+export const ADD_SUBMISSION_TO_EVENT = '/events/submissions/add-submission-to-event'
 export const LOAD_SOTW_EVENTS_QUERY = 'events/load-sotw-events-query';
+export const UPDATE_CLOCK_STATE = 'events/update-clock-state';
+export const CREATE_NEW_SOTW_EVENT_GIVEN_GENRE = 'events/new-sotw-given-genre';
 export const CLEAR_SOTW_EVENTS_QUERY = 'events/load-sotw-events-query';

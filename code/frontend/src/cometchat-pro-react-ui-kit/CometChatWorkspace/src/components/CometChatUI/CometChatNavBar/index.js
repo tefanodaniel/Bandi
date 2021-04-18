@@ -43,7 +43,7 @@ export class CometChatNavBar extends React.Component {
     if (this.props.activeTab !== this.props.tabs["CHATS"]) {
       return false;
     }
-    
+
     this.chatListRef.updateLastMessage(message);
   }
 
@@ -56,7 +56,7 @@ export class CometChatNavBar extends React.Component {
     } else if (this.props.activeTab === this.props.tabs["GROUPS"]) {
 
       this.groupListRef.removeGroupFromListOnDeleting(group);
-    }    
+    }
   }
 
   getDefaultComponent = () => {
@@ -64,6 +64,7 @@ export class CometChatNavBar extends React.Component {
     switch (this.props.activeTab) {
       case "users":
         return <CometChatUserList
+          friendsOnly={true}
           theme={this.props.theme}
           item={this.props.item}
           type={this.props.type}
@@ -122,26 +123,26 @@ export class CometChatNavBar extends React.Component {
         <div css={footerStyle()} className="sidebar__footer">
           <div css={navbarStyle()} className="footer__navbar">
             <div css={itemStyle()} className="navbar__item" onClick={() => this.props.actionGenerated('tabChanged', this.props.tabs["CHATS"])}>
-              <div 
-              css={itemLinkStyle(chatGreyIcon, chatBlueIcon, chatsTabActive, this.props.tabs["CHATS"])} 
+              <div
+              css={itemLinkStyle(chatGreyIcon, chatBlueIcon, chatsTabActive, this.props.tabs["CHATS"])}
               className="item__link item__link__chats"
               title={Translator.translate("CHATS", this.props.lang)}></div>
             </div>
             <div css={itemStyle()} className="navbar__item" onClick={() => this.props.actionGenerated('tabChanged', this.props.tabs["USERS"])}>
-              <div 
-              css={itemLinkStyle(contactGreyIcon, contactBlueIcon, userTabActive, this.props.tabs["USERS"])} 
+              <div
+              css={itemLinkStyle(contactGreyIcon, contactBlueIcon, userTabActive, this.props.tabs["USERS"])}
               className="item__link item__link__contacts"
               title={Translator.translate("USERS", this.props.lang)}></div>
             </div>
             <div css={itemStyle()} className="navbar__item" onClick={() => this.props.actionGenerated('tabChanged', this.props.tabs["GROUPS"])}>
-              <div 
-              css={itemLinkStyle(groupGreyIcon, groupBlueIcon, groupsTabActive, this.props.tabs["GROUPS"])} 
+              <div
+              css={itemLinkStyle(groupGreyIcon, groupBlueIcon, groupsTabActive, this.props.tabs["GROUPS"])}
               className="item__link item__link__groups"
               title={Translator.translate("GROUPS", this.props.lang)}></div>
             </div>
             <div css={itemStyle()} className="navbar__item" onClick={() => this.props.actionGenerated('tabChanged', this.props.tabs["INFO"])}>
-              <div 
-              css={itemLinkStyle(moreGreyIcon, moreBlueIcon, moreTabActive, this.props.tabs["INFO"])} 
+              <div
+              css={itemLinkStyle(moreGreyIcon, moreBlueIcon, moreTabActive, this.props.tabs["INFO"])}
               className="item__link item__link__info"
               title={Translator.translate("MORE", this.props.lang)}></div>
             </div>

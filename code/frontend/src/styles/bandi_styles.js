@@ -47,8 +47,8 @@ export const bandi_styles = {
     },
     musician_card: {
         borderStyle: "dashed",
-        height: "180px",
-        width: "200px",
+        height: "190px",
+        width: "275px",
         backgroundImage: `url(${card_bg})`,
         backgroundPosition: "center",
         backgroundSize:"cover",
@@ -66,11 +66,18 @@ export const bandi_styles = {
         marginLeft: "20px"
     },
     sotw_desc: {
-            borderStyle: "none",
-            height: "180px",
-            marginTop: "20px",
-            marginLeft: "100px",
-            marginBottom:"80px"
+        borderStyle: "none",
+        height: "180px",
+        marginTop: "20px",
+        marginLeft: "50px",
+        marginBottom:"80px"
+    },
+    sotw_user_submission: {
+        borderStyle: "none",
+        height: "180px",
+        marginTop: "20px",
+        marginLeft: "-140px",
+        marginBottom:"80px"
     },
     submission_card: {
         borderStyle: "dashed",
@@ -80,5 +87,11 @@ export const bandi_styles = {
         backgroundPosition: "center",
         backgroundSize:"cover",
         color: "white"
+    },
+    clock_heading: {
+        color: "#396",
+        fontWeight: "100",
+        fontSize: "40px",
+        margin: "40px 0px 20px",
     }
 }

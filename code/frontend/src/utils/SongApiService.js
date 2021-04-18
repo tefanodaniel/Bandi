@@ -9,6 +9,10 @@ class SongAPIService {
         return customhttp.get(`/songs/${songid}`);
     }
 
+    generate(genre) {
+        return customhttp.post(`/songs/generate/${genre}`);
+    }
+
     create(data) {
         return customhttp.post("/songs", data);
     }

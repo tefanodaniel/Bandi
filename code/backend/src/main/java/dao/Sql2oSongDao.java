@@ -75,6 +75,41 @@ public class Sql2oSongDao implements SongDao {
     };
 
     @Override
+    public Song readGivenName(String songname) throws Exception {
+        try (Connection conn = sql2o.open()) {
+            String sql = "SELECT * FROM (SELECT S.songid as SID, * FROM songs as S) as R\n"
+                    + "LEFT JOIN SongGenres as G ON R.SID=G.songid\n"
+                    + "WHERE R.songname=:songname;";
+
+            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("songname", songname).executeAndFetchTable().asList();
+
+            if (queryResults.size() == 0) {
+                return null;
+            }
+
+            if(queryResults.size() >= 2) {
+                throw new Sql2oException("Too many songs with the same name already in the database! Possible duplication");
+            }
+
+            String songid = (String) queryResults.get(0).get("songid");
+            String artistName = (String) queryResults.get(0).get("artistname");
+            String albumName = (String) queryResults.get(0).get("albumname");
+            Integer releaseYear = (Integer) queryResults.get(0).get("releaseyear");
+
+            Song s = new Song(songid, songname, artistName, albumName, releaseYear);
+            for (Map row : queryResults) {
+                if (row.get("genre") != null) {
+                    s.addGenre((String) row.get("genre"));
+                }
+            }
+
+            return s;
+        } catch (Sql2oException ex) {
+            throw new Exception("Unable to read song with name" + songname, ex);
+        }
+    };
+
+    @Override
     public List<Song> readAll() throws DaoException {
         String sql = "SELECT * FROM (SELECT S.songid as SID, * FROM Songs as  S) as R\n" +
                 "LEFT JOIN songgenres as G on R.SID=G.songid;";

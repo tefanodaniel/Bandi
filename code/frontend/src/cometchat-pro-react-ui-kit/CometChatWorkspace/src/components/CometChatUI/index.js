@@ -28,7 +28,7 @@ class CometChatUI extends React.Component {
   loggedInUser = null;
 
   constructor(props) {
-    
+
     super(props);
 
     this.tabs = {
@@ -38,7 +38,7 @@ class CometChatUI extends React.Component {
       "GROUPS": "groups",
       "INFO": "info"
     }
-    
+
     this.state = {
       darktheme: false,
       viewdetailscreen: false,
@@ -72,7 +72,7 @@ class CometChatUI extends React.Component {
       console.log("[CometChatUnified] getLoggedinUser error", error);
     });
   }
-  
+
   componentDidMount() {
 
     if(!Object.keys(this.state.item).length) {
@@ -94,7 +94,7 @@ class CometChatUI extends React.Component {
   }
 
   navBarAction = (action, type, item) => {
-    
+
     switch(action) {
       case "itemClicked":
         this.itemClicked(item, type);
@@ -109,7 +109,7 @@ class CometChatUI extends React.Component {
       break;
     }
   }
-  
+
   itemClicked = (item, type) => {
 
     this.toggleSideBar();
@@ -123,7 +123,7 @@ class CometChatUI extends React.Component {
   }
 
   actionHandler = (action, item, count, ...otherProps) => {
-    
+
     switch(action) {
       case "blockUser":
         this.blockUser();
@@ -137,7 +137,7 @@ class CometChatUI extends React.Component {
       break;
       // eslint-disable-next-line no-lone-blocks
       case "menuClicked": {
-        
+
         this.toggleSideBar();
         this.setState({ item: {} });
       }
@@ -145,7 +145,7 @@ class CometChatUI extends React.Component {
       case "groupUpdated":
         this.groupUpdated(item, count, ...otherProps);
       break;
-      case enums.ACTIONS["GROUP_DELETED"]: 
+      case enums.ACTIONS["GROUP_DELETED"]:
         this.deleteGroup(item);
       break;
       case enums.ACTIONS["GROUP_LEFT"]:
@@ -173,7 +173,7 @@ class CometChatUI extends React.Component {
       case "viewActualImage":
         this.toggleImageView(item);
       break;
-      case "membersAdded": 
+      case "membersAdded":
         this.membersAdded(item);
       break;
       case "memberUnbanned":
@@ -182,7 +182,7 @@ class CometChatUI extends React.Component {
       case "memberScopeChanged":
         this.memberScopeChanged(item);
       break;
-      case "messageComposed": 
+      case "messageComposed":
         this.navBarRef.updateLastMessage(item[0]);
       break;
       case "messageEdited":
@@ -243,7 +243,7 @@ class CometChatUI extends React.Component {
   }
 
   unblockUser = () => {
-    
+
     let usersList = [this.state.item.uid];
     CometChat.unblockUsers(usersList).then(list => {
 
@@ -275,10 +275,10 @@ class CometChatUI extends React.Component {
     const message = {...parentMessage};
     const threaditem = {...this.state.item};
     this.setState({
-      threadmessageview: true, 
-      threadmessageparent: message, 
+      threadmessageview: true,
+      threadmessageparent: message,
       threadmessageitem: threaditem,
-      threadmessagetype: this.state.type, 
+      threadmessagetype: this.state.type,
       viewdetailscreen: false
     });
   }
@@ -319,18 +319,18 @@ class CometChatUI extends React.Component {
   }
 
   groupUpdated = (message, key, group, options) => {
-    
+
     switch(key) {
       case enums.GROUP_MEMBER_BANNED:
       case enums.GROUP_MEMBER_KICKED: {
-        
+
         if(options.user.uid === this.loggedInUser.uid) {
           this.setState({item: {}, type: "group", viewdetailscreen: false});
         }
         break;
       }
       case enums.GROUP_MEMBER_SCOPE_CHANGED: {
-        
+
         if(options.user.uid === this.loggedInUser.uid) {
 
           const newObj = Object.assign({}, this.state.item, {"scope": options["scope"]})
@@ -374,12 +374,12 @@ class CometChatUI extends React.Component {
     CometChat.getConversation(id, type).then(conversation => {
 
       this.itemClicked(conversation.conversationWith, type);
-      
+
       if (this.messageScreenRef) {
         this.messageScreenRef.actionHandler(enums.ACTIONS["ACCEPT_DIRECT_CALL"]);
       }
       this.ongoingDirectCall(true);
-      
+
     }).catch(error => {
 
       console.log('error while fetching a conversation', error);
@@ -400,25 +400,25 @@ class CometChatUI extends React.Component {
   }
 
   membersAdded = (members) => {
-    
+
     const messageList = [];
     members.forEach(eachMember => {
 
       const message = `${this.loggedInUser.name} ${Translator.translate("ADDED", this.state.lang)} ${eachMember.name}`;
       const sentAt = new Date() / 1000 | 0;
-      const messageObj = { 
-        "category": CometChat.CATEGORY_ACTION, 
-        "message": message, 
-        "type": enums.ACTION_TYPE_GROUPMEMBER, 
-        "sentAt": sentAt, 
+      const messageObj = {
+        "category": CometChat.CATEGORY_ACTION,
+        "message": message,
+        "type": enums.ACTION_TYPE_GROUPMEMBER,
+        "sentAt": sentAt,
         "action": CometChat.ACTION_TYPE.MEMBER_ADDED,
-        "actionBy": { ...this.loggedInUser }, 
-        "actionOn": { ...eachMember } 
+        "actionBy": { ...this.loggedInUser },
+        "actionOn": { ...eachMember }
       };
 
       messageList.push(messageObj);
     });
-    
+
     this.setState({ groupmessage: messageList });
   }
 
@@ -429,14 +429,14 @@ class CometChatUI extends React.Component {
 
       const message = `${this.loggedInUser.name} ${Translator.translate("UNBANNED", this.state.lang)} ${eachMember.name}`;
       const sentAt = new Date() / 1000 | 0;
-      const messageObj = { 
-        "category": CometChat.CATEGORY_ACTION, 
-        "message": message, 
-        "type": enums.ACTION_TYPE_GROUPMEMBER, 
+      const messageObj = {
+        "category": CometChat.CATEGORY_ACTION,
+        "message": message,
+        "type": enums.ACTION_TYPE_GROUPMEMBER,
         "sentAt": sentAt,
         "action": CometChat.ACTION_TYPE.MEMBER_UNBANNED,
         "actionBy": { ...this.loggedInUser },
-        "actionOn": { ...eachMember } 
+        "actionOn": { ...eachMember }
       };
 
       messageList.push(messageObj);
@@ -455,14 +455,14 @@ class CometChatUI extends React.Component {
 
       const message = `${this.loggedInUser.name} ${Translator.translate("MADE", this.state.lang)} ${eachMember.name} ${newScope}`;
       const sentAt = new Date() / 1000 | 0;
-      const messageObj = { 
-        "category": CometChat.CATEGORY_ACTION, 
-        "message": message, 
-        "type": enums.ACTION_TYPE_GROUPMEMBER, 
+      const messageObj = {
+        "category": CometChat.CATEGORY_ACTION,
+        "message": message,
+        "type": enums.ACTION_TYPE_GROUPMEMBER,
         "sentAt": sentAt,
         "action": CometChat.ACTION_TYPE.MEMBER_SCOPE_CHANGED,
         "actionBy": { ...this.loggedInUser },
-        "actionOn": { ...eachMember } 
+        "actionOn": { ...eachMember }
       };
       messageList.push(messageObj);
     });
@@ -473,7 +473,7 @@ class CometChatUI extends React.Component {
   toggleImageView = (message) => {
     this.setState({ imageView: message });
   }
-  
+
   render() {
 
     let threadMessageView = null;
@@ -502,7 +502,7 @@ class CometChatUI extends React.Component {
           <div css={unifiedSecondaryStyle(this.props)} className="unified__secondary-view">
             <CometChatUserDetails
               theme={this.props.theme}
-              item={this.state.item} 
+              item={this.state.item}
               type={this.state.type}
               lang={this.state.lang}
               actionGenerated={this.actionHandler} />
@@ -515,7 +515,7 @@ class CometChatUI extends React.Component {
           <div css={unifiedSecondaryStyle(this.props)} className="unified__secondary-view">
           <CometChatGroupDetails
             theme={this.props.theme}
-            item={this.state.item} 
+            item={this.state.item}
             type={this.state.type}
             lang={this.state.lang}
             actionGenerated={this.actionHandler} />
@@ -523,14 +523,14 @@ class CometChatUI extends React.Component {
         );
       }
     }
-    
+
     let messageScreen = null;
     if(Object.keys(this.state.item).length) {
       messageScreen = (
-        <CometChatMessages 
+        <CometChatMessages
         ref={el => this.messageScreenRef = el}
         theme={this.props.theme}
-        item={this.state.item} 
+        item={this.state.item}
         activeTab={this.state.activeTab}
         type={this.state.type}
         composedthreadmessage={this.state.composedthreadmessage}
@@ -556,7 +556,7 @@ class CometChatUI extends React.Component {
     return (
       <div css={unifiedStyle(this.props.theme)} className="cometchat cometchat--unified" dir={Translator.getDirection(this.state.lang)}>
         <div css={unifiedSidebarStyle(this.state, this.props)} className="unified__sidebar">
-          <CometChatNavBar 
+          <CometChatNavBar
           ref={el => this.navBarRef = el}
           theme={this.props.theme}
           type={this.state.type}

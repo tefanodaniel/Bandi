@@ -7,11 +7,9 @@ import {
 import MusicianApi from "../utils/MusicianApiService";
 
 
-// thunk function to load list of all musicians.
-// in the future this should be a list of contextual "featured" musicians pre-any user defined search.
-// also pagination or carousel.
+// the action creators below are thunk functions.
 export async function fetchMusicians(dispatch, getState) {
-    console.log("Inside fetchMusicians action");
+    //console.log("Inside fetchMusicians action");
     const response = await MusicianApi.getAll();
     dispatch({
         type : LOAD_MUSICIANS_INITIAL,
@@ -20,7 +18,7 @@ export async function fetchMusicians(dispatch, getState) {
 }
 
 export function allMusiciansQuery(queryparams) {
-    console.log("Inside all Musicians query");
+    //console.log("Inside all Musicians query");
     return async function fetchAllMusicians(dispatch, getState) {
         const response = await MusicianApi.getAll(); // the backend display of all musicians except logged in user needs to be implemented.
         dispatch({
@@ -31,19 +29,19 @@ export function allMusiciansQuery(queryparams) {
 }
 
 export function newQuery(queryparams) {
-  console.log("Inside newQuery action");
+  //console.log("Inside newQuery action");
     return async function fetchMusiciansNameQuery(dispatch, getState) {
         //const queryparams = { name : input }
         const response = await MusicianApi.findByQuery(queryparams)
         //console.log(response);
         dispatch({
             type : LOAD_MUSICIANS_QUERY,
-            payload : response.data
+            payload : {res_data : response.data, query: queryparams}
         })
     }
 }
 
 export const clearQuery = {
     type : CLEAR_MUSICIANS_QUERY,
-    payload : []
+    payload : {res_data: null, query: null}
 }

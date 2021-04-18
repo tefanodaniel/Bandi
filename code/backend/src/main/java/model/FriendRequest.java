@@ -1,6 +1,6 @@
 package model;
 
-public class FriendRequest {
+public class FriendRequest implements Request {
 
     private String senderID;
     private String senderName;

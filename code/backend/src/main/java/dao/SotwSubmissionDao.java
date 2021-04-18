@@ -14,7 +14,7 @@ public interface SotwSubmissionDao {
      * @return
      * @throws DaoException
      */
-    SongOfTheWeekSubmission create(String submissionId, String musicianId,
+    SongOfTheWeekSubmission create(String submissionId, String musicianId, String musician_name,
                                    String avSubmission, Set<String> instruments) throws DaoException;
 
     /** Read a submission given unique id

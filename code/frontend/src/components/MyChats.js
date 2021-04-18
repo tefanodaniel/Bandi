@@ -1,6 +1,6 @@
 import React from 'react';
 import Cookies from "js-cookie";
-import Header from './Header';
+import Header from './Header/Header';
 
 import { CometChat } from "@cometchat-pro/chat"
 import { CometChatUI } from "../cometchat-pro-react-ui-kit/CometChatWorkspace/src";
