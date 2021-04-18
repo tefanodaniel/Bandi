@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from '../config';
 import Cookies from "js-cookie";
 
+
 export function getFrontendURL() {
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
   const url =
