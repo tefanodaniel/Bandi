@@ -7,6 +7,7 @@ import Header from './Header/Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./Header/SubHeader";
+import Footer from "./Footer";
 
 import { connect } from 'react-redux';
 import { chatLogin } from '../actions/chat_actions';
