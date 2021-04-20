@@ -1,5 +1,5 @@
 # Teamwork
-Team Lead - Noah Johnson
+Team Lead - Noah Johnson  
 [Team Availability](https://www.when2meet.com/?11695597-3PjHf)
 
 # OO Design
