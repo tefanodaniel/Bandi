@@ -615,6 +615,18 @@ public class Sql2oMusicianDao implements MusicianDao {
         }
     }
 
+    @Override
+    public Musician updateShowtoptracks(String id, boolean showtoptracks) throws DaoException {
+        String sql = "UPDATE Musicians SET showtoptracks=:showtoptracks WHERE id=:id;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql).addParameter("id", id)
+                    .addParameter("showtoptracks", showtoptracks).executeUpdate();
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update showtoptracks boolean", ex);
+        }
+    }
+
 
     @Override
     public Musician delete(String id) throws DaoException {
