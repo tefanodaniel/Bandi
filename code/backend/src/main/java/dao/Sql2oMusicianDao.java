@@ -596,6 +596,25 @@ public class Sql2oMusicianDao implements MusicianDao {
 
     }
 
+    public Musician updateTopTracks(String id, Set<String> topTracks) throws DaoException {
+        String deleteSQL = "DELETE FROM TopTracks WHERE id=:id";
+        String insertSQL = "INSERT INTO TopTracks (id, track) VALUES (:id, :track)";
+        try (Connection conn = sql2o.open()) {
+
+            // Delete all stored top tracks for the user
+            conn.createQuery(deleteSQL).addParameter("id", id).executeUpdate();
+
+            // Add new top tracks
+            for (String track : topTracks) {
+                conn.createQuery(insertSQL).addParameter("id", id).addParameter("track", track).executeUpdate();
+            }
+
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the user's Spotify top tracks", ex);
+        }
+    }
+
 
     @Override
     public Musician delete(String id) throws DaoException {

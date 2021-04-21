@@ -73,6 +73,9 @@ public class SpotifyController {
         if (musician == null) { // user has not been added to database yet
             musicianDao.create(id, name);
         }
+        // update user's Spotify top tracks every time they log in
+        musicianDao.updateTopTracks(id, topTracks);
+
         return null;
     };
 }
