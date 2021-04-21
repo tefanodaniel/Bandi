@@ -1,6 +1,6 @@
 import customhttp from "./api";
 
-class FriendApiService {
+class RequestApiService {
 
 
     getUserFriendList(id) {
@@ -28,4 +28,4 @@ class FriendApiService {
     }
 
 } 
-export default new FriendApiService();
+export default new RequestApiService();

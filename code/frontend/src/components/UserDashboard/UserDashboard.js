@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 
-import FriendApiService from '../../utils/FriendApiService';
+import RequestApiService from '../../utils/RequestApiService';
 import { bandi_styles } from "../../styles/bandi_styles";
 
 
@@ -25,7 +25,7 @@ class UserDashboard extends React.Component {
     }
     
     async takeActionOnFriendRequest(request, action) {
-        const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
+        const response = await RequestApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
         this.props.fetchFriends(this.props.userInfo.id)
         this.props.fetchIncoming(this.props.userInfo.id)
         if (action === "accept") {

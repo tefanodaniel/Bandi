@@ -5,7 +5,7 @@ import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
 import {getFrontendURL} from "../../utils/api";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
-import FriendApiService from "../../utils/FriendApiService";
+import RequestApiService from "../../utils/RequestApiService";
 import SotwEventsApi from "../../utils/SotwEventsApiService";
 
 const selectMusicians = (state) => {
@@ -25,7 +25,7 @@ const chunk = (arr, chunkSize = 1, cache = []) => {
 
 async function sendFriendRequest (senderID, recipientID, recipientName) {
     if (senderID && recipientID && recipientName) {
-        const response = await FriendApiService.sendFriendRequest(senderID, recipientID);
+        const response = await RequestApiService.sendFriendRequest(senderID, recipientID);
         if(response) {
             alert("Friend request sent to " + recipientName + "!")
         }

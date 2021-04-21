@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 import {TabPanel} from "react-tabs";
 import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
-import FriendApiService from '../../utils/FriendApiService';
+import RequestApiService from '../../utils/RequestApiService';
 
 class MusicianDetails extends React.Component {
     constructor(props) {
@@ -53,7 +53,7 @@ class MusicianDetails extends React.Component {
 
 
     addFriend = () => {
-        FriendApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
+        RequestApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
             alert("A request to connect was sent to " + this.state.name + ".")
         );
     }
