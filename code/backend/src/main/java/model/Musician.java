@@ -31,6 +31,7 @@ public class Musician extends Client {
         admin = false;
         // true by default
         showtoptracks = true;
+        topTracks = new HashSet<>();
     }
 
     public Musician(String id, String name, Set<String> genres, Set<String> instruments,
@@ -50,6 +51,7 @@ public class Musician extends Client {
         this.admin = isAdmin;
         // true by default
         showtoptracks = true;
+        topTracks = new HashSet<>();
     }
 
     public Musician(String id, String name, Set<String> genres, Set<String> instruments,
@@ -69,6 +71,7 @@ public class Musician extends Client {
         this.admin = isAdmin;
         // true by default
         showtoptracks = true;
+        topTracks = new HashSet<>();
     }
 
     private void setLatitudeLongitude(String zipCode) {
@@ -95,6 +98,10 @@ public class Musician extends Client {
 
     public void setTopTracks(Set<String> tracks) {
         this.topTracks = tracks;
+    }
+
+    public void addTopTrack(String track) {
+        this.topTracks.add(track);
     }
 
     public boolean getShowtoptracks() {
