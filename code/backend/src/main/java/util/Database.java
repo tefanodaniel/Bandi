@@ -75,6 +75,7 @@ public final class Database {
             conn.createQuery("DROP TABLE IF EXISTS MusicianGenres;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS ProfileAVLinks;").executeUpdate();
             conn.createQuery("DROP TABLE IF EXISTS MusicianFriends;").executeUpdate();
+            conn.createQuery("DROP TABLE IF EXISTS toptracks;").executeUpdate();
 
             String sql = "CREATE TABLE IF NOT EXISTS Musicians("
                     + "id VARCHAR(30) PRIMARY KEY,"
@@ -113,6 +114,7 @@ public final class Database {
                     + "friendID VARCHAR(30)," // TODO: Make reference musician.
                     + "CONSTRAINT unique_friends UNIQUE(id, friendid)"
                     + ");";
+            conn.createQuery(sql).executeUpdate();
 
             // create empty top tracks table. Is not populated by default
             sql = "CREATE TABLE IF NOT EXISTS toptracks("
@@ -122,7 +124,7 @@ public final class Database {
             conn.createQuery(sql).executeUpdate();
 
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
-                    "zipCode, latitude, longitude, distance, admin)" +
+                    "zipCode, latitude, longitude, distance, admin, showtoptracks)" +
                     " VALUES(:id, :name, :experience, :location, " +
                     ":zipCode, :latitude, :longitude, :distance, :admin, :showtoptracks);";
 
