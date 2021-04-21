@@ -10,6 +10,9 @@ import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileReq
 import model.Musician;
 import spark.Route;
 import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
+
 import static api.ApiServer.*;
 
 public class SpotifyController {
@@ -54,12 +57,13 @@ public class SpotifyController {
         GetUsersTopTracksRequest trackReq = spotifyApi.getUsersTopTracks()
                 .limit(10)
                 .offset(0)
-                .time_range("medium_term")
+                .time_range("short_term")
                 .build();
         Paging<Track> pagingOfTracks = trackReq.execute();
+        Set<String> topTracks = new HashSet<>();
         for (Track track : pagingOfTracks.getItems()) {
             System.out.println(track.getName());
-            System.out.println(track.getIsExplicit());
+            topTracks.add(track.getName());
         }
 
         res.redirect(frontend_url + "/?id=" + id);

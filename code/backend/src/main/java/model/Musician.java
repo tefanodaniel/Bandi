@@ -19,6 +19,8 @@ public class Musician extends Client {
     private double distance;
     private Set<String> friends;
     private boolean admin;
+    private boolean showTopTracks;
+    private Set<String> topTracks;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
@@ -80,6 +82,23 @@ public class Musician extends Client {
             this.longitude = fields.getDouble("longitude");
         }
     }
+
+    public Set<String> getTopTracks() {
+        return topTracks;
+    }
+
+    public void setTopTracks(Set<String> tracks) {
+        this.topTracks = tracks;
+    }
+
+    public boolean getShowTopTracks() {
+        return showTopTracks;
+    }
+
+    public void setShowTopTracks(boolean show) {
+        this.showTopTracks = show;
+    }
+
 
     public boolean getAdmin() {
         return this.admin;
