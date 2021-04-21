@@ -61,9 +61,13 @@ public class SpotifyController {
                 .build();
         Paging<Track> pagingOfTracks = trackReq.execute();
         Set<String> topTracks = new HashSet<>();
+        String trackName;
         for (Track track : pagingOfTracks.getItems()) {
-            System.out.println(track.getName());
-            topTracks.add(track.getName());
+            trackName = track.getName();
+            System.out.println(trackName);
+            if (trackName.length() <= 100) {
+                topTracks.add(track.getName());
+            }
         }
 
         res.redirect(frontend_url + "/?id=" + id);

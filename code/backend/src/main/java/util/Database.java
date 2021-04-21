@@ -85,7 +85,8 @@ public final class Database {
                     + "latitude DOUBLE PRECISION,"
                     + "longitude DOUBLE PRECISION,"
                     + "distance DOUBLE PRECISION DEFAULT 9999.0,"
-                    + "admin boolean"
+                    + "admin boolean,"
+                    + "showtoptracks boolean"
                     + ");";
             conn.createQuery(sql).executeUpdate();
 
@@ -113,10 +114,17 @@ public final class Database {
                     + "CONSTRAINT unique_friends UNIQUE(id, friendid)"
                     + ");";
 
+            // create empty top tracks table. Is not populated by default
+            sql = "CREATE TABLE IF NOT EXISTS toptracks("
+                    + "id VARCHAR(30) REFERENCES Musicians, "
+                    + "track VARCHAR(100)"
+                    + ");";
+            conn.createQuery(sql).executeUpdate();
+
             String musician_sql = "INSERT INTO Musicians(id, name, experience, location, " +
                     "zipCode, latitude, longitude, distance, admin)" +
                     " VALUES(:id, :name, :experience, :location, " +
-                    ":zipCode, :latitude, :longitude, :distance, :admin);";
+                    ":zipCode, :latitude, :longitude, :distance, :admin, :showtoptracks);";
 
             conn.createQuery(sql).executeUpdate();
             String instrument_sql = "INSERT INTO Instruments(id, instrument) VALUES(:id, :instrument);";

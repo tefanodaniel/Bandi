@@ -597,8 +597,8 @@ public class Sql2oMusicianDao implements MusicianDao {
     }
 
     public Musician updateTopTracks(String id, Set<String> topTracks) throws DaoException {
-        String deleteSQL = "DELETE FROM TopTracks WHERE id=:id";
-        String insertSQL = "INSERT INTO TopTracks (id, track) VALUES (:id, :track)";
+        String deleteSQL = "DELETE FROM toptracks WHERE id=:id";
+        String insertSQL = "INSERT INTO toptracks (id, track) VALUES (:id, :track)";
         try (Connection conn = sql2o.open()) {
 
             // Delete all stored top tracks for the user
