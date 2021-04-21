@@ -1,8 +1,11 @@
 package api;
 
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 import model.Musician;
 import spark.Route;
@@ -46,6 +49,18 @@ public class SpotifyController {
         final User user = getCurrentUser.execute();
         String name = user.getDisplayName();
         String id = user.getId();
+
+        // get user's top tracks
+        GetUsersTopTracksRequest trackReq = spotifyApi.getUsersTopTracks()
+                .limit(10)
+                .offset(0)
+                .time_range("medium_term")
+                .build();
+        Paging<Track> pagingOfTracks = trackReq.execute();
+        for (Track track : pagingOfTracks.getItems()) {
+            System.out.println(track.getName());
+            System.out.println(track.getIsExplicit());
+        }
 
         res.redirect(frontend_url + "/?id=" + id);
 
