@@ -12,7 +12,7 @@ import { bandi_styles } from "../../styles/bandi_styles";
 
 
 import { connect } from 'react-redux';
-import { getIncomingFriendRequests, getUserFriends } from '../../actions/friend_actions';
+import { getIncomingFriendRequests, getUserFriends, takeActionOnFriendRequest } from '../../actions/friend_actions';
 
 class UserDashboard extends React.Component {
     constructor(props) {
@@ -25,6 +25,7 @@ class UserDashboard extends React.Component {
     }
     
     async takeActionOnFriendRequest(request, action) {
+        /*
         const response = await RequestApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
         this.props.fetchFriends(this.props.userInfo.id)
         this.props.fetchIncoming(this.props.userInfo.id)
@@ -33,7 +34,13 @@ class UserDashboard extends React.Component {
         } else if (action === "decline") {
             alert("You declined " + request.senderName + "'s friend request!");
         }
-    }
+        */
+       this.props.respondToFriendRequest(request.senderID, request.recipientID, action);
+        if (action === "accept") {
+            alert("You accepted " + request.senderName + "'s friend request!");
+        } else {
+            alert("You declined " + request.senderName + "'s friend request!");
+        }
     
     renderFriendListForMusician(friends) {
         if (friends && friends.length > 0) {            
@@ -188,6 +195,9 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchFriends: (id) => dispatch(getUserFriends(id)),
         fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
+        respondToFriendRequest: (senderID, recipientID, action) => {
+            dispatch(takeActionOnFriendRequest(senderID, recipientID, action))
+        }
     }
 }
 
