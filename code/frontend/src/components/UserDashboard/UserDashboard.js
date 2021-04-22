@@ -25,7 +25,7 @@ class UserDashboard extends React.Component {
     }
     
     async takeActionOnFriendRequest(request, action) {
-       this.props.respondToFriendRequest(request.senderID, request.recipientID, action);
+        this.props.respondToFriendRequest(request.senderID, request.recipientID, action);
         if (action === "accept") {
             alert("You accepted " + request.senderName + "'s friend request!");
         } else {
