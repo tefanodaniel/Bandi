@@ -5,6 +5,7 @@ import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
 import {getFrontendURL} from "../../utils/api";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
+import { sendFriendRequest } from "../../actions/friend_actions";
 import RequestApiService from "../../utils/RequestApiService";
 import SotwEventsApi from "../../utils/SotwEventsApiService";
 
@@ -23,9 +24,9 @@ const chunk = (arr, chunkSize = 1, cache = []) => {
     return cache
 }
 
-async function sendFriendRequest (senderID, recipientID, recipientName) {
+async function handleConnect(senderID, recipientID, recipientName, dispatch) {
     if (senderID && recipientID && recipientName) {
-        const response = await RequestApiService.sendFriendRequest(senderID, recipientID);
+        const response = dispatch(sendFriendRequest(senderID, recipientID));
         if(response) {
             alert("Friend request sent to " + recipientName + "!")
         }
@@ -38,13 +39,14 @@ const RenderConnectButton = (props) => {
     const senderID = props.logged_id;
     const recipientID = props.id;
     const recipientName = props.name;
+    const dispatch = props.dispatch;
     // remove question mark once pending_outgoing_requests confirmed to exist
     /*
     if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
         return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
     } else { return <Button disabled>Pending...</Button> };*/
     //if (true) {
-        return <Button variant="primary" onClick={() => sendFriendRequest(senderID, recipientID, recipientName)}>Connect!</Button>
+        return <Button variant="primary" onClick={() => handleConnect(senderID, recipientID, recipientName, dispatch)}>Connect!</Button>
     //} else { return <Button disabled>Pending...</Button> };
 }
 
@@ -88,7 +90,7 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>
-                            <RenderConnectButton logged_id = {logged_id} id = {musician.id} name={musician.name}/>
+                            <RenderConnectButton logged_id = {logged_id} id = {musician.id} name={musician.name} dispatch={props.dispatch}/>
                         </Modal.Footer>
                     </Modal>
                 </Card.Body>
@@ -130,7 +132,7 @@ const MusicianSearchResults = () => {
                 const ref = React.createRef();
                 return (
                     <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} musician={user}/>
+                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} musician={user} dispatch={dispatch}/>
                     </Col>
                 );
             });
@@ -143,5 +145,6 @@ const MusicianSearchResults = () => {
         )
     }
 }
+
 
 export default MusicianSearchResults;

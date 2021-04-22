@@ -2,31 +2,115 @@ import customhttp from "./api";
 
 class MusicianAPIService {
     getAll() {
-        return customhttp.get("/musicians");
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.get("/musicians");
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in getting musicians. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     get(id) {
-        return customhttp.get(`/musicians/${id}`);
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.get(`/musicians/${id}`);
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in getting musician. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     create(data) {
-        return customhttp.post("/musicians", data);
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.post("/musicians", data);
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in creating musician. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     update(id, data) {
-        return customhttp.put(`/musicians/${id}`, data);
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.put(`/musicians/${id}`, data);
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in updating musician. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     delete(id) {
-        return customhttp.delete(`/musicians/${id}`);
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.delete(`/musicians/${id}`);
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in getting deleting musician. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     deleteAll() {
-        return customhttp.delete(`/musicians`);
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.delete(`/musicians`);
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in deleting musicians. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     findByQuery(queryparams) {
-        return customhttp.get(`/musicians`, { params: queryparams });
+        let tries = 0;
+        while (tries < 5) {
+            try {
+                let response = customhttp.get(`/musicians`, { params: queryparams });
+                if (response) {
+                    return response;
+                }
+            } catch (e) {
+                console.log("Error in finding musicians. Retrying...", e);
+                tries++;
+            }
+        }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 }
 

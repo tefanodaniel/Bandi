@@ -2,7 +2,8 @@ import {
     LOAD_USER_FRIENDS,
     LOAD_INCOMING_FRIEND_REQUESTS,
     LOAD_OUTGOING_FRIEND_REQUESTS,
-    TAKE_ACTION_ON_FRIEND_REQUEST
+    TAKE_ACTION_ON_FRIEND_REQUEST,
+    SEND_FRIEND_REQUEST
 } from './types';
 import RequestApiService from '../utils/RequestApiService';
 
@@ -37,8 +38,19 @@ export function getOutgoingFriendRequests(senderID) {
     }
 }
 
+export function sendFriendRequest(senderID, recipientID) {
+    return async function dispatchFriendRequest(dispatch, getState) {
+        const response = await RequestApiService.sendFriendRequest(senderID,recipientID);
+        dispatch(getOutgoingFriendRequests(recipientID));
+        return dispatch({
+            type: SEND_FRIEND_REQUEST
+        })
+    }
+}
+
+
 export function takeActionOnFriendRequest(senderID, recipientID, action) {
-    return async function replyToRequest(dispatch, getState) {
+    return async function dispatchActionOnFriendRequest(dispatch, getState) {
         const response = await RequestApiService.respondToFriendRequest(senderID,recipientID, action);
         dispatch(getIncomingFriendRequests(recipientID));
         dispatch(getUserFriends(recipientID));

@@ -7,7 +7,7 @@ class RequestApiService {
         let tries = 0;
         while (tries < 5) {
             try {
-                var response = customhttp.get(`/friends/${id}`);
+                let response = customhttp.get(`/friends/${id}`);
                 if (response) {
                     return response;
                 }
@@ -16,6 +16,7 @@ class RequestApiService {
                 tries++;
             }
         }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
     getIncomingFriendRequests(recipientID) {
@@ -32,6 +33,7 @@ class RequestApiService {
                 tries++;
             }
         }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
     
     getOutgoingFriendRequests(senderID) {
@@ -48,6 +50,7 @@ class RequestApiService {
                 tries++;
             }
         }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
     
     sendFriendRequest(senderID, recipientID) {
@@ -64,6 +67,7 @@ class RequestApiService {
                 tries++;
             }
         }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
     
     respondToFriendRequest(senderID, recipientID, action) {
@@ -80,6 +84,7 @@ class RequestApiService {
                 tries++;
             }
         }
+        alert("Fatal error encountered, please refresh the page to continue using Bandi.")
     }
 
 } 
