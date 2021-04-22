@@ -40,14 +40,20 @@ const RenderConnectButton = (props) => {
     const recipientID = props.id;
     const recipientName = props.name;
     const dispatch = props.dispatch;
-    // remove question mark once pending_outgoing_requests confirmed to exist
-    /*
-    if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
-        return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
-    } else { return <Button disabled>Pending...</Button> };*/
-    //if (true) {
+    
+    let friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
+    let outgoing = friend_reducer.outgoing_friend_requests;
+    // Check if logged in user has already sent a friend request to this user
+    let already_requested = false;
+    outgoing.forEach((req) => {
+        if (req.recipientID === recipientID) {
+            already_requested = true;
+        }
+    })
+
+    if (!already_requested) {
         return <Button variant="primary" onClick={() => handleConnect(senderID, recipientID, recipientName, dispatch)}>Connect!</Button>
-    //} else { return <Button disabled>Pending...</Button> };
+    } else { return <Button disabled>Pending...</Button> };
 }
 
 const FilteredMusicianItem = React.forwardRef((props, ref) => {
@@ -104,6 +110,7 @@ const MusicianSearchResults = () => {
     const fil_musicians = useSelector(selectMusicians, shallowEqual)
     let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
     let logged_user_friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
+    
 
     if(fil_musicians === -1)
     {
@@ -132,7 +139,7 @@ const MusicianSearchResults = () => {
                 const ref = React.createRef();
                 return (
                     <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} musician={user} dispatch={dispatch}/>
+                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} musician={user} dispatch={dispatch} />
                     </Col>
                 );
             });
