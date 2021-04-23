@@ -100,6 +100,10 @@ public interface MusicianDao {
 
     Musician updateProfileLinks(String id, Set<String> links) throws DaoException;
 
+    Musician updateTopTracks(String id, Set<String> topTracks) throws DaoException;
+
+    Musician updateShowtoptracks(String id, boolean showtoptracks) throws DaoException;
+
     // TODO: add function for adding friends
 
     /**
