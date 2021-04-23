@@ -9,6 +9,7 @@ Team Lead - Noah Johnson
 # Iteration Backlog
 - As a user, I want to submit a "play-along" to another user's 1) uploaded personal audio/video 2) song-of-the-week submissions
 - As a user, I want to be able to register with an email/password so that I can still use the app even if I don't have a Spotify account.
+- As a user, I want to be able to display my recent Spotify top tracks on my profile so that others may know what kind of music I enjoy.
 
 Previously postponed user stories:
 - As a student user, I would like to verify my college enrollment with a .edu email so I can filter and find other students on my campus and at nearby schools.
