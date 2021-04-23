@@ -33,7 +33,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                            String experience, String location, String zipCode,
                            Set<String> profileLinks, Set<String> friends, boolean admin) throws DaoException {
         // TODO: re-implement? DONE
-        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, zipCode, latitude, longitude, admin) " +
+        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, zipCode, latitude, longitude, admin, showtoptracks) " +
                              "VALUES (:id, :name, :experience, :location, :zipCode, :latitude, :longitude, :admin, :showtoptracks)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
