@@ -42,8 +42,16 @@ const RenderConnectButton = (props) => {
     const dispatch = props.dispatch;
     
     let friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
+    // Check if user already friends with this person
+    let friend_info = friend_reducer.friend_info;
+    let already_friends = false;
+    friend_info.forEach((friend) => {
+        if (friend.id === recipientID) {
+            already_friends = true;
+        }
+    })
+    // Check if user has already sent a friend request to this person
     let outgoing = friend_reducer.outgoing_friend_requests;
-    // Check if logged in user has already sent a friend request to this user
     let already_requested = false;
     outgoing.forEach((req) => {
         if (req.recipientID === recipientID) {
@@ -51,7 +59,9 @@ const RenderConnectButton = (props) => {
         }
     })
 
-    if (!already_requested) {
+    if (already_friends) {
+        return <Button variant="success" onClick={() => {alert("You and " + recipientName + " are friends!")}}>Friends</Button>;
+    } else if (!already_requested) {
         return <Button variant="primary" onClick={() => handleConnect(senderID, recipientID, recipientName, dispatch)}>Connect!</Button>
     } else { return <Button disabled>Pending...</Button> };
 }
@@ -111,7 +121,6 @@ const MusicianSearchResults = () => {
     let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
     let logged_user_friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
     
-
     if(fil_musicians === -1)
     {
         let queryparams = {};
