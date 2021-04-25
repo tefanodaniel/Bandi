@@ -130,6 +130,11 @@ class UserDashboard extends React.Component {
                             <div>
                                 <h4>Links: {userInfo?.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
                             </div>
+
+                            <div>
+                                <h4>Spotify Top Tracks: {userInfo?.showtoptracks ? "(visible to others)" : "(not visible to others)"}{userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}</h4>
+                            </div>
+
                             <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
                         </TabPanel>
 
