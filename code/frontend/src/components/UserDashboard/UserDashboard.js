@@ -10,7 +10,7 @@ import SubHeader from "../Header/SubHeader";
 import FriendApiService from '../../utils/FriendApiService';
 import ChatApi from "../../utils/ChatApiService";
 import { bandi_styles } from "../../styles/bandi_styles";
-
+import MusicianApi from "../../utils/MusicianApiService";
 
 import { connect } from 'react-redux';
 import { getIncomingFriendRequests, getUserFriends } from '../../actions/friend_actions';
@@ -96,6 +96,12 @@ class UserDashboard extends React.Component {
         }
     }
 
+    spotifyButton(isVisible) {
+        var newSetting = !isVisible;
+        MusicianApi.updateShowTopTracks(this.state.id, {"showtoptracks": newSetting});
+        this.render();
+    }
+
     render() {
 
         // Get user information from our central redux store, rather than the limited state of this component
@@ -132,7 +138,13 @@ class UserDashboard extends React.Component {
                             </div>
 
                             <div>
-                                <h4>Spotify Top Tracks: {userInfo?.showtoptracks ? "(visible to others)" : "(not visible to others)"}{userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}</h4>
+                                <h4>Spotify Top Tracks:
+                                    {userInfo?.topTracks ? <div>{userInfo?.showtoptracks ? "(visible to others)" : "(not visible to others)"}{userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
+                                            <Button onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Hide top tracks from others" : "Show top tracks to others"}</Button></div>
+                                        : " Loading..."}
+
+                                </h4>
+
                             </div>
 
                             <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
