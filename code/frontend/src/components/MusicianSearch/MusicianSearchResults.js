@@ -61,6 +61,11 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                             <div>
                                 <h5>Links: {musician.links}</h5>
                             </div>
+
+                            <div>
+                                <h5>Spotify Top Tracks: {musician.id}</h5>
+                            </div>
+
                         </Modal.Body>
                         <Modal.Footer>
                             <Button variant="secondary" onClick={handleClose}>

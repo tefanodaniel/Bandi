@@ -99,7 +99,7 @@ class UserDashboard extends React.Component {
     spotifyButton(isVisible) {
         var newSetting = !isVisible;
         MusicianApi.updateShowTopTracks(this.state.id, {"showtoptracks": newSetting});
-        this.render();
+        window.location.reload();
     }
 
     render() {

@@ -90,6 +90,7 @@ class MusicianDetails extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
+
                     {this.renderConnectButton()}
                 </div>
             );
