@@ -1,0 +1,124 @@
+html {
+    background-color: rgb(218, 189, 223);
+}
+
+.tabs-container {
+    display: grid;
+    height: 300px; /* Or whatever */
+    border: 2px;
+    border-color: black;
+}
+
+.name {
+    text-align: center;
+    font-weight: bold;
+    font-family: "Consolas";
+    font-stretch: expanded;
+}
+
+h4, h2 {
+    font-family: "Consolas";
+    padding-left: 0px; 
+    margin-bottom: 0;   
+    margin-left: auto;
+    margin-right: auto;
+    width: 35%;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: rgba(255, 255, 255, 0.815);
+}
+
+h4 {
+    padding-left: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    width: 50%;
+    border-radius: 10px;
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+}
+
+h4 span.label-text {
+    background-color: white;
+    background-color: rgb(222, 191, 224);
+    border-radius: 10px;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+#location {
+    margin-top: 25px;
+}
+
+.btn.btn-outline-dark {
+    font-family: "Consolas";
+    border-width: 1px;
+    background-color: rgba(214, 34, 34, 0.281);
+}
+
+.react-tabs {
+    border: 3px;
+    border-color: black;
+    background-color: rgb(218, 189, 223);
+    height: 75%;
+}
+
+.react-tabs__tab {
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    border-bottom-width: 5px;
+    background-color: rgb(218, 189, 223);
+    background-color: rgb(207, 127, 207);
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.react-tabs__tab--selected {
+    background-color: white;
+    border-style: solid;
+
+}
+
+/* This might be the same as 'outer' */
+.react-tabs__tab-panel {
+    margin: 25px 20% 20%;
+    padding: 75px;
+    background-color: aqua;
+}
+
+.react-tabs__tab-panel--selected {
+    margin-top: 0px;
+    padding: 25px;
+    border-left: 1px;
+    background-clip: padding-box;
+    background-color: rgb(134, 173, 224);
+    background-color: rgb(201, 137, 201);
+    background-color: rgb(218, 189, 223);
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    background-color: lightsalmon;
+    background-color: rgb(207, 127, 207);
+}
+
+.inner-panel {
+}
+
+.react-tabs__tab-list {
+    font-family: "Consolas";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 30px 0 0;
+    
+}
+
+
+.outer {
+    background-color: rgb(218, 189, 223);
+}

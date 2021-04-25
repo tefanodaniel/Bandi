@@ -42,6 +42,7 @@ const RenderConnectButton = (props) => {
     const dispatch = props.dispatch;
     
     let friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
+
     // Check if user already friends with this person
     let friend_info = friend_reducer.friend_info;
     let already_friends = false;
@@ -59,6 +60,7 @@ const RenderConnectButton = (props) => {
         }
     })
 
+    // Conditionally render button depending on friend status
     if (already_friends) {
         return <Button variant="success" onClick={() => {alert("You and " + recipientName + " are friends!")}}>Friends</Button>;
     } else if (!already_requested) {

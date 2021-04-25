@@ -9,7 +9,7 @@ import SubHeader from "../Header/SubHeader";
 
 import RequestApiService from '../../utils/RequestApiService';
 import { bandi_styles } from "../../styles/bandi_styles";
-
+import '../../styles/user_dashboard.css';
 
 import { connect } from 'react-redux';
 import { getIncomingFriendRequests, getUserFriends, takeActionOnFriendRequest } from '../../actions/friend_actions';
@@ -103,49 +103,54 @@ class UserDashboard extends React.Component {
 
         if (userInfo) {
             return (
-                <div style={bandi_styles.discover_background}>
+                <div>
                     <Header/>
-                    <SubHeader text="Customize your profile"/>
-                    <Tabs>
-                        <TabList>
-                            <Tab>My Profile</Tab>
-                            <Tab>My Bands</Tab>
-                            <Tab>My Friends</Tab>
-                        </TabList>
+                    <div class="outer">
+                        <div class="tabs-container">
+                            <Tabs class="child">
+                                <TabList>
+                                    <Tab>My Profile</Tab>
+                                    <Tab>My Bands</Tab>
+                                    <Tab>My Friends</Tab>
+                                </TabList>
 
-                        <TabPanel>
-                            <h2>Name: {userInfo.name}</h2>
-                            <h4>Location: {userInfo.location === "NULL" ? "" : userInfo.location}</h4>
-                            <h4>Experience: {userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
-                            <div>
-                                <h4>Instruments: {userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
-                            </div>
-                            <div>
-                                <h4>Genres: {userInfo.genres ? userInfo.genres.join(", ") : ""}</h4>
-                            </div>
-                            <div>
-                                <h4>Links: {userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
-                            </div>
-                            <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
-                        </TabPanel>
+                                <TabPanel>
+                                    <div class="inner-panel">
+                                        <Button class="edit-profile-button" variant="outline-dark" onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
+                                        <h2 class="name">{userInfo.name}</h2>
+                                        <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
+                                        <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
+                                        <div>
+                                            <h4 class="label"><span class="label-text">Instruments: </span>{userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
+                                        </div>
+                                        <div>
+                                            <h4 class="label"><span class="label-text">Genres: </span>{userInfo.genres ? userInfo.genres.join(", ") : ""}</h4>
+                                        </div>
+                                        <div>
+                                            <h4 class="label"><span class="label-text">Links: </span>{userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
+                                        </div>
+                                    </div>
+                                </TabPanel>
 
-                        <TabPanel>
-                            {this.renderBandList(bands)}
-                            <Button onClick={() => this.props.history.push('/createband')}>Create Band</Button>
-                        </TabPanel>
+                                <TabPanel>
+                                    {this.renderBandList(bands)}
+                                    <Button onClick={() => this.props.history.push('/createband')}>Create Band</Button>
+                                </TabPanel>
 
 
-                        <TabPanel>
-                            <h3>My friends ({friends?.length})</h3>
-                            {this.renderFriendListForMusician(friends)}
-                            <h3>Friend requests ({incoming?.length})</h3>
-                            {this.renderIncomingRequestList(incoming)}
-                            <h3>Pending friend requests ({outgoing?.length})</h3>
-                            {this.renderOutgoingRequestList(outgoing)}
+                                <TabPanel>
+                                    <h3>My friends ({friends?.length})</h3>
+                                    {this.renderFriendListForMusician(friends)}
+                                    <h3>Friend requests ({incoming?.length})</h3>
+                                    {this.renderIncomingRequestList(incoming)}
+                                    <h3>Pending friend requests ({outgoing?.length})</h3>
+                                    {this.renderOutgoingRequestList(outgoing)}
 
-                        </TabPanel>
+                                </TabPanel>
 
-                    </Tabs>
+                            </Tabs>
+                        </div>
+                    </div>
                 </div>
             );
         } else {
