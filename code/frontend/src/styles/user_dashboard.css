@@ -69,7 +69,7 @@ h4 span.label-text {
     border-color: black;
     border-style: solid;
     border-width: 2px;
-    border-bottom-width: 5px;
+    border-bottom-width: 3px;
     background-color: rgb(218, 189, 223);
     background-color: rgb(207, 127, 207);
     border-top-right-radius: 5px;
@@ -92,7 +92,6 @@ h4 span.label-text {
 .react-tabs__tab-panel--selected {
     margin-top: 0px;
     padding: 25px;
-    border-left: 1px;
     background-clip: padding-box;
     background-color: rgb(134, 173, 224);
     background-color: rgb(201, 137, 201);
@@ -100,12 +99,10 @@ h4 span.label-text {
     border-radius: 10px;
     border-style: solid;
     border-color: black;
-    border-width: 1px;
+    border-width: 2px;
+    border-bottom-width: 7px;
     background-color: lightsalmon;
     background-color: rgb(207, 127, 207);
-}
-
-.inner-panel {
 }
 
 .react-tabs__tab-list {
@@ -116,6 +113,51 @@ h4 span.label-text {
     flex-wrap: wrap;
     margin: 30px 0 0;
     
+}
+
+.friend-panel li {
+    font-family: "Consolas";
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+    background-color: rgb(171, 250, 243);
+    display: inline-block;
+    margin: 5px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.friend-panel li.pending {
+    background-color: rgb(205, 190, 235);
+}
+
+
+
+
+.friend-panel h3 {
+    font-size: 1rem;
+    padding-left: 5px;
+    padding: 5px;
+    margin-bottom: 15px;
+    width: 125px;
+    border-radius: 5px;
+    border-width: 2px;
+    border-style: solid;
+    background-color: rgb(222, 191, 224);
+    font-family: "Consolas";
+}
+
+#friend-label-1 {
+    width: 140px;
+}
+
+#friend-label-2 {
+    width: 185px;
+}
+
+#friend-label-3 {
+    width: 275px;
 }
 
 

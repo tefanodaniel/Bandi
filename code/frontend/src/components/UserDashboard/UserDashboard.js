@@ -65,7 +65,7 @@ class UserDashboard extends React.Component {
     renderOutgoingRequestList(outgoing) {
         if (outgoing && outgoing.length > 0) {
             const listItems = outgoing.map((request) =>
-            <li>{request.recipientName}</li>
+            <li class="pending">{request.recipientName}</li>
             );
             return (
                 <ul>{listItems}</ul>
@@ -139,12 +139,14 @@ class UserDashboard extends React.Component {
 
 
                                 <TabPanel>
-                                    <h3>My friends ({friends?.length})</h3>
-                                    {this.renderFriendListForMusician(friends)}
-                                    <h3>Friend requests ({incoming?.length})</h3>
-                                    {this.renderIncomingRequestList(incoming)}
-                                    <h3>Pending friend requests ({outgoing?.length})</h3>
-                                    {this.renderOutgoingRequestList(outgoing)}
+                                    <div class="friend-panel">
+                                        <h3 id="friend-label-1">My friends ({friends?.length})</h3>
+                                        {this.renderFriendListForMusician(friends)}
+                                        <h3 id="friend-label-2">Friend requests ({incoming?.length})</h3>
+                                        {this.renderIncomingRequestList(incoming)}
+                                        <h3 id="friend-label-3">Pending friend requests ({outgoing?.length})</h3>
+                                        {this.renderOutgoingRequestList(outgoing)}
+                                    </div>
 
                                 </TabPanel>
 
