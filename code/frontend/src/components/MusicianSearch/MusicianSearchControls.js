@@ -49,6 +49,7 @@ const MusicianSearchControls = () => {
             dispatch(clearQuery)
         }
         else {
+            
             queryparams.id = user.id
             dispatch(newQuery(queryparams))
         }

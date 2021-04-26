@@ -26,7 +26,8 @@ class MusicianAPIService {
     }
 
     findByQuery(queryparams) {
-        return customhttp.get(`/musicians`, { params: queryparams });
+        console.log('what is the id now,', queryparams.id) //testing
+        return customhttp.get("/musicians", { params: queryparams });
     }
 }
 
