@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
 
-import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
+import {Container, Row, Col, Card, Modal, Button, Spinner } from "react-bootstrap";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import FriendApiService from "../../utils/FriendApiService";
