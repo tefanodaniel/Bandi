@@ -36,10 +36,10 @@ class UserDashboard extends React.Component {
     renderFriendListForMusician(friends) {
         if (friends && friends.length > 0) {            
             const listItems = friends.map((friend) =>
-            <li key={friend["id"]}>{friend["name"]}</li>
+            <li class="friends" key={friend["id"]}>{friend["name"]}</li>
             );
             return (
-                <ul>{listItems}</ul>
+                <ul class="friend-container">{listItems}</ul>
             );
         } else {
             return <ul/>
@@ -50,12 +50,12 @@ class UserDashboard extends React.Component {
         if (incoming && incoming.length > 0) {
             const listItems = incoming.map((request) =>
             <div>
-                <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
-                <Button onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
+                <li class="incoming">{request.senderName}<Button id="accept-button" onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
+                <Button id= "decline-button" onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
             </div>
             );
             return (
-                <ul>{listItems}</ul>
+                <ul class="friend-container">{listItems}</ul>
             );
         } else {
             return <ul/>
@@ -68,7 +68,7 @@ class UserDashboard extends React.Component {
             <li class="pending">{request.recipientName}</li>
             );
             return (
-                <ul>{listItems}</ul>
+                <ul class="friend-container">{listItems}</ul>
             );
         } else {
             return <ul/>
@@ -116,7 +116,7 @@ class UserDashboard extends React.Component {
 
                                 <TabPanel>
                                     <div class="inner-panel">
-                                        <Button class="edit-profile-button" variant="outline-dark" onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
+                                        <Button variant="outline-dark" onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
                                         <h2 class="name">{userInfo.name}</h2>
                                         <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
                                         <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
@@ -134,7 +134,7 @@ class UserDashboard extends React.Component {
 
                                 <TabPanel>
                                     {this.renderBandList(bands)}
-                                    <Button onClick={() => this.props.history.push('/createband')}>Create Band</Button>
+                                    <Button variant="outline-dark" onClick={() => this.props.history.push('/createband')}>Create Band</Button>
                                 </TabPanel>
 
 

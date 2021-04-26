@@ -1,5 +1,10 @@
-html {
-    background-color: rgb(218, 189, 223);
+body {
+    background: 
+        linear-gradient(
+            rgba(218, 189, 223, .5),
+            rgba(218, 189, 223, .5)
+        ),
+        url(../images/discover_bg.jpg);
 }
 
 .tabs-container {
@@ -27,6 +32,9 @@ h4, h2 {
     border-radius: 10px;
     border-width: 2px;
     background-color: rgba(255, 255, 255, 0.815);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
 }
 
 h4 {
@@ -38,6 +46,9 @@ h4 {
     border-radius: 10px;
     border-width: 1px;
     background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
 }
 
 h4 span.label-text {
@@ -56,12 +67,14 @@ h4 span.label-text {
     font-family: "Consolas";
     border-width: 1px;
     background-color: rgba(214, 34, 34, 0.281);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
 }
 
 .react-tabs {
     border: 3px;
     border-color: black;
-    background-color: rgb(218, 189, 223);
     height: 75%;
 }
 
@@ -70,16 +83,15 @@ h4 span.label-text {
     border-style: solid;
     border-width: 2px;
     border-bottom-width: 3px;
-    background-color: rgb(218, 189, 223);
-    background-color: rgb(207, 127, 207);
     border-top-right-radius: 5px;
     border-top-left-radius: 5px;
+    background-color: rgb(218, 189, 223);
 }
 
 .react-tabs__tab--selected {
     background-color: white;
     border-style: solid;
-
+    
 }
 
 /* This might be the same as 'outer' */
@@ -93,9 +105,6 @@ h4 span.label-text {
     margin-top: 0px;
     padding: 25px;
     background-clip: padding-box;
-    background-color: rgb(134, 173, 224);
-    background-color: rgb(201, 137, 201);
-    background-color: rgb(218, 189, 223);
     border-radius: 10px;
     border-style: solid;
     border-color: black;
@@ -112,30 +121,13 @@ h4 span.label-text {
     align-items: center;
     flex-wrap: wrap;
     margin: 30px 0 0;
+    border-bottom: 0px;
     
 }
 
-.friend-panel li {
-    font-family: "Consolas";
-    border-radius: 5px;
-    border-width: 1px;
-    border-style: solid;
-    background-color: rgb(171, 250, 243);
-    display: inline-block;
-    margin: 5px;
-    padding: 2px;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.friend-panel li.pending {
-    background-color: rgb(205, 190, 235);
-}
-
-
-
-
 .friend-panel h3 {
+    /* margin-left: auto;
+    margin-right: auto; */
     font-size: 1rem;
     padding-left: 5px;
     padding: 5px;
@@ -144,9 +136,48 @@ h4 span.label-text {
     border-radius: 5px;
     border-width: 2px;
     border-style: solid;
+    border-bottom-width: 5px;
+    border-left-width: 2px;
     background-color: rgb(222, 191, 224);
     font-family: "Consolas";
 }
+
+.friend-container {
+    display: flex;
+    justify-content: left;
+}
+
+.friend-panel li {
+    font-family: "Consolas";
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+
+    border-left-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    background-color: rgb(171, 250, 243);
+    display: inline-block;
+    margin: 5px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.friend-panel li.friends {
+    /* background-color: rgb(190, 235, 198); */
+    background-color: rgb(205, 190, 235);
+}
+
+.friend-panel li.incoming {
+    /* background-color: rgb(205, 190, 235); */
+    background-color: rgb(223, 235, 190);
+}
+
+.friend-panel li.pending {
+    background-color: rgb(176, 148, 233);
+}
+
 
 #friend-label-1 {
     width: 140px;
@@ -160,7 +191,23 @@ h4 span.label-text {
     width: 275px;
 }
 
+.btn.btn-primary {
+    border-style: solid;
+    border-color: black;
+    border-left-width: 2px;
+    border-bottom-width: 3px;
+}
 
-.outer {
-    background-color: rgb(218, 189, 223);
+#accept-button {
+    font-size: 0.7rem;
+    margin-left: 20px;
+    margin-right: 5px;
+    background-color: green;
+}
+
+#decline-button {
+    font-size: 0.7rem;
+    margin-left: 5px;
+    margin-right: 5px;
+    background-color: red;
 }
