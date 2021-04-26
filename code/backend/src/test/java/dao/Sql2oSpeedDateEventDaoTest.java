@@ -22,6 +22,7 @@ public class Sql2oSpeedDateEventDaoTest {
     private static Sql2o sql2o;
     private static Sql2oSpeedDateEventDao speedDateEventDao;
 
+    /*
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
 
@@ -39,15 +40,7 @@ public class Sql2oSpeedDateEventDaoTest {
 
     @BeforeAll
     static void createSampleData() {
-        /*
-        Database.createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
-        Database.createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-        Database.createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
-        Database.createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
-        Database.createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
-        Database.createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
-        Database.createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
-         */
+
     }
 
     @Test
@@ -112,4 +105,5 @@ public class Sql2oSpeedDateEventDaoTest {
         assertFalse(updatedEvent.getParticipants().contains(musId));
         speedDateEventDao.delete(id);
     }
+*/
 }

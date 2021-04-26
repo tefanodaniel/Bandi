@@ -1,8 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import Cookies from "js-cookie";
-import MusicianApi from "./MusicianApiService";
-import { CometChat } from "@cometchat-pro/chat";
+
 
 export function getFrontendURL() {
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
@@ -35,6 +34,7 @@ export function chatApiInstance() {
     }
   })
 }
+
 
 export default axios.create({
   baseURL: getBackendURL(),

@@ -1,27 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
-import {Container, Row, Col, Card, Modal, Button, Spinner } from "react-bootstrap";
-import {getFrontendURL} from "../../utils/api";
+
+import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import FriendApiService from "../../utils/FriendApiService";
-import SotwEventsApi from "../../utils/SotwEventsApiService";
-
-const selectMusicians = (state) => {
-    if(!state.musician_reducer.filteredMusicians)
-        return -1;
-    else
-        return state.musician_reducer.filteredMusicians.map(user => user)
-}
-
-
-const chunk = (arr, chunkSize = 1, cache = []) => {
-    const tmp = [...arr]
-    if (chunkSize <= 0) return cache
-    while (tmp.length) cache.push(tmp.splice(0, chunkSize))
-    return cache
-}
+import {selectFilteredMusicians} from "../../selectors/musician_selector";
+import {chunk} from "../../utils/miscellaneous";
+import {getLoggedInUser} from "../../selectors/user_selector";
 
 async function addFriend (temp) {
     const response = await FriendApiService.sendFriendRequest(temp.logged_id, temp.id);
@@ -92,8 +79,8 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
 
 const MusicianSearchResults = () => {
     const dispatch = useDispatch();
-    const fil_musicians = useSelector(selectMusicians, shallowEqual)
-    let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
+    const fil_musicians = useSelector(selectFilteredMusicians, shallowEqual)
+    let logged_user = useSelector(getLoggedInUser, shallowEqual);
 
     if(fil_musicians === -1)
     {

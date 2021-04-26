@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import FormGroup from 'react-bootstrap/FormGroup'
 import Cookies from "js-cookie";
 import {getBackendURL} from "../../utils/api";
+import Header from "../Header/Header";
+import Footer from "../Footer";
 
 import { connect } from 'react-redux';
 import { updateUserProfile, getUser } from '../../actions/user_actions';
@@ -40,6 +42,10 @@ class EditUserInfo extends React.Component {
       if (field === "experience" && value === "Select skill level") {
         value = "";
       } else if (field === "location" && value === "Select location") {
+        value = "";
+      } else if (field === "instruments" && value === "Select instrument") {
+        value = "";
+      } else if (field === "genre" && value === "Select genre") {
         value = "";
       }
       this.setState({
@@ -166,21 +172,28 @@ class EditUserInfo extends React.Component {
                   </Form.Control>
               </Form.Group>
 
-            <FormGroup controlId="profileForm.instruments">
-              <Form.Label>Instruments:</Form.Label>
-              <Form.Check inline name="guitar" label="Guitar" type="checkbox" defaultChecked={this.instrumentIsChecked("guitar")} onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="bass" label="Bass" type="checkbox" defaultChecked={this.instrumentIsChecked("bass")} onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="drums" label="Drums" type="checkbox" defaultChecked={this.instrumentIsChecked("drums")} onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="vocals" label="Vocals" type="checkbox" defaultChecked={this.instrumentIsChecked("vocals")} onChange={this.handleInstrumentSelection}/>
-              <Form.Check inline name="piano" label="Piano / Keyboard" type="checkbox" defaultChecked={this.instrumentIsChecked("piano")} onChange={this.handleInstrumentSelection}/>
-            </FormGroup>
 
-              <FormGroup controlId="profileForm.genres">
+            <FormGroup controlId="profileForm.instruments">
+                <Form.Label>Instruments:</Form.Label>
+                    <Form.Control name="instruments" as="select" value={this.state.instruments} onChange={this.handleChange}>
+                        <option>Select instrument</option>
+                        <option>Guitar</option>
+                        <option>Piano</option>
+                        <option>Bass</option>
+                        <option>Drums</option>
+                        <option>Vocals</option>
+                    </Form.Control>
+                </FormGroup>
+
+            <FormGroup controlId="profileForm.genres">
                   <Form.Label>Genres:</Form.Label>
-                  <Form.Check inline name="rock" label="Rock" type="checkbox" defaultChecked={this.genreIsChecked("rock")} onChange={this.handleGenreSelection}/>
-                  <Form.Check inline name="blues" label="Blues" type="checkbox" defaultChecked={this.genreIsChecked("blues")} onChange={this.handleGenreSelection}/>
-                  <Form.Check inline name="jazz" label="Jazz" type="checkbox" defaultChecked={this.genreIsChecked("jazz")} onChange={this.handleGenreSelection}/>
-                  <Form.Check inline name="classical" label="Classical" type="checkbox" defaultChecked={this.genreIsChecked("classical")} onChange={this.handleGenreSelection}/>
+                  <Form.Control name="genre" as="select" value={this.state.genre} onChange={this.handleChange}>
+                    <option>Select genre</option>
+                    <option>Rock</option>
+                    <option>Blues</option>
+                    <option>Jazz</option>
+                    <option>Classical</option>
+                  </Form.Control>
               </FormGroup>
 
             <Button type="submit">Save</Button>

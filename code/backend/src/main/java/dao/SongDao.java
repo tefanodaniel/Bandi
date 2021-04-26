@@ -31,6 +31,14 @@ public interface SongDao {
     Song read(String songId) throws DaoException;
 
     /**
+     *
+     * @param songname
+     * @return
+     * @throws Exception
+     * */
+    Song readGivenName(String songname) throws Exception;
+
+    /**
      * Read all Songs from the database.
      *
      * @return All the songs in the data source.

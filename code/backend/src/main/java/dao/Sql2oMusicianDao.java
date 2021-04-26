@@ -33,8 +33,8 @@ public class Sql2oMusicianDao implements MusicianDao {
                            String experience, String location, String zipCode,
                            Set<String> profileLinks, Set<String> friends, boolean admin) throws DaoException {
         // TODO: re-implement? DONE
-        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, zipCode, latitude, longitude, admin) " +
-                             "VALUES (:id, :name, :experience, :location, :zipCode, :latitude, :longitude, :admin)";
+        String musicianSQL = "INSERT INTO Musicians (id, name, experience, location, zipCode, latitude, longitude, admin, showtoptracks) " +
+                             "VALUES (:id, :name, :experience, :location, :zipCode, :latitude, :longitude, :admin, :showtoptracks)";
         String genresSQL = "INSERT INTO MusicianGenres (id, genre) VALUES (:id, :genre)";
         String instrumentsSQL = "INSERT INTO Instruments (id, instrument) VALUES (:id, :instrument)";
         String profileLinksSQL = "INSERT INTO ProfileAVLinks (id, link) VALUES (:id, :link)";
@@ -62,6 +62,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     .addParameter("latitude", latitude)
                     .addParameter("longitude", longitude)
                     .addParameter("admin", admin)
+                    .addParameter("showtoptracks", true)
                     .executeUpdate();
 
             // Insert corresponding genres into database
@@ -120,8 +121,8 @@ public class Sql2oMusicianDao implements MusicianDao {
     @Override
     public Musician create(String id, String name) throws DaoException {
         // TODO: re-implement? DONE
-        String sql = "INSERT INTO Musicians(id, name, experience, location, zipCode, latitude, longitude, admin) " +
-                     "VALUES(:id, :name, 'NULL', 'NULL', 'NULL', 0, 0, FALSE);";
+        String sql = "INSERT INTO Musicians(id, name, experience, location, zipCode, latitude, longitude, admin, showtoptracks) " +
+                     "VALUES(:id, :name, 'NULL', 'NULL', 'NULL', 0, 0, FALSE, TRUE);";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sql).addParameter("id", id)
                                  .addParameter("name", name)
@@ -144,6 +145,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                     "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                     "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
                     "LEFT JOIN MusicianFriends as F ON R.MID=F.id\n" +
+                    "LEFT JOIN toptracks as T ON R.MID=T.id\n" +
                     "WHERE R.mid=:id;";
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
 
@@ -157,9 +159,11 @@ public class Sql2oMusicianDao implements MusicianDao {
             String loc = (String) queryResults.get(0).get("location");
             String zipCode = (String) queryResults.get(0).get("zipcode");
             boolean admin = (boolean) queryResults.get(0).get("admin");
+            boolean showtoptracks = (boolean) queryResults.get(0).get("showtoptracks");
 
             Musician m = new Musician(id, name, new HashSet<String>(), new HashSet<String>(),
                     exp, new HashSet<String>(), loc, zipCode, new HashSet<String>(), admin);
+            m.setShowtoptracks(showtoptracks);
 
             for (Map row : queryResults) {
 
@@ -174,6 +178,9 @@ public class Sql2oMusicianDao implements MusicianDao {
                 }
                 if (row.get("friendid") != null) {
                     m.addFriend((String) row.get("friendid"));
+                }
+                if (row.get("track") != null) {
+                    m.addTopTrack((String) row.get("track"));
                 }
 
             }
@@ -190,6 +197,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN instruments as I ON R.MID=I.id\n" +
                 "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                 "LEFT JOIN profileavlinks as L ON R.MID=L.id\n" +
+                "LEFT JOIN toptracks as T ON R.MID=T.id\n" +
                 "LEFT JOIN musicianfriends as F ON R.MID=F.id;";
         try (Connection conn = sql2o.open()) {
 
@@ -594,6 +602,37 @@ public class Sql2oMusicianDao implements MusicianDao {
         }
 
 
+    }
+
+    public Musician updateTopTracks(String id, Set<String> topTracks) throws DaoException {
+        String deleteSQL = "DELETE FROM toptracks WHERE id=:id";
+        String insertSQL = "INSERT INTO toptracks (id, track) VALUES (:id, :track)";
+        try (Connection conn = sql2o.open()) {
+
+            // Delete all stored top tracks for the user
+            conn.createQuery(deleteSQL).addParameter("id", id).executeUpdate();
+
+            // Add new top tracks
+            for (String track : topTracks) {
+                conn.createQuery(insertSQL).addParameter("id", id).addParameter("track", track).executeUpdate();
+            }
+
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update the user's Spotify top tracks", ex);
+        }
+    }
+
+    @Override
+    public Musician updateShowtoptracks(String id, boolean showtoptracks) throws DaoException {
+        String sql = "UPDATE Musicians SET showtoptracks=:showtoptracks WHERE id=:id;";
+        try (Connection conn = sql2o.open()) {
+            conn.createQuery(sql).addParameter("id", id)
+                    .addParameter("showtoptracks", showtoptracks).executeUpdate();
+            return this.read(id);
+        } catch (Sql2oException ex) {
+            throw new DaoException("Unable to update showtoptracks boolean", ex);
+        }
     }
 
 

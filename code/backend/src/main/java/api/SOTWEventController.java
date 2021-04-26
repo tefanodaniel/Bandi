@@ -3,14 +3,12 @@ package api;
 import com.google.gson.JsonSyntaxException;
 import exceptions.ApiError;
 import exceptions.DaoException;
+import model.Musician;
 import model.SongOfTheWeekEvent;
 import model.SongOfTheWeekSubmission;
 import spark.Route;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static api.ApiServer.*;
 
@@ -41,14 +39,51 @@ public class SOTWEventController {
         }
     };
 
+    // get (read) a sotw event given genre, start day and end day
+    public static Route findSOTWEventByDesc = (req, res) -> {
+        try {
+            SongOfTheWeekEvent event;
+            String genre = req.params("genre");
+            String startday = req.params("startday");
+            String endday = req.params("endday");
+            System.out.println("Attempting to find event for genre : "+ genre);
+
+            if((genre != null) && (startday != null) && (endday != null)) {
+                event = sotw_eventDao.findEvent(startday, endday, genre);
+            }
+            else {
+                throw new ApiError("Bad request insufficient query parameters", 404);
+            }
+            res.type("application/json");
+
+
+            if (event == null) {
+                return gson.toJson(null);
+//                throw new ApiError("Resource not found for parameters, genre : " + genre + " start day :  " + startday
+//                        + " end day : " + endday, 404); // Bad request
+            }
+            System.out.println("Found an event :" + event);
+            return gson.toJson(event);
+        } catch (DaoException ex) {
+            throw new ApiError(ex.getMessage(), 500);
+        }
+    };
+
     // post (create) a sotw event
     public static Route postSOTWEvent = (req, res) -> {
         try {
             SongOfTheWeekEvent event = gson.fromJson(req.body(), SongOfTheWeekEvent.class);
+            System.out.println(event);
             Set<String> submissions = event.getSubmissions();
 
             if (submissions == null) { submissions = new HashSet<String>(); }
-            sotw_eventDao.create(event.getEventId(), event.getAdminId(), event.getStart_week(), event.getEnd_week(), event.getSongId(), submissions);
+            //check if an event already exists for this genre, startday, endday
+            SongOfTheWeekEvent check = sotw_eventDao.findEvent(event.getStartDay(), event.getEndDay(), event.getGenre());
+            if(check != null){
+                return null;
+            }
+
+            sotw_eventDao.create(event.getEventId(), event.getAdminId(), event.getStartDay(), event.getEndDay(), event.getSongId(), event.getGenre(), submissions);
             res.status(201);
             return gson.toJson(event);
         } catch (DaoException ex) {
@@ -71,18 +106,18 @@ public class SOTWEventController {
                 throw new ApiError("event ID does not match the resource identifier", 400);
             }
 
-            String start_week = event.getStart_week();
-            String end_week = event.getEnd_week();
+            String startDay = event.getStartDay();
+            String endDay = event.getEndDay();
             String songId = event.getSongId();
 
             // Update specific fields:
             boolean flag = false;
-            if (start_week != null) {
+            if (startDay != null) {
                 flag = true;
-                event = sotw_eventDao.updateStartWeek(eventid, start_week);
-            } if (end_week != null) {
+                event = sotw_eventDao.updateStartDay(eventid, startDay);
+            } if (endDay != null) {
                 flag = true;
-                event = sotw_eventDao.updateEndWeek(eventid, end_week);
+                event = sotw_eventDao.updateEndDay(eventid, endDay);
             } if (songId != null) {
                 flag = true;
                 event = sotw_eventDao.updateSong(eventid, songId);

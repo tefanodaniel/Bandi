@@ -182,4 +182,34 @@ public class MusicianController {
             throw new ApiError(ex.getMessage(), 500);
         }
     };
+
+    // get showtoptracks boolean of a Musician
+    public static Route getShowTopTracks = (req, res) -> {
+        try {
+            String id = req.params("id");
+            Musician musician = musicianDao.read(id);
+            if (musician == null) {
+                throw new ApiError("Resource not found", 404); // Bad request
+            }
+            boolean showtoptracks = musician.getShowtoptracks();
+            res.type("application/json");
+            return "{\"showtoptracks\":"+ showtoptracks +"}";
+        } catch (DaoException ex) {
+            throw new ApiError(ex.getMessage(), 500);
+        }
+    };
+
+    // update showtoptracks boolean of a Musician
+    public static Route putShowTopTracks = (req, res) -> {
+        try {
+            String id = req.params("id");
+            Map map = gson.fromJson(req.body(), HashMap.class);
+            boolean showtoptracks = (boolean) map.get("showtoptracks");
+            Musician m = musicianDao.updateShowtoptracks(id, showtoptracks);
+            res.type("application/json");
+            return gson.toJson(m);
+        } catch (DaoException ex) {
+            throw new ApiError(ex.getMessage(), 500);
+        }
+    };
 }

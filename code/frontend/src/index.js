@@ -1,33 +1,57 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import './styles/index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
-import Cookies from "js-cookie";
 import { CometChat } from "@cometchat-pro/chat"
 import config from './config';
-//import { useDispatch } from "react-redux";
-
-
 import store from "./store";
 import { fetchMusicians } from "./actions/musician_actions";
 import {fetchSDEvents} from "./actions/sd_event_actions";
-import {fetchSotwEvents} from "./actions/sotw_event_actions";
+import {fetchSotwEvents, newEventByGenreWrapper} from "./actions/sotw_event_actions";
 import { CHAT_INITIALIZE } from './actions/types';
-
+import {CronJob} from 'cron';
+import {endOfWeek, format, startOfWeek} from "date-fns";
+import {shazam_genre_api_names} from "./utils/miscellaneous";
+import { v4 as uuidv4 } from 'uuid';
 // Redux store
 console.log('Initial state: ', store.getState())
 const unsubscribe = store.subscribe(() =>
     console.log('Subscriber: State has possibly changed after a dispatched action, ', store.getState())
 )
+
+// Initial list of dispatches
 console.log("Fetching initial list of musicians")
 store.dispatch(fetchMusicians)
 console.log("Fetching initial list of speed dating events")
 store.dispatch(fetchSDEvents)
 console.log("Fetching initial list of song of the week events")
 store.dispatch(fetchSotwEvents)
+
+// Start CronJob
+console.log('Before job instantiation');
+const job = new CronJob('0 */10 6 * * 0', function() {
+    const d = new Date();
+    console.log('At 06:00:00 on a Sunday:', d);
+    console.log('Creating New SOTW Events')
+
+    let startDay = format(startOfWeek(new Date()), 'PPP');
+    startDay = startDay.replace(/st|nd|rd|th/,'');
+
+    let endDay = format(endOfWeek(new Date()), 'PPP');
+    endDay = endDay.replace(/st|nd|rd|th/,'');
+
+    const genres = shazam_genre_api_names();
+
+    for(let i=0; i < 13; i++) {
+        let eventId = uuidv4();
+        store.dispatch(newEventByGenreWrapper(eventId, genres[i], startDay, endDay));
+    }
+});
+console.log('After job instantiation');
+job.start();
+
 // Init CometChat
 var appID = config.appId;
 var region = config.region;

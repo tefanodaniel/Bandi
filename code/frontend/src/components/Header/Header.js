@@ -2,15 +2,16 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import { logout } from "../../utils/api"; // logout is named export, needs brackets
-import { Nav, NavDropdown } from "react-bootstrap";
+import { NavDropdown } from "react-bootstrap";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { USER_LOGOUT, CHAT_LOGOUT } from "../../actions/types";
+import { USER_LOGOUT} from "../../actions/types";
 import { chatLogout } from "../../actions/chat_actions";
 import styles from "../../styles/navDropdown.module.css";
+import {getLoggedInUser} from "../../selectors/user_selector";
 
 const Header = () => {
   const dispatch = useDispatch();
-  let user = useSelector((state) => state.user_reducer, shallowEqual);
+  let user = useSelector(getLoggedInUser, shallowEqual);
 
   const handleLogout = () => {
     // Log out of chat
@@ -73,10 +74,6 @@ const Header = () => {
 
 
 }
-
-// const DropdownTitle = () => {
-//   return ();
-// }
 
 
 export default withRouter(Header);

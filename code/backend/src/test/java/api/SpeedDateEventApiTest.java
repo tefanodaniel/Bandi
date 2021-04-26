@@ -16,7 +16,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SpeedDateEventApiTest {
-
+/*
     private final static String BASE_URL = "http://localhost:4567";
     private static final Gson gson = new Gson();
 
@@ -94,5 +94,5 @@ class SpeedDateEventApiTest {
         HttpResponse<JsonNode> deleteResponse = Unirest.delete(deleteURL).asJson();
         assertNotEquals(0, deleteResponse.getBody().getArray().length());
     }
-
+*/
 }

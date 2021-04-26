@@ -7,11 +7,8 @@ import Header from './Header/Header';
 import {Container, Row, Col} from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./Header/SubHeader";
-import {allMusiciansQuery} from "../actions/musician_actions";
-import {shallowEqual, useDispatch, useSelector} from "react-redux";
+import Footer from "./Footer";
 
-import { CometChat } from "@cometchat-pro/chat";
-import config from '../config';
 import { connect } from 'react-redux';
 import { chatLogin } from '../actions/chat_actions';
 import {getUser} from "../actions/user_actions";
