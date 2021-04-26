@@ -200,7 +200,7 @@ public class Sql2oMusicianDao implements MusicianDao {
                 "LEFT JOIN toptracks as T ON R.MID=T.id\n" +
                 "LEFT JOIN musicianfriends as F ON R.MID=F.id;";
         try (Connection conn = sql2o.open()) {
-
+            System.out.println("making get with NO query");
             addDefaultDistances(conn); // this will prevent a null distance val
             List<Musician> musicians = this.extractMusiciansFromDatabase(sql, conn, "");
             return musicians;
@@ -220,6 +220,7 @@ public class Sql2oMusicianDao implements MusicianDao {
             // Ensure that the user performing the advanced search provided their user ID
             String[] sourceIDArray = query.get("id");
             String sourceID;
+            System.out.println("making get with query");
             if (sourceIDArray != null) {
                 sourceID = sourceIDArray[0];
             }
@@ -317,12 +318,19 @@ public class Sql2oMusicianDao implements MusicianDao {
             else if (distFlag && !additionalQFlag){
                 filterSQL = distFilter + "ORDER BY distance;";
             }
-            else {
+            else if (!distFlag && additionalQFlag) {
                 addDefaultDistances(conn);
                 filterSQL = tableSQL + "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
                         "LEFT JOIN instruments as I ON R.MID=I.id\n" +
                         "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
                         "WHERE " + filterOn + "AND R.MID <> '" + sourceID + "';";
+            }
+            else { // case: no search query, only user ID is provided
+                addDefaultDistances(conn);
+                filterSQL = tableSQL + "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
+                        "LEFT JOIN instruments as I ON R.MID=I.id\n" +
+                        "LEFT JOIN musiciangenres as G ON R.MID=G.id\n" +
+                        "WHERE R.MID <> '" + sourceID + "';";
             }
             String resultSQL = "SELECT * FROM (SELECT m.id as MID, * FROM musicians as m) as R\n" +
                     "LEFT JOIN instruments as I ON R.MID=I.id\n" +
