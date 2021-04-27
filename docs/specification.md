@@ -27,9 +27,6 @@ Single User
 - As a user, I want to be able to save the profiles of people I meet in the app so that I can connect with them later.
 - As a user, I want to be able to browse and register for speed-dating events that are happening in my area so that I can quickly meet a lot of people with similar interests and see if we might be a good match.
 - As a user, I want to browse song-of-the-week events by genre and make submissions. 
-- As a student user, I would like to verify my college enrollment with an .edu email so I can filter and find other students on my campus and at nearby schools.
-- As a user, I want to submit a "play-along" to another user's 1) uploaded personal audio/video 2) song-of-the-week submissions
-- As a user, I want to be able to register with an email/password so that I can still use the app even if I don't have a Spotify account.
 
 Band Member
 - As a band member, I want to be able to create a profile on the app for my band so that we can easily search for additional musicians as a single entity.
@@ -53,6 +50,10 @@ Admin
 - As a user, I want to see where other musicians are located on a geographic map of my city or town so that I have a better idea of who's playing what in my area.
 - As a band member, I would like to be able to create and customize an application portal for virtual tryouts, so that musicians interested in joining my band can submit recordings/videos of themselves playing their instrument.
 - As a user, I want to be able to specifically browse for bands with virtual tryouts so I can easily find them and apply.
+- As a student user, I would like to verify my college enrollment with an .edu email so I can filter and find other students on my campus and at nearby schools.
+- As a user, I want to submit a "play-along" to another user's 1) uploaded personal audio/video 2) song-of-the-week submissions
+- As a user, I want to be able to register with an email/password so that I can still use the app even if I don't have a Spotify account.
+
 
 
 ## Software Architecture & Technology Stack
