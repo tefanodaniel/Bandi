@@ -70,7 +70,7 @@ class Discover extends React.Component {
 	  return (
   		<div style={bandi_styles.discover_background}>
         	<Header />
-        	<SubHeader text={"We need a banDi tagline to insert here"}/>
+        	<SubHeader text={"Find Your Musical Match"}/>
         	<div style={{marginTop:"120px"}}>
         	<Container >
 				<Row>
