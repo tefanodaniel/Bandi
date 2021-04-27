@@ -54,10 +54,12 @@ class Discover extends React.Component {
 		  this.props.getUser(id1)
 	  }
 	  // Load friends and bands for usage throughout the rest of app
-	  this.props.fetchFriends(id1);
-	  this.props.fetchIncoming(id1);
-	  this.props.fetchOutgoing(id1);
-	  this.props.fetchBands(id1);
+	  this.props.fetchFriends(id1)
+      .then(() => this.props.fetchIncoming(id1))
+      .then(() => this.props.fetchOutgoing(id1))
+      .then(() => this.props.fetchBands(id1))
+      .then(() => console.log("Successfully fetched friends, incoming/outgoing requests, and bands"));
+      //.catch((err) => console.log(err));
   }
 
 	render() {
