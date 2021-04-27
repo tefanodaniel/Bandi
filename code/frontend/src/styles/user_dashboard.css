@@ -1,10 +1,12 @@
-body {
+.outer-dashboard {
+    height: 100vh;
     background: 
         linear-gradient(
             rgba(218, 189, 223, .5),
             rgba(218, 189, 223, .5)
         ),
         url(../images/discover_bg.jpg);
+    
 }
 
 .tabs-container {

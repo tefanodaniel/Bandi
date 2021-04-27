@@ -70,15 +70,20 @@ public class Sql2oBandDao implements BandDao {
                 + "WHERE R.uBID=:id";
         try (Connection conn = sql2o.open()) {
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
-            // Extract non-list attributes
-            String bandId = (String) queryResults.get(0).get("id");
-            String name = (String) queryResults.get(0).get("name");
-            int capacity = (int) queryResults.get(0).get("capacity");
+            Band b = null;
+            if (queryResults.size() > 0) {
+                // Extract non-list attributes
+                String bandId = (String) queryResults.get(0).get("id");
+                String name = (String) queryResults.get(0).get("name");
+                int capacity = (int) queryResults.get(0).get("capacity");
 
-            Band b = new Band(bandId, name, capacity, new HashSet<String>(), new HashSet<String>());
-            for (Map row : queryResults) {
-                b.addGenre((String) row.get("genre"));
-                b.addMember((String) row.get("member"));
+                b = new Band(bandId, name, capacity, new HashSet<String>(), new HashSet<String>());
+                for (Map row : queryResults) {
+                    b.addGenre((String) row.get("genre"));
+                    b.addMember((String) row.get("member"));
+                }
+            } else {
+                System.out.println("Warning! Attempted to read Band that doesn't exist!");
             }
             return b;
         } catch (Sql2oException ex) {

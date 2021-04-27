@@ -13,6 +13,7 @@ import '../../styles/user_dashboard.css';
 
 import { connect } from 'react-redux';
 import { getIncomingFriendRequests, getUserFriends, takeActionOnFriendRequest } from '../../actions/friend_actions';
+import EditUserInfo from './EditUserInfo';
 
 class UserDashboard extends React.Component {
     constructor(props) {
@@ -21,6 +22,7 @@ class UserDashboard extends React.Component {
         // Define the state for this component
         this.state = {
             id: Cookies.get('id'),
+            editing: false
         }
     }
     
@@ -101,11 +103,37 @@ class UserDashboard extends React.Component {
         const outgoing = this.props.outgoing_friend_requests;
         const bands = this.props.bands;
 
+        let profile_view;
+        if (this.state.editing) {
+            profile_view = 
+                <div>
+                    <Button variant="outline-dark" onClick={() => {this.setState({editing: false})}}>Go back</Button>
+                    <EditUserInfo/>
+                </div>
+        } else {
+            profile_view = 
+                <div class="inner-panel">
+                    <Button variant="outline-dark" onClick={() => {this.setState({editing: true})}}>Edit Profile</Button>
+                    <h2 class="name">{userInfo.name}</h2>
+                    <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
+                    <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
+                    <div>
+                        <h4 class="label"><span class="label-text">Instruments: </span>{userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
+                    </div>
+                    <div>
+                        <h4 class="label"><span class="label-text">Genres: </span>{userInfo.genres ? userInfo.genres.join(", ") : ""}</h4>
+                    </div>
+                    <div>
+                        <h4 class="label"><span class="label-text">Links: </span>{userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
+                    </div>
+                </div>;
+        }
+
         if (userInfo) {
             return (
-                <div>
+                <div class="outer-dashboard">
                     <Header/>
-                    <div class="outer">
+                    <div>
                         <div class="tabs-container">
                             <Tabs class="child">
                                 <TabList>
@@ -115,21 +143,7 @@ class UserDashboard extends React.Component {
                                 </TabList>
 
                                 <TabPanel>
-                                    <div class="inner-panel">
-                                        <Button variant="outline-dark" onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
-                                        <h2 class="name">{userInfo.name}</h2>
-                                        <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
-                                        <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
-                                        <div>
-                                            <h4 class="label"><span class="label-text">Instruments: </span>{userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
-                                        </div>
-                                        <div>
-                                            <h4 class="label"><span class="label-text">Genres: </span>{userInfo.genres ? userInfo.genres.join(", ") : ""}</h4>
-                                        </div>
-                                        <div>
-                                            <h4 class="label"><span class="label-text">Links: </span>{userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
-                                        </div>
-                                    </div>
+                                {profile_view}
                                 </TabPanel>
 
                                 <TabPanel>

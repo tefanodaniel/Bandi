@@ -4,7 +4,7 @@ import Jumbotron from 'react-bootstrap/Jumbotron';
 import Button from 'react-bootstrap/Button';
 import Cookies from "js-cookie";
 import Header from './Header/Header';
-import {Container, Row, Col} from "react-bootstrap";
+import {Container, Row, Col, Image } from "react-bootstrap";
 import { bandi_styles } from "../styles/bandi_styles";
 import SubHeader from "./Header/SubHeader";
 import {allMusiciansQuery} from "../actions/musician_actions";
@@ -17,7 +17,7 @@ import { chatLogin } from '../actions/chat_actions';
 import {getUser} from "../actions/user_actions";
 import { fetchBandsForMusician } from "../actions/band_actions";
 import { getIncomingFriendRequests, getOutgoingFriendRequests, getUserFriends } from '../actions/friend_actions';
-
+import "../styles/discover.css";
 
 class Discover extends React.Component {
   constructor(props) {
@@ -93,50 +93,50 @@ class Discover extends React.Component {
 	}
 	
 	return (
-  		<div style={bandi_styles.discover_background}>
+  		<div class="outer-discover">
         	<Header />
-        	<SubHeader text={"We need a banDi tagline to insert here"}/>
-        	<div style={{marginTop:"120px"}}>
+			<img id="logo" src="../bandi-logo.png"></img>
+        	<div>
         	<Container >
 				<Row>
 					<Col style={bandi_styles.discover_row_col}>
-						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_music}>
+						<Jumbotron className="rounded text-white">
 							<Container style={{float:"right"}}>
 								<h3 className="display-5" >Musicians</h3>
 
 							</Container>
 							<Container>
-								<Button onClick={this.viewMusicians} variant="light" >Browse</Button>
+								<Button variant="outline-dark" onClick={this.viewMusicians} >Browse</Button>
 							</Container>
 						</Jumbotron>
 					</Col>
 					<Col style={bandi_styles.discover_row_col}>
-						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_band}>
+						<Jumbotron className="rounded text-white" >
 							<h3>Bands</h3>
-							<Button onClick={this.viewBands} variant="light">Browse</Button>
+							<Button variant="outline-dark" onClick={this.viewBands}>Browse</Button>
 						</Jumbotron>
 					</Col>
 				</Row>
 			</Container>
 			</div>
-			<div style={{marginTop:"220px"}}>
+			<div>
 			<Container >
 				<Row style={{marginTop:"120px"}}>
 					<Col style={bandi_styles.discover_row_col}>
-						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sdate}>
+						<Jumbotron className="rounded text-white" >
 							<Container style={{float:"right"}}>
 								<h3 className="display-5" >Speed-Dating</h3>
 
 							</Container>
 							<Container>
-								<Button onClick={this.viewSpeedDating} variant="light" >Explore</Button>
+								<Button variant="outline-dark" onClick={this.viewSpeedDating}  >Explore</Button>
 							</Container>
 						</Jumbotron>
 					</Col>
 					<Col style={bandi_styles.discover_row_col}>
-						<Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sotw}>
+						<Jumbotron className="rounded text-white" >
 							<h3>Song Of The Week!</h3>
-							<Button onClick={this.viewSOTW} variant="light">Explore</Button>
+							<Button variant="outline-dark" onClick={this.viewSOTW} >Explore</Button>
 						</Jumbotron>
 					</Col>
 				</Row>
