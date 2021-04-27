@@ -23,7 +23,7 @@ const RenderConnectButton = (temp) => {
         return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
     } else { return <Button disabled>Pending...</Button> };*/
     //if (true) {
-        return <Button variant="primary" onClick={temp => addFriend(temp)}>Connect!</Button>
+        return <Button variant="primary" onClick={() => addFriend(temp)}>Connect!</Button>
     //} else { return <Button disabled>Pending...</Button> };
 }
 
