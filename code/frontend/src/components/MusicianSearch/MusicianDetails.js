@@ -58,10 +58,10 @@ class MusicianDetails extends React.Component {
 
     tracks() {
         if (this.state.showtoptracks) {
-            return(<div>{this.state.toptracks.join(", ")}</div>)
+            return(<div>{this.state.toptracks.map((track, i) => <li>{track}</li>)}</div>)
         }
         else {
-            return(<div>hidden</div>)
+            return(<div>(hidden)</div>)
         }
 
     }
@@ -86,11 +86,11 @@ class MusicianDetails extends React.Component {
                         <h4>Genres: {this.state.genres.join(", ")}</h4>
                     </div>
                     <div>
-                        <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
+                        <h4>Links: </h4>{this.state.links.map((link, i) => <li><a href={link}>{link}</a></li>)}
                     </div>
 
                     <div>
-                        <h4>Top Tracks: {this.tracks()}</h4>
+                        <h4>Top Spotify Tracks: </h4>{this.tracks()}
                     </div>
 
                 </div>
