@@ -76,13 +76,6 @@ class CreateBand extends React.Component {
         if (this.state.members) {
             return (
                 <div>
-                    <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Create a new Band!
-                        </Navbar.Brand>
-                    </Navbar>
-
                     <Form onSubmit={"nothing"}>
                         <Form.Group controlId="profileForm.name">
                             <Form.Label>Band Name:</Form.Label>
@@ -102,21 +95,12 @@ class CreateBand extends React.Component {
                     </Form>
 
                     <Button onClick={this.submit_form}>Create</Button>
-
-                    <Button onClick={() => {this.props.history.push('/myprofile')}}>Go Back</Button>
-
                 </div>
             )
         }
         else {
             return (
                 <div>
-                    <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Create a new Band!
-                        </Navbar.Brand>
-                    </Navbar>
                     <h1>Loading...</h1>
                 </div>
             )

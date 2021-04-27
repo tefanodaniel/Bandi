@@ -14,6 +14,7 @@ import '../../styles/user_dashboard.css';
 import { connect } from 'react-redux';
 import { getIncomingFriendRequests, getUserFriends, takeActionOnFriendRequest } from '../../actions/friend_actions';
 import EditUserInfo from './EditUserInfo';
+import CreateBand from '../Bands/CreateBand';
 
 class UserDashboard extends React.Component {
     constructor(props) {
@@ -22,7 +23,8 @@ class UserDashboard extends React.Component {
         // Define the state for this component
         this.state = {
             id: Cookies.get('id'),
-            editing: false
+            editing: false, // tracks whether user is currently editing their profile
+            creating: false // tracks whether user is in the process of creating a band
         }
     }
     
@@ -110,7 +112,7 @@ class UserDashboard extends React.Component {
                     <Button variant="outline-dark" onClick={() => {this.setState({editing: false})}}>Go back</Button>
                     <EditUserInfo/>
                 </div>
-        } else {
+        } else { // render user profile
             profile_view = 
                 <div class="inner-panel">
                     <Button variant="outline-dark" onClick={() => {this.setState({editing: true})}}>Edit Profile</Button>
@@ -129,6 +131,21 @@ class UserDashboard extends React.Component {
                 </div>;
         }
 
+        let band_view;
+        if (this.state.creating) {
+            band_view = 
+            <div>
+                <Button variant="outline-dark" onClick={() => this.setState({creating: false})}>Go back</Button>
+                <CreateBand/>
+            </div>
+        } else {
+            band_view = 
+            <div>
+                <Button variant="outline-dark" onClick={() => this.setState({creating: true})}>Create band</Button>
+                {this.renderBandList(bands)}
+            </div>
+        }
+        
         if (userInfo) {
             return (
                 <div class="outer-dashboard">
@@ -147,8 +164,7 @@ class UserDashboard extends React.Component {
                                 </TabPanel>
 
                                 <TabPanel>
-                                    {this.renderBandList(bands)}
-                                    <Button variant="outline-dark" onClick={() => this.props.history.push('/createband')}>Create Band</Button>
+                                {band_view}
                                 </TabPanel>
 
 
