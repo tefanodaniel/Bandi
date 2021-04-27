@@ -3,6 +3,7 @@ Team Lead - Noah Johnson
 [Team Availability](https://www.when2meet.com/?11695597-3PjHf)
 
 # OO Design
+![](assets/I4/I4_UML.png)
 
 # Wireframe & Use-case
 
