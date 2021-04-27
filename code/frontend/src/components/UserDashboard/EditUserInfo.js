@@ -196,6 +196,11 @@ class EditUserInfo extends React.Component {
                   </Form.Control>
               </FormGroup>
 
+              <Form.Group controlId="profileForm.links">
+                  <Form.Label>Links:</Form.Label>
+                  <Form.Control name="links" type="input" placeholder="Links" value={this.state.links} onChange={this.handleChange} />
+              </Form.Group>
+
             <Button type="submit">Save</Button>
 
           </Form>
