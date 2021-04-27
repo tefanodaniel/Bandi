@@ -8,6 +8,7 @@ import {TabPanel} from "react-tabs";
 import Header from "../Header/Header";
 import {Container, Navbar} from "react-bootstrap";
 import FriendApiService from '../../utils/FriendApiService';
+import MusicianApi from "../../utils/MusicianApiService";
 
 class MusicianDetails extends React.Component {
     constructor(props) {
@@ -18,58 +19,43 @@ class MusicianDetails extends React.Component {
 
             my_id : '',
 
-            userId : '',
+            view_id : '',
             name: 'Loading...',
             location: '',
             experience: '',
             instruments: [],
             genres: [],
             links: [],
-            friends: [],
+            friends: []
         }
 
-        this.addFriend.bind(this)
-
-
         const params = new URLSearchParams(this.props.location.search);
-        this.state.us_id = params.get("view");
+        this.state.view_id = params.get("view");
         this.state.my_id = Cookies.get("id");
+    }
 
-        var userURL = getBackendURL() + "/musicians/" + this.state.us_id;
-        axios.get(userURL)
+    componentDidMount() {
+        var view_id = this.state.view_id;
+        MusicianApi.get(view_id)
             .then((response) => {
-                this.state =
-                    {name: response.data.name, location: response.data.location,
+                this.setState({name: response.data.name,
+                        location: response.data.location,
                         experience: response.data.experience,
                         instruments: response.data.instruments,
                         genres: response.data.genres,
                         links: response.data.profileLinks,
                         friends: response.data.friends
-                    }
+                    }); console.log(response.data)
             });
+
+        console.log(this.state.view_id);
+        console.log(this.state.name);
     }
 
     goBack = () => {this.props.history.goBack()};
 
-
-    addFriend = () => {
-        FriendApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
-            alert("A request to connect was sent to " + this.state.name + ".")
-        );
-    }
-
-    renderConnectButton = () => {
-        // TODO: Configure global store to hold pending friend request information. That way, we can determine
-        // whether we need to allow the user to send a friend request to this musician or not.
-
-        if (true) {
-            return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
-        } else { return <Button disabled>Pending...</Button> };
-    }
-
     render() {
 
-        if (this.state.name) {
             return (
                 <div>
                     <Header/>
@@ -90,21 +76,9 @@ class MusicianDetails extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
-
-                    {this.renderConnectButton()}
                 </div>
             );
-        } else {
 
-            return (
-                <div>
-                    <h1>View a Musician's Profile</h1>
-                    <h3>Loading...</h3>
-                    <Button onClick={() => {this.goBack()}}>Go Back</Button>
-                </div>
-
-            );
-        }
     }
 
 }
