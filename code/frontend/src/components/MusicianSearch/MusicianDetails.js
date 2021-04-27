@@ -26,7 +26,9 @@ class MusicianDetails extends React.Component {
             instruments: [],
             genres: [],
             links: [],
-            friends: []
+            friends: [],
+            toptracks: [],
+            showtoptracks: true
         }
 
         const params = new URLSearchParams(this.props.location.search);
@@ -44,7 +46,9 @@ class MusicianDetails extends React.Component {
                         instruments: response.data.instruments,
                         genres: response.data.genres,
                         links: response.data.profileLinks,
-                        friends: response.data.friends
+                        friends: response.data.friends,
+                        toptracks: response.data.topTracks,
+                        showtoptracks: response.data.showtoptracks
                     }); console.log(response.data)
             });
 
@@ -52,7 +56,15 @@ class MusicianDetails extends React.Component {
         console.log(this.state.name);
     }
 
-    goBack = () => {this.props.history.goBack()};
+    tracks() {
+        if (this.state.showtoptracks) {
+            return(<div>{this.state.toptracks.join(", ")}</div>)
+        }
+        else {
+            return(<div>hidden</div>)
+        }
+
+    }
 
     render() {
 
@@ -76,6 +88,11 @@ class MusicianDetails extends React.Component {
                     <div>
                         <h4>Links: {this.state.links.map((link, i) => <a href={link}>{link}</a>)}</h4>
                     </div>
+
+                    <div>
+                        <h4>Top Tracks: {this.tracks()}</h4>
+                    </div>
+
                 </div>
             );
 
