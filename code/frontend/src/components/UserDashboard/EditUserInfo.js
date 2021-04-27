@@ -110,7 +110,7 @@ class EditUserInfo extends React.Component {
       }
 
       // Redirect back to view the updated profile
-      this.props.history.push('/myprofile')
+      alert("Profile updated successfully!")
     }
 
     instrumentIsChecked(instrument) {
@@ -124,11 +124,6 @@ class EditUserInfo extends React.Component {
     }
 
     render() {
-      // Check if user is logged in, else redirect to the main page
-      if (!this.state.id) {
-          this.props.history.push('/discover');
-      }
-
       return (
         <div>
         <div className="profile">
