@@ -82,7 +82,7 @@ class UserDashboard extends React.Component {
     renderBandList(bands) {
         if (bands && bands.length > 0) {
             var bandsList = bands.map((band) =>
-            <div className="card">
+            <div key={band.id} className="card">
                 <div className="card-body">
                     <h5 className="card-title">{band.name}</h5>
                     <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
@@ -109,7 +109,7 @@ class UserDashboard extends React.Component {
         const friends = this.props.friends;
         const incoming = this.props.incoming_friend_requests;
         const outgoing = this.props.outgoing_friend_requests;
-        const bands = this.props.bands;
+        const bands = this.props.userInfo.bands;
 
         if (userInfo) {
             return (
@@ -197,7 +197,6 @@ function mapStateToProps(state) {
     // changed so that we only keep the parts of the store that are relevant to UserDashboard
     // can still access whole store using 'state'
     userInfo: state.user_reducer,
-    bands: state.band_reducer,
     friends: state.friend_reducer.friend_info,
     incoming_friend_requests: state.friend_reducer.incoming_friend_requests,
     outgoing_friend_requests: state.friend_reducer.outgoing_friend_requests
