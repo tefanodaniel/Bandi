@@ -1,7 +1,7 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
 import Jumbotron from 'react-bootstrap/Jumbotron';
-import Button from 'react-bootstrap/Button';
+import button from 'react-bootstrap/button';
 import Cookies from "js-cookie";
 import Header from './Header/Header';
 import {Container, Row, Col, Image } from "react-bootstrap";
@@ -107,14 +107,14 @@ class Discover extends React.Component {
 
 							</Container>
 							<Container>
-								<Button variant="outline-dark" onClick={this.viewMusicians} >Browse</Button>
+								<button class="bandi-button discover" onClick={this.viewMusicians} >Browse</button>
 							</Container>
 						</Jumbotron>
 					</Col>
 					<Col style={bandi_styles.discover_row_col}>
 						<Jumbotron className="rounded text-white" >
 							<h3>Bands</h3>
-							<Button variant="outline-dark" onClick={this.viewBands}>Browse</Button>
+							<button class="bandi-button discover" onClick={this.viewBands}>Browse</button>
 						</Jumbotron>
 					</Col>
 				</Row>
@@ -130,14 +130,14 @@ class Discover extends React.Component {
 
 							</Container>
 							<Container>
-								<Button variant="outline-dark" onClick={this.viewSpeedDating}  >Explore</Button>
+								<button class="bandi-button discover" onClick={this.viewSpeedDating}  >Explore</button>
 							</Container>
 						</Jumbotron>
 					</Col>
 					<Col style={bandi_styles.discover_row_col}>
 						<Jumbotron className="rounded text-white" >
 							<h3>Song Of The Week!</h3>
-							<Button variant="outline-dark" onClick={this.viewSOTW} >Explore</Button>
+							<button class="bandi-button discover" onClick={this.viewSOTW} >Explore</button>
 						</Jumbotron>
 					</Col>
 				</Row>

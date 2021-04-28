@@ -78,7 +78,7 @@ const MusicianSearchControls = () => {
                 <input id="distance-input" onChange={e => {adddistancequery(e);}} placeholder={placeholder_query.distance} type='text'/>
             </Row>
             <Row id="submit-button-row" className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Button variant="outline-dark" onClick={SubmitQuery} >Submit!</Button>
+                <button id="musician-search-submit" class="bandi-button" onClick={SubmitQuery} >Submit!</button>
             </Row>
         </Container>
     )

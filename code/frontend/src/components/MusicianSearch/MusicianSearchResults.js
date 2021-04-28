@@ -77,15 +77,14 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
     //<Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/musiciandetails?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
     //
     return (
-            <Card style={bandi_styles.musician_card} className="rounded border-0">
+            <Card>
                 <Card.Body>
-                    <Card.Title><b>{musician.name}</b></Card.Title>
-                    <Card.Text className="small font-italic" style={{textColor:"white"}}>Genres: {musician.genres.join(', ')}</Card.Text>
-                    <Card.Text className="small font-italic" style={{color:"white"}}>Instruments: {musician.instruments.join(', ')}</Card.Text>
-                    <Card.Text> <Button variant="primary" style={{width: "170px",
-                        height: "30x", marginBottom:"10px"}} onClick={handleShow}>
+                    <Card.Title style={{color:"black"}}><b>{musician.name}</b></Card.Title>
+                    <Card.Text className="small font-italic">Genres: {musician.genres.join(', ')}</Card.Text>
+                    <Card.Text className="small font-italic">Instruments: {musician.instruments.join(', ')}</Card.Text>
+                    <Card.Text> <button class="bandi-button view-more" onClick={handleShow}>
                         View More
-                    </Button>
+                    </button>
                     </Card.Text>
                     <Modal key={musician.name} show={show} onHide={handleClose}>
                         <Modal.Header closeButton>

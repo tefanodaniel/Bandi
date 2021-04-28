@@ -65,13 +65,8 @@ h4 span.label-text {
     margin-top: 25px;
 }
 
-.btn.btn-outline-dark {
-    font-family: "Consolas";
-    border-width: 1px;
+.bandi-button.dashboard {
     background-color: rgba(214, 34, 34, 0.281);
-    border-top-width: 2px;
-    border-bottom-width: 4px;
-    border-left-width: 3px;
 }
 
 .react-tabs {
@@ -193,23 +188,22 @@ h4 span.label-text {
     width: 275px;
 }
 
-.btn.btn-primary {
-    border-style: solid;
-    border-color: black;
-    border-left-width: 2px;
-    border-bottom-width: 3px;
-}
-
-#accept-button {
+.bandi-button.accept-button {
     font-size: 0.7rem;
     margin-left: 20px;
     margin-right: 5px;
+    border-color: black;
+    border-left-width: 2px;
+    border-bottom-width: 3px;
     background-color: green;
 }
 
-#decline-button {
+.bandi-button.decline-button {
     font-size: 0.7rem;
     margin-left: 5px;
     margin-right: 5px;
+    border-color: black;
+    border-left-width: 2px;
+    border-bottom-width: 3px;
     background-color: red;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import Button from "react-bootstrap/Button";
+import button from "react-bootstrap/button";
 import Cookies from "js-cookie";
 
 import Header from "../Header/Header";
@@ -54,8 +54,8 @@ class UserDashboard extends React.Component {
         if (incoming && incoming.length > 0) {
             const listItems = incoming.map((request) =>
             <div>
-                <li class="incoming">{request.senderName}<Button id="accept-button" onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
-                <Button id= "decline-button" onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
+                <li class="incoming">{request.senderName}<button class="bandi-button accept-button" onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</button>
+                <button class= "bandi-button decline-button" onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</button></li>
             </div>
             );
             return (
@@ -87,7 +87,7 @@ class UserDashboard extends React.Component {
                     <h5 className="card-title">{band.name}</h5>
                     <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
                     <p className="card-text"></p>
-                    <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
+                    <button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</button>
                 </div>
             </div>);
             return bandsList;
@@ -109,13 +109,13 @@ class UserDashboard extends React.Component {
         if (this.state.editing) {
             profile_view = 
                 <div>
-                    <Button variant="outline-dark" onClick={() => {this.setState({editing: false})}}>Go back</Button>
+                    <button class="bandi-button dashboard"  onClick={() => {this.setState({editing: false})}}>Go back</button>
                     <EditUserInfo/>
                 </div>
         } else { // render user profile
             profile_view = 
                 <div class="inner-panel">
-                    <Button variant="outline-dark" onClick={() => {this.setState({editing: true})}}>Edit Profile</Button>
+                    <button class="bandi-button dashboard" onClick={() => {this.setState({editing: true})}}>Edit Profile</button>
                     <h2 class="name">{userInfo.name}</h2>
                     <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
                     <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
@@ -135,13 +135,13 @@ class UserDashboard extends React.Component {
         if (this.state.creating) {
             band_view = 
             <div>
-                <Button variant="outline-dark" onClick={() => this.setState({creating: false})}>Go back</Button>
+                <button class="bandi-button dashboard" onClick={() => this.setState({creating: false})}>Go back</button>
                 <CreateBand/>
             </div>
         } else {
             band_view = 
             <div>
-                <Button variant="outline-dark" onClick={() => this.setState({creating: true})}>Create band</Button>
+                <button class="bandi-button dashboard" onClick={() => this.setState({creating: true})}>Create band</button>
                 {this.renderBandList(bands)}
             </div>
         }

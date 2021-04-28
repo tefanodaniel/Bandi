@@ -13,13 +13,9 @@
     margin: 50px auto 50px auto; /* top left bottom right */
 }
 
-.btn.btn-outline-dark {
-    font-family: "Consolas";
-    border-width: 1px;
+.bandi-button.discover {
     background-color: rgba(214, 34, 34, 0.281);
-    border-top-width: 2px;
-    border-bottom-width: 4px;
-    border-left-width: 3px;
+    padding: 5px 25px 5px 25px;    
 }
 
 .rounded.text-white.jumbotron {
