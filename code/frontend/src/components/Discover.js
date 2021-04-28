@@ -12,7 +12,7 @@ import Footer from "./Footer";
 import { connect } from 'react-redux';
 import { chatLogin } from '../actions/chat_actions';
 import {getUser} from "../actions/user_actions";
-import { fetchBandsForMusician } from "../actions/band_actions";
+import { fetchUserBands } from "../actions/user_actions";
 import { getIncomingFriendRequests, getOutgoingFriendRequests, getUserFriends } from '../actions/friend_actions';
 
 
@@ -58,7 +58,7 @@ class Discover extends React.Component {
       .then(() => this.props.fetchIncoming(id1))
       .then(() => this.props.fetchOutgoing(id1))
       .then(() => this.props.fetchBands(id1))
-      .then(() => console.log("Successfully fetched friends, incoming/outgoing requests, and bands"));
+      //.then(() => console.log("Successfully fetched friends, incoming/outgoing requests, and bands"));
       //.catch((err) => console.log(err));
   }
 
@@ -138,7 +138,7 @@ function mapDispatchToProps(dispatch) {
         fetchFriends: (id) => dispatch(getUserFriends(id)),
 		fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
 		fetchOutgoing: (id) => dispatch(getOutgoingFriendRequests(id)),
-        fetchBands: (userID) => dispatch(fetchBandsForMusician({id: userID}))
+        fetchBands: (userID) => dispatch(fetchUserBands(userID))
     }
 }
 

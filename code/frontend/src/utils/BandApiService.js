@@ -5,6 +5,10 @@ class BandAPIService {
         return customhttp.get("/bands");
     }
 
+    getUserBands(userId) {
+      return customhttp.get(`/bands?musicianId=${userId}`)
+    }
+
     get(id) {
         return customhttp.get(`/bands/${id}`);
     }
