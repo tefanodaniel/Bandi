@@ -1,0 +1,57 @@
+.justify-content-sm-left.row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    font-family: 'Consolas';
+}
+
+.justify-content-sm-left.row h5 {
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.justify-content-sm-left.row input {
+    display: block;
+    border-style: solid;
+    border-width: 1px;
+    border-color: black;
+    border-radius: 10px;
+}
+
+.justify-content-sm-left.row #name-input {
+    width: 73%;
+}
+
+.justify-content-sm-left.row #instrument-input {
+    width: 54%;
+}
+
+.justify-content-sm-left.row #genre-input {
+    width: 70%;
+}
+
+.justify-content-sm-left.row #distance-input {
+    width: 35%;
+}
+
+#submit-button-row {
+    background-color: transparent;
+    border-style: none;
+}
+ 
+.btn.btn-outline-dark {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Consolas";
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}

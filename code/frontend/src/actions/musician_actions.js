@@ -12,11 +12,20 @@ import MusicianApi from "../utils/MusicianApiService";
 // also pagination or carousel.
 export async function fetchMusicians(dispatch, getState) {
     //console.log("Inside fetchMusicians action");
-    const response = await MusicianApi.getAll();
-    dispatch({
-        type : LOAD_MUSICIANS_INITIAL,
-        payload : response.data
-    })
+    // let tries = 0;
+    // while (tries < 5) {
+    //     try {
+    //         const response = await MusicianApi.getAll();
+    //         dispatch({
+    //             type : LOAD_MUSICIANS_INITIAL,
+    //             payload : response.data
+    //         })
+    //     } catch (error) {
+    //         console.log("Error fetching musicians. Retrying...")
+    //         tries++;
+    //     }
+    // }
+    console.log("Critical error occurred. Please refresh the page to continue using Bandi.");
 }
 
 export function allMusiciansQuery(queryparams) {
