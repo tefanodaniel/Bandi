@@ -22,12 +22,8 @@
 - As a user, I want to be able to browse and register for speed-dating events that are happening in my area so that I can quickly meet a lot of people with similar interests and see if we might be a good match.
 - As a user, I want to browse song-of-the-week events by genre and make submissions. 
 - As a band member, I want to be able to send an invite to other registered users to join my band profile.
-- As a student user, I would like to verify my college enrollment with an .edu email so I can filter and find other students on my campus and at nearby schools.
-- As an admin, I want to enable RSVP functionality for the speed-dating events and set visibility to all registered users, so that only registered users can attend the events.
 
 ## Iteration 5
-- As a user, I want to submit a "play-along" to another user's 1) uploaded personal audio/video 2) song-of-the-week submissions
-- As a user, I want to be able to register with an email/password so that I can still use the app even if I don't have a Spotify account.
 - As a user, I want to be able to display my recent Spotify top tracks on my profile so that others may know what kind of music I enjoy.
 
 <details><summary>Deleted User Stories</summary>
@@ -46,5 +42,11 @@
 - As a guest, I want to be able to browse band profiles and use a “contact us” form to ask about their availability for gigs so that I can hire local bands to play events.
 - as a guest without login credentials, I want to have view-only privileges for the available profiles 
   so that I can see what kind of musicians and groups are around.
+
+- As a user, I want to submit a "play-along" to another user's 1) uploaded personal audio/video 2) song-of-the-week submissions
+- As a user, I want to be able to register with an email/password so that I can still use the app even if I don't have a Spotify account.
+- As a student user, I would like to verify my college enrollment with an .edu email so I can filter and find other students on my campus and at nearby schools.
+- As an admin, I want to enable RSVP functionality for the speed-dating events and set visibility to all registered users, so that only registered users can attend the events.
+
 </p>
 </details>

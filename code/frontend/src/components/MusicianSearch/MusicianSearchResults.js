@@ -9,6 +9,7 @@ import FriendApiService from "../../utils/FriendApiService";
 import {selectFilteredMusicians} from "../../selectors/musician_selector";
 import {chunk} from "../../utils/miscellaneous";
 import {getLoggedInUser} from "../../selectors/user_selector";
+import {getFrontendURL} from "../../utils/api";
 
 async function addFriend (temp) {
     const response = await FriendApiService.sendFriendRequest(temp.logged_id, temp.id);
@@ -24,7 +25,7 @@ const RenderConnectButton = (temp) => {
         return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
     } else { return <Button disabled>Pending...</Button> };*/
     //if (true) {
-        return <Button variant="primary" onClick={temp => addFriend(temp)}>Connect!</Button>
+        return <Button variant="primary" onClick={() => addFriend(temp)}>Connect!</Button>
     //} else { return <Button disabled>Pending...</Button> };
 }
 
@@ -62,8 +63,12 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                             <div>
                                 <h5>Links: {musician.links}</h5>
                             </div>
+
                         </Modal.Body>
                         <Modal.Footer>
+                            <Button onClick={() => {window.location = getFrontendURL() + '/#/musiciandetails?view=' + musician.id;}}>
+                                View More
+                            </Button>
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>

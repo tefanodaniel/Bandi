@@ -30,6 +30,10 @@ class MusicianAPIService {
         console.log('what are the params:,', queryparams)
         return customhttp.get("/musicians", { params: queryparams });
     }
+
+    updateShowTopTracks(id, data) {
+        return customhttp.put(`/showtoptracks/${id}`, data);
+    }
 }
 
 export default new MusicianAPIService();

@@ -11,7 +11,7 @@ export default function musicianReducer (state = {}, action) {
             return {
                 ...state,
                 musicians: action.payload,
-                filteredMusicians: null,
+                filteredMusicians: action.payload,
                 query: null
             }
         case LOAD_MUSICIANS_INITIAL_SEARCH:

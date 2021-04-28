@@ -1,9 +1,9 @@
-import { LOAD_BANDS_FOR_MUSICIAN } from './types';
+import { LOAD_USER_BANDS } from './types';
 import BandApi from "../utils/BandApiService";
 
-export const fetchBandsForMusician = (attr) => (dispatch) => {
-  return BandApi.get(attr).then(response => dispatch({
+export const fetchBandsForMusician = (id) => (dispatch) => {
+  return BandApi.get(id).then(response => dispatch({
     payload: response.data,
-    type: LOAD_BANDS_FOR_MUSICIAN
+    type: LOAD_USER_BANDS
   }))
 }

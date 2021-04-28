@@ -16,7 +16,6 @@ const MusicianSearchControls = () => {
     const addnamequery = (e) => {
         let input = e.target.value;
         queryparams.name = input
-        console.log('what is the name now,', queryparams.name)
     }
 
     const addgenrequery = (e) => {
