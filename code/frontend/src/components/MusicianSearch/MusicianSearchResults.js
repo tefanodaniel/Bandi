@@ -8,6 +8,7 @@ import FriendApiService from "../../utils/FriendApiService";
 import {selectFilteredMusicians} from "../../selectors/musician_selector";
 import {chunk} from "../../utils/miscellaneous";
 import {getLoggedInUser} from "../../selectors/user_selector";
+import {getFrontendURL} from "../../utils/api";
 
 async function addFriend (temp) {
     const response = await FriendApiService.sendFriendRequest(temp.logged_id, temp.id);
@@ -61,8 +62,12 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                             <div>
                                 <h5>Links: {musician.links}</h5>
                             </div>
+
                         </Modal.Body>
                         <Modal.Footer>
+                            <Button onClick={() => {window.location = getFrontendURL() + '/#/musiciandetails?view=' + musician.id;}}>
+                                View More
+                            </Button>
                             <Button variant="secondary" onClick={handleClose}>
                                 Close
                             </Button>

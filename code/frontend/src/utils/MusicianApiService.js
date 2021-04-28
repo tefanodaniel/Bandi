@@ -28,6 +28,10 @@ class MusicianAPIService {
     findByQuery(queryparams) {
         return customhttp.get(`/musicians`, { params: queryparams });
     }
+
+    updateShowTopTracks(id, data) {
+        return customhttp.put(`/showtoptracks/${id}`, data);
+    }
 }
 
 export default new MusicianAPIService();
