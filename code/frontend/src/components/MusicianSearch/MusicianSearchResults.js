@@ -62,10 +62,10 @@ const RenderConnectButton = (props) => {
 
     // Conditionally render button depending on friend status
     if (already_friends) {
-        return <Button variant="success" onClick={() => {alert("You and " + recipientName + " are friends!")}}>Friends</Button>;
+        return <button id="friends-badge" class="bandi-button" onClick={() => {alert("You and " + recipientName + " are friends!")}}>Friends!</button>;
     } else if (!already_requested) {
-        return <Button variant="primary" onClick={() => handleConnect(senderID, recipientID, recipientName, dispatch)}>Connect!</Button>
-    } else { return <Button disabled>Pending...</Button> };
+        return <button id="connect" class="bandi-button" onClick={() => handleConnect(senderID, recipientID, recipientName, dispatch)}>Connect!</button>
+    } else { return <button id="pending" class="bandi-button" disabled>Pending...</button> };
 }
 
 const FilteredMusicianItem = React.forwardRef((props, ref) => {
@@ -104,9 +104,9 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
                             </div>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
+                            <button id="close" class="bandi-button" onClick={handleClose}>
                                 Close
-                            </Button>
+                            </button>
                             <RenderConnectButton logged_id = {logged_id} id = {musician.id} name={musician.name} dispatch={props.dispatch}/>
                         </Modal.Footer>
                     </Modal>

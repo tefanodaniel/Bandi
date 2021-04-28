@@ -55,17 +55,6 @@
     border-style: none;
 }
 
-.btn.btn-outline-dark {
-    margin-left: auto;
-    margin-right: auto;
-    font-family: "Consolas";
-    border-width: 1px;
-    background-color: rgb(69, 84, 219);
-    border-top-width: 2px;
-    border-bottom-width: 4px;
-    border-left-width: 3px;
-}
-
 .bandi-button {
     padding: 5px 10px 5px 10px;
     font-family: "Consolas";
@@ -82,8 +71,6 @@
     width: 170px;
     background-color: rgb(69, 84, 219);
 }
-
-
 
 #musician-search-submit {
     background-color: rgb(69, 84, 219);
@@ -111,4 +98,58 @@
     border-color: black;
     border-radius: 10px;
     
+}
+
+.modal-content {
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    border-bottom-width: 3px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    background-color: rgb(116, 174, 228);
+}
+
+.modal-title.h4 {
+    text-align: center;
+    font-weight: bold;
+    font-family: "Consolas";
+    font-stretch: expanded;
+    background-color: white;
+    background-color: rgb(255, 255, 255);
+    border-style: solid;
+    border-width: 1px;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    border-color: black;
+    border-radius: 10px;
+    padding: 2px 10px 2px 10px;
+}
+
+.modal-body h5 {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Consolas";
+    padding: 2px 10px 2px 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: rgba(170, 249, 255, 0.815);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+#friends-badge {
+    background-color: aquamarine;
+}
+
+#pending {
+    background-color: rgb(178, 185, 181);
+}
+
+#close {
+    background-color: rgb(128, 137, 226);
 }
