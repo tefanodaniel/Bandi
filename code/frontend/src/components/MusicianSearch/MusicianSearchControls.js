@@ -46,10 +46,11 @@ const MusicianSearchControls = () => {
 
     const SubmitQuery = () => {
         if(Object.keys(queryparams)===0) {
+            console.log('(queryparams)===0')
             dispatch(clearQuery)
         }
         else {
-            
+            console.log('submitting new')
             queryparams.id = user.id
             dispatch(newQuery(queryparams))
         }

@@ -52,7 +52,6 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                         </Modal.Header>
                         <Modal.Body>
                             <h5>Location: {musician.location}</h5>
-                            <h5>Distance: {musician.distance}</h5>
                             <h5>Experience: {musician.experience}</h5>
                             <div>
                                 <h5>Instruments: {musician.instruments.join(", ")}</h5>
@@ -103,6 +102,7 @@ const MusicianSearchResults = () => {
                 return user
             }
         });
+        // return empty result message
         if ((index !== null) && index !== -1) fil_musicians_mod.splice(index, 1);
         const fil_musicians_chunk = chunk(fil_musicians_mod,3)
         const rows = fil_musicians_chunk.map((user_chunk, index) => {

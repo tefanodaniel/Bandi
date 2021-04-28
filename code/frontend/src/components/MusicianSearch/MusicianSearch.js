@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
 import MusicianSearchResults from "./MusicianSearchResults";
 import MusicianSearchControls from "./MusicianSearchControls";
+import Cookies from "js-cookie";
+
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 import {bandi_styles} from "../../styles/bandi_styles";
@@ -48,7 +50,7 @@ class MusicianSearch extends Component {
 }
 
 function mapStateToProps(state) {
-    return {state};
+    return {state}
 }
 
 export default connect(mapStateToProps)(MusicianSearch);
