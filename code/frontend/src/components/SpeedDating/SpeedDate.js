@@ -8,12 +8,13 @@ import { connect } from 'react-redux';
 import { fetchSDEvents } from '../../actions/sd_event_actions';
 import SDEventApi from "../../utils/SDEventApiService";
 import Button from "react-bootstrap/Button";
-import {fetchBandsForMusician} from "../../actions/band_actions";
 import Form from "react-bootstrap/Form";
-import FormGroup from "react-bootstrap/FormGroup";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import BandApi from "../../utils/BandApiService";
-import MusicianApi from "../../utils/MusicianApiService";
+import Modal from "react-bootstrap/Modal";
+import SpeedDateEvent from './SpeedDateEvent.js';
+
+import '../../styles/speed_dating.css';
 
 class SpeedDate extends React.Component {
     constructor(props) {
@@ -26,7 +27,10 @@ class SpeedDate extends React.Component {
             name: '',
             link: '',
             date: '',
-            minusers: 1
+            minusers: 1,
+            showModal: false,
+            modalEvent: 0,
+            isParticipant: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,7 +70,7 @@ class SpeedDate extends React.Component {
 
     func(arr) {
         var size;
-        if (arr[0] == null) {
+        if (arr == undefined) {
             size = 0;
         }
         else{
@@ -75,38 +79,85 @@ class SpeedDate extends React.Component {
         return size;
     }
 
+    register_leave() {
+        if (!this.state.isParticipant) {
+            // add participant to event
+            SDEventApi.addParticipant(this.state.eventId, this.state.id)
+                .then((response) => console.log(response.data));
+        }
+        else {
+            // remove participant from event
+            SDEventApi.deleteParticipant(this.state.eventId, this.state.id)
+                .then((response) => console.log(response.data));
+        }
+
+        this.setState({isParticipant : !(this.state.isParticipant)});
+        this.buttonText();
+    }
+
+    render_event_button() {
+        if (this.state.isParticipant) {
+            return <button class="bandi-button event" onClick={() => this.register_leave()}>Leave event</button> 
+        } else {
+            return <button class="bandi-button event" onClick={() => this.register_leave()}>Register for event</button> 
+        }
+    }
+
     render() {
-        console.log(this.state.sdEvents);
+        console.log(this.state);
 
         const userInfo = this.props.store.user_reducer;
         const isAdmin = userInfo.admin;
-        console.log('here here', userInfo);
 
+        const handleClose = () => this.setState({showModal: false});
+        const handleShow = (event) => { 
+            this.setState(
+                { showModal: true,
+                    modalEvent: event,
+                    isParticipant: (event.participants).indexOf(this.state.id) > -1
+                }) 
+        };
+        
         var eventList = this.state.sdEvents.map((event) =>
 
-            <div className="card">
-                <Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sdate}>
-                <div className="card-body">
+                <Jumbotron className="bandi-card dating-event">
+                <div className="bandi-text-fields dating-event">
                     <h5 className="card-title">{event.name}</h5>
-                    <h6 className="card-subtitle">{event.date}</h6>
-                    <h6 className="card-subtitle"><a href={event.link}>{event.link}</a></h6>
+                    <h6 className="card-text">{event.date}</h6>
+                    <h6 className="card-text"><a href={event.link}>{event.link}</a></h6>
                     <p className="card-text">Minimum number of participants: {event.minusers}</p>
                     <p className="card-text">Registered participants: {this.func(event.participants)}</p>
-                    <Button className="small font-italic" onClick={() => {this.props.history.push('/speeddateevent?view=' + event.id);}}>View More</Button>
+                    <button className="bandi-button view-sd" onClick={() => {handleShow(event)}}>View More</button>
                 </div>
                 </Jumbotron>
-            </div>
-
         );
 
         if (isAdmin) {
             return(
-                <div className="bg-transparent" style={bandi_styles.discover_background}>
+                <div class="speed-dating-outer">
                     <Header/>
-                    <SubHeader text={"Register for speed-dating events here!"}/>
-
                     <h1>Speed-Dating Events:</h1>
-                    {eventList}
+                    <div class="dating-container">
+                        {eventList}
+                    </div>
+
+                    <Modal className="bandi-modal"show={this.state.showModal} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalEvent.name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h5>{this.state.modalEvent.date}</h5>
+                            <h5><a href={this.state.modalEvent.link}>{this.state.modalEvent.link}</a></h5>
+                            <h5>Minimum number of participants: {this.state.modalEvent.minusers}</h5>
+                            <h5>Registered participants: {this.func(this.state.modalEvent.participants)}</h5>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {this.render_event_button()}
+                            <button id="close" class="bandi-button" onClick={handleClose}>
+                                Close
+                            </button>
+                        </Modal.Footer>
+                    </Modal>
 
                     <h1>Create Event: (Admin)</h1>
 
@@ -132,7 +183,7 @@ class SpeedDate extends React.Component {
                             <Form.Control name="minusers" type="number"  placeholder="1" value={this.state.minusers} onChange={this.handleChange} />
                         </Form.Group>
 
-                        <Button type="submit">Create Event</Button>
+                        <button class="bandi-button" type="submit">Create Event</button>
 
                     </Form>
 
@@ -141,10 +192,8 @@ class SpeedDate extends React.Component {
         }
         else { // not an admin
             return (
-                <div className="bg-transparent" style={bandi_styles.discover_background}>
+                <div class="speed-dating-outer">
                     <Header/>
-                    <SubHeader text={"Register for speed-dating events here!"}/>
-
                     <h1>Speed-Dating Events:</h1>
                     {eventList}
                 </div>

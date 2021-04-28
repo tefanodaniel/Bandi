@@ -77,15 +77,14 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
     //<Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/musiciandetails?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
     //
     return (
-            <Card>
+            <Card className="bandi-card musician">
                 <Card.Body>
                     <Card.Title style={{color:"black"}}><b>{musician.name}</b></Card.Title>
                     <Card.Text className="small font-italic">Genres: {musician.genres.join(', ')}</Card.Text>
                     <Card.Text className="small font-italic">Instruments: {musician.instruments.join(', ')}</Card.Text>
-                    <Card.Text> <button class="bandi-button view-more" onClick={handleShow}>
+                    <button class="bandi-button view-more" onClick={handleShow}>
                         View More
                     </button>
-                    </Card.Text>
                     <Modal key={musician.name} show={show} onHide={handleClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>{musician.name}</Modal.Title>

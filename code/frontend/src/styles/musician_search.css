@@ -1,14 +1,15 @@
 .outer-musician-search {
-    height: 100%;
+    height: 300vh;
     background: 
-        linear-gradient(
-            rgba(122, 235, 255, 0.5),
-            rgba(122, 235, 255, 0.5)
+    linear-gradient(
+        rgba(122, 235, 255, 0.5),
+        rgba(122, 235, 255, 0.5)
         ),
         url(../images/discover_bg.jpg);
 }
 
 .justify-content-sm-left.row {
+    padding-left: 5px;
     padding-top: 5px;
     padding-bottom: 5px;
     border-radius: 10px;
@@ -32,6 +33,7 @@
     border-width: 1px;
     border-color: black;
     border-radius: 10px;
+    background-color: rgba(235, 242, 243, 0.932);
 }
 
 .justify-content-sm-left.row #name-input {
@@ -49,7 +51,7 @@
 .justify-content-sm-left.row #distance-input {
     width: 35%;
 }
-
+    
 #submit-button-row {
     background-color: transparent;
     border-style: none;
@@ -76,23 +78,26 @@
     background-color: rgb(69, 84, 219);
 }
 
-.card {
-    background-image: none;
-    box-sizing: unset;
+.bandi-card {
     border-radius: 10px;
     border-style: solid;
     border-width: 1px;
     border-color: black;
-    background-color: rgb(116, 174, 228);
     border-top-width: 2px;
     border-bottom-width: 4px;
     border-left-width: 3px;
     font-family: 'Consolas';
 }
 
+.bandi-card.musician {
+    background-image: none;
+    box-sizing: unset;
+    background-color: rgb(116, 174, 228);
+}
+
 .small.font-italic.card-text {
     padding-left: 10px;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     border-style: solid;
     border-width: 1px;
     border-color: black;
