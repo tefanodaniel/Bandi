@@ -48,8 +48,8 @@ class SpeedDate extends React.Component {
     }
 
     handleSubmit(event) {
-        console.log(event);
         SDEventApi.create({
+                id: "709870", // backend will generate new value for this
                 name: this.state.name,
                 link: this.state.link,
                 date: this.state.date,
@@ -60,7 +60,6 @@ class SpeedDate extends React.Component {
         }).catch(error => {
             console.error(error)
         })
-        event.preventDefault();
     }
 
     componentDidMount() {
