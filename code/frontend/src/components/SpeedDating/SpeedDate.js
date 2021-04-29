@@ -47,19 +47,19 @@ class SpeedDate extends React.Component {
     }
 
     handleSubmit(event) {
+        console.log(event);
         SDEventApi.create({
-            name: this.state.name,
-            link: this.state.link,
-            date: this.state.date,
-            minusers: this.state.minusers
+                name: this.state.name,
+                link: this.state.link,
+                date: this.state.date,
+                minusers: this.state.minusers
+        }).then(res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(res)
+        }).catch(error => {
+            console.error(error)
         })
-            .then(res => {
-                console.log(`statusCode: ${res.statusCode}`)
-                console.log(res)
-            })
-            .catch(error => {
-                console.error(error)
-            })
+        event.preventDefault();
     }
 
     componentDidMount() {
@@ -136,9 +136,30 @@ class SpeedDate extends React.Component {
             return(
                 <div class="speed-dating-outer">
                     <Header/>
-                    <h1>Speed-Dating Events:</h1>
                     <div class="dating-container">
                         {eventList}
+                        <Jumbotron className="bandi-card dating-event">
+                        <h5 class="bandi-card">Create Event: (Admin)</h5>
+                        <Form className="bandi-form event" onSubmit={this.handleSubmit}>
+                            <Form.Group controlId="eventForm.name">
+                                <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} />
+                            </Form.Group>
+
+                            <Form.Group controlId="eventForm.link">
+                                <Form.Control name="link" type="input"  placeholder="Link" value={this.state.link} onChange={this.handleChange} />
+                            </Form.Group>
+
+                            <Form.Group controlId="eventForm.date">
+                                <Form.Control name="date" type="input"  placeholder="Date" value={this.state.date} onChange={this.handleChange} />
+                            </Form.Group>
+
+                            <Form.Group controlId="eventForm.minusers">
+                                <Form.Control name="minusers" type="number"  placeholder="Min participants" value={this.state.minusers} onChange={this.handleChange} />
+                            </Form.Group>
+                            <button class="bandi-button view-sd" type="submit">Create Event</button>
+                        </Form>
+
+                        </Jumbotron>
                     </div>
 
                     <Modal className="bandi-modal"show={this.state.showModal} onHide={handleClose}>
@@ -158,35 +179,6 @@ class SpeedDate extends React.Component {
                             </button>
                         </Modal.Footer>
                     </Modal>
-
-                    <h1>Create Event: (Admin)</h1>
-
-                    <Form onSubmit={this.handleSubmit}>
-
-                        <Form.Group controlId="profileForm.name">
-                            <Form.Label>Name:</Form.Label>
-                            <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <Form.Group controlId="profileForm.link">
-                            <Form.Label>Link:</Form.Label>
-                            <Form.Control name="link" type="input"  placeholder="Link" value={this.state.link} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <Form.Group controlId="profileForm.date">
-                            <Form.Label>Date:</Form.Label>
-                            <Form.Control name="date" type="input"  placeholder="Date" value={this.state.date} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <Form.Group controlId="profileForm.minusers">
-                            <Form.Label>Minimum Number of Participants:</Form.Label>
-                            <Form.Control name="minusers" type="number"  placeholder="1" value={this.state.minusers} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <button class="bandi-button" type="submit">Create Event</button>
-
-                    </Form>
-
                 </div>
             )
         }
