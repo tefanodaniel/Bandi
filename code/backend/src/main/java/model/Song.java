@@ -11,12 +11,22 @@ public class Song {
     private Integer releaseYear;
     private Set<String> genres;
 
+    public Song(String songId, String songName, String artistName) {
+        this.songId = songId;
+        this.songName = songName;
+        this.artistName = artistName;
+        this.albumName = null;
+        this.releaseYear = -1;
+        this.genres = null;
+    }
+
     public Song(String songId, String songName, String artistName, String albumName, Integer releaseYear) {
         this.songId = songId;
         this.songName = songName;
         this.artistName = artistName;
         this.albumName = albumName;
         this.releaseYear = releaseYear;
+        this.genres = null;
     }
     public Song(String songId, String songName, String artistName, String albumName, Integer releaseYear, Set<String> genres) {
         this.songId = songId;

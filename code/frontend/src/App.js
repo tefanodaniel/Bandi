@@ -29,7 +29,7 @@ function App() {
     <div>
       <HashRouter>
         <Switch>
-          <Route exact path="/" component={Discover} />
+          <Route exact path="/" component={Signin} />
           <Route exact path="/discover" component={Discover} />
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/edit-user-info" component={EditUserInfo} />

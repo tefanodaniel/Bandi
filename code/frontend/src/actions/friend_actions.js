@@ -89,5 +89,3 @@ export function takeActionOnFriendRequest(senderID, recipientID, action) {
         })
     }
 }
-
-

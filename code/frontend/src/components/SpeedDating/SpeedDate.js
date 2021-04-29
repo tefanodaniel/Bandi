@@ -1,20 +1,13 @@
 import React from 'react';
-import {bandi_styles} from "../../styles/bandi_styles";
 import Header from "../Header/Header";
-import SubHeader from "../Header/SubHeader";
 import Cookies from "js-cookie";
 
 import { connect } from 'react-redux';
-import { fetchSDEvents } from '../../actions/sd_event_actions';
 import SDEventApi from "../../utils/SDEventApiService";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Jumbotron from "react-bootstrap/Jumbotron";
-import BandApi from "../../utils/BandApiService";
 import Modal from "react-bootstrap/Modal";
-import SpeedDateEvent from './SpeedDateEvent.js';
 import Card from "react-bootstrap/Card";
-
 import '../../styles/speed_dating.css';
 
 class SpeedDate extends React.Component {
@@ -104,10 +97,8 @@ class SpeedDate extends React.Component {
     }
 
     render() {
-        console.log(this.state);
-
         const userInfo = this.props.store.user_reducer;
-        const isAdmin = userInfo.admin;
+        const isAdmin = userInfo?.admin;
 
         const handleClose = () => this.setState({showModal: false});
         const handleShow = (event) => { 

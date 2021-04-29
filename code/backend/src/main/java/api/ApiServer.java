@@ -118,6 +118,8 @@ public class ApiServer {
         delete("/musicians/:id", MusicianController.deleteMusician);
         get("/adminstatus/:id", MusicianController.getAdminStatus);
         put("/adminstatus/:id", MusicianController.putAdminStatus);
+        get("/showtoptracks/:id", MusicianController.getShowTopTracks);
+        put("/showtoptracks/:id", MusicianController.putShowTopTracks);
 
         get("/friends/:id", RequestController.getMusicianFriends);
         // (Friend, Band) request routes
@@ -144,6 +146,7 @@ public class ApiServer {
         // Song routes
         get("/songs", SongController.getAllSongs);
         get("/songs/:songid", SongController.getSongById);
+        post("/songs/generate/:genre", SongController.generateSongByGenre);
         post("/songs", SongController.postSong);
         put("/songs/:songid", SongController.putSong);
         delete("/songs/:songId", SongController.deleteSong);
@@ -158,6 +161,7 @@ public class ApiServer {
         // SOTW Event Routes
         get("/sotwevents", SOTWEventController.getAllSOTWEvents);
         get("/sotwevents/:eventid", SOTWEventController.getSOTWEventById);
+        get("/sotwevents/desc/:genre/:startday/:endday", SOTWEventController.findSOTWEventByDesc);
         post("/sotwevents", SOTWEventController.postSOTWEvent);
         put("/sotwevents/:eventid", SOTWEventController.putSOTWEvent);
         get("/sotwevents/submissions/:eventid", SOTWEventController.getSOTWEventSubmissions);

@@ -7,9 +7,7 @@ import {
 import MusicianApi from "../utils/MusicianApiService";
 
 
-// thunk function to load list of all musicians.
-// in the future this should be a list of contextual "featured" musicians pre-any user defined search.
-// also pagination or carousel.
+// the action creators below are thunk functions.
 export async function fetchMusicians(dispatch, getState) {
     //console.log("Inside fetchMusicians action");
     // let tries = 0;

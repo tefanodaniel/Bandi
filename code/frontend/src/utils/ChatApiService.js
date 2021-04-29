@@ -6,7 +6,7 @@ class ChatAPIService {
     }
 
     getCurrentUser(uid) {
-      return this.chatApiInstance.get(`/${uid}/me`);
+      return this.chatApiInstance.get(`/users/${uid}/me`);
     }
 
     async accountExists(uid) {
@@ -24,11 +24,11 @@ class ChatAPIService {
     }
 
     createUserAuthToken(uid) {
-      return this.chatApiInstance.post(`/${uid}/auth_tokens`);
+      return this.chatApiInstance.post(`/users/${uid}/auth_tokens`);
     }
 
     getUserAuthTokens(uid) {
-      return this.chatApiInstance.get(`/${uid}/auth_tokens`);
+      return this.chatApiInstance.get(`/users/${uid}/auth_tokens`);
     }
 
     async hasAuthTokens(uid) {
@@ -42,12 +42,21 @@ class ChatAPIService {
     }
 
     deleteAllUserAuthTokens(uid) {
-      return this.chatApiInstance.delete(`/${uid}/auth_tokens`);
+      return this.chatApiInstance.delete(`/users/${uid}/auth_tokens`);
     }
 
     addChatFriend(uid, friendUID) {
       let data = {"accepted": [friendUID]}
-      return this.chatApiInstance.post(`/${uid}/friends`, data);
+      return this.chatApiInstance.post(`/users/${uid}/friends`, data);
+    }
+
+    createBandGroupChat(guid, groupName, type) {
+      let data = {guid: guid, name: groupName, type: type}
+      return this.chatApiInstance.post(`/groups`, data)
+    }
+
+    addMembersToGroupChat(guid, data) {
+      return this.chatApiInstance.post(`/groups/${guid}/members`, data)
     }
 }
 

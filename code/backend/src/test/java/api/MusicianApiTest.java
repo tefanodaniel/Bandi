@@ -12,7 +12,7 @@ import java.net.URISyntaxException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MusicianApiTest {
-
+    /*
     private final static String BASE_URL = "http://localhost:4567";
     private static final Gson gson = new Gson();
 
@@ -33,5 +33,5 @@ class MusicianApiTest {
         assertEquals(200, jsonResponse.getStatus());
         assertNotEquals(0, jsonResponse.getBody().getArray().length());
     }
-
+*/
 }

@@ -22,7 +22,7 @@ class Sql2oMusicianDaoTest {
     private static Sql2o sql2o;
     private static List<Musician> samples;
     private MusicianDao musicianDao;
-
+/*
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
         String databaseUrl = System.getenv("TEST_DATABASE_URL");
@@ -210,5 +210,5 @@ class Sql2oMusicianDaoTest {
         assertThrows(ApiError.class, ()->musicianDao.readAll(query));
     }
 
-
+*/
 }

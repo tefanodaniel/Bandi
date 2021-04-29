@@ -2,27 +2,11 @@ import React from 'react';
 import { useState } from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
 import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
-import {getFrontendURL} from "../../utils/api";
-import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import { sendFriendRequest } from "../../actions/friend_actions";
-import RequestApiService from "../../utils/RequestApiService";
-import SotwEventsApi from "../../utils/SotwEventsApiService";
-
-const selectMusicians = (state) => {
-    if(!state.musician_reducer.filteredMusicians)
-        return -1;
-    else
-        return state.musician_reducer.filteredMusicians.map(user => user)
-}
-
-
-const chunk = (arr, chunkSize = 1, cache = []) => {
-    const tmp = [...arr]
-    if (chunkSize <= 0) return cache
-    while (tmp.length) cache.push(tmp.splice(0, chunkSize))
-    return cache
-}
+import {selectFilteredMusicians} from "../../selectors/musician_selector";
+import {chunk} from "../../utils/miscellaneous";
+import {getFrontendURL} from "../../utils/api";
 
 async function handleConnect(senderID, recipientID, recipientName, dispatch) {
     if (senderID && recipientID && recipientName) {
@@ -101,8 +85,12 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
                             <div>
                                 <h5>Links: {musician.profileLinks.map((link, i) => <a key={i} href={link}>{link}</a>)}</h5>
                             </div>
+
                         </Modal.Body>
                         <Modal.Footer>
+                            <Button onClick={() => {window.location = getFrontendURL() + '/#/musiciandetails?view=' + musician.id;}}>
+                                View More
+                            </Button>
                             <button id="close" class="bandi-button" onClick={handleClose}>
                                 Close
                             </button>
@@ -117,9 +105,8 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
 
 const MusicianSearchResults = () => {
     const dispatch = useDispatch();
-    const fil_musicians = useSelector(selectMusicians, shallowEqual)
+    const fil_musicians = useSelector(selectFilteredMusicians, shallowEqual)
     let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
-    let logged_user_friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
     
     if(fil_musicians === -1)
     {
@@ -137,7 +124,7 @@ const MusicianSearchResults = () => {
         let fil_musicians_mod =JSON.parse(JSON.stringify(fil_musicians));
         let index = null;
         index = fil_musicians_mod.findIndex(user => {
-            if(user.id === logged_user.id) {
+            if(user.id === logged_user?.id) {
                 return user
             }
         });

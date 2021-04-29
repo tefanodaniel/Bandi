@@ -4,6 +4,7 @@ import {Container, Row, Col} from "react-bootstrap";
 import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
 import '../../styles/musician_search.css';
+import { getLoggedInUser } from '../../selectors/user_selector';
 
 const selectPlaceholderQuery = (state) => {
     let query = {};
@@ -23,7 +24,7 @@ const selectPlaceholderQuery = (state) => {
 
 const MusicianSearchControls = () => {
     const dispatch = useDispatch();
-    let user = useSelector((state) => state.user_reducer, shallowEqual);
+    let user = useSelector(getLoggedInUser, shallowEqual);
     let placeholder_query = useSelector(selectPlaceholderQuery, shallowEqual);
 
     let queryparams = {};
@@ -31,7 +32,6 @@ const MusicianSearchControls = () => {
     const addnamequery = (e) => {
         let input = e.target.value;
         queryparams.name = input
-        console.log('what is the name now,', queryparams.name)
     }
 
     const addgenrequery = (e) => {

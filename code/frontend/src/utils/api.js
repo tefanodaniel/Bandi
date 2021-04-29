@@ -1,14 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import Cookies from "js-cookie";
-import MusicianApi from "./MusicianApiService";
-import { CometChat } from "@cometchat-pro/chat";
 
-export function loginWithSpotify() {
-  //Test API call:
-  //return axios.get('https://dog.ceo/api/breeds/list/all');
-  return axios.get('http://localhost:4567');
-}
 
 export function getFrontendURL() {
   const isDev = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
@@ -32,7 +25,7 @@ export function logout() {
 
 export function chatApiInstance() {
   return axios.create({
-    baseURL: "https://api-us.cometchat.io/v2.0/users",
+    baseURL: "https://api-us.cometchat.io/v2.0",
     headers: {
         "Content-Type": "application/json",
         "Accept": "application/json",
@@ -41,6 +34,7 @@ export function chatApiInstance() {
     }
   })
 }
+
 
 export default axios.create({
   baseURL: getBackendURL(),

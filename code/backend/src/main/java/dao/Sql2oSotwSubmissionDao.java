@@ -17,15 +17,16 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
     }
 
     @Override
-    public SongOfTheWeekSubmission create(String submissionid, String musicianid,
+    public SongOfTheWeekSubmission create(String submissionid, String musicianid, String musician_name,
                                           String avsubmission, Set<String> instruments) throws DaoException {
-        String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionid, musicianid, avsubmission)" +
-                "VALUES (:submissionid, :musicianid, :avsubmission)";
+        String sotw_submission_sql = "INSERT INTO sotwsubmissions (submissionid, musicianid, musicianname, avsubmission)" +
+                "VALUES (:submissionid, :musicianid, :musicianname, :avsubmission)";
         String sotw_submissions_instruments_sql = "INSERT INTO sotwsubmissionsinstruments (submissionid, instrument) VALUES (:submissionid, :instrument)";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sotw_submission_sql)
                     .addParameter("submissionid", submissionid)
                     .addParameter("musicianid", musicianid)
+                    .addParameter("musicianname", musician_name)
                     .addParameter("avsubmission", avsubmission)
                     .executeUpdate();
 
@@ -56,9 +57,10 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
             }
 
             String musicianid = (String) queryResults.get(0).get("musicianid");
+            String musicianname = (String) queryResults.get(0).get("musicianname");
             String avsubmission = (String) queryResults.get(0).get("avsubmission");
 
-            SongOfTheWeekSubmission s = new SongOfTheWeekSubmission(submissionid, musicianid, avsubmission);
+            SongOfTheWeekSubmission s = new SongOfTheWeekSubmission(submissionid, musicianid, musicianname, avsubmission);
             for (Map row : queryResults) {
                 if (row.get("instrument") != null) {
                     s.addInstrument((String) row.get("instrument"));
@@ -168,11 +170,12 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
             // Extract data from this row
             String submissionid = (String) row.get("submissionid");
             String musicianid = (String) row.get("musicianid");
+            String musicianname = (String) row.get("musicianname");
             String avsubmission = (String) row.get("avsubmission");
             String instrument = (String) row.get("instrument");
             if (!alreadyAdded.contains(submissionid)){
                 alreadyAdded.add(submissionid);
-                submissions.put(submissionid, new SongOfTheWeekSubmission(submissionid, musicianid, avsubmission, new HashSet<String>()));
+                submissions.put(submissionid, new SongOfTheWeekSubmission(submissionid, musicianid, musicianname, avsubmission, new HashSet<String>()));
             }
 
             SongOfTheWeekSubmission s = submissions.get(submissionid);

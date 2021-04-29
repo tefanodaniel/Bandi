@@ -1,15 +1,15 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import button from "react-bootstrap/button";
+import Button from "react-bootstrap/button";
 import Cookies from "js-cookie";
 
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 
-import RequestApiService from '../../utils/RequestApiService';
-import { bandi_styles } from "../../styles/bandi_styles";
 import '../../styles/user_dashboard.css';
+import ChatApi from "../../utils/ChatApiService";
+import MusicianApi from "../../utils/MusicianApiService";
 
 import { connect } from 'react-redux';
 import { getIncomingFriendRequests, getUserFriends, takeActionOnFriendRequest } from '../../actions/friend_actions';
@@ -27,18 +27,19 @@ class UserDashboard extends React.Component {
             creating: false // tracks whether user is in the process of creating a band
         }
     }
-    
+
     async takeActionOnFriendRequest(request, action) {
         this.props.respondToFriendRequest(request.senderID, request.recipientID, action);
         if (action === "accept") {
-            alert("You accepted " + request.senderName + "'s friend request!");
-        } else {
+            await ChatApi.addChatFriend(this.props.userInfo.id, request.senderID);
+            alert("You accepted " + request.senderName + "'s friend request! You can now chat with each other.");
+        } else if (action === "decline") {
             alert("You declined " + request.senderName + "'s friend request!");
         }
     }
-    
+
     renderFriendListForMusician(friends) {
-        if (friends && friends.length > 0) {            
+        if (friends && friends.length > 0) {
             const listItems = friends.map((friend) =>
             <li class="friends" key={friend["id"]}>{friend["name"]}</li>
             );
@@ -82,7 +83,7 @@ class UserDashboard extends React.Component {
     renderBandList(bands) {
         if (bands && bands.length > 0) {
             var bandsList = bands.map((band) =>
-            <div className="card">
+            <div key={band.id} className="card">
                 <div className="card-body">
                     <h5 className="card-title">{band.name}</h5>
                     <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
@@ -96,6 +97,12 @@ class UserDashboard extends React.Component {
         }
     }
 
+    spotifyButton(isVisible) {
+        var newSetting = !isVisible;
+        MusicianApi.updateShowTopTracks(this.state.id, {"showtoptracks": newSetting});
+        window.location.reload();
+    }
+
     render() {
 
         // Get user information from our central redux store, rather than the limited state of this component
@@ -103,7 +110,7 @@ class UserDashboard extends React.Component {
         const friends = this.props.friends;
         const incoming = this.props.incoming_friend_requests;
         const outgoing = this.props.outgoing_friend_requests;
-        const bands = this.props.bands;
+        const bands = this.props.userInfo.bands;
 
         let profile_view;
         if (this.state.editing) {
@@ -145,6 +152,16 @@ class UserDashboard extends React.Component {
                 {this.renderBandList(bands)}
             </div>
         }
+
+        let spotify_info_view;
+        spotify_info_view = 
+            <div>
+                <h4>Spotify Top Tracks:</h4>
+                {userInfo?.topTracks ? (userInfo?.showtoptracks ? "(visible to others)" : "(not visible to others)") : ""}
+                {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
+                {userInfo?.topTracks ? <Button onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Hide top tracks from others" : "Show top tracks to others"}</Button>
+                        : " Loading..."}
+            </div>;
         
         if (userInfo) {
             return (
@@ -212,7 +229,6 @@ function mapStateToProps(state) {
     // changed so that we only keep the parts of the store that are relevant to UserDashboard
     // can still access whole store using 'state'
     userInfo: state.user_reducer,
-    bands: state.band_reducer,
     friends: state.friend_reducer.friend_info,
     incoming_friend_requests: state.friend_reducer.incoming_friend_requests,
     outgoing_friend_requests: state.friend_reducer.outgoing_friend_requests
