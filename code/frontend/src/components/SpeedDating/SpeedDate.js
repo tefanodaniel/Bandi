@@ -13,6 +13,7 @@ import Jumbotron from "react-bootstrap/Jumbotron";
 import BandApi from "../../utils/BandApiService";
 import Modal from "react-bootstrap/Modal";
 import SpeedDateEvent from './SpeedDateEvent.js';
+import Card from "react-bootstrap/Card";
 
 import '../../styles/speed_dating.css';
 
@@ -97,9 +98,9 @@ class SpeedDate extends React.Component {
 
     render_event_button() {
         if (this.state.isParticipant) {
-            return <button class="bandi-button event" onClick={() => this.register_leave()}>Leave event</button> 
+            return <button class="bandi-button register" onClick={() => this.register_leave()}>Leave event</button> 
         } else {
-            return <button class="bandi-button event" onClick={() => this.register_leave()}>Register for event</button> 
+            return <button class="bandi-button register" onClick={() => this.register_leave()}>Register for event</button> 
         }
     }
 
@@ -136,6 +137,17 @@ class SpeedDate extends React.Component {
             return(
                 <div class="speed-dating-outer">
                     <Header/>
+                    <Card className="bandi-card dating-information">
+                        <p>
+                            Bandi speed-dating events are a great way to meet a lot of local musicians in your area, fast!
+                        </p>
+                        <p id="how-it-works">
+                            How it works: Every 5 minutes, you get paired (virtually) with a Bandi musician we think might be
+                            a good fit for you (based of similar music interests, location, etc.). We'll do a couple of these rounds &mdash;
+                            each time matching you up with a different Bandi musician. Afterwards, you'll all go back to a main room where you can
+                            mingle for a bit before the event wraps up.
+                        </p>
+                    </Card>
                     <div class="dating-container">
                         {eventList}
                         <Jumbotron className="bandi-card dating-event">
@@ -162,7 +174,7 @@ class SpeedDate extends React.Component {
                         </Jumbotron>
                     </div>
 
-                    <Modal className="bandi-modal"show={this.state.showModal} onHide={handleClose}>
+                    <Modal className="bandi-modal speed-dating"show={this.state.showModal} onHide={handleClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>{this.state.modalEvent.name}</Modal.Title>
                         </Modal.Header>
@@ -186,7 +198,17 @@ class SpeedDate extends React.Component {
             return (
                 <div class="speed-dating-outer">
                     <Header/>
-                    <h1>Speed-Dating Events:</h1>
+                    <Card className="bandi-card dating-information">
+                        <p>
+                            Bandi speed-dating events are a great way to meet a lot of local musicians in your area, fast!
+                        </p>
+                        <p id="how-it-works">
+                            How it works: Every 5 minutes, you get paired (virtually) with a Bandi musician we think might be
+                            a good fit for you (based of similar music interests, location, etc.). We'll do a couple of these rounds &mdash;
+                            each time matching you up with a different Bandi musician. Afterwards, you'll all go back to a main room where you can
+                            mingle for a bit before the event wraps up.
+                        </p>
+                    </Card>
                     {eventList}
                 </div>
             )

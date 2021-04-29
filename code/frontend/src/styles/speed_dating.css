@@ -1,5 +1,5 @@
 .speed-dating-outer {
-    height: 100vh;
+    height: 150vh;
     background: 
         linear-gradient(
             rgba(251, 253, 130, 0.5),
@@ -11,7 +11,7 @@
 .dating-container {
     display: inline-flex;
     flex-direction: row;
-    margin-top: 100px;
+    margin-top: 10px;
 }
 
 .bandi-card.dating-event.jumbotron{
@@ -39,6 +39,10 @@
     background-color: rgb(255, 255, 255);
 }
 
+.bandi-text-fields.dating-event .card-title, bandi-card {
+    background-color: rgb(255, 248, 157);
+}
+
 .bandi-button.view-sd {
     background-color: rgb(248, 152, 9);
     display: inline-block;
@@ -46,12 +50,36 @@
     margin-right: auto;
 }
 
-.bandi-modal h5 {
+.bandi-button.register {
+    background-color: rgb(248, 152, 9);
+}
+
+.bandi-modal.speed-dating h5 {
     width: 100%;
 }
 
-.bandi-card.dating-event.jumbotron h5 {
-    background-color: rgb(248, 152, 9);
+.bandi-modal.speed-dating .modal-content {
+    background-color: rgb(247, 247, 108);
+}
+
+.bandi-modal.speed-dating h5 {
+    background-color: rgb(255, 255, 255);
+}
+
+.bandi-button#close {
+    background-color: rgb(247, 231, 7);
+}
+
+.bandi-card.dating-information {
+    border-style: none;
+    background-color: transparent;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.bandi-card.dating-information p {
+    display: inline-block;
+    width: 40%;
 }
 
 .bandi-form.event .form-control {
