@@ -39,6 +39,7 @@ public class Sql2oSongDao implements SongDao {
 
             return this.read(songId);
         } catch (Sql2oException ex) {
+            System.out.println(ex);
             throw new DaoException(ex.getMessage(), ex);
         }
     };

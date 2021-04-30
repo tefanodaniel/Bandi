@@ -13,6 +13,7 @@ import java.util.*;
 import static api.ApiServer.songDao;
 import static org.junit.jupiter.api.Assertions.*;
 
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Sql2oSongDaoTest {
 
     // url for the test database to use
@@ -54,10 +55,14 @@ public class Sql2oSongDaoTest {
         songDao = new Sql2oSongDao(sql2o);
     }
 
+    /**
+     * Tests for dao.Sql2oSongDao.create() method
+     */
     @Test
     @Order(1)
-    @DisplayName("create song works for valid input")
+    @DisplayName("create Song works for valid input")
     void createNewSong() {
+        System.out.println("Test 1");
         Set<String> genres = new HashSet<>();
         genres.add("Pop");
         genres.add("Rock");
@@ -67,7 +72,18 @@ public class Sql2oSongDaoTest {
     }
 
     @Test
-    void doNothing() {
-
+    @Order(2)
+    @DisplayName("create Song throws exception for incomplete data")
+    void createSongIncompleteData() {
+        System.out.println("Test 2");
+        assertThrows(DaoException.class, () -> {
+            Set<String> genres = new HashSet<>();
+            genres.add("Pop");
+            genres.add("Rock");
+            Song s1 = new Song("99999fakesongid", "Never Gonna Give You Up", "Rick Astley", "null", 1987, genres);
+            songDao.create(null, null, s1.getArtistName(), s1.getAlbumName(), s1.getReleaseYear(), s1.getGenres());
+            //courseDao.create(null, null);
+        });
     }
+
 }
