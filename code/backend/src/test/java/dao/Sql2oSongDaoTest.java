@@ -90,6 +90,7 @@ public class Sql2oSongDaoTest {
     @Order(3)
     @DisplayName("create Song throws exception for duplicate song")
     void createSongDuplicateData() {
+        System.out.println("Test 3");
         assertThrows(DaoException.class, () -> {
             Set<String> g1 = new HashSet<>();
             g1.add("Pop");
@@ -106,11 +107,26 @@ public class Sql2oSongDaoTest {
     @Order(4)
     @DisplayName("read a Song given its id")
     void readSongGivenId() {
+        System.out.println("Test 4");
         for (Song s1 : sample_songs) {
             Song s2 = songDao.read(s1.getSongId());
             assertEquals(s1, s2);
         }
     }
+
+
+    @Test
+    @Order(5)
+    @DisplayName("read Song returns null given invalid Id")
+    void readSongGivenInvalidId() {
+        System.out.println("Test 5");
+        Song s = songDao.read("88888fakesongid");
+        assertNull(s);
+    }
+    //@Test
+    //void doNothing() {
+
+    //}
 
 
 }
