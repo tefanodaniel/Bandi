@@ -3,6 +3,7 @@ package dao;
 import dao.MusicianDao;
 import dao.Sql2oMusicianDao;
 import exceptions.ApiError;
+import exceptions.DaoException;
 import model.Musician;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -161,9 +162,6 @@ class Sql2oMusicianDaoTest {
     */
 
     @Test
-    void doNothing() {    }
-
-    @Test
     @DisplayName("create musician for valid input")
     void createAndDeleteNewMusician() {
         // Testing create
@@ -183,9 +181,58 @@ class Sql2oMusicianDaoTest {
     }
 
     @Test
-    @DisplayName("read all the musicians that satisfy the search query by distance and genre")
+    @DisplayName("read musician given ID")
+    void readMusicianByID() {
+        // Test assumes musician with id = 00004fakeid exists in the database
+        Set<String> genres = new HashSet<String>(Arrays.asList("Progressive Rock", "Psychedelic Rock"));
+        Set<String> instruments = new HashSet<String>(Arrays.asList("Guitar", "Vocals"));
+
+        Musician m = musicianDao.read("00004fakeid");
+        assertEquals("Roger Waters", m.getName());
+        assertEquals(genres, m.getGenres());
+        assertEquals(instruments, m.getInstruments());
+        assertEquals("Expert", m.getExperience());
+        assertEquals("Grand Prairie, TX", m.getLocation());
+    }
+
+    @Test
+    void readAllMusicians() {
+        List<Musician> musicians = musicianDao.readAll();
+        assertNotEquals(0, musicians.size());
+    }
+
+    @Test
+    @DisplayName("return musician friends")
+    void getMusicianFriends() {
+
+    }
+
+    @Test
+    @DisplayName("updating a musician works")
+    void updateWorks() {
+        String name = "New Name";
+        Musician m = musicianDao.updateName("00001fakeid", name);
+        // add more updates
+        assertEquals("00001fakeid", m.getId());
+        assertEquals(name, m.getName());
+
+        // Reset back to original properties
+        m = musicianDao.updateName("00001fakeid", "David Gilmour");
+    }
+
+    @Test
+    @DisplayName("Update returns null for an invalid musician id")
+    void updateReturnsNullInvalidCode() {
+        String name = "New Name";
+        Musician m = musicianDao.updateName("112111fakeid", name);
+        assertNull(m);
+        // add more updates
+    }
+
+    @Test
+    @DisplayName("read all the musicians that satisfy the search query by distance and multiple genres")
     void readAllGivenSearchQuery() {
-        String[] genre = new String[]{"blues"};
+        String[] genre = new String[]{"blues", "rock"};
         String[] distance = new String[]{"5000"};
         String[] sourceID = new String[]{"00001fakeid"};
         Map<String, String[]> query = Map.of("genre", genre,"distance", distance, "id", sourceID);
@@ -194,6 +241,7 @@ class Sql2oMusicianDaoTest {
         for (Musician musician : musicians) {
             assertTrue(musician.getDistance() <= Double.parseDouble("5000"));
             assertTrue(musician.getGenres().contains("Blues"));
+            assertTrue(musician.getGenres().contains("Rock"));
         }
     }
 
