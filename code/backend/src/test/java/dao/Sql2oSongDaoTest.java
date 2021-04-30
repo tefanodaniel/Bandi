@@ -147,6 +147,28 @@ public class Sql2oSongDaoTest {
         assertTrue(sample_Set.containsAll(read_Set));
     }
 
+    /**
+     * Tests for dao.Sql2oSongDao.updateSongName() method
+     */
+    @Test
+    @Order(9)
+    @DisplayName("updating a Song name works")
+    void updateSongNameWorks() {
+        String name = "Updated Title!";
+        Song s = songDao.updateSongName(sample_songs.get(0).getSongId(), name);
+        assertEquals(name, s.getSongName());
+        assertEquals(sample_songs.get(0).getSongId(), s.getSongId());
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("Update Song Name throws exception for an invalid/missing name")
+    void updateSongNameInvalidName() {
+        assertThrows(DaoException.class, () -> {
+            songDao.updateSongName(sample_songs.get(0).getSongId(), null);
+        });
+    }
+
     //@Test
     //void doNothing() {
 
