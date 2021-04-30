@@ -26,22 +26,20 @@ const SotwUserSubmission = () => {
 
     if(song === -1)  {
         return (
-            <div style={{marginLeft:"-300px"}}>
+            <div>
             </div>
         )
     }
 
     if((clock_state.total_time_left<=0) ) {
         return (
-            <div style={{marginLeft:"-300px"}}>
-                <Card style={bandi_styles.sotw_user_submission} className="bg-transparent rounded border-0 text-center">
-                    <section className="light">
-                        <Card.Body className="gradient1" fluid>
-                            <Button disabled={true} variant="secondary">
-                                Sorry submissions are closed!
-                            </Button>
-                        </Card.Body>
-                    </section>
+            <div>
+                <Card>
+                    <Card.Body>
+                        <Button disabled={true} variant="secondary">
+                            Sorry submissions are closed!
+                        </Button>
+                    </Card.Body>
                 </Card>
             </div>
         )
@@ -66,8 +64,7 @@ const SotwUserSubmission = () => {
     }
 
     return (
-        <Card style={bandi_styles.sotw_user_submission} className="bg-transparent rounded border-0 text-center">
-            <section className="light">
+        <Card>
                 <Card.Body className="gradient1" fluid>
                     <Button onClick={() => setOpen(!open)} variant="secondary" aria-controls="collapse-text" aria-expanded={open}>
                         Add your submissions!
@@ -75,7 +72,7 @@ const SotwUserSubmission = () => {
                     <Collapse in={open}>
                         <div id="collapse-text">
                             <Container fluid>
-                                <Row className="justify-content-sm-center" style={{ marginTop:"20px"}}>
+                                <Row className="justify-content-sm-center">
                                     <Col className="col-sm-5">
                                         <h5> Instrument:</h5>
                                     </Col>
@@ -86,18 +83,18 @@ const SotwUserSubmission = () => {
                                             handleOnChange={(instruments) => setInstruments(instruments)}/>
                                     </Col>
                                 </Row>
-                                <Row className="justify-content-sm-center" style={{ marginTop:"20px"}}>
+                                <Row className="justify-content-sm-center">
                                     <Col className="col-sm-5">
                                         <h5> A/V Submission Url:</h5>
                                     </Col>
-                                    <Col className="col-sm-5" style={{minWidth: "65px", textAlign:"center"}}>
+                                    <Col className="col-sm-5">
                                         <input onChange={(e) => setAVLink(e.target.value)} style={{width: "120%"}} placeholder='Your submission' type='text'/>
                                     </Col>
                                 </Row>
-                                <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
+                                <Row className="justify-content-sm-left">
                                     <Col className="col-sm-5">
                                     </Col>
-                                    <div className="col-sm-7" style={{textAlign:"center"}}>
+                                    <div className="col-sm-7">
                                         <Button variant="primary" onClick={() => addSubmission(submission_data)} >Submit!</Button>
                                     </div>
                                 </Row>
@@ -105,7 +102,6 @@ const SotwUserSubmission = () => {
                         </div>
                     </Collapse>
                 </Card.Body>
-            </section>
         </Card>
     )
 }

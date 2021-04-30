@@ -85,12 +85,11 @@ const SotwSearchControls = () => {
     };
 
     return (
-        <Container className="bandi-box sotw-controller-container">
             <div class="sotw-controller">
                 <div class="sotw-calendar-controller">
-                    <b>Pick a Week:</b>
+                    <h4>Pick a Week:</h4>
                     <div class="CalendarWeekPicker">
-                        <DayPicker
+                        <DayPicker className="sotw-daypicker"
                             selectedDays={selectedDays}
                             showWeekNumbers
                             showOutsideDays
@@ -160,7 +159,6 @@ const SotwSearchControls = () => {
                         <button id="see-events" class="bandi-button" onClick={SubmitEventQuery} >See Events!</button>
                 </div>
             </div>
-        </Container>
     )
 }
 

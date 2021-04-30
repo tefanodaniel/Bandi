@@ -31,13 +31,11 @@ const SotwEventDesc = () => {
     if((days === -1) || (song === -1)) {
         return (
             <div>
-            <Card style={bandi_styles.sotw_desc} className="bg-transparent rounded border-0 text-center">
-                <section className="light">
+                <Card>
                     <Card.Body className="gradient1" fluid="true">
-                        <Card.Text>Loading Event Info ...</Card.Text>
+                    <Card.Text>Loading Event Info ...</Card.Text>
                     </Card.Body>
-                </section>
-            </Card>
+                </Card>
             </div>)
     }
 
@@ -50,18 +48,16 @@ const SotwEventDesc = () => {
 
     return (
         <div>
-        <Card style={bandi_styles.sotw_desc} className="bg-transparent rounded border-0 text-center">
-        <section className="light">
-            <Card.Body className="gradient1" fluid="true" style={{marginBottom:"40px"}}>
+        <Card>
+            <Card.Body>
                 <Card.Text><b>Song Of The Week: {song.songName}</b></Card.Text>
                 <Card.Text >Artist : {song.artistName}</Card.Text>
                 <Card.Text className="font-italic">Genre: {convert_genre(song.genres)}</Card.Text>
             </Card.Body>
-        </section>
         </Card>
         {clock_state.total_time_left > 0 && (
-        <div className="col-sm-12 justify-content-md-center" style={{marginTop:"100px", marginLeft:"200px", marginBottom:"30px"}}>
-            <h5 style={{marginLeft:"80px"}}>Event ends soon!</h5>
+        <div>
+            <h5>Event ends soon!</h5>
             <div id="clockdiv">
                         <div>
                             <span className="days">{clock_state.days_left}</span>
