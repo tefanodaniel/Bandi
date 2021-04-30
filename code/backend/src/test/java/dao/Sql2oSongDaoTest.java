@@ -258,11 +258,46 @@ public class Sql2oSongDaoTest {
         });
     }
 
+    /**
+     * Tests for dao.Sql2oSongDao.delete() method
+     */
+    @Test
+    @Order(19)
+    @DisplayName("create and delete a dummy song")
+    void deleteWorksReadSongGivenDeletedId() {
+        // create a dummy song
+        Set<String> genres = new HashSet<>();
+        genres.add("Pop");
+        genres.add("Rock");
+        Song s1 = new Song("99999fakesongid", "Never Gonna Give You Up", "Rick Astley", "null", 1987, genres);
+        Song s = songDao.create(s1.getSongId(), s1.getSongName(), s1.getArtistName(), s1.getAlbumName(), s1.getReleaseYear(), s1.getGenres());
+        // ensure that it is in the database
+        Song s2 = songDao.read(s.getSongId());
+        assertEquals(s, s2);
+        // delete and retrieve dummy song
+        Song s3 = songDao.deleteSong(s.getSongId());
+        // check that the returned song was the dummy song
+        assertEquals(s, s3);
+        // check that the dummy song was in fact deleted
+        Song s4 = songDao.read(s.getSongId());
+        assertNull(s4);
+    }
 
-    //@Test
-    //void doNothing() {
+    @Test
+    @Order(20)
+    @DisplayName("delete returns null for an invalid song Id")
+    void deleteReturnsNullInvalidSongId() {
+        Song s  = songDao.deleteSong("99999fakesongid");
+        assertNull(s);
+    }
+    /**
+     * The doNothing Test to invoke before all tests
+     */
 
-    //}
+    @Test
+    void doNothing() {
+
+    }
 
 
 }
