@@ -122,9 +122,9 @@ class UserDashboard extends React.Component {
                         {userInfo?.topTracks ? (userInfo?.showtoptracks ? "Currently visible" : "Currently private") : ""}
                     </div>
                     <div class="bandi-box top-tracks-container">
-                        <ul class="top-tracks-list">
+                        <ol class="top-tracks-list">
                         {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
-                        </ul>
+                        </ol>
                     </div>
             </div>;
 

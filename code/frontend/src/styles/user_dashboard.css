@@ -99,11 +99,9 @@ h4 span.label-text {
 }
 
 .profile h3 {
-    width: 57%;
+    width: 50%;
     font-family: 'Consolas';
-    background-color: rgb(247, 151, 226);
-    padding-top: 5px;
-    padding-bottom: 5px;
+    background-color: white;
     padding-left: 10px;
     padding-right: 10px;
     border-style: solid;
@@ -157,10 +155,13 @@ h4 span.label-text {
     border-left-width: 3px;
     background-color: white;
     font-family: 'Consolas';
-
+    
 }
 
-#top-tracks-list {
+.top-tracks-list .bandi-box{
+    background-color: rgb(255, 255, 255);
+    margin-top: 5px;
+    width: fit-content;
 }
 
 .bandi-box#visibility-status {
