@@ -159,6 +159,7 @@ public class Sql2oSongDao implements SongDao {
         String sql = "UPDATE Songs SET albumname=:albumname WHERE songid=:songid;";
 
         try (Connection conn = sql2o.open()) {
+            if(albumname == null) throw new Sql2oException("No album name to update!");
             conn.createQuery(sql).addParameter("songid", songid).addParameter("albumname", albumname).executeUpdate();
             return this.read(songid);
         } catch (Sql2oException ex) {
