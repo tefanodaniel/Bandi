@@ -123,7 +123,7 @@ class UserDashboard extends React.Component {
                     </div>
                     <div class="bandi-box top-tracks-container">
                         <ol class="top-tracks-list">
-                        {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
+                        {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li class="bandi-box">{track}</li>) : ""}
                         </ol>
                     </div>
             </div>;

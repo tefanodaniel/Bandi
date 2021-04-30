@@ -134,19 +134,22 @@ h4 span.label-text {
 .spotify-info-panel h4 {
     display: block;
     /* background-color: rgb(30, 215, 96); */
-    background-color: rgb(214, 119, 210);
+    background-color: rgb(255, 255, 255);
+
     width: 52%;
     padding-top: 5px;
     padding-bottom: 6px;
+    margin-left: 23%;
     margin-bottom: 10px;
     margin-right: 5%;
 }
 
-.top-tracks li {
+.top-tracks-list {
     display: block;
-    margin: auto;
-    text-align: center;
+    margin-top: 10px;
+    margin-left: 5%;
     font-family: 'Consolas';
+    width: 100%;
 }
 
 .bandi-box {
@@ -161,11 +164,16 @@ h4 span.label-text {
     font-family: 'Consolas';
     
 }
+.bandi-box.top-tracks-container {
+    background-color: rgb(184, 131, 248);
+}
 
 .top-tracks-list .bandi-box{
-    background-color: rgb(255, 255, 255);
     margin-top: 5px;
-    width: fit-content;
+    padding-left:5px;
+    padding-right:5px;
+    width: 80%;
+    background-color: rgb(229, 208, 255);
 }
 
 .bandi-box#visibility-status {
@@ -179,12 +187,15 @@ h4 span.label-text {
     margin-left: auto;
     margin-right: auto;
     background-color: rgb(240, 200, 234);
+    background-color: rgb(184, 131, 248);
+    
 }
 
 .bandi-button.dashboard#set-top-tracks-visibility {
     display: inline;
+    margin-left: 10%;
     margin-bottom: 10px;
-    margin-right: 21%;
+    margin-right: 2%;
 }
 
 .react-tabs {
