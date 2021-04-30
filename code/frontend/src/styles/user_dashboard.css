@@ -99,11 +99,13 @@ h4 span.label-text {
 }
 
 .profile h3 {
-    width: 50%;
+    width: 57%;
     font-family: 'Consolas';
-    background-color: white;
+    background-color: rgb(201, 95, 201);
     padding-left: 10px;
     padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     border-style: solid;
     border-radius: 10px;
     border-width: 2px;
@@ -131,6 +133,8 @@ h4 span.label-text {
 
 .spotify-info-panel h4 {
     display: block;
+    /* background-color: rgb(30, 215, 96); */
+    background-color: rgb(214, 119, 210);
     width: 52%;
     padding-top: 5px;
     padding-bottom: 6px;
