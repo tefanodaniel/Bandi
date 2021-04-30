@@ -147,6 +147,7 @@ public class Sql2oSongDao implements SongDao {
         String sql = "UPDATE Songs SET artistname=:artistname WHERE songid=:songid;";
 
         try (Connection conn = sql2o.open()) {
+            if(artistname == null) throw new Sql2oException("No artistname to update!");
             conn.createQuery(sql).addParameter("songid", songid).addParameter("artistname", artistname).executeUpdate();
             return this.read(songid);
         } catch (Sql2oException ex) {
@@ -168,11 +169,12 @@ public class Sql2oSongDao implements SongDao {
     };
 
     @Override
-    public Song updateReleaseYear(String songId, Integer releaseYear) throws DaoException {
+    public Song updateReleaseYear(String songId, Integer releaseyear) throws DaoException {
         String sql = "UPDATE Songs SET releaseyear=:releaseyear WHERE songid=:songId;";
 
         try (Connection conn = sql2o.open()) {
-            conn.createQuery(sql).addParameter("songId", songId).addParameter("releaseyear", releaseYear).executeUpdate();
+            if(releaseyear == null) throw new Sql2oException("No release year to update!");
+            conn.createQuery(sql).addParameter("songId", songId).addParameter("releaseyear", releaseyear).executeUpdate();
             return this.read(songId);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the song release year", ex);

@@ -173,7 +173,7 @@ public class Sql2oSongDaoTest {
      * Tests for dao.Sql2oSongDao.updateArtistName() method
      */
     @Test
-    @Order(9)
+    @Order(11)
     @DisplayName("updating a Song Artist name works")
     void updateSongArtistNameWorks() {
         String name = "Updated Title2!";
@@ -183,7 +183,7 @@ public class Sql2oSongDaoTest {
     }
 
     @Test
-    @Order(10)
+    @Order(12)
     @DisplayName("Update Song Artist Name throws exception for an invalid/missing name")
     void updateSongArtistNameInvalidName() {
         assertThrows(DaoException.class, () -> {
@@ -195,7 +195,7 @@ public class Sql2oSongDaoTest {
      * Tests for dao.Sql2oSongDao.updateAlbumName() method
      */
     @Test
-    @Order(9)
+    @Order(13)
     @DisplayName("updating a Song Album name works")
     void updateSongAlbumNameWorks() {
         String name = "Updated Title2!";
@@ -205,13 +205,36 @@ public class Sql2oSongDaoTest {
     }
 
     @Test
-    @Order(10)
+    @Order(14)
     @DisplayName("Update Song Album Name throws exception for an invalid/missing name")
     void updateSongAlbumNameInvalidName() {
         assertThrows(DaoException.class, () -> {
             songDao.updateAlbumName(sample_songs.get(0).getSongId(), null);
         });
     }
+
+    /**
+     * Tests for dao.Sql2oSongDao.updateReleaseYear() method
+     */
+    @Test
+    @Order(15)
+    @DisplayName("updating a Song ReleaseYear works")
+    void updateSongReleaseYearWorks() {
+        Integer year = 9999;
+        Song s = songDao.updateReleaseYear(sample_songs.get(0).getSongId(), year);
+        assertEquals(year, s.getReleaseYear());
+        assertEquals(sample_songs.get(0).getSongId(), s.getSongId());
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("Update Song ReleaseYear throws exception for an invalid/missing year")
+    void updateSongReleaseYearInvalidYear() {
+        assertThrows(DaoException.class, () -> {
+            songDao.updateReleaseYear(sample_songs.get(0).getSongId(), null);
+        });
+    }
+
 
     //@Test
     //void doNothing() {
