@@ -25,10 +25,9 @@
 
 h4, h2 {
     font-family: "Consolas";
-    padding-left: 0px; 
+    padding-left: 0px;
+    margin-top: 25px;
     margin-bottom: 0;   
-    margin-left: auto;
-    margin-right: auto;
     width: 35%;
     border-style: solid;
     border-radius: 10px;
@@ -41,8 +40,6 @@ h4, h2 {
 
 h4 {
     padding-left: 5px;
-    margin-left: auto;
-    margin-right: auto;
     margin-bottom: 15px;
     width: 50%;
     border-radius: 10px;
@@ -67,6 +64,122 @@ h4 span.label-text {
 
 .bandi-button.dashboard {
     background-color: rgba(214, 34, 34, 0.281);
+}
+
+.bandi-text-fields.inner-panel {
+    display: inline-block;
+    width: 45%;
+    margin-right: 20px;
+}
+
+.bandi-text-fields.inner-panel h4, h5 {
+    width: 100%;
+}
+
+.bandi-text-fields.inner-panel h2 {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.edit-profile-button-div {
+    display: block;
+    width: 100%;
+}
+
+.bandi-button.dashboard#edit-profile {
+    display: block;
+    width: 30%;
+    margin: auto;
+    float: none;
+}
+
+.bandi-button.dashboard#edit-profile-submit {
+    background-color: rgb(224, 109, 205);
+}
+
+.profile h3 {
+    width: 57%;
+    font-family: 'Consolas';
+    background-color: rgb(247, 151, 226);
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.spotify-info-panel {
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+    width: 48%;
+}
+
+.top-tracks {
+    display: block;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    height: 100%;
+}
+
+.spotify-info-panel h4 {
+    display: block;
+    width: 52%;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+    margin-right: 5%;
+}
+
+.top-tracks li {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-family: 'Consolas';
+}
+
+.bandi-box {
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    background-color: white;
+    font-family: 'Consolas';
+
+}
+
+#top-tracks-list {
+}
+
+.bandi-box#visibility-status {
+    display: inline-block;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    width: 35%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(240, 200, 234);
+}
+
+.bandi-button.dashboard#set-top-tracks-visibility {
+    display: inline;
+    margin-bottom: 10px;
+    margin-right: 21%;
 }
 
 .react-tabs {
@@ -100,6 +213,9 @@ h4 span.label-text {
 
 .react-tabs__tab-panel--selected {
     margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
     padding: 25px;
     background-clip: padding-box;
     border-radius: 10px;
@@ -187,6 +303,7 @@ h4 span.label-text {
 #friend-label-3 {
     width: 275px;
 }
+
 
 .bandi-button.accept-button {
     font-size: 0.7rem;

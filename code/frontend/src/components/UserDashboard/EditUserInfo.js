@@ -133,19 +133,14 @@ class EditUserInfo extends React.Component {
       return (
         <div>
         <div className="profile">
-          <header>
-            <h1>Edit Your Profile</h1>
-          </header>
-
-          <Form onSubmit={this.handleSubmit}>
+          <h3>Editing profile</h3>
+          <Form className="bandi-form edit-profile" onSubmit={this.handleSubmit}>
 
             <Form.Group controlId="profileForm.name">
-              <Form.Label>Name:</Form.Label>
-              <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} />
+              <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} placeholder="John Appleseed" />
             </Form.Group>
 
             <Form.Group controlId="profileForm.location">
-              <Form.Label>Location:</Form.Label>
               <Form.Control name="location" as="select" value={this.state.location} onChange={this.handleChange}>
                 <option>Select location</option>
                 <option>Baltimore, MD</option>
@@ -158,7 +153,6 @@ class EditUserInfo extends React.Component {
             </Form.Group>
 
               <Form.Group controlId="profileForm.experience">
-                  <Form.Label>Experience:</Form.Label>
                   <Form.Control name="experience" as="select" value={this.state.experience} onChange={this.handleChange}>
                       <option>Select skill level</option>
                       <option>Beginner</option>
@@ -169,7 +163,6 @@ class EditUserInfo extends React.Component {
 
 
             <FormGroup controlId="profileForm.instruments">
-                <Form.Label>Instruments:</Form.Label>
                     <Form.Control name="instruments" as="select" value={this.state.instruments} onChange={this.handleChange}>
                         <option>Select instrument</option>
                         <option>Guitar</option>
@@ -181,8 +174,7 @@ class EditUserInfo extends React.Component {
                 </FormGroup>
 
             <FormGroup controlId="profileForm.genres">
-                  <Form.Label>Genres:</Form.Label>
-                  <Form.Control name="genre" as="select" value={this.state.genre} onChange={this.handleChange}>
+                  <Form.Control name="genre" as="select" value={this.state.genre} onChange={this.handleChange} placeholder="rock, jazz">
                     <option>Select genre</option>
                     <option>Rock</option>
                     <option>Blues</option>
@@ -191,7 +183,7 @@ class EditUserInfo extends React.Component {
                   </Form.Control>
               </FormGroup>
 
-            <Button type="submit">Save</Button>
+            <button id="edit-profile-submit" class="bandi-button dashboard" type="submit">Save</button>
 
           </Form>
         </div>

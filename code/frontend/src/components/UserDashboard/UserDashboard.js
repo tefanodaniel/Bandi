@@ -112,17 +112,32 @@ class UserDashboard extends React.Component {
         const outgoing = this.props.outgoing_friend_requests;
         const bands = this.props.userInfo.bands;
 
+        let spotify_info_view;
+        spotify_info_view = 
+            <div class="spotify-info-panel">
+                    <h4>Spotify Top Tracks</h4>
+                    {userInfo?.topTracks ? <button id="set-top-tracks-visibility" class="bandi-button dashboard" onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Make private" : "Make publicly visible"}</button>
+                            : " Loading..."}
+                    <div id="visibility-status" class="bandi-box">
+                        {userInfo?.topTracks ? (userInfo?.showtoptracks ? "Currently visible" : "Currently private") : ""}
+                    </div>
+                    <div class="bandi-box top-tracks-container">
+                        <ul class="top-tracks-list">
+                        {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
+                        </ul>
+                    </div>
+            </div>;
+
         let profile_view;
         if (this.state.editing) {
             profile_view = 
-                <div>
-                    <button class="bandi-button dashboard"  onClick={() => {this.setState({editing: false})}}>Go back</button>
+                <div class="bandi-text-fields inner-panel">
                     <EditUserInfo/>
+                    <button id="edit-profile" class="bandi-button dashboard"  onClick={() => {this.setState({editing: false})}}>Go back</button>
                 </div>
         } else { // render user profile
             profile_view = 
-                <div class="inner-panel">
-                    <button class="bandi-button dashboard" onClick={() => {this.setState({editing: true})}}>Edit Profile</button>
+                <div class="bandi-text-fields inner-panel">
                     <h2 class="name">{userInfo.name}</h2>
                     <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
                     <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
@@ -134,6 +149,9 @@ class UserDashboard extends React.Component {
                     </div>
                     <div>
                         <h4 class="label"><span class="label-text">Links: </span>{userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
+                    </div>
+                    <div class="edit-profile-button-div">
+                    <button id="edit-profile" class="bandi-button dashboard" onClick={() => {this.setState({editing: true})}}>Edit Profile</button>
                     </div>
                 </div>;
         }
@@ -153,15 +171,7 @@ class UserDashboard extends React.Component {
             </div>
         }
 
-        let spotify_info_view;
-        spotify_info_view = 
-            <div>
-                <h4>Spotify Top Tracks:</h4>
-                {userInfo?.topTracks ? (userInfo?.showtoptracks ? "(visible to others)" : "(not visible to others)") : ""}
-                {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
-                {userInfo?.topTracks ? <Button onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Hide top tracks from others" : "Show top tracks to others"}</Button>
-                        : " Loading..."}
-            </div>;
+
         
         if (userInfo) {
             return (
@@ -176,8 +186,9 @@ class UserDashboard extends React.Component {
                                     <Tab>My Friends</Tab>
                                 </TabList>
 
-                                <TabPanel>
+                                <TabPanel className="profile-panel">
                                 {profile_view}
+                                {spotify_info_view}
                                 </TabPanel>
 
                                 <TabPanel>

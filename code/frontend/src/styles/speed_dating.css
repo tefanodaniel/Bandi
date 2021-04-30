@@ -82,8 +82,7 @@
     width: 40%;
 }
 
-.bandi-form.event .form-control {
-    display: inline-block;
+.bandi-form .form-control {
     margin-left: auto;
     margin-right: auto;
     font-family: "Consolas";
@@ -92,8 +91,11 @@
     border-radius: 10px;
     border-width: 2px;
     border-color: black;
-    background-color: rgb(255, 255, 255);
     border-top-width: 2px;
     border-bottom-width: 4px;
     border-left-width: 3px;
+}
+
+.bandi-form.event .form-control {
+    background-color: rgb(255, 255, 255);
 }
