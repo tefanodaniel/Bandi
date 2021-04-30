@@ -99,5 +99,18 @@ public class Sql2oSongDaoTest {
         });
     }
 
+    /**
+     * Tests for dao.Sql2oSongDao.read() method
+     */
+    @Test
+    @Order(4)
+    @DisplayName("read a Song given its id")
+    void readSongGivenId() {
+        for (Song s1 : sample_songs) {
+            Song s2 = songDao.read(s1.getSongId());
+            assertEquals(s1, s2);
+        }
+    }
+
 
 }
