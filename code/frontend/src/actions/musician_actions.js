@@ -9,21 +9,11 @@ import MusicianApi from "../utils/MusicianApiService";
 
 // the action creators below are thunk functions.
 export async function fetchMusicians(dispatch, getState) {
-    console.log("Inside fetchMusicians action");
-    let tries = 0;
-    while (tries < 5) {
-        try {
-            const response = await MusicianApi.getAll();
-            dispatch({
-                type : LOAD_MUSICIANS_INITIAL,
-                payload : response.data
-            })
-        } catch (error) {
-            console.log("Error fetching musicians. Retrying...")
-            tries++;
-        }
-    }
-    console.log("Critical error occurred. Please refresh the page to continue using Bandi.");
+    const response = await MusicianApi.getAll();
+    dispatch({
+        type : LOAD_MUSICIANS_INITIAL,
+        payload : response.data
+    })
 }
 
 export function allMusiciansQuery(queryparams) {

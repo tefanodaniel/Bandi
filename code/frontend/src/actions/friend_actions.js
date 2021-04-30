@@ -10,61 +10,31 @@ import RequestApiService from '../utils/RequestApiService';
 
 export function getUserFriends(id) {
     return async function fetchFriends(dispatch, getState) {
-        let tries = 0;
-        while (tries < 5) {
-        try {
-            const response = await RequestApiService.getUserFriendList(id);
+        const response = await RequestApiService.getUserFriendList(id);
             return dispatch({
                 type : LOAD_USER_FRIENDS,
                 payload : response.data
             })
-        }
-        catch (e) {
-            console.log("Error fetching friends. Retrying")
-            tries++;
-        }
-        }
-        alert("Critical error has occurred. Please refresh the page to continue using Bandi.");
     }
 }
 
 export function getIncomingFriendRequests(recipientID) {
     return async function fetchIncomingFriendRequests(dispatch, getState) {
-        let tries = 0;
-        while (tries < 5) {
-            try {
-                const response = await RequestApiService.getIncomingFriendRequests(recipientID);
-                return dispatch({
-                    type : LOAD_INCOMING_FRIEND_REQUESTS,
-                    payload : response.data
-                })
-            }
-            catch (e) {
-                console.log("Error fetching friends. Retrying")
-                tries++;
-            }
-        }
-        alert("Critical error has occurred. Please refresh the page to continue using Bandi.");
+        const response = await RequestApiService.getIncomingFriendRequests(recipientID);
+            return dispatch({
+                type : LOAD_INCOMING_FRIEND_REQUESTS,
+                payload : response.data
+            })
     }
 }
 
 export function getOutgoingFriendRequests(senderID) {
     return async function fetchOutgoingFriendRequests(dispatch, getState) {
-        let tries = 0;
-        while (tries < 5) {
-            try {
-                const response = await RequestApiService.getOutgoingFriendRequests(senderID);
-                return dispatch({
-                    type : LOAD_OUTGOING_FRIEND_REQUESTS,
-                    payload : response.data
-                })
-            }
-            catch (e) {
-                console.log("Error fetching friends. Retrying")
-                tries++;
-            }
-        }
-        alert("Critical error has occurred. Please refresh the page to continue using Bandi.");
+        const response = await RequestApiService.getOutgoingFriendRequests(senderID);
+        return dispatch({
+            type : LOAD_OUTGOING_FRIEND_REQUESTS,
+            payload : response.data
+        })
     }
 }
 
