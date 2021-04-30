@@ -123,7 +123,7 @@ public class Sql2oSongDao implements SongDao {
 
         try (Connection conn = sql2o.open()) {
             List<Song> songs = this.extractSongsFromDatabase(sql, conn);
-            System.out.println(songs);
+            //System.out.println(songs);
             return songs;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from database", ex);
@@ -246,13 +246,13 @@ public class Sql2oSongDao implements SongDao {
         HashSet<String> alreadyAdded = new HashSet<String>();
         Map<String, Song> songs = new HashMap<String, Song>();
         for (Map row : queryResults) {
-            System.out.println(row);
+            //System.out.println(row);
             // Extract data from this row
             String songId = (String) row.get("songid");
             String songName = (String) row.get("songname");
             String artistName = (String) row.get("artistname");
             String albumName = (String) row.get("albumname");
-            Integer releaseYear = (Integer) row.get("releaseYear");
+            Integer releaseYear = (Integer) row.get("releaseyear");
             String genre = (String) row.get("genre");
             if (!alreadyAdded.contains(songId)){
                 alreadyAdded.add(songId);

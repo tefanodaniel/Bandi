@@ -130,6 +130,23 @@ public class Sql2oSongDaoTest {
         assertNull(s);
     }
 
+    /**
+     * Tests for dao.Sql2oSongDao.readAll() method
+     */
+    @Test
+    @Order(8)
+    @DisplayName("read all the songs")
+    void readAllSongs() {
+        HashSet<Song> sample_Set = new HashSet<Song>();
+        sample_Set.addAll(sample_songs);
+
+        List<Song> read_songs = songDao.readAll();
+        HashSet<Song> read_Set = new HashSet<Song>();
+        read_Set.addAll(read_songs);
+        assertEquals(sample_Set.size(), read_Set.size());
+        assertTrue(sample_Set.containsAll(read_Set));
+    }
+
     //@Test
     //void doNothing() {
 
