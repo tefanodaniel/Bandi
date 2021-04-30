@@ -23,30 +23,12 @@ public class Sql2oSongDaoTest {
 
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
-        //String databaseUrl = System.getenv("TEST_DATABASE_URL");
-        //URI dbUri = new URI(databaseUrl);
-        //String username = dbUri.getUserInfo().split(":")[0];
-        //String password = dbUri.getUserInfo().split(":")[1];
-        //String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-        //        + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-        //sql2o = new Sql2o(dbUrl, username, password);
-        //songDao = new Sql2oSongDao(sql2o);
         sql2o = Database.getSql2o();
     }
 
     @BeforeAll
     static void createSampleData() {
-        // Careful resetting database if other people are using it
-        /*
-        Database.createMusicianTablesWithSampleData(sql2o, DataStore.sampleMusicians());
-        Database.createBandTablesWithSampleData(sql2o, DataStore.sampleBands());
-        Database.createSpeedDateEventsWithSampleData(sql2o, DataStore.sampleSpeedDateEvents());
-        Database.createRequestTableWithSamples(sql2o, new ArrayList<FriendRequest>());
-        Database.createSongTablesWithSampleData(sql2o, DataStore.sampleSongs());
-        Database.createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
-        Database.createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
-         */
-        sample_songs = DataStore.sampleSongs();
+         sample_songs = DataStore.sampleSongs();
     }
 
     @BeforeEach
@@ -123,6 +105,31 @@ public class Sql2oSongDaoTest {
         Song s = songDao.read("88888fakesongid");
         assertNull(s);
     }
+
+    /**
+     * Tests for dao.Sql2oSongDao.readGivenName() method
+     */
+    @Test
+    @Order(6)
+    @DisplayName("read a Song given its Name")
+    void readSongGivenName() {
+        System.out.println("Test 6");
+        for (Song s1 : sample_songs) {
+            Song s2 = songDao.readGivenName(s1.getSongName());
+            assertEquals(s1, s2);
+        }
+    }
+
+
+    @Test
+    @Order(7)
+    @DisplayName("read Song returns null given invalid Name")
+    void readSongGivenInvalidName() {
+        System.out.println("Test 7");
+        Song s = songDao.readGivenName("Never Gonna Give You Up");
+        assertNull(s);
+    }
+
     //@Test
     //void doNothing() {
 

@@ -76,21 +76,27 @@ public class Sql2oSongDao implements SongDao {
     };
 
     @Override
-    public Song readGivenName(String songname) throws Exception {
+    public Song readGivenName(String songname) throws DaoException {
         try (Connection conn = sql2o.open()) {
+            //check for duplication
+            String sql_no_genre = "SELECT * FROM (SELECT S.songid as SID, * FROM songs as S) as R\n"
+                    + "WHERE R.songname=:songname;";
+
+            List<Map<String, Object>> queryResults_no_genre = conn.createQuery(sql_no_genre).addParameter("songname", (String) songname).executeAndFetchTable().asList();
+
+            if (queryResults_no_genre.size() == 0) {
+                return null;
+            }
+
+            if(queryResults_no_genre.size() >= 2) {
+                throw new Sql2oException("Too many songs with the same name already in the database! Possible duplication");
+            }
+
             String sql = "SELECT * FROM (SELECT S.songid as SID, * FROM songs as S) as R\n"
                     + "LEFT JOIN SongGenres as G ON R.SID=G.songid\n"
                     + "WHERE R.songname=:songname;";
 
-            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("songname", songname).executeAndFetchTable().asList();
-
-            if (queryResults.size() == 0) {
-                return null;
-            }
-
-            if(queryResults.size() >= 2) {
-                throw new Sql2oException("Too many songs with the same name already in the database! Possible duplication");
-            }
+            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("songname", (String) songname).executeAndFetchTable().asList();
 
             String songid = (String) queryResults.get(0).get("songid");
             String artistName = (String) queryResults.get(0).get("artistname");
@@ -103,10 +109,10 @@ public class Sql2oSongDao implements SongDao {
                     s.addGenre((String) row.get("genre"));
                 }
             }
-
+            //System.out.println(s);
             return s;
         } catch (Sql2oException ex) {
-            throw new Exception("Unable to read song with name" + songname, ex);
+            throw new DaoException("Unable to read song with name " + songname, ex);
         }
     };
 
