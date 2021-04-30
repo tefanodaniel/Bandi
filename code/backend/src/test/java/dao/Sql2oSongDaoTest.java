@@ -86,4 +86,18 @@ public class Sql2oSongDaoTest {
         });
     }
 
+    @Test
+    @Order(3)
+    @DisplayName("create Song throws exception for duplicate song")
+    void createSongDuplicateData() {
+        assertThrows(DaoException.class, () -> {
+            Set<String> g1 = new HashSet<>();
+            g1.add("Pop");
+            g1.add("R&B");
+            Song s1 = new Song("00001fakesongid", "Peaches", "Justin Bieber", "null", 2021, g1);
+            Song s2 = songDao.create(s1.getSongId(), s1.getSongName(), s1.getArtistName(), s1.getAlbumName(), s1.getReleaseYear(), s1.getGenres());
+        });
+    }
+
+
 }
