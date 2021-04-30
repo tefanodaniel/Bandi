@@ -23,7 +23,7 @@ class SongOfTheWeek extends Component {
                     <SubHeader text={"Participate in our weekly Song Of The Week event!"}/>
                     <Container className="mx-auto" fluid>
                         <Row>
-                            <Col className="col-sm-3">
+                            <Col className="col-sm-5">
                                 <SotwSearchControls />
                             </Col>
                             <Col className="col-sm-9 bg-transparent">
