@@ -235,6 +235,29 @@ public class Sql2oSongDaoTest {
         });
     }
 
+    /**
+     * Tests for dao.Sql2oSongDao.updateGenres() method
+     */
+    @Test
+    @Order(17)
+    @DisplayName("updating a Song Genres works")
+    void updateSongGenresWorks() {
+        Set<String> g2 = new HashSet<>();
+        g2.add("Hip Hop");
+        Song s = songDao.updateGenres(sample_songs.get(0).getSongId(), g2);
+        assertEquals(g2, s.getGenres());
+        assertEquals(sample_songs.get(0).getSongId(), s.getSongId());
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Update Song Genres throws exception for an invalid/missing genres set")
+    void updateSongGenresInvalidSet() {
+        assertThrows(DaoException.class, () -> {
+            songDao.updateGenres(sample_songs.get(0).getSongId(), null);
+        });
+    }
+
 
     //@Test
     //void doNothing() {

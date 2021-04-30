@@ -187,6 +187,8 @@ public class Sql2oSongDao implements SongDao {
         String deleteGenreSQL = "DELETE FROM SongGenres WHERE songid=:songId AND genre=:genre";
         String insertGenreSQL = "INSERT INTO SongGenres (songid, genre) VALUES (:songId, :genre)";
         try (Connection conn = sql2o.open()) {
+            if(newGenres == null) throw new Sql2oException("No genre list provided!");
+
             // Get current genres stored in DB for this musician
             List<Map<String, Object>> rows = conn.createQuery(getCurrentGenresSQL).addParameter("songId", songId).executeAndFetchTable().asList();
             HashSet<String> currentGenres = new HashSet<String>();
