@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class Sql2oMusicianDaoTest {
     private static Sql2o sql2o;
     private static List<Musician> samples;
-    private MusicianDao musicianDao;
-/*
+    private static MusicianDao musicianDao;
+
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
         String databaseUrl = System.getenv("TEST_DATABASE_URL");
@@ -34,8 +34,11 @@ class Sql2oMusicianDaoTest {
                 + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
 
         sql2o = new Sql2o(dbUrl, username, password);
+
+        musicianDao = new Sql2oMusicianDao(sql2o);
     }
 
+    /*
     @BeforeAll
     static void setSampleMusicians() {
 //        samples = new ArrayList<>();
@@ -155,24 +158,28 @@ class Sql2oMusicianDaoTest {
 
         musicianDao = new Sql2oMusicianDao(sql2o);
     }
-
+    */
 
     @Test
     void doNothing() {    }
 
     @Test
     @DisplayName("create musician for valid input")
-    void createNewMusician() {
-        // TODO: update create() with new fields
+    void createAndDeleteNewMusician() {
+        // Testing create
         Set<String> genres = new HashSet<String>(Arrays.asList("Pop"));
         Set<String> instruments = new HashSet<String>(Arrays.asList("Vocals"));
         Set<String> profileLinks = new HashSet<String>();
         Set<String> gagaFriends = new HashSet<String>(Arrays.asList("00001fakeid"));
-        Musician m1 = new Musician("fakeid5","Lady Gaga", genres, instruments,
+        Musician m1 = new Musician("010101fakeid","Lady Gaga", genres, instruments,
                 "Expert", profileLinks, "Honolulu, HI", "96816", gagaFriends, false);
-//        Musician m2 = musicianDao.create(m1.getId(), m1.getName(), m1.getGenres(), m1.getInstruments(),
-//                m1.getExperience(), m1.getLocation(), m1.getZipCode(), m1.getLatitude(), m1.getLongitude());
-//        assertEquals(m1, m2);
+        Musician m2 = musicianDao.create(m1.getId(), m1.getName(), m1.getGenres(), m1.getInstruments(),
+                m1.getExperience(), m1.getLocation(), m1.getZipCode(), m1.getProfileLinks(), m1.getFriends(), m1.getAdmin());
+        assertEquals(m1, m2);
+
+        // Testing delete
+        Musician m3 = musicianDao.delete(m1.getId());
+        assertEquals(m1, m3);
     }
 
     @Test
@@ -210,5 +217,5 @@ class Sql2oMusicianDaoTest {
         assertThrows(ApiError.class, ()->musicianDao.readAll(query));
     }
 
-*/
+
 }
