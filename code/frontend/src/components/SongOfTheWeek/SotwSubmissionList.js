@@ -35,7 +35,7 @@ const SotwSubmissionList = () => {
     {
         return (
             <Container style={{marginTop:"250px", marginLeft:"600px"}} className="justify-content-md-center">
-                <h4> Stay Tuned ...</h4>
+                <h4> </h4>
             </Container>
         )
     }

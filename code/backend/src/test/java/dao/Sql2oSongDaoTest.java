@@ -1,37 +1,36 @@
 package dao;
 
 import exceptions.DaoException;
-import model.FriendRequest;
-import model.Musician;
-import model.SpeedDateEvent;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import model.Song;
+import org.junit.jupiter.api.*;
 import org.sql2o.Sql2o;
 import util.DataStore;
 import util.Database;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
+
+import static api.ApiServer.songDao;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class Sql2oSongDaoTest {
 
     // url for the test database to use
     private static Sql2o sql2o;
-    private static Sql2oSongDao songDao;
+    private SongDao songDao;
+    private static List<Song> sample_songs;
 
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
-        String databaseUrl = System.getenv("TEST_DATABASE_URL");
-        URI dbUri = new URI(databaseUrl);
-        String username = dbUri.getUserInfo().split(":")[0];
-        String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
-                + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
-        sql2o = new Sql2o(dbUrl, username, password);
-        songDao = new Sql2oSongDao(sql2o);
+        //String databaseUrl = System.getenv("TEST_DATABASE_URL");
+        //URI dbUri = new URI(databaseUrl);
+        //String username = dbUri.getUserInfo().split(":")[0];
+        //String password = dbUri.getUserInfo().split(":")[1];
+        //String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + ':'
+        //        + dbUri.getPort() + dbUri.getPath() + "?sslmode=require";
+        //sql2o = new Sql2o(dbUrl, username, password);
+        //songDao = new Sql2oSongDao(sql2o);
+        sql2o = Database.getSql2o();
     }
 
     @BeforeAll
@@ -46,6 +45,29 @@ public class Sql2oSongDaoTest {
         Database.createSotwSubmissionTablesWithSampleData(sql2o, DataStore.sampleSotwSubmissions());
         Database.createSotwEventTablesWithSampleData(sql2o, DataStore.sampleSotwEvents());
          */
+        sample_songs = DataStore.sampleSongs();
     }
 
+    @BeforeEach
+    void injectDependency(){
+        Database.createSongTablesWithSampleData(sql2o, sample_songs);
+        songDao = new Sql2oSongDao(sql2o);
+    }
+
+    @Test
+    @Order(1)
+    @DisplayName("create song works for valid input")
+    void createNewSong() {
+        Set<String> genres = new HashSet<>();
+        genres.add("Pop");
+        genres.add("Rock");
+        Song s1 = new Song("99999fakesongid", "Never Gonna Give You Up", "Rick Astley", "null", 1987, genres);
+        Song s2 = songDao.create(s1.getSongId(), s1.getSongName(), s1.getArtistName(), s1.getAlbumName(), s1.getReleaseYear(), s1.getGenres());
+        assertEquals(s1, s2);
+    }
+
+    @Test
+    void doNothing() {
+
+    }
 }

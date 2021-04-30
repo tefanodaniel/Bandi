@@ -34,7 +34,7 @@ const SotwEventDesc = () => {
             <Card style={bandi_styles.sotw_desc} className="bg-transparent rounded border-0 text-center">
                 <section className="light">
                     <Card.Body className="gradient1" fluid="true">
-                        <Card.Text>Loading Event Info ...</Card.Text>
+                        <Card.Text></Card.Text>
                     </Card.Body>
                 </section>
             </Card>
