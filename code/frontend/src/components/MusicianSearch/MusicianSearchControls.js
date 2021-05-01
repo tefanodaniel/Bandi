@@ -1,6 +1,8 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col, Spinner} from "react-bootstrap";
+import Form from 'react-bootstrap/Form';
+import FormGroup from 'react-bootstrap/FormGroup';
 import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
 import {selectPlaceholderQuery} from "../../selectors/musician_selector";
@@ -57,6 +59,93 @@ const MusicianSearchControls = () => {
     }
 
     return (
+        // NEW FORM: 
+        /*
+        <Form onSubmit={SubmitQuery}>
+            <Form.Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+                <Form.Group controlId="musicianForm.name">
+                    <Form.Label>Name:</Form.Label>
+                    <Form.Control name="name" type="input" value={queryparams.name} placeholder={placeholder_query.name} />
+                </Form.Group>
+            </Form.Row>
+
+            <Form.Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+                <FormGroup controlId="musicianForm.instruments">
+                    <Form.Label>Instrument(s):</Form.Label>
+                    {['checkbox', 'radio'].map((type) => (
+                        <div key={`inline-${type}`} className="mb-3" value={queryparams.instrument}>
+                        <Form.Check inline label="Guitar" type={type} id={`inline-${type}-Guitar`} />
+                        <Form.Check inline label="Piano" type={type} id={`inline-${type}-Piano`} />
+                        <Form.Check inline label="Bass" type={type} id={`inline-${type}-Bass`} />
+                        <Form.Check inline label="Drums" type={type} id={`inline-${type}-Drums`} />
+                        <Form.Check inline label="Vocals" type={type} id={`inline-${type}-Vocals`} />
+                        </div>
+                    ))}
+                </FormGroup>
+            </Form.Row>
+
+            <Form.Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+                <FormGroup controlId="musicianForm.genres">
+                    <Form.Label>Genre(s):</Form.Label>
+                        {['checkbox', 'radio'].map((type) => (
+                            <div key={`inline-${type}`} className="mb-3" value={queryparams.genre}>
+                            <Form.Check inline label="Rock" type={type} id={`inline-${type}-Rock`} />
+                            <Form.Check inline label="Blues" type={type} id={`inline-${type}-Blues`} />
+                            <Form.Check inline label="Bass" type={type} id={`inline-${type}-Bass`} />
+                            <Form.Check inline label="Jazz" type={type} id={`inline-${type}-Jazz`} />
+                            <Form.Check inline label="Classical" type={type} id={`inline-${type}-Classical`} />
+                            </div>
+                        ))}
+                </FormGroup>
+              </Form.Row>
+
+            <Form.Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+                <Form.Group controlId="musicianForm.experience">
+                    <Form.Label>Experience:</Form.Label>
+                    <Form.Control name="experience" as="select" value={queryparams.experience} defaultValue={placeholder_query.experience}>
+                        <option>Beginner</option>
+                        <option>Intermediate</option>
+                        <option>Expert</option>
+                    </Form.Control>
+                </Form.Group>
+            </Form.Row>
+
+            <Form.Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+                <Form.Group controlId="musicianForm.location">
+                    <Form.Label>Location:</Form.Label>
+                    <Form.Control name="location" as="select" value={queryparams.location} defaultValue={placeholder_query.location}>
+                        <option>Baltimore, MD</option>
+                        <option>Washington, DC</option>
+                        <option>New York City, NY</option>
+                        <option>Boston, MA</option>
+                        <option>Los Angeles, CA</option>
+                    </Form.Control>
+                </Form.Group>
+            </Form.Row>
+
+            <Form.Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+                <FormGroup controlId="musicianForm.distance">
+                    <Form.Label>Distance (miles):</Form.Label>
+                    <Form.Control name="distance" as="select" value={queryparams.distance} defaultValue={placeholder_query.distance}>
+                        <option>10</option>
+                        <option>50</option>
+                        <option>100</option>
+                        <option>500</option>
+                        <option>1000</option>
+                        <option>3000</option>
+                        <option>5000</option>
+                    </Form.Control>
+                </FormGroup>
+            </Form.Row>
+            
+
+            <Button type="submit">Find Musicians</Button>
+
+          </Form>
+        */
+
+        // OLD:
+        
         <Container fluid>
             <Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
                 <Col className="col-sm-5">
@@ -114,6 +203,7 @@ const MusicianSearchControls = () => {
                 </div>
             </Row>
         </Container>
+        
     )
 }
 
