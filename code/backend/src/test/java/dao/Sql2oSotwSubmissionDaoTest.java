@@ -43,7 +43,6 @@ public class Sql2oSotwSubmissionDaoTest {
     @Order(1)
     @DisplayName("create Sotw Submission works for valid input")
     void createNewSotwSubmission() {
-        System.out.println("Test 1");
         Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
         String avLink = "https://youtu.be/dQw4w9WgXcQ";
         SongOfTheWeekSubmission s1 = new SongOfTheWeekSubmission("99999fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1);
@@ -55,9 +54,7 @@ public class Sql2oSotwSubmissionDaoTest {
     @Order(2)
     @DisplayName("create Sotw Submission throws exception for incomplete data")
     void createSotwSubmissionIncompleteData() {
-        System.out.println("Test 2");
         assertThrows(DaoException.class, () -> {
-            System.out.println("Test 1");
             Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
             String avLink = "https://youtu.be/dQw4w9WgXcQ";
             SongOfTheWeekSubmission s1 = new SongOfTheWeekSubmission("99999fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1);
@@ -70,9 +67,7 @@ public class Sql2oSotwSubmissionDaoTest {
     @Order(3)
     @DisplayName("create Song throws exception for duplicate song")
     void createSotwSubmissionDuplicateData() {
-        System.out.println("Test 3");
         assertThrows(DaoException.class, () -> {
-            System.out.println("Test 1");
             Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
             String avLink = "https://youtu.be/dQw4w9WgXcQ";
             SongOfTheWeekSubmission s1 = new SongOfTheWeekSubmission("00001fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1);
@@ -87,7 +82,6 @@ public class Sql2oSotwSubmissionDaoTest {
     @Order(4)
     @DisplayName("read a Sotw Submission given its id")
     void readSotwSubmissionGivenId() {
-        System.out.println("Test 4");
         for (SongOfTheWeekSubmission s1 : sample_sotw_submissions) {
             SongOfTheWeekSubmission s2 = sotwSubmissionDao.read(s1.getSubmission_id());
             assertEquals(s1, s2);
@@ -142,4 +136,28 @@ public class Sql2oSotwSubmissionDaoTest {
             sotwSubmissionDao.updateAVSubmission(sample_sotw_submissions.get(0).getSubmission_id(), null);
         });
     }
+
+    /**
+     * Tests for dao.Sql2oSotwSubmissionDao.updateInstruments() method
+     */
+    @Test
+    @Order(9)
+    @DisplayName("updating a Sotw Submission Instruments works")
+    void updateSotwSubmissionInstrumentsWorks() {
+        Set<String> instruments4 = new HashSet<String>(Arrays.asList("Drums"));
+        SongOfTheWeekSubmission s = sotwSubmissionDao.updateInstruments(sample_sotw_submissions.get(0).getSubmission_id(), instruments4);
+        assertEquals(instruments4, s.getInstruments());
+        assertEquals(sample_sotw_submissions.get(0).getSubmission_id(), s.getSubmission_id());
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("Update Sotw Submission Instruments throws exception for an invalid/missing instruments")
+    void updateSotwSubmissionInstrumentsInvalid() {
+        assertThrows(DaoException.class, () -> {
+            sotwSubmissionDao.updateInstruments(sample_sotw_submissions.get(0).getSubmission_id(), null);
+        });
+    }
+
+
 }
