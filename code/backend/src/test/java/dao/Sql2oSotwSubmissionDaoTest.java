@@ -42,7 +42,7 @@ public class Sql2oSotwSubmissionDaoTest {
     @Test
     @Order(1)
     @DisplayName("create Sotw Submission works for valid input")
-    void createNewSong() {
+    void createNewSotwSubmission() {
         System.out.println("Test 1");
         Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
         String avLink = "https://youtu.be/dQw4w9WgXcQ";
@@ -54,7 +54,7 @@ public class Sql2oSotwSubmissionDaoTest {
     @Test
     @Order(2)
     @DisplayName("create Sotw Submission throws exception for incomplete data")
-    void createSongIncompleteData() {
+    void createSotwSubmissionIncompleteData() {
         System.out.println("Test 2");
         assertThrows(DaoException.class, () -> {
             System.out.println("Test 1");
@@ -69,7 +69,7 @@ public class Sql2oSotwSubmissionDaoTest {
     @Test
     @Order(3)
     @DisplayName("create Song throws exception for duplicate song")
-    void createSongDuplicateData() {
+    void createSotwSubmissionDuplicateData() {
         System.out.println("Test 3");
         assertThrows(DaoException.class, () -> {
             System.out.println("Test 1");
@@ -78,5 +78,29 @@ public class Sql2oSotwSubmissionDaoTest {
             SongOfTheWeekSubmission s1 = new SongOfTheWeekSubmission("00001fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1);
             sotwSubmissionDao.create(s1.getSubmission_id(), s1.getMusician_id(), s1.getMusician_name(), s1.getAVSubmission(), s1.getInstruments());
         });
+    }
+
+    /**
+     * Tests for dao.Sql2oSotwSubmissionDao.read() method
+     */
+    @Test
+    @Order(4)
+    @DisplayName("read a Sotw Submission given its id")
+    void readSotwSubmissionGivenId() {
+        System.out.println("Test 4");
+        for (SongOfTheWeekSubmission s1 : sample_sotw_submissions) {
+            SongOfTheWeekSubmission s2 = sotwSubmissionDao.read(s1.getSubmission_id());
+            assertEquals(s1, s2);
+        }
+    }
+
+
+    @Test
+    @Order(5)
+    @DisplayName("read Sotw Submission returns null given invalid Id")
+    void readSotwSubmissionGivenInvalidId() {
+        System.out.println("Test 5");
+        SongOfTheWeekSubmission s = sotwSubmissionDao.read("88888fakesongid");
+        assertNull(s);
     }
 }
