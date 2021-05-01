@@ -117,13 +117,28 @@ public class Sql2oSotwEventDaoTest {
     @Test
     @Order(5)
     @DisplayName("read Sotw Event returns null given invalid Id")
-    void readSongGivenInvalidId() {
+    void readSotwEventGivenInvalidId() {
         System.out.println("Test 5");
         SongOfTheWeekEvent e = sotwEventDao.read("88888fakeeventid");
         assertNull(e);
     }
 
+    /**
+     * Tests for dao.Sql2oSotwEventDao.readAll() method
+     */
+    @Test
+    @Order(6)
+    @DisplayName("read all Sotw Events")
+    void readAllSotwEvents() {
+        HashSet<SongOfTheWeekEvent> sample_Set = new HashSet<SongOfTheWeekEvent>();
+        sample_Set.addAll(sample_sotw_events);
 
+        List<SongOfTheWeekEvent> read_events = sotwEventDao.readAll();
+        HashSet<SongOfTheWeekEvent> read_Set = new HashSet<SongOfTheWeekEvent>();
+        read_Set.addAll(read_events);
+        assertEquals(sample_Set.size(), read_Set.size());
+        assertTrue(sample_Set.containsAll(read_Set));
+    }
 
 
     /**
