@@ -83,14 +83,12 @@ class UserDashboard extends React.Component {
     renderBandList(bands) {
         if (bands && bands.length > 0) {
             var bandsList = bands.map((band) =>
-            <div key={band.id} className="card">
-                <div className="card-body">
-                    <h5 className="card-title">{band.name}</h5>
-                    <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
-                    <p className="card-text"></p>
-                    <button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</button>
-                </div>
-            </div>);
+            <div key={band.id} className="bandi-box band-card">
+                <h5 className="card-title">{band.name}</h5>
+                <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
+                <p className="card-text"></p>
+                <button id="user-band-view-more" class="bandi-button" onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</button>
+            </div>)
             return bandsList;
         } else {
             return <div/>
@@ -165,9 +163,11 @@ class UserDashboard extends React.Component {
             </div>
         } else {
             band_view = 
-            <div>
-                <button class="bandi-button dashboard" onClick={() => this.setState({creating: true})}>Create band</button>
-                {this.renderBandList(bands)}
+            <div class="band-view">
+                <div class="user-band-container">
+                    {this.renderBandList(bands)}
+                </div>
+                <button id="create-band" class="bandi-button dashboard" onClick={() => this.setState({creating: true})}>Create band</button>
             </div>
         }
 

@@ -72,7 +72,6 @@ class Discover extends React.Component {
   		<div class="outer-discover">
         	<Header />
 			<img id="logo" src="../bandi-logo.png"></img>
-			<SubHeader style={{marginBottom: "25px"}} text="Find your musical soulmate!"/>
         	<div>
         	<Container >
 				<Row>
