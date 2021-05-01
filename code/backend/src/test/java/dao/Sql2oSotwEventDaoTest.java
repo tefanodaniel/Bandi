@@ -3,17 +3,13 @@ package dao;
 import exceptions.DaoException;
 import model.SongOfTheWeekEvent;
 import model.SongOfTheWeekSubmission;
-import model.Song;
 import org.junit.jupiter.api.*;
 import org.sql2o.Sql2o;
 import util.DataStore;
 import util.Database;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
-import static api.ApiServer.sotw_eventDao;
-import static api.ApiServer.sotw_submissionDao;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -289,9 +285,72 @@ public class Sql2oSotwEventDaoTest {
     }
 
     /**
-     * The doNothing Test to invoke before all tests
+     * Tests for dao.Sql2oSotwEventDao.removeSubmissionFromEvent() method
+     */
+    @Test
+    @Order(19)
+    @DisplayName("removing submission from event works")
+    void removeSubmissionFromEventWorks() {
+        String eventid = sample_sotw_events.get(0).getEventId();
+        SongOfTheWeekEvent e = sotwEventDao.removeSubmissionFromEvent(eventid, "00001fakesubmissionid");
+        Set<String> read_submissions = sotwEventDao.readAllSubmissionsGivenEvent(e.getEventId());
+        assertTrue(!read_submissions.contains("00009fakesubmissionid"));
+    }
+
+    @Test
+    @Order(20)
+    @DisplayName("removing nonexistent or invalid Submission from Event throws exception")
+    void removeSubmissionFromEventInvalid() {
+        String eventid = sample_sotw_events.get(0).getEventId();
+        assertThrows(DaoException.class, () -> {
+            sotwEventDao.removeSubmissionFromEvent(eventid, null);
+        });
+        Integer initial_size = sotwEventDao.readAllSubmissionsGivenEvent(eventid).size();
+        sotwEventDao.removeSubmissionFromEvent(eventid, "393939fakesubmissionid");
+        Integer final_size = sotwEventDao.readAllSubmissionsGivenEvent(eventid).size();
+        assertEquals(initial_size, final_size);
+    }
+
+    /**
+     * Tests for dao.Sql2oSotwEventDao.delete() method
+     */
+    @Test
+    @Order(21)
+    @DisplayName("create and delete a song of the week event")
+    void deleteWorksGivenEventd() {
+        // create a dummy sotw event
+        String startday = "April 4, 2021";
+        String endday = "April 10, 2021";
+        String adminid = "22zcnk76clvox7mifcwgz3tha";
+        String songid = "00001fakesongid";
+        String genre = "pop";
+        SongOfTheWeekEvent e1 = new SongOfTheWeekEvent("99999fakeeventid", adminid, startday, endday, songid, genre);
+        SongOfTheWeekEvent e = sotwEventDao.create(e1.getEventId(), e1.getAdminId(), e1.getStartDay(), e1.getEndDay(), e1.getSongId(), e1.getGenre());
+        // ensure that it is in the database
+        SongOfTheWeekEvent e2 = sotwEventDao.read(e.getEventId());
+        assertEquals(e, e2) ;
+        // delete and retrieve dummy event
+        SongOfTheWeekEvent e3 = sotwEventDao.deleteEvent(e.getEventId());
+        // check that the returned event was the dummy event
+        assertEquals(e, e3);
+        // check that the dummy event was in fact deleted
+        SongOfTheWeekEvent e4 = sotwEventDao.read(e.getEventId());
+        assertNull(e4);
+    }
+
+    @Test
+    @Order(22)
+    @DisplayName("delete returns null for an invalid event Id")
+    void deleteReturnsNullInvalidEventId() {
+        SongOfTheWeekEvent e  = sotwEventDao.deleteEvent("945699fakeeventid");
+        assertNull(e);
+    }
+
+    /**
+     * The doNothing Test to reset the tables
      */
 
     @Test
+    @Order(23)
     void doNothing() {}
 }
