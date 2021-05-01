@@ -104,8 +104,6 @@ public class Song {
                 albumName.equals(s.albumName) && releaseYear.equals(s.releaseYear) && genres.equals(s.genres);
     }
 
-
-
     @Override
     public String toString() {
         return "Song {"+

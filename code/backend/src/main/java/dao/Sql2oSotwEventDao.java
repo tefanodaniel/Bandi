@@ -46,7 +46,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
     @Override
     public SongOfTheWeekEvent create(String eventid, String adminid, String startday, String endday, String songid, String genre) throws DaoException {
         String sotw_event_sql = "INSERT INTO sotwevents (eventid, adminid, startday, endday, songid, genre)" +
-                "VALUES (:eventid, :adminid, :startday, :endday, :songid, genre)";
+                "VALUES (:eventid, :adminid, :startday, :endday, :songid, :genre)";
         try (Connection conn = sql2o.open()) {
             conn.createQuery(sotw_event_sql)
                     .addParameter("eventid", eventid)
@@ -83,7 +83,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
             for (String submissionId : submissions) {
                 conn.createQuery(sotw_event_submissions_sql)
                         .addParameter("eventid", eventid)
-                        .addParameter("submission", submissions)
+                        .addParameter("submission", submissionId)
                         .executeUpdate();
             }
 

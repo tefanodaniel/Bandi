@@ -28,7 +28,7 @@ public class Sql2oSongDaoTest {
 
     @BeforeAll
     static void createSampleData() {
-         sample_songs = DataStore.sampleSongs();
+        sample_songs = DataStore.sampleSongs();
     }
 
     @BeforeEach
@@ -295,9 +295,7 @@ public class Sql2oSongDaoTest {
      */
 
     @Test
-    void doNothing() {
-
-    }
+    void doNothing() {}
 
 
 }
