@@ -120,4 +120,26 @@ public class Sql2oSotwSubmissionDaoTest {
         assertEquals(sample_Set.size(), read_Set.size());
         assertTrue(sample_Set.containsAll(read_Set));
     }
+
+    /**
+     * Tests for dao.Sql2oSotwSubmissionDao.updateAVSubmission() method
+     */
+    @Test
+    @Order(7)
+    @DisplayName("updating a Sotw Submission AV Link works")
+    void updateSotwSubmissionAVLinkWorks() {
+        String avlink = "new link";
+        SongOfTheWeekSubmission s = sotwSubmissionDao.updateAVSubmission(sample_sotw_submissions.get(0).getSubmission_id(), avlink);
+        assertEquals(avlink, s.getAVSubmission());
+        assertEquals(sample_sotw_submissions.get(0).getSubmission_id(), s.getSubmission_id());
+    }
+
+    @Test
+    @Order(8)
+    @DisplayName("Update Sotw Submission AV Link throws exception for an invalid/missing link")
+    void updateSotwSubmissionAVLinkInvalid() {
+        assertThrows(DaoException.class, () -> {
+            sotwSubmissionDao.updateAVSubmission(sample_sotw_submissions.get(0).getSubmission_id(), null);
+        });
+    }
 }
