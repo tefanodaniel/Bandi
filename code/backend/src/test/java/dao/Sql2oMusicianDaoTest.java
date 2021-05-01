@@ -89,7 +89,10 @@ class Sql2oMusicianDaoTest {
     @DisplayName("updating a musician works")
     void updateWorks() {
         String name = "New Name";
+        Set<String> genre = new HashSet<String>(Arrays.asList("New Genre"));
         Musician m = musicianDao.updateName("00001fakeid", name);
+        Musician m = musicianDao.updateGenres("00001fakeid", genre);
+
         // add more updates
         assertEquals("00001fakeid", m.getId());
         assertEquals(name, m.getName());
