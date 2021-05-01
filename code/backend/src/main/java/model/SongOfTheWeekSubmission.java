@@ -1,5 +1,6 @@
 package model;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class SongOfTheWeekSubmission {
@@ -61,9 +62,24 @@ public class SongOfTheWeekSubmission {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(submission_id,musician_id,musician_name,avSubmission,instruments);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        SongOfTheWeekSubmission s = (SongOfTheWeekSubmission) o;
+        return submission_id.equals(s.submission_id) && musician_id.equals(s.musician_id) && musician_name.equals(s.musician_name) &&
+                avSubmission.equals(s.avSubmission) && instruments.equals(s.instruments);
+    }
+
+
+    @Override
     public String toString() {
         return "SongOfTheWeek Submission {" +
-                ", submission id = '" + this.submission_id + '\''+
+                "submission id = '" + this.submission_id + '\''+
                 ", musician id = '" + this.musician_id + '\''+
                 ", musician name = '" + this.musician_name + '\''+
                 ", audio/video Submission = '" + this.avSubmission + '\''+

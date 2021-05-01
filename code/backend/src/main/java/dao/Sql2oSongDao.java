@@ -39,6 +39,7 @@ public class Sql2oSongDao implements SongDao {
 
             return this.read(songId);
         } catch (Sql2oException ex) {
+            System.out.println(ex);
             throw new DaoException(ex.getMessage(), ex);
         }
     };
@@ -75,21 +76,27 @@ public class Sql2oSongDao implements SongDao {
     };
 
     @Override
-    public Song readGivenName(String songname) throws Exception {
+    public Song readGivenName(String songname) throws DaoException {
         try (Connection conn = sql2o.open()) {
+            //check for duplication
+            String sql_no_genre = "SELECT * FROM (SELECT S.songid as SID, * FROM songs as S) as R\n"
+                    + "WHERE R.songname=:songname;";
+
+            List<Map<String, Object>> queryResults_no_genre = conn.createQuery(sql_no_genre).addParameter("songname", (String) songname).executeAndFetchTable().asList();
+
+            if (queryResults_no_genre.size() == 0) {
+                return null;
+            }
+
+            if(queryResults_no_genre.size() >= 2) {
+                throw new Sql2oException("Too many songs with the same name already in the database! Possible duplication");
+            }
+
             String sql = "SELECT * FROM (SELECT S.songid as SID, * FROM songs as S) as R\n"
                     + "LEFT JOIN SongGenres as G ON R.SID=G.songid\n"
                     + "WHERE R.songname=:songname;";
 
-            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("songname", songname).executeAndFetchTable().asList();
-
-            if (queryResults.size() == 0) {
-                return null;
-            }
-
-            if(queryResults.size() >= 2) {
-                throw new Sql2oException("Too many songs with the same name already in the database! Possible duplication");
-            }
+            List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("songname", (String) songname).executeAndFetchTable().asList();
 
             String songid = (String) queryResults.get(0).get("songid");
             String artistName = (String) queryResults.get(0).get("artistname");
@@ -102,10 +109,10 @@ public class Sql2oSongDao implements SongDao {
                     s.addGenre((String) row.get("genre"));
                 }
             }
-
+            //System.out.println(s);
             return s;
         } catch (Sql2oException ex) {
-            throw new Exception("Unable to read song with name" + songname, ex);
+            throw new DaoException("Unable to read song with name " + songname, ex);
         }
     };
 
@@ -116,7 +123,7 @@ public class Sql2oSongDao implements SongDao {
 
         try (Connection conn = sql2o.open()) {
             List<Song> songs = this.extractSongsFromDatabase(sql, conn);
-            System.out.println(songs);
+            //System.out.println(songs);
             return songs;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read musicians from database", ex);
@@ -140,6 +147,7 @@ public class Sql2oSongDao implements SongDao {
         String sql = "UPDATE Songs SET artistname=:artistname WHERE songid=:songid;";
 
         try (Connection conn = sql2o.open()) {
+            if(artistname == null) throw new Sql2oException("No artistname to update!");
             conn.createQuery(sql).addParameter("songid", songid).addParameter("artistname", artistname).executeUpdate();
             return this.read(songid);
         } catch (Sql2oException ex) {
@@ -152,6 +160,7 @@ public class Sql2oSongDao implements SongDao {
         String sql = "UPDATE Songs SET albumname=:albumname WHERE songid=:songid;";
 
         try (Connection conn = sql2o.open()) {
+            if(albumname == null) throw new Sql2oException("No album name to update!");
             conn.createQuery(sql).addParameter("songid", songid).addParameter("albumname", albumname).executeUpdate();
             return this.read(songid);
         } catch (Sql2oException ex) {
@@ -160,11 +169,12 @@ public class Sql2oSongDao implements SongDao {
     };
 
     @Override
-    public Song updateReleaseYear(String songId, Integer releaseYear) throws DaoException {
+    public Song updateReleaseYear(String songId, Integer releaseyear) throws DaoException {
         String sql = "UPDATE Songs SET releaseyear=:releaseyear WHERE songid=:songId;";
 
         try (Connection conn = sql2o.open()) {
-            conn.createQuery(sql).addParameter("songId", songId).addParameter("releaseyear", releaseYear).executeUpdate();
+            if(releaseyear == null) throw new Sql2oException("No release year to update!");
+            conn.createQuery(sql).addParameter("songId", songId).addParameter("releaseyear", releaseyear).executeUpdate();
             return this.read(songId);
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to update the song release year", ex);
@@ -177,6 +187,8 @@ public class Sql2oSongDao implements SongDao {
         String deleteGenreSQL = "DELETE FROM SongGenres WHERE songid=:songId AND genre=:genre";
         String insertGenreSQL = "INSERT INTO SongGenres (songid, genre) VALUES (:songId, :genre)";
         try (Connection conn = sql2o.open()) {
+            if(newGenres == null) throw new Sql2oException("No genre list provided!");
+
             // Get current genres stored in DB for this musician
             List<Map<String, Object>> rows = conn.createQuery(getCurrentGenresSQL).addParameter("songId", songId).executeAndFetchTable().asList();
             HashSet<String> currentGenres = new HashSet<String>();
@@ -239,13 +251,13 @@ public class Sql2oSongDao implements SongDao {
         HashSet<String> alreadyAdded = new HashSet<String>();
         Map<String, Song> songs = new HashMap<String, Song>();
         for (Map row : queryResults) {
-            System.out.println(row);
+            //System.out.println(row);
             // Extract data from this row
             String songId = (String) row.get("songid");
             String songName = (String) row.get("songname");
             String artistName = (String) row.get("artistname");
             String albumName = (String) row.get("albumname");
-            Integer releaseYear = (Integer) row.get("releaseYear");
+            Integer releaseYear = (Integer) row.get("releaseyear");
             String genre = (String) row.get("genre");
             if (!alreadyAdded.contains(songId)){
                 alreadyAdded.add(songId);
@@ -258,8 +270,5 @@ public class Sql2oSongDao implements SongDao {
         System.out.println("Song Extraction successful");
         return new ArrayList<Song>(songs.values());
     }
-
-
-
 
 }

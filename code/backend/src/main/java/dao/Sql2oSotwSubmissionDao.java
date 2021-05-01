@@ -80,7 +80,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
 
         try (Connection conn = sql2o.open()) {
             List<SongOfTheWeekSubmission> submissions = this.extractSubmissionsFromDatabase(sql, conn);
-            System.out.println(submissions);
+            //System.out.println(submissions);
             return submissions;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read submissions from database", ex);
@@ -92,6 +92,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         String sql = "UPDATE sotwsubmissions SET avsubmission=:avsubmission WHERE submissionid=:submissionid;";
 
         try (Connection conn = sql2o.open()) {
+            if(avsubmission == null) throw new Sql2oException("No av link provided");
             conn.createQuery(sql).addParameter("submissionid", submissionid).addParameter("avsubmission", avsubmission).executeUpdate();
             return this.read(submissionid);
         } catch (Sql2oException ex) {
@@ -105,6 +106,7 @@ public class Sql2oSotwSubmissionDao implements SotwSubmissionDao {
         String deleteInstrumentSQL = "DELETE FROM sotwsubmissionsinstruments WHERE submissionid=:submissionid AND instrument=:instrument";
         String insertInstrumentSQL = "INSERT INTO sotwsubmissionsinstruments (submissionid, instrument) VALUES (:submissionid, :instrument)";
         try (Connection conn = sql2o.open()) {
+            if(newInstruments == null) throw new Sql2oException("No new instruments provided");
             // Get current instruments stored in DB for this musician
             List<Map<String, Object>> rows = conn.createQuery(getCurrentInstrumentsSQL).addParameter("submissionid", submissionid).executeAndFetchTable().asList();
             HashSet<String> currentInstruments = new HashSet<String>();

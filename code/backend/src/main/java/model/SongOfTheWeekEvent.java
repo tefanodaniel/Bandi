@@ -1,6 +1,7 @@
 package model;
 //import model.SongOfTheWeekSubmission;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 public class SongOfTheWeekEvent {
@@ -69,6 +70,24 @@ public class SongOfTheWeekEvent {
             this.submissions = new HashSet<String>();
         }
         this.submissions.add(newSubmission);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(eventId,adminId,startDay,endDay,songId,genre,submissions);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        SongOfTheWeekEvent e = (SongOfTheWeekEvent) o;
+        if((e.submissions != null) && (submissions != null)) {
+            if(!submissions.equals(e.submissions))
+                return false;
+        }
+        return eventId.equals(e.eventId) && adminId.equals(e.adminId) && startDay.equals(e.startDay) &&
+                endDay.equals(e.endDay) && songId.equals(e.songId) && genre.equals(e.genre);
     }
 
     @Override
