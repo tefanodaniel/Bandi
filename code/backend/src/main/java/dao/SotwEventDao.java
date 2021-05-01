@@ -44,7 +44,7 @@ public interface SotwEventDao {
 
     /** Read all Song of the Week Events.
      *
-     * @return List of all SongOfTheWeekEvent objects from databse
+     * @return List of all SongOfTheWeekEvent objects from database
      * @throws DaoException
      */
     List<SongOfTheWeekEvent> readAll() throws DaoException;

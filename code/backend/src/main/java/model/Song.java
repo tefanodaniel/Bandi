@@ -2,6 +2,7 @@ package model;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Objects;
 
 public class Song {
     private String songId;
@@ -90,9 +91,23 @@ public class Song {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(songId,songName,artistName,albumName,releaseYear,genres);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(o == null || getClass() != o.getClass()) return false;
+        Song s = (Song) o;
+        return songId.equals(s.songId) && songName.equals(s.songName) && artistName.equals(s.artistName) &&
+                albumName.equals(s.albumName) && releaseYear.equals(s.releaseYear) && genres.equals(s.genres);
+    }
+
+    @Override
     public String toString() {
         return "Song {"+
-                ", songId = '" + this.songId + '\''+
+                "songId = '" + this.songId + '\''+
                 ", songName = '" + this.songName + '\''+
                 ", artistName = '" + artistName + '\'' +
                 ", albumName = '" + this.albumName + '\''+

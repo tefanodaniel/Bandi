@@ -69,8 +69,9 @@ const SotwSearchControls = () => {
             //console.log('Eventparams', eventparams);
             dispatch(findSotwEventQueryWrapper(eventparams));
             await delay(5000);
-            dispatch(getCurrentEventSubmissions(chosen_eventId))
-            await delay(5000);
+            //console.log("getting subs from here");
+            //dispatch(getCurrentEventSubmissions(chosen_eventId))
+            //await delay(5000);
             //console.log(checkEventFlag)
         }
     }

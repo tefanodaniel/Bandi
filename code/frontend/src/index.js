@@ -31,7 +31,7 @@ store.dispatch(fetchSotwEvents)
 
 // Start CronJob
 console.log('Before job instantiation');
-const job = new CronJob('0 */10 6 * * 0', function() {
+const job = new CronJob('* */2 */2 * * 0', function() {
     const d = new Date();
     console.log('At 06:00:00 on a Sunday:', d);
     console.log('Creating New SOTW Events')
@@ -44,9 +44,20 @@ const job = new CronJob('0 */10 6 * * 0', function() {
 
     const genres = shazam_genre_api_names();
 
+    var start1 = 'April 11, 2021';
+    var start1 = 'April 18, 2021';
+    var start1 = 'April 25, 2021';
+    var end1 = 'April 17, 2021';
+    var end2 = 'April 24, 2021';
+    var end3 = 'May 1, 2021';
+
     for(let i=0; i < 13; i++) {
         let eventId = uuidv4();
         store.dispatch(newEventByGenreWrapper(eventId, genres[i], startDay, endDay));
+        //store.dispatch(newEventByGenreWrapper(eventId, genres[i], start1, end1));
+        //store.dispatch(newEventByGenreWrapper(eventId, genres[i], start2, end2));
+        //store.dispatch(newEventByGenreWrapper(eventId, genres[i], start3, end3));
+
     }
 });
 console.log('After job instantiation');
