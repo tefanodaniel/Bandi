@@ -248,6 +248,20 @@ public class Sql2oSotwEventDaoTest {
         });
     }
 
+    /**
+     * Tests for dao.Sql2oSotwEventDao.readAllSubmissionsGivenEvent() method
+     */
+    @Test
+    @Order(15)
+    @DisplayName("reading all submissions for a given Sotw Event")
+    void readSubmissionsGivenEventWorks() {
+        for (SongOfTheWeekEvent e : sample_sotw_events) {
+            Set<String> sample_submissions = e.getSubmissions();
+            Set<String> read_submissions = sotwEventDao.readAllSubmissionsGivenEvent(e.getEventId());
+            assertEquals(sample_submissions.size(), read_submissions.size());
+            assertTrue(sample_submissions.equals(read_submissions));
+        }
+    }
 
     /**
      * The doNothing Test to invoke before all tests
