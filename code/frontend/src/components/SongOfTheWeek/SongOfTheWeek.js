@@ -20,11 +20,11 @@ class SongOfTheWeek extends Component {
 
     render() {
         return (
-                <div style={bandi_styles.discover_background}>
+                <div class="sotw-outer">
                     <Header/>
                     <SubHeader text={"Participate in our weekly Song Of The Week event!"}/>
                     <div class="sotw-view">
-                        <div class="bandi-box sotw-controller-container">
+                        <div class="sotw-controller-container">
                             <SotwSearchControls />
                         </div>
                         <div class="bandi-box-right-of-calendar">

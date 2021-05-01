@@ -109,7 +109,10 @@ const SotwSearchControls = () => {
                             }
                             .CalendarWeekPicker .DayPicker-Day {
                                 outline: none;
-                                border: 1px solid transparent;
+                                background-color: #ffffff;
+                                padding: 2px;
+                                margin: 5px;
+                                border: 1px solid black;
                             }
                             .CalendarWeekPicker .DayPicker-Day--hoverRange {
                                 background-color: #EFEFEF !important;
@@ -146,8 +149,7 @@ const SotwSearchControls = () => {
                     </div>
                 </div>
                 <div class="genre-form-container">
-                        <b>Genre:</b>
-                    <Form className="genre-form" style={{textAlign:"center"}}>
+                    <Form className="bandi-box genre-form" style={{textAlign:"center"}}>
                         <Form.Group controlId="genre-form.SelectGenre">
                             <Form.Control as="select" onChange={addgenrequery} custom>
                                 {createGenreSelectItems()}

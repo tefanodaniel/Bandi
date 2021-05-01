@@ -1,9 +1,20 @@
+.sotw-outer {
+    height: 350vh;
+    background: 
+        linear-gradient(
+            rgba(111, 255, 188, 0.856),
+            rgba(111, 255, 188, 0.856)
+        ),
+        url(../images/discover_bg.jpg);
+}
+
 .sotw-view {
     display: grid;
     grid-template-columns: 40% 60%;
     grid-template-rows: 595px 32% 40%;
 
 }
+
 
 .bandi-box.sotw-controller-container {
     grid-column-start: 1;
@@ -13,7 +24,8 @@
     margin: 30px;
     padding-left: 6%;
     padding-right: 6%;
-    height: 550px;
+    height: 500px;
+    background-color: rgb(167, 241, 148);
 }
 
 .bandi-box.sotw-event-description-container {
@@ -42,6 +54,53 @@
     border-top-width: 2px;
     border-bottom-width: 4px;
     border-left-width: 3px;
+    background-color:  rgb(102, 238, 192);
+    padding-bottom: 15px;
+}
+
+.DayPicker.sotw-daypicker {
+    display: block;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months abbr {
+    color:black;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months .DayPicker-WeekNumber {
+    color: transparent;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months .DayPicker-Caption {
+    font-family: "Consolas";
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    width: 55%;
+    background-color: white;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months .DayPicker-Day {
+    border-radius: 0%;
+    border-width: 1px;
+}
+
+.DayPicker-Day.DayPicker-Day--selected {
+    background-color: black;
+}
+
+.bandi-box.genre-form {
+    display: block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
 }
 
 .bandi-box.sotw-user-submission-container {
@@ -69,9 +128,11 @@
     width: 50%;
     margin-left: auto;
     margin-right: auto;
-    
 }
 
 .bandi-button#see-events {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
     margin-bottom: 10px;
 }
