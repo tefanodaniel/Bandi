@@ -34,7 +34,7 @@ const MusicianSearchControls = () => {
         }
         else { // remove query param if box is unchecked
             let index = queryparams.genre.indexOf(input);
-            if(index != -1) {queryparams.genre.splice(index, 1)}
+            if(index !== -1) {queryparams.genre.splice(index, 1)}
         }
     }
 
@@ -51,7 +51,7 @@ const MusicianSearchControls = () => {
         }
         else { // remove query param if box is unchecked
             let index = queryparams.instrument.indexOf(input);
-            if(index != -1) {queryparams.instrument.splice(index, 1)}
+            if(index !== -1) {queryparams.instrument.splice(index, 1)}
         }
         console.log("params are: ", queryparams);
     }

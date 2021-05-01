@@ -220,7 +220,6 @@ public class Sql2oMusicianDao implements MusicianDao {
             // Ensure that the user performing the advanced search provided their user ID
             String[] sourceIDArray = query.get("id");
             String sourceID;
-            System.out.println("making get with query");
             if (sourceIDArray != null) {
                 sourceID = sourceIDArray[0];
             }
