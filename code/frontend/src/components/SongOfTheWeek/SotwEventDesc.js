@@ -48,7 +48,7 @@ const SotwEventDesc = () => {
 
     return (
         <div>
-        <Card>
+        <Card className="sotw-event-card">
             <Card.Body>
                 <Card.Text><b>Song Of The Week: {song.songName}</b></Card.Text>
                 <Card.Text >Artist : {song.artistName}</Card.Text>

@@ -19,7 +19,7 @@
 .sotw-intro {
     display: block;
     margin: 45px auto 0px auto;
-    width: 35%;
+    width: 30%;
 }
 #sotw-intro-text {
     border-style: none;
@@ -35,18 +35,8 @@
     padding-right: 6%;
     height: 500px;
     background-color: rgb(167, 241, 148);
+    background-color:rgb(102, 238, 192);
 }
-
-.bandi-box.sotw-event-description-container {
-    margin: 30px;
-    height: 300px;
-    background-color: aquamarine;
-}
-
-.bandi-box.sotw-event-description-container .sotw-loading-event{
-    background-color: aquamarine;
-}
-
 
 .bandi-box.right-of-calendar {
     grid-column-start: 2;
@@ -69,8 +59,9 @@
     border-top-width: 2px;
     border-bottom-width: 4px;
     border-left-width: 3px;
-    background-color: aquamarine;
+    background-color:rgb(102, 238, 192);
 
+    
     padding-bottom: 15px;
 }
 
@@ -111,6 +102,24 @@
     background-color: black;
 }
 
+.sotw-calendar-controller {
+    display: block;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sotw-calendar-controller h4 {
+    display: block;
+    text-align: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: aquamarine;
+    background-color:  rgb(102, 238, 192);
+    
+}
+
 .bandi-box.genre-form {
     display: block;
     width: 50%;
@@ -119,10 +128,33 @@
     margin-bottom: 15px;
 }
 
+.bandi-button#see-events {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:  rgb(102, 238, 192);
+    margin-bottom: 10px;
+}
+
+.bandi-box.sotw-event-description-container {
+    margin: 30px;
+    height: 300px;
+    background-color: aquamarine;
+    background-color:rgb(102, 238, 192);
+}
+
+.bandi-box.sotw-event-description-container .sotw-loading-event{
+    background-color:rgb(102, 238, 192);
+}
+
+.sotw-event-card .card-body {
+    background-color:rgb(102, 238, 192);
+}
+
 .bandi-box.sotw-user-submission-container {
     margin: 30px 20% 30px 20%;
     height: 190px;
-    background-color: aquamarine;
+    background-color:rgb(102, 238, 192);
     position: relative;
 }
 
@@ -148,32 +180,6 @@
     grid-row-start: 2;
     grid-row-end: 2;
     margin: 30px;
-    background-color: aquamarine;
+    background-color:rgb(102, 238, 192);
     position: relative;
-}
-
-.sotw-calendar-controller {
-    display: block;
-    width: 85%;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.sotw-calendar-controller h4 {
-    display: block;
-    text-align: center;
-    width: 50%;
-    margin-left: auto;
-    margin-right: auto;
-    background-color: aquamarine;
-    background-color:  rgb(102, 238, 192);
-    
-}
-
-.bandi-button#see-events {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    background-color:  rgb(102, 238, 192);
-    margin-bottom: 10px;
 }

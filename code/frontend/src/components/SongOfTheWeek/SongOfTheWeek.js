@@ -25,8 +25,8 @@ class SongOfTheWeek extends Component {
                     <div class="bandi-box sotw-intro">
                         <p id="sotw-intro-text" class="sotw-intro-text">
                             Show off your skills and check out what other people on Bandi are all about! Bandi
-                            song of the week is a place for users to share clips of themselves playing and
-                            see what kind of stuff other musicians on Bandi are doing!
+                            song of the week is a place for users to share clips of themselves playing popular songs
+                            so you can get a better idea of who's doing what on Bandi...
                         </p>
                     </div>
                     <div class="sotw-view">
