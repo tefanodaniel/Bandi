@@ -1,0 +1,44 @@
+h4, h2 {
+    font-family: "Consolas";
+    padding-left: 0px;
+    margin-top: 25px;
+    margin-bottom: 0;
+    width: 35%;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: rgba(255, 255, 255, 0.815);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+
+    text-align: center;
+}
+
+h2 {
+    background-color: rgb(149, 226, 168);
+}
+
+h4 {
+    padding-left: 5px;
+    margin-bottom: 15px;
+    width: 50%;
+    border-radius: 10px;
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+li {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-family: 'Consolas';
+}
+
+div.musicianInfo {
+    margin: auto;
+    text-align: center;
+}
