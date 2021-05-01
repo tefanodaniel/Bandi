@@ -14,7 +14,11 @@ const MusicianSearchControls = () => {
     let user = useSelector(getLoggedInUser, shallowEqual);
     let placeholder_query = useSelector(selectPlaceholderQuery, shallowEqual);
 
-    let queryparams = {};
+    let queryparams = {
+        genre: [],
+        instrument: []
+    };
+
     let instruments = {};
     let genres = {};
 
@@ -24,8 +28,14 @@ const MusicianSearchControls = () => {
     }
 
     const addgenrequery = (e) => {
-        let input = e.target.value;
-        queryparams.genre = input
+        let input = e.target.name;
+        if (e.target.checked) {
+            queryparams.genre.push(input);
+        }
+        else { // remove query param if box is unchecked
+            let index = queryparams.genre.indexOf(input);
+            if(index != -1) {queryparams.genre.splice(index, 1)}
+        }
     }
 
     const addexperiencequery = (e) => {
@@ -34,8 +44,16 @@ const MusicianSearchControls = () => {
     }
 
     const addinstrumentquery = (e) => {
-        let input = e.target.value;
-        queryparams.instrument = input
+        // e.target.checked <-- will tell us if box is checked or not (may want to save to state)
+        let input = e.target.name;
+        if (e.target.checked) {
+            queryparams.instrument.push(input);
+        }
+        else { // remove query param if box is unchecked
+            let index = queryparams.instrument.indexOf(input);
+            if(index != -1) {queryparams.instrument.splice(index, 1)}
+        }
+        console.log("params are: ", queryparams);
     }
 
     const addlocationquery = (e) => {
@@ -50,12 +68,17 @@ const MusicianSearchControls = () => {
 
     const SubmitQuery = () => {
         if(Object.keys(queryparams)===0) {
-            console.log('(queryparams)===0')
+            //console.log('(queryparams)===0')
             dispatch(clearQuery)
         }
         else {
-            console.log('submitting new')
+            //console.log('submitting new')
             queryparams.id = Cookies.get('id');
+            for(var query in queryparams) {
+                if (queryparams[query] === '') {
+                    delete queryparams[query];
+                }
+            }
             dispatch(newQuery(queryparams))
         }
     }
@@ -137,7 +160,7 @@ const MusicianSearchControls = () => {
                     <h5> Experience</h5>
                 </Col>
                 <select className="col-sm-7" value={queryparams.experience} style={{width: "200%"}} onChange={e => {addexperiencequery(e);}}>
-                    <option value="Select skill level">Select Skill level</option>
+                    <option value="">Select Skill level</option>
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
                     <option value="Expert">Expert</option>
@@ -147,8 +170,8 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                     <h5> Location</h5>
                 </Col>
-                <select className="col-sm-7" value={queryparams.experience} style={{width: "120%"}} onChange={e => {addlocationquery(e);}}>
-                    <option value="Select location">Select Location</option>
+                <select className="col-sm-7" value={queryparams.location} style={{width: "120%"}} onChange={e => {addlocationquery(e);}}>
+                    <option value="">Select Location</option>
                     <option value="Baltimore, MD">Baltimore, MD</option>
                     <option value="Washington, DC">Washington, DC</option>
                     <option value="ew York City, NY">New York City, NY</option>
