@@ -26,7 +26,11 @@ const SotwUserSubmission = () => {
 
     if(song === -1)  {
         return (
-            <div>
+            <div class="sotw-user-submission-placeholder">
+                <p id="sotw-user-submission-placeholder-text">
+                    Here's where you'll see any submissions you've made for the currently
+                    selected Song of the Week!
+                </p>
             </div>
         )
     }

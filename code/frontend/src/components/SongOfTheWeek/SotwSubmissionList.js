@@ -34,9 +34,12 @@ const SotwSubmissionList = () => {
     if(submissions === -1)
     {
         return (
-            <Container style={{marginTop:"250px", marginLeft:"600px"}} className="justify-content-md-center">
-                <h4> Stay Tuned ...</h4>
-            </Container>
+            <div class="sotw-submission-list-placeholder">
+            <p id="sotw-submission-list-placeholder-text">
+                Here's where you'll see other Bandi members' submissions for the currently
+                selected Song of the Week!
+            </p>
+        </div>
         )
     }
     else {
