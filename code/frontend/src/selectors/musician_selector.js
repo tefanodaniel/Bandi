@@ -5,12 +5,12 @@ export const selectPlaceholderQuery = (state) => {
     let query = {};
 
     if(!state.musician_reducer.query){
-        query.name = 'Eric G';
-        query.instrument = 'Guitar';
-        query.genre = 'Rock';
-        query.distance = '50';
-        query.experience = 'Expert';
-        query.location = 'MD';
+        query.name = 'Search by Name';
+        query.instrument = 'Search by Instrument';
+        query.genre = 'Search by Genre';
+        query.distance = '30';
+        query.experience = 'Select Skill Level';
+        query.location = 'Select Location';
         return query;
     }
     else{

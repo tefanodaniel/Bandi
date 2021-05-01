@@ -1,8 +1,6 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col, Spinner} from "react-bootstrap";
-import Form from 'react-bootstrap/Form';
-import FormGroup from 'react-bootstrap/FormGroup';
 import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
 import {selectPlaceholderQuery} from "../../selectors/musician_selector";
