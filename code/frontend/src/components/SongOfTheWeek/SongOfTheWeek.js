@@ -22,7 +22,13 @@ class SongOfTheWeek extends Component {
         return (
                 <div class="sotw-outer">
                     <Header/>
-                    <SubHeader text={"Participate in our weekly Song Of The Week event!"}/>
+                    <div class="bandi-box sotw-intro">
+                        <p id="sotw-intro-text" class="sotw-intro-text">
+                            Show off your skills and check out what other people on Bandi are all about! Bandi
+                            song of the week is a place for users to share clips of themselves playing and
+                            see what kind of stuff other musicians on Bandi are doing!
+                        </p>
+                    </div>
                     <div class="sotw-view">
                         <div class="sotw-controller-container">
                             <SotwSearchControls />

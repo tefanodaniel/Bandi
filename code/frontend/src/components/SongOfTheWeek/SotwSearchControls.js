@@ -87,7 +87,7 @@ const SotwSearchControls = () => {
     return (
             <div class="sotw-controller">
                 <div class="sotw-calendar-controller">
-                    <h4>Pick a Week:</h4>
+                    <h4>Event search</h4>
                     <div class="CalendarWeekPicker">
                         <DayPicker className="sotw-daypicker"
                             selectedDays={selectedDays}

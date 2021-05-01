@@ -10,9 +10,19 @@
 
 .sotw-view {
     display: grid;
-    grid-template-columns: 40% 60%;
+    grid-template-columns: 35% 60%;
     grid-template-rows: 595px 32% 40%;
+    padding-top: 20px;
 
+}
+
+.sotw-intro {
+    display: block;
+    margin: 45px auto 0px auto;
+    width: 35%;
+}
+#sotw-intro-text {
+    border-style: none;
 }
 
 
@@ -31,7 +41,13 @@
 .bandi-box.sotw-event-description-container {
     margin: 30px;
     height: 300px;
+    background-color: aquamarine;
 }
+
+.bandi-box.sotw-event-description-container .sotw-loading-event{
+    background-color: aquamarine;
+}
+
 
 .bandi-box.right-of-calendar {
     grid-column-start: 2;
@@ -54,7 +70,8 @@
     border-top-width: 2px;
     border-bottom-width: 4px;
     border-left-width: 3px;
-    background-color:  rgb(102, 238, 192);
+    background-color: aquamarine;
+
     padding-bottom: 15px;
 }
 
@@ -125,14 +142,19 @@
 
 .sotw-calendar-controller h4 {
     display: block;
+    text-align: center;
     width: 50%;
     margin-left: auto;
     margin-right: auto;
+    background-color: aquamarine;
+    background-color:  rgb(102, 238, 192);
+    
 }
 
 .bandi-button#see-events {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    background-color:  rgb(102, 238, 192);
     margin-bottom: 10px;
 }

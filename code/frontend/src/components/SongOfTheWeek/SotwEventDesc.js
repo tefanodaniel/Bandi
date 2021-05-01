@@ -31,9 +31,9 @@ const SotwEventDesc = () => {
     if((days === -1) || (song === -1)) {
         return (
             <div>
-                <Card>
+                <Card className="sotw-loading-event">
                     <Card.Body className="gradient1" fluid="true">
-                    <Card.Text>Loading Event Info ...</Card.Text>
+                    <Card.Text>Select a week and genre to browse events!</Card.Text>
                     </Card.Body>
                 </Card>
             </div>)
