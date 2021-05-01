@@ -70,7 +70,7 @@ public class Sql2oSotwEventDaoTest {
     @Test
     @Order(2)
     @DisplayName("create Sotw Event throws exception for incomplete data")
-    void createSongIncompleteData() {
+    void createSotwEventIncompleteData() {
         System.out.println("Test 2");
         assertThrows(DaoException.class, () -> {
             String startday = "April 4, 2021";
@@ -86,7 +86,7 @@ public class Sql2oSotwEventDaoTest {
     @Test
     @Order(3)
     @DisplayName("create Sotw Event throws exception for duplicate event")
-    void createSongDuplicateData() {
+    void createSotwEventDuplicateData() {
         System.out.println("Test 3");
         assertThrows(DaoException.class, () -> {
             Set<String> submissions1 = new HashSet<String>(Arrays.asList("00001fakesubmissionid", "00002fakesubmissionid", "00003fakesubmissionid", "00004fakesubmissionid"));
@@ -138,6 +138,48 @@ public class Sql2oSotwEventDaoTest {
         read_Set.addAll(read_events);
         assertEquals(sample_Set.size(), read_Set.size());
         assertTrue(sample_Set.containsAll(read_Set));
+    }
+
+    /**
+     * Tests for dao.Sql2oSongDao.findEvent() method
+     */
+    @Test
+    @Order(7)
+    @DisplayName("find a Sotw Event given genre and week")
+    void findEventGivenGenreAndWeek() {
+        System.out.println("Test 7");
+        for (SongOfTheWeekEvent e1 : sample_sotw_events) {
+            SongOfTheWeekEvent e2 = sotwEventDao.findEvent(e1.getStartDay(), e1.getEndDay(), e1.getGenre());
+            assertEquals(e1, e2);
+        }
+    }
+
+
+    @Test
+    @Order(8)
+    @DisplayName("find a Sotw Event returns null given invalid/missing parameters")
+    void findSotwEventGivenInvalidParams() {
+        System.out.println("Test 7");
+        String startDay = "April 4, 2021";
+        String endDay = "April 10, 2021";
+        String genre = "pop";
+
+        //check for missing parameters
+        SongOfTheWeekEvent e1 = sotwEventDao.findEvent(null, endDay, genre);
+        assertNull(e1);
+        SongOfTheWeekEvent e2 = sotwEventDao.findEvent(startDay, null, genre);
+        assertNull(e2);
+        SongOfTheWeekEvent e3 = sotwEventDao.findEvent(startDay, endDay, null);
+        assertNull(e3);
+
+        // check for invalid parameters
+        SongOfTheWeekEvent e4 = sotwEventDao.findEvent("April 0, 2021", endDay, genre);
+        assertNull(e4);
+        SongOfTheWeekEvent e5 = sotwEventDao.findEvent(startDay, "September 6, 2021", genre);
+        assertNull(e5);
+        SongOfTheWeekEvent e6 = sotwEventDao.findEvent(startDay, endDay, "electric-boogalo");
+        assertNull(e6);
+
     }
 
 
