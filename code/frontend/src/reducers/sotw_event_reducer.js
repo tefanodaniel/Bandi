@@ -29,7 +29,8 @@ export default function sotwEventReducer (state = {}, action) {
         case LOAD_SOTW_EVENTS_QUERY:
             return {
                 ...state,
-                chosen_event: action.payload
+                chosen_event: action.payload,
+                chosen_event_submissions: []
             }
         case LOAD_SOTW_EVENTS_CURRENT_SONG:
             return {

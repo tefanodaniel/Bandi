@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {useSelector, useDispatch, shallowEqual} from "react-redux";
 import {Container, Row, Col, Card} from "react-bootstrap";
 import {bandi_styles} from "../../styles/bandi_styles";
 import {chunk} from "../../utils/miscellaneous";
 import {selectChosenSotwEventId, selectSotwEventSubmissions, selectSotwEventSubmissionIds} from "../../selectors/sotw_selector";
 import {getSubmissionsWrapper} from "../../actions/sotw_event_actions";
+
+import { connect } from 'react-redux';
 
 const SubmissionItem = ( entry ) => {
     return (
@@ -18,17 +20,21 @@ const SubmissionItem = ( entry ) => {
     )
 }
 
-
 const SotwSubmissionList = () => {
     const dispatch = useDispatch();
     let submission_ids = useSelector(selectSotwEventSubmissionIds);
     let event_id = useSelector(selectChosenSotwEventId);
 
-    if(event_id !== -1) {
-        if(submission_ids !== -1) {
-            dispatch(getSubmissionsWrapper(submission_ids, event_id));
-        }
-    }
+    const [current_event_id, set_current_event_id] = useState(-1);
+
+    useEffect(() => {
+      if (event_id !== -1 && submission_ids !== -1 && event_id !== current_event_id) {
+        dispatch(getSubmissionsWrapper(submission_ids, event_id));
+        set_current_event_id(event_id);
+      }
+    });
+
+
 
     let submissions = useSelector(selectSotwEventSubmissions)
     if(submissions === -1)
@@ -62,4 +68,4 @@ const SotwSubmissionList = () => {
     }
 }
 
-export default SotwSubmissionList
+export default SotwSubmissionList;

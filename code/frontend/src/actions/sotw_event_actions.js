@@ -95,7 +95,7 @@ export function getCurrentEventSubmissions(eventId) {
         if(eventId === -1){
             return;
         }
-        console.log('fetching submissions for current event');
+        console.log('fetching submissions for current event: ', eventId);
         const response = await SotwEventsApi.readAllSubmissions(eventId);
         dispatch({
             type : LOAD_SOTW_EVENTS_CURRENT_SUBMISSIONS,
@@ -160,5 +160,3 @@ export function getSubmissionsWrapper(submissions_ids, eventId) {
         dispatch(getCurrentEventSubmissions(eventId))
     }
 }
-
-

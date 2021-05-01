@@ -51,7 +51,7 @@ class Discover extends React.Component {
 	  let user = this.props.store.user_reducer;
 	  if(Object.keys(user).length === 0) {
 		  console.log("Not getting yet in componentDidMount")
-		  this.props.getUser(id1)
+		  this.props.getUser(id1).then(() => console.log('Got user info'));
 	  }
 	  // Load friends and bands for usage throughout the rest of app
 	  this.props.fetchFriends(id1)
