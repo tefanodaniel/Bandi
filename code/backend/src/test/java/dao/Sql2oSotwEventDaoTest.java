@@ -2,7 +2,6 @@ package dao;
 
 import exceptions.DaoException;
 import model.SongOfTheWeekEvent;
-import model.SongOfTheWeekSubmission;
 import org.junit.jupiter.api.*;
 import org.sql2o.Sql2o;
 import util.DataStore;
@@ -20,8 +19,6 @@ public class Sql2oSotwEventDaoTest {
     private Sql2oSotwEventDao sotwEventDao;
     private Sql2oSotwSubmissionDao sotwSubmissionDao;
     private static List<SongOfTheWeekEvent> sample_sotw_events;
-    private static List<SongOfTheWeekSubmission> sample_sotw_event_submissions;
-
 
     @BeforeAll
     static void connectToDatabase() throws URISyntaxException {
