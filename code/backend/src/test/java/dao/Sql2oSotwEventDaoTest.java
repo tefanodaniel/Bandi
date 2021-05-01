@@ -182,6 +182,72 @@ public class Sql2oSotwEventDaoTest {
 
     }
 
+    /**
+     * Tests for dao.Sql2oSotwEventDao.updateStartDay() method
+     */
+    @Test
+    @Order(9)
+    @DisplayName("updating a Sotw Event start day works")
+    void updateSotwEventStartDayWorks() {
+        String new_day = "Test Day!";
+        SongOfTheWeekEvent e = sotwEventDao.updateStartDay(sample_sotw_events.get(0).getEventId(), new_day);
+        assertEquals(new_day, e.getStartDay());
+        assertEquals(sample_sotw_events.get(0).getEventId(), e.getEventId());
+    }
+
+    @Test
+    @Order(10)
+    @DisplayName("Update Sotw Event Start Day Name throws exception for an invalid/missing day")
+    void updateSotwEventStartDayInvalid() {
+        assertThrows(DaoException.class, () -> {
+            sotwEventDao.updateStartDay(sample_sotw_events.get(0).getEventId(), null);
+        });
+    }
+
+    /**
+     * Tests for dao.Sql2oSotwEventDao.updateEndDay() method
+     */
+    @Test
+    @Order(11)
+    @DisplayName("updating a Sotw Event end day works")
+    void updateSotwEventEndDayWorks() {
+        String new_day = "Test Day!";
+        SongOfTheWeekEvent e = sotwEventDao.updateEndDay(sample_sotw_events.get(0).getEventId(), new_day);
+        assertEquals(new_day, e.getEndDay());
+        assertEquals(sample_sotw_events.get(0).getEventId(), e.getEventId());
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("Update Sotw Event End Day Name throws exception for an invalid/missing day")
+    void updateSotwEventEndDayInvalid() {
+        assertThrows(DaoException.class, () -> {
+            sotwEventDao.updateEndDay(sample_sotw_events.get(0).getEventId(), null);
+        });
+    }
+
+    /**
+     * Tests for dao.Sql2oSotwEventDao.updateSong() method
+     */
+    @Test
+    @Order(13)
+    @DisplayName("updating a Sotw Event song works")
+    void updateSotwEventSongWorks() {
+        String songid = "Test id!";
+        SongOfTheWeekEvent e = sotwEventDao.updateSong(sample_sotw_events.get(0).getEventId(), songid);
+        assertEquals(songid, e.getSongId());
+        assertEquals(sample_sotw_events.get(0).getEventId(), e.getEventId());
+    }
+
+    @Test
+    @Order(14)
+    @DisplayName("Update Sotw Event song throws exception for an invalid/missing id")
+    void updateSotwEventSongInvalid() {
+        assertThrows(DaoException.class, () -> {
+            sotwEventDao.updateSong(sample_sotw_events.get(0).getEventId(), null);
+        });
+    }
+
 
     /**
      * The doNothing Test to invoke before all tests

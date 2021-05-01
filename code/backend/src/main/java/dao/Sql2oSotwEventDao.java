@@ -193,9 +193,10 @@ public class Sql2oSotwEventDao implements SotwEventDao {
 
     @Override
     public SongOfTheWeekEvent updateStartDay(String eventid, String newDay) throws DaoException{
-        String sql = "UPDATE sotwevents SET startDay=:startDay WHERE eventid=:eventid;";
+        String sql = "UPDATE sotwevents SET startday=:startday WHERE eventid=:eventid;";
 
         try (Connection conn = sql2o.open()) {
+            if (newDay == null) throw new Sql2oException("No start day provided!");
             conn.createQuery(sql).addParameter("eventid", eventid).addParameter("startday", newDay).executeUpdate();
             return this.read(eventid);
         } catch (Sql2oException ex) {
@@ -205,9 +206,10 @@ public class Sql2oSotwEventDao implements SotwEventDao {
 
     @Override
     public SongOfTheWeekEvent updateEndDay(String eventid, String newDay) throws DaoException {
-        String sql = "UPDATE sotwevents SET endDay=:endDay WHERE eventid=:eventid;";
+        String sql = "UPDATE sotwevents SET endday=:endday WHERE eventid=:eventid;";
 
         try (Connection conn = sql2o.open()) {
+            if (newDay == null) throw new Sql2oException("No end day provided!");
             conn.createQuery(sql).addParameter("eventid", eventid).addParameter("endday", newDay).executeUpdate();
             return this.read(eventid);
         } catch (Sql2oException ex) {
@@ -220,6 +222,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         String sql = "UPDATE sotwevents SET songid=:songid WHERE eventid=:eventid;";
 
         try (Connection conn = sql2o.open()) {
+            if (songid == null) throw new Sql2oException("No song id provided!");
             conn.createQuery(sql).addParameter("eventid", eventid).addParameter("songid", songid).executeUpdate();
             return this.read(eventid);
         } catch (Sql2oException ex) {
