@@ -1,9 +1,9 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import {Container, Row, Col, Spinner} from "react-bootstrap";
-import { newQuery, clearQuery } from "../../actions/musician_actions";
+import { newQuery, clearQuery, setLoadingOn, setLoadingOff } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
-import {selectPlaceholderQuery} from "../../selectors/musician_selector";
+import {selectPlaceholderQuery, checkLoading} from "../../selectors/musician_selector";
 import { getLoggedInUser } from "../../selectors/user_selector";
 import Cookies from "js-cookie";
 
@@ -11,6 +11,7 @@ const MusicianSearchControls = () => {
     const dispatch = useDispatch();
     let user = useSelector(getLoggedInUser, shallowEqual);
     let placeholder_query = useSelector(selectPlaceholderQuery, shallowEqual);
+    let isLoading = useSelector(checkLoading, shallowEqual);
 
     let queryparams = {
         genre: [],
@@ -22,7 +23,7 @@ const MusicianSearchControls = () => {
 
     const addnamequery = (e) => {
         let input = e.target.value;
-        queryparams.name = input
+        queryparams.name = input;
     }
 
     const addgenrequery = (e) => {
@@ -71,13 +72,15 @@ const MusicianSearchControls = () => {
         }
         else {
             //console.log('submitting new')
+            dispatch(setLoadingOn);
+            console.log("is loading: ", isLoading);
             queryparams.id = Cookies.get('id');
             for(var query in queryparams) {
                 if (queryparams[query] === '') {
                     delete queryparams[query];
                 }
             }
-            dispatch(newQuery(queryparams))
+            dispatch(newQuery(queryparams)).then(dispatch(setLoadingOff));
         }
     }
 
@@ -91,7 +94,7 @@ const MusicianSearchControls = () => {
                     <h5> Name</h5>
                 </Col>
                 <Col className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
-                       <input onChange={e => {addnamequery(e);}} style={{width: "120%"}} placeholder={placeholder_query.name} type='text'/>
+                       <input onChange={e => {addnamequery(e);}} style={{width: "120%"}} placeholder="Search by Name" type='text'/>
                 </Col>
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
@@ -189,7 +192,7 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                 </Col>
                 <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery}>Find Musicians</Button>
+                    <Button variant="primary" onClick={SubmitQuery} disabled={isLoading} >Find Musicians</Button>
                 </div>
             </Row>
         </Container>

@@ -2,7 +2,9 @@ import {
     LOAD_MUSICIANS_INITIAL,
     LOAD_MUSICIANS_QUERY,
     CLEAR_MUSICIANS_QUERY,
-    LOAD_MUSICIANS_INITIAL_SEARCH
+    LOAD_MUSICIANS_INITIAL_SEARCH,
+    DISP_LOADING_SYMBOL,
+    STOP_DISP_LOADING_SYMBOL
 } from './types';
 import MusicianApi from "../utils/MusicianApiService";
 
@@ -23,6 +25,7 @@ export function allMusiciansQuery(queryparams) {
         const response = await MusicianApi.getAll(); // the backend display of all musicians except logged in user needs to be implemented.
         dispatch({
             type : LOAD_MUSICIANS_INITIAL_SEARCH,
+            loadCheck: false,
             payload : response.data
         })
     }
@@ -44,4 +47,14 @@ export function newQuery(queryparams) {
 export const clearQuery = {
     type : CLEAR_MUSICIANS_QUERY,
     payload : {res_data: null, query: null}
+}
+
+export const setLoadingOn = {
+    type : DISP_LOADING_SYMBOL,
+    payload : {loadCheck: true}
+}
+
+export const setLoadingOff = {
+    type : STOP_DISP_LOADING_SYMBOL,
+    payload : {loadCheck: false}
 }
