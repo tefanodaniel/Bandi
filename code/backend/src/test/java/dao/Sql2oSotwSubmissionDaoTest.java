@@ -2,6 +2,7 @@ package dao;
 
 import exceptions.DaoException;
 import model.Song;
+import model.SongOfTheWeekEvent;
 import model.SongOfTheWeekSubmission;
 import org.junit.jupiter.api.*;
 import org.sql2o.Sql2o;
@@ -157,6 +158,38 @@ public class Sql2oSotwSubmissionDaoTest {
         assertThrows(DaoException.class, () -> {
             sotwSubmissionDao.updateInstruments(sample_sotw_submissions.get(0).getSubmission_id(), null);
         });
+    }
+
+    /**
+     * Tests for dao.Sql2oSotwSubmissionDao.delete() method
+     */
+    @Test
+    @Order(11)
+    @DisplayName("create and delete a dummy sotw submission")
+    void deleteSotwSubmissionsWorks() {
+        // create a dummy sotw submission
+        Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
+        String avLink = "https://youtu.be/dQw4w9WgXcQ";
+        SongOfTheWeekSubmission s1 = new SongOfTheWeekSubmission("82345fakesubmissionid","00001fakeid", "David Gilmour", avLink, instruments1);
+        SongOfTheWeekSubmission s = sotwSubmissionDao.create(s1.getSubmission_id(), s1.getMusician_id(), s1.getMusician_name(), s1.getAVSubmission(), s1.getInstruments());
+        // ensure that it is in the database
+        SongOfTheWeekSubmission s2 = sotwSubmissionDao.read(s.getSubmission_id());
+        assertEquals(s, s2) ;
+        // delete and retrieve dummy sotw submission
+        SongOfTheWeekSubmission s3 = sotwSubmissionDao.delete(s.getSubmission_id());
+        // check that the returned event was the dummy sotw submission
+        assertEquals(s, s3);
+        // check that the dummy sotw submission was in fact deleted
+        SongOfTheWeekSubmission s4 = sotwSubmissionDao.read(s.getSubmission_id());
+        assertNull(s4);
+    }
+
+    @Test
+    @Order(12)
+    @DisplayName("delete returns null for an invalid submission Id")
+    void deleteReturnsNullInvalidSubmissionId() {
+        SongOfTheWeekSubmission s  = sotwSubmissionDao.delete("92134fakesubmissionid");
+        assertNull(s);
     }
 
 
