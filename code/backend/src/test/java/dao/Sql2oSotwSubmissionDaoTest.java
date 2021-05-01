@@ -103,4 +103,21 @@ public class Sql2oSotwSubmissionDaoTest {
         SongOfTheWeekSubmission s = sotwSubmissionDao.read("88888fakesongid");
         assertNull(s);
     }
+
+    /**
+     * Tests for dao.Sql2oSotwSubmissionDao.readAll() method
+     */
+    @Test
+    @Order(6)
+    @DisplayName("read all the sotw submissions")
+    void readAllSotwSubmissions() {
+        HashSet<SongOfTheWeekSubmission> sample_Set = new HashSet<SongOfTheWeekSubmission>();
+        sample_Set.addAll(sample_sotw_submissions);
+
+        List<SongOfTheWeekSubmission> read_submissions = sotwSubmissionDao.readAll();
+        HashSet<SongOfTheWeekSubmission> read_Set = new HashSet<SongOfTheWeekSubmission>();
+        read_Set.addAll(read_submissions);
+        assertEquals(sample_Set.size(), read_Set.size());
+        assertTrue(sample_Set.containsAll(read_Set));
+    }
 }
