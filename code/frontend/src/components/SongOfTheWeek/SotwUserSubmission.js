@@ -57,9 +57,11 @@ const SotwUserSubmission = () => {
 
         if((eventId !== undefined) && (submission_data.musician_id !== undefined) && (submission_data.instruments !== undefined) && (submission_data.avSubmission !== undefined)) {
             submission_data.submission_id = uuidv4();
+            console.log('new user submission??')
             dispatch(newUserSubmission(eventId, submission_data));
             //console.log('have I got eventid', eventId)
-            dispatch(getCurrentEventSubmissions(eventId))
+            //console.log('in addSubmission')
+            //dispatch(getCurrentEventSubmissions(eventId))  // TODO: I think this gets called alredy in newUserSubmission
             await delay(5000);
         }
 
@@ -110,5 +112,3 @@ const SotwUserSubmission = () => {
     )
 }
 export default SotwUserSubmission
-
-
