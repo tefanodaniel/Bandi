@@ -5,6 +5,7 @@ import { newQuery, clearQuery } from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
 import {selectPlaceholderQuery} from "../../selectors/musician_selector";
 import { getLoggedInUser } from "../../selectors/user_selector";
+import Cookies from "js-cookie";
 
 const MusicianSearchControls = () => {
     const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const MusicianSearchControls = () => {
         }
         else {
             console.log('submitting new')
-            queryparams.id = user.id
+            queryparams.id = Cookies.get('id');
             dispatch(newQuery(queryparams))
         }
     }
