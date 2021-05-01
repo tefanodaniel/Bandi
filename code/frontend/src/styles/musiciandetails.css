@@ -2,7 +2,7 @@ h4, h2 {
     font-family: "Consolas";
     padding-left: 0px;
     margin-top: 25px;
-    margin-bottom: 0;
+    margin-bottom: 10px;
     width: 35%;
     border-style: solid;
     border-radius: 10px;
@@ -17,7 +17,7 @@ h4, h2 {
 }
 
 h2 {
-    background-color: rgb(149, 226, 168);
+    background-color: rgb(163, 142, 195);
 }
 
 h4 {
@@ -37,6 +37,8 @@ li {
     margin: auto;
     text-align: center;
     font-family: 'Consolas';
+    font-size: larger;
+    font-weight: bold;
 }
 
 div.musicianInfo {
@@ -44,4 +46,14 @@ div.musicianInfo {
     width: 50%;
     text-align: center;
     display: block;
+}
+
+div.fullDiv {
+    height: 100vh;
+    background:
+            linear-gradient(
+                    rgba(218, 189, 223, .5),
+                    rgba(218, 189, 223, .5)
+            ),
+            url(../images/discover_bg.jpg);
 }

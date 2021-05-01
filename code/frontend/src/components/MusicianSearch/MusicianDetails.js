@@ -71,7 +71,7 @@ class MusicianDetails extends React.Component {
     render() {
 
             return (
-                <div>
+                <div class ="fullDiv">
                     <Header/>
                     <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
                         <Navbar.Brand className="mx-auto">
