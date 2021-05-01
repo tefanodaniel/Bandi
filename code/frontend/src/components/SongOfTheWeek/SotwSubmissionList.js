@@ -20,85 +20,6 @@ const SubmissionItem = ( entry ) => {
     )
 }
 
-
-// class SotwSubmissionList extends React.Component {
-//   constructor(props) {
-//     super(props)
-//
-//
-//   }
-//
-//   componentDidMount() {
-//     let submission_ids = selectSotwEventSubmissionIds(this.props.store);
-//     let event_id = selectChosenSotwEventId(this.props.store);
-//     let submissions = selectSotwEventSubmissions(this.props.store);
-//
-//     // If an event is selected and there are submissions to show, fetch them
-//     if(event_id !== -1 && submission_ids !== -1) {
-//       console.log('fetching submissions')
-//       this.props.getSubmissionsWrapper(submission_ids, event_id);
-//     }
-//   }
-//
-//   componentDidUpdate(prevProps) {
-//     let event_id = selectChosenSotwEventId(this.props.store);
-//     let prev_event_id = selectChosenSotwEventId(prevProps.store);
-//
-//     let submission_ids = selectSotwEventSubmissionIds(this.props.store);
-//     let prev_submission_ids = selectSotwEventSubmissionIds(prevProps.store);
-//
-//     //let submissions = selectSotwEventSubmissions(this.props.store);
-//
-//     // If an event is selected and there are submissions to show, fetch them
-//     if (prev_event_id !== event_id) {
-//       if (event_id !== -1 && submission_ids !== -1) {
-//         console.log('fetching submissions')
-//         this.props.getSubmissionsWrapper(submission_ids, event_id);
-//       }
-//     }
-//
-//   }
-//
-//   render() {
-//     let submissions = selectSotwEventSubmissions(this.props.store)
-//     // let submission_ids = selectSotwEventSubmissionIds(this.props.store);
-//     // let event_id = selectChosenSotwEventId(this.props.store);
-//     // let submissions = selectSotwEventSubmissions(this.props.store);
-//     //
-//     // // If an event is selected and there are submissions to show, fetch them
-//     // if(event_id !== -1 && submission_ids !== -1) {
-//     //   this.props.getSubmissionsWrapper(submission_ids, event_id);
-//     // }
-//
-//     if (submissions === -1) {
-//       return (
-//         <Container style={{marginTop:"250px", marginLeft:"600px"}} className="justify-content-md-center">
-//           <h4> Stay Tuned ...</h4>
-//         </Container>
-//       )
-//     } else {
-//       const submissions_chunk = chunk(submissions,4);
-//       const rows = submissions_chunk.map((sub_chunk, index) => {
-//         const cols = sub_chunk.map((entry, index) => {
-//           return (
-//             <Col key={index} style={{height: "180px" , columnWidth: "250px"}}>
-//               <SubmissionItem id={entry.submission_id} name={entry.musician_name} instruments={entry.instruments}  avLink={entry.avSubmission}/>
-//             </Col>
-//           );
-//         });
-//         return <Row key={index} style={{width: "1000px",marginTop:"50px", height: "250px"}} >{cols}</Row>
-//       });
-//
-//       return (
-//         <div style={{marginTop:"50px", marginLeft:"100px", height: "1000px"}}>
-//           <Container fluid>{rows}</Container>
-//         </div>
-//       );
-//     }
-//   }
-// }
-
-
 const SotwSubmissionList = () => {
     const dispatch = useDispatch();
     let submission_ids = useSelector(selectSotwEventSubmissionIds);
@@ -108,7 +29,6 @@ const SotwSubmissionList = () => {
 
     useEffect(() => {
       if (event_id !== -1 && submission_ids !== -1 && event_id !== current_event_id) {
-        console.log("in effect, doing api call with state", current_event_id)
         dispatch(getSubmissionsWrapper(submission_ids, event_id));
         set_current_event_id(event_id);
       }
@@ -148,20 +68,4 @@ const SotwSubmissionList = () => {
     }
 }
 
-
-
-// function mapStateToProps(state) {
-//   return {
-//     store: state
-//   };
-// } // end mapStateToProps
-//
-// function mapDispatchToProps(dispatch) {
-//     return {
-// 		    getSubmissionsWrapper: (submission_ids, event_id) => dispatch(getSubmissionsWrapper(submission_ids, event_id)),
-//     }
-// }
-
 export default SotwSubmissionList;
-
-//export default connect(mapStateToProps, mapDispatchToProps)(SotwSubmissionList);
