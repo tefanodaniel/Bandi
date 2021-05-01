@@ -2,8 +2,8 @@
     height: 350vh;
     background: 
         linear-gradient(
-            rgba(111, 255, 188, 0.856),
-            rgba(111, 255, 188, 0.856)
+            rgba(111, 255, 188, 0.600),
+            rgba(111, 255, 188, 0.600)
         ),
         url(../images/discover_bg.jpg);
 }
