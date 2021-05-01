@@ -62,9 +62,12 @@ const MusicianSearchControls = () => {
 
     return (
         <Container fluid>
-            <Row className="justify-content-sm-left" style={{ marginTop:"50px"}}>
+            <Row className="justify-content-sm-left" style={{ marginLeft:"0px"}}>
+                <h4>Musician Filters</h4>
+            </Row>
+            <Row className="justify-content-sm-left" style={{ marginTop:"10px"}}>
                 <Col className="col-sm-5">
-                    <h5> Name:</h5>
+                    <h5> Name</h5>
                 </Col>
                 <Col className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
                        <input onChange={e => {addnamequery(e);}} style={{width: "120%"}} placeholder={placeholder_query.name} type='text'/>
@@ -72,51 +75,69 @@ const MusicianSearchControls = () => {
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
                 <Col className="col-sm-5">
-                    <h5> Instrument:</h5>
+                    <h5> Instrument</h5>
                 </Col>
-                <div className="col-sm-7" style={{minWidth: "175px", textAlign:"left"}}>
-                    <label>Guitar
-                        <input name="Guitar" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.guitar}/>
-                    </label>
-                    <label>Piano
-                        <input name="Piano" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.piano}/>
-                    </label>
-                    <label>Bass
-                        <input name="Bass" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.bass}/>
-                    </label>
-                    <label>Drums
-                        <input name="Drums" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.drums}/>
-                    </label>
-                    <label>Vocals
-                        <input name="Vocals" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.bass}/>
-                    </label>
-                </div>
+                <Col className="col-sm-7" style={{width: "120%", textAlign:"left"}}>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Guitar
+                            <input name="Guitar" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.guitar}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Piano
+                            <input name="Piano" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.piano}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Bass
+                            <input name="Bass" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.bass}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Drums
+                            <input name="Drums" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.drums}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Vocals
+                            <input name="Vocals" onChange={e => {addinstrumentquery(e);}} type="checkbox" checked={instruments.bass}/>
+                        </label>
+                    </div>
+                </Col>
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
-                    <h5> Genre :</h5>
+                    <h5> Genre</h5>
                 </Col>
-                <div className="col-sm-7" style={{minWidth: "175px", textAlign:"left"}}>
-                    <label>Rock
-                        <input name="Rock" onChange={e => {addgenrequery(e);}} type="checkbox" checked={genres.rock}/>
-                    </label>
-                    <label>Blues
-                        <input name="Blues" onChange={e => {addgenrequery(e);}} type="checkbox" checked={instruments.blues}/>
-                    </label>
-                    <label>Jazz
-                        <input name="Jazz" onChange={e => {addgenrequery(e);}} type="checkbox" checked={instruments.jazz}/>
-                    </label>
-                    <label>Classical
-                        <input name="Classical" onChange={e => {addgenrequery(e);}} type="checkbox" checked={instruments.classical}/>
-                    </label>
-                </div>
+                <Col className="col-sm-7" style={{width: "120%", textAlign:"left"}}>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Rock
+                            <input name="Rock" onChange={e => {addgenrequery(e);}} type="checkbox" checked={genres.rock}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{textAlign:"left"}}>
+                        <label>Blues
+                            <input name="Blues" onChange={e => {addgenrequery(e);}} type="checkbox" checked={instruments.blues}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{minWidth: "175px", textAlign:"left"}}>
+                        <label>Jazz
+                            <input name="Jazz" onChange={e => {addgenrequery(e);}} type="checkbox" checked={instruments.jazz}/>
+                        </label>
+                    </div>
+                    <div className="col-sm-7" style={{minWidth: "175px", textAlign:"left"}}>
+                        <label>Classical
+                            <input name="Classical" onChange={e => {addgenrequery(e);}} type="checkbox" checked={instruments.classical}/>
+                        </label>
+                    </div>
+                </Col>
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
-                    <h5> Experience :</h5>
+                    <h5> Experience</h5>
                 </Col>
-                <select className="col-sm-7" value={queryparams.experience} style={{minWidth: "175px"}} onChange={e => {addexperiencequery(e);}}>
-                    <option value="Select skill level">Select skill level</option>
+                <select className="col-sm-7" value={queryparams.experience} style={{width: "200%"}} onChange={e => {addexperiencequery(e);}}>
+                    <option value="Select skill level">Select Skill level</option>
                     <option value="Beginner">Beginner</option>
                     <option value="Intermediate">Intermediate</option>
                     <option value="Expert">Expert</option>
@@ -124,9 +145,9 @@ const MusicianSearchControls = () => {
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
-                    <h5> State :</h5>
+                    <h5> Location</h5>
                 </Col>
-                <select className="col-sm-7" value={queryparams.experience} style={{minWidth: "175px"}} onChange={e => {addlocationquery(e);}}>
+                <select className="col-sm-7" value={queryparams.experience} style={{width: "120%"}} onChange={e => {addlocationquery(e);}}>
                     <option value="Select location">Select Location</option>
                     <option value="Baltimore, MD">Baltimore, MD</option>
                     <option value="Washington, DC">Washington, DC</option>
@@ -137,7 +158,7 @@ const MusicianSearchControls = () => {
             </Row>
             <Row className="justify-content-sm-left" style={{ marginTop:"20px"}} >
                 <Col className="col-sm-5">
-                    <h5> Within Distance (miles) :</h5>
+                    <h5> Within Distance (miles)</h5>
                 </Col>
                 <div className="col-sm-7" style={{minWidth: "175px", textAlign:"center"}}>
                     <input onChange={e => {adddistancequery(e);}} style={{width: "120%"}} placeholder={placeholder_query.distance} type='text'/>
