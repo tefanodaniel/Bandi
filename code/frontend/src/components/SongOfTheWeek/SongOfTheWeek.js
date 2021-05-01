@@ -40,9 +40,9 @@ class SongOfTheWeek extends Component {
                             <div class="bandi-box sotw-user-submission-container">
                                 <SotwUserSubmission />
                             </div>
-                        </div>
                         <div class="bandi-box sotw-submission-list-container">
                             <SotwSubmissionList />
+                        </div>
                         </div>
                     </div>
 

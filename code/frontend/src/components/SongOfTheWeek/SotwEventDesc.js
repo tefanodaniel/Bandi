@@ -32,7 +32,7 @@ const SotwEventDesc = () => {
         return (
             <div>
                 <Card className="sotw-loading-event">
-                    <Card.Body className="gradient1" fluid="true">
+                    <Card.Body>
                     <Card.Text>Select a week and genre to browse events!</Card.Text>
                     </Card.Body>
                 </Card>
