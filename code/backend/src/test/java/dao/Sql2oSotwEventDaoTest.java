@@ -51,7 +51,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(1)
     @DisplayName("create Sotw Event works for valid input")
     void createNewSotwEvent() {
-        System.out.println("Test 1");
         Set<String> submissions = new HashSet<String>(Arrays.asList("00008fakesubmissionid", "00002fakesubmissionid", "00001fakesubmissionid", "00004fakesubmissionid"));
 
         String startday = "April 4, 2021";
@@ -71,7 +70,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(2)
     @DisplayName("create Sotw Event throws exception for incomplete data")
     void createSotwEventIncompleteData() {
-        System.out.println("Test 2");
         assertThrows(DaoException.class, () -> {
             String startday = "April 4, 2021";
             String endday = "April 10, 2021";
@@ -87,7 +85,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(3)
     @DisplayName("create Sotw Event throws exception for duplicate event")
     void createSotwEventDuplicateData() {
-        System.out.println("Test 3");
         assertThrows(DaoException.class, () -> {
             Set<String> submissions1 = new HashSet<String>(Arrays.asList("00001fakesubmissionid", "00002fakesubmissionid", "00003fakesubmissionid", "00004fakesubmissionid"));
             String startday1 = "April 4, 2021";
@@ -106,7 +103,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(4)
     @DisplayName("read a Sotw Event given its id")
     void readSotwEventGivenId() {
-        System.out.println("Test 4");
         for (SongOfTheWeekEvent e1 : sample_sotw_events) {
             SongOfTheWeekEvent e2 = sotwEventDao.read(e1.getEventId());
             assertEquals(e1, e2);
@@ -118,7 +114,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(5)
     @DisplayName("read Sotw Event returns null given invalid Id")
     void readSotwEventGivenInvalidId() {
-        System.out.println("Test 5");
         SongOfTheWeekEvent e = sotwEventDao.read("88888fakeeventid");
         assertNull(e);
     }
@@ -147,7 +142,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(7)
     @DisplayName("find a Sotw Event given genre and week")
     void findEventGivenGenreAndWeek() {
-        System.out.println("Test 7");
         for (SongOfTheWeekEvent e1 : sample_sotw_events) {
             SongOfTheWeekEvent e2 = sotwEventDao.findEvent(e1.getStartDay(), e1.getEndDay(), e1.getGenre());
             assertEquals(e1, e2);
@@ -159,7 +153,6 @@ public class Sql2oSotwEventDaoTest {
     @Order(8)
     @DisplayName("find a Sotw Event returns null given invalid/missing parameters")
     void findSotwEventGivenInvalidParams() {
-        System.out.println("Test 7");
         String startDay = "April 4, 2021";
         String endDay = "April 10, 2021";
         String genre = "pop";
@@ -261,6 +254,38 @@ public class Sql2oSotwEventDaoTest {
             assertEquals(sample_submissions.size(), read_submissions.size());
             assertTrue(sample_submissions.equals(read_submissions));
         }
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("reading all submissions for a invalid/missing event throws exception")
+    void readSubmissionsGivenInvalidEvent() {
+        assertThrows(DaoException.class, () -> {
+            sotwEventDao.readAllSubmissionsGivenEvent(null);
+        });
+        assertEquals(0, sotwEventDao.readAllSubmissionsGivenEvent("44444fakeeventid").size());
+    }
+
+    /**
+     * Tests for dao.Sql2oSotwEventDao.addSubmissionToEvent() method
+     */
+    @Test
+    @Order(17)
+    @DisplayName("adding new submission to event works")
+    void addSubmissionToEventWorks() {
+        String eventid = sample_sotw_events.get(0).getEventId();
+        SongOfTheWeekEvent e = sotwEventDao.addSubmissionToEvent(eventid, "00009fakesubmissionid");
+        Set<String> read_submissions = sotwEventDao.readAllSubmissionsGivenEvent(e.getEventId());
+        assertTrue(read_submissions.contains("00009fakesubmissionid"));
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("adding null Submission to Event throws exception")
+    void addSubmissionToEventInvalid() {
+        assertThrows(DaoException.class, () -> {
+            sotwEventDao.addSubmissionToEvent(sample_sotw_events.get(0).getEventId(), null);
+        });
     }
 
     /**

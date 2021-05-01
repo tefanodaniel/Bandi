@@ -172,7 +172,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
                 + "LEFT JOIN sotweventssubmissions as G ON R.EID=G.eventid;";
         try (Connection conn = sql2o.open()) {
             List<SongOfTheWeekEvent> events = this.extractSOTWEventsFromDatabase(sql, conn);
-            System.out.println(events);
+            //System.out.println(events);
             return events;
         } catch (Sql2oException ex) {
             throw new DaoException("Unable to read events from database", ex);
@@ -234,6 +234,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
     public Set<String> readAllSubmissionsGivenEvent(String eventid) throws DaoException{
         String getCurrentSubmissionsSQL = "SELECT * FROM sotweventssubmissions WHERE eventid=:eventid";
         try (Connection conn = sql2o.open()) {
+            if(eventid == null) throw new Sql2oException("No eventid provided");
             // Get current submissions stored in DB for this event
             List<Map<String, Object>> rows = conn.createQuery(getCurrentSubmissionsSQL).addParameter("eventid", eventid).executeAndFetchTable().asList();
             HashSet<String> currentSubmissions = new HashSet<String>();
@@ -253,16 +254,20 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         String getCurrentSubmissionsSQL = "SELECT * FROM sotweventssubmissions WHERE eventid=:eventid";
         String addSubmissionSQL = "INSERT INTO sotweventssubmissions (eventid, submission) VALUES (:eventid, :submission)";
         try (Connection conn = sql2o.open()) {
+            if(submissionId == null) {
+                throw new Sql2oException("No submission id provided");
+            }
             // Get current submissions stored in DB for this event
             List<Map<String, Object>> rows = conn.createQuery(getCurrentSubmissionsSQL).addParameter("eventid", eventid).executeAndFetchTable().asList();
+
             HashSet<String> currentSubmissions = new HashSet<String>();
             for (Map row : rows) {
                 currentSubmissions.add((String) row.get("submission"));
             }
 
-           // Add new submission to the database, if they aren't already in there
+            // Add new submission to the database, if they aren't already in there
             if (!currentSubmissions.contains(submissionId)) {
-                    conn.createQuery(addSubmissionSQL).addParameter("eventid", eventid).addParameter("submission", submissionId).executeUpdate();
+                conn.createQuery(addSubmissionSQL).addParameter("eventid", eventid).addParameter("submission", submissionId).executeUpdate();
                 }
 
             // Return the updated event
@@ -277,6 +282,7 @@ public class Sql2oSotwEventDao implements SotwEventDao {
         String getCurrentSubmissionsSQL = "SELECT * FROM sotweventssubmissions WHERE eventid=:eventid";
         String removeSubmissionSQL = "DELETE FROM sotweventssubmissions WHERE eventid=:eventid AND submission=:submission";
         try (Connection conn = sql2o.open()) {
+            if(submissionId == null) throw new Sql2oException("No submission id provided");
             // Get current submissions stored in DB for this event
             List<Map<String, Object>> rows = conn.createQuery(getCurrentSubmissionsSQL).addParameter("eventid", eventid).executeAndFetchTable().asList();
             HashSet<String> currentSubmissions = new HashSet<String>();
