@@ -100,6 +100,33 @@ public class Sql2oSotwEventDaoTest {
     }
 
     /**
+     * Tests for dao.Sql2oSotwEventDao.read() method
+     */
+    @Test
+    @Order(4)
+    @DisplayName("read a Sotw Event given its id")
+    void readSotwEventGivenId() {
+        System.out.println("Test 4");
+        for (SongOfTheWeekEvent e1 : sample_sotw_events) {
+            SongOfTheWeekEvent e2 = sotwEventDao.read(e1.getEventId());
+            assertEquals(e1, e2);
+        }
+    }
+
+
+    @Test
+    @Order(5)
+    @DisplayName("read Sotw Event returns null given invalid Id")
+    void readSongGivenInvalidId() {
+        System.out.println("Test 5");
+        SongOfTheWeekEvent e = sotwEventDao.read("88888fakeeventid");
+        assertNull(e);
+    }
+
+
+
+
+    /**
      * The doNothing Test to invoke before all tests
      */
 
