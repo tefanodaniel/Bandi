@@ -10,6 +10,8 @@ import {Container, Navbar} from "react-bootstrap";
 import FriendApiService from '../../utils/FriendApiService';
 import MusicianApi from "../../utils/MusicianApiService";
 
+import '../../styles/musiciandetails.css';
+
 class MusicianDetails extends React.Component {
     constructor(props) {
         super(props)
@@ -69,13 +71,16 @@ class MusicianDetails extends React.Component {
     render() {
 
             return (
-                <div>
+                <div class ="fullDiv">
                     <Header/>
                     <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
                         <Navbar.Brand className="mx-auto">
                             Learn more about fellow Musicians!
                         </Navbar.Brand>
                     </Navbar>
+
+                    <div class="musicianInfo">
+
                     <h2>Name: {this.state.name}</h2>
                     <h4>Location: {this.state.location}</h4>
                     <h4>Experience: {this.state.experience}</h4>
@@ -91,6 +96,8 @@ class MusicianDetails extends React.Component {
 
                     <div>
                         <h4>Top Spotify Tracks: </h4>{this.tracks()}
+                    </div>
+
                     </div>
 
                 </div>
