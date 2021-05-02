@@ -27,7 +27,7 @@ class MusicianAPIService {
     }
 
     findByQuery(queryparams) {
-        console.log('what are the params:,', queryparams)
+        //console.log('params:,', queryparams)
         return customhttp.get("/musicians", { 
             params: queryparams, 
             paramsSerializer: params => {

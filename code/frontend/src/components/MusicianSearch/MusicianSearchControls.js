@@ -25,7 +25,7 @@ const MusicianSearchControls = () => {
         if (e.target.checked) {
             queryparams.genre.push(input);
         }
-        else { // remove query param if box is unchecked
+        else { // remove query param if box is unchecked:
             let index = queryparams.genre.indexOf(input);
             if(index !== -1) {queryparams.genre.splice(index, 1)}
         }
@@ -37,16 +37,14 @@ const MusicianSearchControls = () => {
     }
 
     const addinstrumentquery = (e) => {
-        // e.target.checked <-- will tell us if box is checked or not (may want to save to state)
         let input = e.target.name;
         if (e.target.checked) {
             queryparams.instrument.push(input);
         }
-        else { // remove query param if box is unchecked
+        else { // remove query param if box is unchecked:
             let index = queryparams.instrument.indexOf(input);
             if(index !== -1) {queryparams.instrument.splice(index, 1)}
         }
-        console.log("params are: ", queryparams);
     }
 
     const addlocationquery = (e) => {
@@ -61,11 +59,9 @@ const MusicianSearchControls = () => {
 
     const SubmitQuery = () => {
         if(Object.keys(queryparams)===0) {
-            //console.log('(queryparams)===0')
             dispatch(clearQuery)
         }
         else {
-            //console.log('submitting new')
             queryparams.id = Cookies.get('id');
             for(var query in queryparams) {
                 if (queryparams[query] === '') {
