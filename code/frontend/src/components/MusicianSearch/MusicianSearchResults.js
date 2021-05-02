@@ -6,7 +6,7 @@ import {Container, Row, Col, Card, Modal, Button, Spinner } from "react-bootstra
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import FriendApiService from "../../utils/FriendApiService";
-import {selectFilteredMusicians, checkLoading} from "../../selectors/musician_selector";
+import {selectFilteredMusicians} from "../../selectors/musician_selector";
 import {chunk} from "../../utils/miscellaneous";
 import {getLoggedInUser} from "../../selectors/user_selector";
 import {getFrontendURL} from "../../utils/api";
@@ -85,7 +85,6 @@ const MusicianSearchResults = () => {
     const dispatch = useDispatch();
     const fil_musicians = useSelector(selectFilteredMusicians, shallowEqual)
     let logged_user = useSelector(getLoggedInUser, shallowEqual);
-    let isLoading = useSelector(checkLoading, shallowEqual);
 
     if(fil_musicians === -1)
     {
@@ -112,8 +111,7 @@ const MusicianSearchResults = () => {
         // return empty result message
         if ((index !== null) && index !== -1) fil_musicians_mod.splice(index, 1);
 
-        console.log("fil_musicians.size: ", fil_musicians.length);
-        if (fil_musicians.length == 0) {
+        if (fil_musicians.length === 0) {
             return (
                 <Container>
                     <h5 style={{marginTop:"100px", marginLeft:"50px"}}> Sorry, no musicians found. Try again!</h5>
@@ -121,15 +119,6 @@ const MusicianSearchResults = () => {
             )
         }
 
-        // check new filtered musicinaions, if changed display laoding | else, setLoading off and display the rest
-        console.log("is loading: ", isLoading);
-        if (isLoading) {
-            return (
-                <Container>
-                    <Spinner style={{marginTop:"50px", marginLeft:"200px"}} animation="grow" variant="info" />
-                </Container>
-            )
-        }
         else {
             const fil_musicians_chunk = chunk(fil_musicians_mod,3)
             const rows = fil_musicians_chunk.map((user_chunk, index) => {

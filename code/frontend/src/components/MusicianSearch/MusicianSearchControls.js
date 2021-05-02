@@ -1,17 +1,14 @@
 import React from 'react';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import {Container, Row, Col, Spinner} from "react-bootstrap";
-import { newQuery, clearQuery, setLoadingOn, setLoadingOff } from "../../actions/musician_actions";
+import {Container, Row, Col} from "react-bootstrap";
+import { newQuery, clearQuery} from "../../actions/musician_actions";
 import { Button } from "react-bootstrap";
-import {selectPlaceholderQuery, checkLoading} from "../../selectors/musician_selector";
-import { getLoggedInUser } from "../../selectors/user_selector";
+import {selectPlaceholderQuery} from "../../selectors/musician_selector";
 import Cookies from "js-cookie";
 
 const MusicianSearchControls = () => {
     const dispatch = useDispatch();
-    let user = useSelector(getLoggedInUser, shallowEqual);
     let placeholder_query = useSelector(selectPlaceholderQuery, shallowEqual);
-    let isLoading = useSelector(checkLoading, shallowEqual);
 
     let queryparams = {
         genre: [],
@@ -72,15 +69,13 @@ const MusicianSearchControls = () => {
         }
         else {
             //console.log('submitting new')
-            dispatch(setLoadingOn);
-            console.log("is loading: ", isLoading);
             queryparams.id = Cookies.get('id');
             for(var query in queryparams) {
                 if (queryparams[query] === '') {
                     delete queryparams[query];
                 }
             }
-            dispatch(newQuery(queryparams)).then(dispatch(setLoadingOff));
+            dispatch(newQuery(queryparams));
         }
     }
 
@@ -192,7 +187,7 @@ const MusicianSearchControls = () => {
                 <Col className="col-sm-5">
                 </Col>
                 <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitQuery} disabled={isLoading} >Find Musicians</Button>
+                    <Button variant="primary" onClick={SubmitQuery} >Find Musicians</Button>
                 </div>
             </Row>
         </Container>

@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {Container, Row, Col} from "react-bootstrap";
 import MusicianSearchResults from "./MusicianSearchResults";
 import MusicianSearchControls from "./MusicianSearchControls";
-import Cookies from "js-cookie";
 
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";

@@ -2,9 +2,7 @@ import {
     LOAD_MUSICIANS_INITIAL,
     LOAD_MUSICIANS_QUERY,
     CLEAR_MUSICIANS_QUERY,
-    LOAD_MUSICIANS_INITIAL_SEARCH,
-    DISP_LOADING_SYMBOL,
-    STOP_DISP_LOADING_SYMBOL
+    LOAD_MUSICIANS_INITIAL_SEARCH
 } from '../actions/types';
 
 export default function musicianReducer (state = {}, action) {
@@ -20,7 +18,6 @@ export default function musicianReducer (state = {}, action) {
             return {
                 ...state,
                 filteredMusicians: action.payload,
-                isLoading: action.payload.loadCheck,
                 query: null
             }
         case LOAD_MUSICIANS_QUERY:
@@ -35,16 +32,6 @@ export default function musicianReducer (state = {}, action) {
                 ...state,
                 filteredMusicians: action.payload.res_data,
                 query: action.payload.query
-            }
-        case DISP_LOADING_SYMBOL:
-            return {
-                ...state,
-                isLoading: action.payload.loadCheck
-            }
-        case STOP_DISP_LOADING_SYMBOL:
-            return {
-                ...state,
-                isLoading: action.payload.loadCheck
             }
         default:
             return state

@@ -3,8 +3,6 @@ export const LOAD_MUSICIANS_INITIAL = 'musicians/loadfirst';
 export const LOAD_MUSICIANS_INITIAL_SEARCH = 'musicians/loadfirstsearch';
 export const LOAD_MUSICIANS_QUERY = 'musicians/newquery';
 export const CLEAR_MUSICIANS_QUERY = 'musicians/clearquery';
-export const DISP_LOADING_SYMBOL = 'musicians/loading';
-export const STOP_DISP_LOADING_SYMBOL = 'musicians/stoploading';
 
 // Friend API action action types
 export const LOAD_USER_FRIENDS = 'user/friends';

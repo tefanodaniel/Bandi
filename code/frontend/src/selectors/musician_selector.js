@@ -25,9 +25,3 @@ export const selectFilteredMusicians = (state) => {
     else
         return state.musician_reducer.filteredMusicians.map(user => user)
 }
-
-export const checkLoading = (state) => {
-    if(!state.musician_reducer.isLoading)
-        return false;
-    return state.musician_reducer.isLoading;
-}
