@@ -20,6 +20,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class Sql2oMusicianDaoTest {
+    /*
     private static Sql2o sql2o;
     private static List<Musician> samples;
     private static MusicianDao musicianDao;
@@ -172,6 +173,6 @@ class Sql2oMusicianDaoTest {
         Map<String, String[]> query = Map.of("distance", distance);
         assertThrows(ApiError.class, ()->musicianDao.readAll(query));
     }
-
+*/
 
 }
