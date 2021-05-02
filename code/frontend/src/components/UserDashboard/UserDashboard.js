@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import Button from "react-bootstrap/button";
+import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
 
 import Header from "../Header/Header";
@@ -111,7 +111,7 @@ class UserDashboard extends React.Component {
         const bands = this.props.userInfo.bands;
 
         let spotify_info_view;
-        spotify_info_view = 
+        spotify_info_view =
             <div class="spotify-info-panel">
                     <h4>Spotify Top Tracks</h4>
                     {userInfo?.topTracks ? <button id="set-top-tracks-visibility" class="bandi-button dashboard" onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Make private" : "Make publicly visible"}</button>
@@ -128,13 +128,13 @@ class UserDashboard extends React.Component {
 
         let profile_view;
         if (this.state.editing) {
-            profile_view = 
+            profile_view =
                 <div class="bandi-text-fields inner-panel">
                     <EditUserInfo/>
                     <button id="edit-profile" class="bandi-button dashboard"  onClick={() => {this.setState({editing: false})}}>Go back</button>
                 </div>
         } else { // render user profile
-            profile_view = 
+            profile_view =
                 <div class="bandi-text-fields inner-panel">
                     <h2 class="name">{userInfo.name}</h2>
                     <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
@@ -156,13 +156,13 @@ class UserDashboard extends React.Component {
 
         let band_view;
         if (this.state.creating) {
-            band_view = 
+            band_view =
             <div>
                 <button class="bandi-button dashboard" onClick={() => this.setState({creating: false})}>Go back</button>
                 <CreateBand/>
             </div>
         } else {
-            band_view = 
+            band_view =
             <div class="band-view">
                 <div class="user-band-container">
                     {this.renderBandList(bands)}
@@ -172,7 +172,7 @@ class UserDashboard extends React.Component {
         }
 
 
-        
+
         if (userInfo) {
             return (
                 <div class="outer-dashboard">
