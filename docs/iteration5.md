@@ -30,10 +30,16 @@ Postponed/Scrapped:
 #### What we have done
 - Restyled the front end to be more visually appealing
 - Troubleshooting bugs from previous iterations
-- 
+- Added unit tests to the frontend
+- Implemented "save for later" feature
+- Implemented search functionality for bands browse
+- Implemented advanced search for musicians
+- Implemented adding links to a profile
 #### What we haven't done
 - Adding in login for users who don't have a Spotify account (scrapped user story)
 - Adding in verification for student users (scrapped user story)
 - Submitting a play-along to another user's song-of-the-week submission
 #### Difficulties
 - Editing the styling for all pages in the web app
+- Running updated backend and frontend at the same time
+- 
