@@ -80,25 +80,52 @@ class Sql2oMusicianDaoTest {
     }
 
     @Test
-    @DisplayName("return musician friends")
-    void getMusicianFriends() {
-
-    }
-
-    @Test
     @DisplayName("updating a musician works")
     void updateWorks() {
         String name = "New Name";
         Set<String> genre = new HashSet<String>(Arrays.asList("New Genre"));
+        Set<String> instruments = new HashSet<String>(Arrays.asList("New Instrument"));
+        Set<String> proflinks = new HashSet<String>(Arrays.asList("New Link"));
+        Set<String> toptracks = new HashSet<String>(Arrays.asList("New Track"));
         Musician m = musicianDao.updateName("00001fakeid", name);
-        Musician m = musicianDao.updateGenres("00001fakeid", genre);
+        m = musicianDao.updateGenres("00001fakeid", genre);
+        m = musicianDao.updateInstruments("00001fakeid", instruments);
+        m = musicianDao.updateExperience("00001fakeid", "New Exp");
+        m = musicianDao.updateLocation("00001fakeid", "New Location");
+        m = musicianDao.updateZipCode("00001fakeid", "21218");
+        m = musicianDao.updateAdmin("00001fakeid", true);
+        m = musicianDao.updateProfileLinks("00001fakeid", proflinks);
+        m = musicianDao.updateTopTracks("00001fakeid", toptracks);
+        m = musicianDao.updateShowtoptracks("00001fakeid", true);
 
         // add more updates
         assertEquals("00001fakeid", m.getId());
         assertEquals(name, m.getName());
+        assertEquals(genre, m.getGenres());
+        assertEquals(instruments, m.getInstruments());
+        assertEquals(proflinks, m.getProfileLinks());
+        assertEquals(toptracks, m.getTopTracks());
+        assertEquals("New Exp", m.getExperience());
+        assertEquals("New Location", m.getLocation());
+        assertEquals("21218", m.getZipCode());
+        assertEquals(true, m.getAdmin());
+        assertEquals(true, m.getShowtoptracks());
 
         // Reset back to original properties
+        Set<String> genres1 = new HashSet<String>(Arrays.asList("Progressive Rock", "Psychedelic Rock"));
+        Set<String> instruments1 = new HashSet<String>(Arrays.asList("Guitar"));
+        Set<String> profileLinks1 = new HashSet<String>();
+        Set<String> toptracks1 = new HashSet<String>();
         m = musicianDao.updateName("00001fakeid", "David Gilmour");
+        m = musicianDao.updateGenres("00001fakeid", genres1);
+        m = musicianDao.updateInstruments("00001fakeid", instruments1);
+        m = musicianDao.updateExperience("00001fakeid", "Expert");
+        m = musicianDao.updateLocation("00001fakeid", "WNY, NJ");
+        m = musicianDao.updateZipCode("00001fakeid", "07093");
+        m = musicianDao.updateAdmin("00001fakeid", false);
+        m = musicianDao.updateProfileLinks("00001fakeid", profileLinks1);
+        m = musicianDao.updateTopTracks("00001fakeid", toptracks1);
+        m = musicianDao.updateShowtoptracks("00001fakeid", false);
     }
 
     @Test
