@@ -69,13 +69,21 @@
     border-radius: 7px;
 }
 
-.bandi-button.view-more {
-    width: 170px;
+.bandi-button.musician-search {
     background-color: rgb(69, 84, 219);
 }
 
+.bandi-button.view-more {
+    width: 170px;
+    background-color: rgb(88, 102, 230);
+}
+
 #musician-search-submit {
-    background-color: rgb(69, 84, 219);
+    background-color: rgb(88, 102, 230);
+}
+
+.bandi-button.musician-search#close {
+    background-color: rgba(170, 249, 255, 0.815);
 }
 
 .bandi-card {

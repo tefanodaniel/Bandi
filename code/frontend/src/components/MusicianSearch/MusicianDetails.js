@@ -72,30 +72,24 @@ class MusicianDetails extends React.Component {
             return (
                 <div class ="fullDiv">
                     <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Learn more about fellow Musicians!
-                        </Navbar.Brand>
-                    </Navbar>
+                    <div class="bandi-text-fields musicianInfo">
 
-                    <div class="musicianInfo">
+                        <h2>{this.state.name}</h2>
+                        <h4>Location: {this.state.location}</h4>
+                        <h4>Experience: {this.state.experience}</h4>
+                        <div>
+                            <h4>Instruments: {this.state.instruments.join(", ")}</h4>
+                        </div>
+                        <div>
+                            <h4>Genres: {this.state.genres.join(", ")}</h4>
+                        </div>
+                        <div>
+                            <h4>Links: </h4>{this.state.links.map((link, i) => <li><a href={link}>{link}</a></li>)}
+                        </div>
 
-                    <h2>Name: {this.state.name}</h2>
-                    <h4>Location: {this.state.location}</h4>
-                    <h4>Experience: {this.state.experience}</h4>
-                    <div>
-                        <h4>Instruments: {this.state.instruments.join(", ")}</h4>
-                    </div>
-                    <div>
-                        <h4>Genres: {this.state.genres.join(", ")}</h4>
-                    </div>
-                    <div>
-                        <h4>Links: </h4>{this.state.links.map((link, i) => <li><a href={link}>{link}</a></li>)}
-                    </div>
-
-                    <div>
-                        <h4>Top Spotify Tracks: </h4>{this.tracks()}
-                    </div>
+                        <div>
+                            <h4>Top Spotify Tracks: </h4>{this.tracks()}
+                        </div>
 
                     </div>
 

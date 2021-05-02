@@ -30,7 +30,7 @@ const RenderConnectButton = (props) => {
     // Check if user already friends with this person
     let friend_info = friend_reducer.friend_info;
     let already_friends = false;
-    friend_info.forEach((friend) => {
+    friend_info?.forEach((friend) => {
         if (friend.id === recipientID) {
             already_friends = true;
         }
@@ -38,7 +38,7 @@ const RenderConnectButton = (props) => {
     // Check if user has already sent a friend request to this person
     let outgoing = friend_reducer.outgoing_friend_requests;
     let already_requested = false;
-    outgoing.forEach((req) => {
+    outgoing?.forEach((req) => {
         if (req.recipientID === recipientID) {
             already_requested = true;
         }
@@ -88,10 +88,10 @@ const FilteredMusicianItem = React.forwardRef((props, ref) => {
 
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button onClick={() => {window.location = getFrontendURL() + '/#/musiciandetails?view=' + musician.id;}}>
-                                View More
-                            </Button>
-                            <button id="close" class="bandi-button" onClick={handleClose}>
+                            <button id="go-to-profile" class="bandi-button musician-search" onClick={() => {window.location = getFrontendURL() + '/#/musiciandetails?view=' + musician.id;}}>
+                                Go to profile
+                            </button>
+                            <button id="close" class="bandi-button musician-search" onClick={handleClose}>
                                 Close
                             </button>
                             <RenderConnectButton logged_id = {logged_id} id = {musician.id} name={musician.name} dispatch={props.dispatch}/>
