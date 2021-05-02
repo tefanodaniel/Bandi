@@ -199,7 +199,26 @@ class SpeedDate extends React.Component {
                             mingle for a bit before the event wraps up.
                         </p>
                     </Card>
-                    {eventList}
+                    <div class="dating-container">
+                        {eventList}
+                    </div>
+                    <Modal className="bandi-modal speed-dating"show={this.state.showModal} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalEvent.name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h5>{this.state.modalEvent.date}</h5>
+                            <h5><a href={this.state.modalEvent.link}>{this.state.modalEvent.link}</a></h5>
+                            <h5>Minimum number of participants: {this.state.modalEvent.minusers}</h5>
+                            <h5>Registered participants: {this.func(this.state.modalEvent.participants)}</h5>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {this.render_event_button()}
+                            <button id="close" class="bandi-button" onClick={handleClose}>
+                                Close
+                            </button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             )
         }
