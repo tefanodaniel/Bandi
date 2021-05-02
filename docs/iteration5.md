@@ -30,8 +30,7 @@ Postponed/Scrapped:
 #### What we have done
 - Restyled the front end to be more visually appealing
 - Troubleshooting bugs from previous iterations
-- Added unit tests to the frontend
-- Implemented "save for later" feature
+- Added unit tests to the backend
 - Implemented search functionality for bands browse
 - Implemented advanced search for musicians
 - Implemented adding links to a profile
