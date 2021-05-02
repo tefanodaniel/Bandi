@@ -1,4 +1,5 @@
 import customhttp from "./api";
+import querystring from 'query-string';
 
 class MusicianAPIService {
     getAll() {
@@ -26,7 +27,13 @@ class MusicianAPIService {
     }
 
     findByQuery(queryparams) {
-        return customhttp.get(`/musicians`, { params: queryparams });
+        //console.log('params:,', queryparams)
+        return customhttp.get("/musicians", { 
+            params: queryparams, 
+            paramsSerializer: params => {
+                return querystring.stringify(params)
+            } 
+        });
     }
 
     updateShowTopTracks(id, data) {

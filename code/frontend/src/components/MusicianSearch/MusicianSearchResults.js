@@ -1,7 +1,8 @@
 import React from 'react';
 import { useState } from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
-import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
+import {Container, Row, Col, Card, Modal, Button, Spinner } from "react-bootstrap";
+import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
 import { sendFriendRequest } from "../../actions/friend_actions";
 import {selectFilteredMusicians} from "../../selectors/musician_selector";
@@ -116,7 +117,8 @@ const MusicianSearchResults = () => {
 
         return (
             <Container>
-                <h5 style={{marginTop:"50px", marginLeft:"50px"}}> Loading some of our featured musicians!</h5>
+                <h5 style={{marginTop:"100px", marginLeft:"50px"}}> Loading some of our featured musicians</h5>
+                <Spinner style={{marginTop:"50px", marginLeft:"200px"}} animation="grow" variant="info" />
             </Container>
         )
     }
@@ -128,24 +130,38 @@ const MusicianSearchResults = () => {
                 return user
             }
         });
+
+        // return empty result message
         if ((index !== null) && index !== -1) fil_musicians_mod.splice(index, 1);
-        const fil_musicians_chunk = chunk(fil_musicians_mod,3)
-        const rows = fil_musicians_chunk.map((user_chunk, index) => {
-            const fil_musicians_cols = user_chunk.map((user, index) => {
-                const ref = React.createRef();
-                return (
-                    <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user.id} musician={user} dispatch={dispatch} />
-                    </Col>
-                );
+        if (fil_musicians.length === 0) {
+            return (
+                <Container>
+                    <h5 style={{marginTop:"100px", marginLeft:"50px"}}> Sorry, no musicians found. Try again!</h5>
+                </Container>
+            )
+        }
+
+        else {
+            const fil_musicians_chunk = chunk(fil_musicians_mod,3)
+            const rows = fil_musicians_chunk.map((user_chunk, index) => {
+                const fil_musicians_cols = user_chunk.map((user, index) => {
+                    const ref = React.createRef();
+                    return (
+                        <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
+                            <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} name={user.name} 
+                                instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} distance={user.distance} 
+                                links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
+                        </Col>
+                    );
+                });
+                return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
             });
-            return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
-        });
-        return (
-            <Container key="musiciansearchresults">
-                {rows}
-            </Container>
-        )
+            return (
+                <Container key="musiciansearchresults">
+                    {rows}
+                </Container>
+            )
+        }
     }
 }
 

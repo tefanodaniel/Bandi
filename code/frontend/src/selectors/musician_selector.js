@@ -8,7 +8,9 @@ export const selectPlaceholderQuery = (state) => {
         query.name = 'Search by Name';
         query.instrument = 'Search by Instrument';
         query.genre = 'Search by Genre';
-        query.distance = 'Search by Distance';
+        query.distance = '30';
+        query.experience = 'Select Skill Level';
+        query.location = 'Select Location';
         return query;
     }
     else{
