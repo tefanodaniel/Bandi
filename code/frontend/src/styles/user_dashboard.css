@@ -1,0 +1,409 @@
+.outer-dashboard {
+    height: 100vh;
+    background: 
+        linear-gradient(
+            rgba(218, 189, 223, .5),
+            rgba(218, 189, 223, .5)
+        ),
+        url(../images/discover_bg.jpg);
+    
+}
+
+.tabs-container {
+    display: grid;
+    height: 300px; /* Or whatever */
+    border: 2px;
+    border-color: black;
+}
+
+.name {
+    text-align: center;
+    font-weight: bold;
+    font-family: "Consolas";
+    font-stretch: expanded;
+}
+
+
+.react-tabs h4, h2 {
+    font-family: "Consolas";
+    padding-left: 0px;
+    margin-top: 25px;
+    margin-bottom: 0;   
+    width: 35%;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: rgba(255, 255, 255, 0.815);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.react-tabs h4 {
+    padding-left: 5px;
+    margin-bottom: 15px;
+    width: 50%;
+    border-radius: 10px;
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.react-tabs h4 span.label-text {
+    background-color: white;
+    background-color: rgb(222, 191, 224);
+    border-radius: 10px;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+#location {
+    margin-top: 25px;
+}
+
+.bandi-button.dashboard {
+    background-color: rgba(214, 34, 34, 0.281);
+}
+
+.bandi-text-fields.inner-panel {
+    display: inline-block;
+    width: 45%;
+    margin-right: 20px;
+}
+
+.bandi-text-fields.inner-panel h4, h5 {
+    width: 100%;
+}
+
+.bandi-text-fields.inner-panel h2 {
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.edit-profile-button-div {
+    display: block;
+    width: 100%;
+}
+
+.bandi-button.dashboard#edit-profile {
+    display: block;
+    width: 30%;
+    margin: auto;
+    float: none;
+}
+
+.bandi-button.dashboard#edit-profile-submit {
+    background-color: rgb(224, 109, 205);
+}
+
+.profile h3 {
+    width: 57%;
+    font-family: 'Consolas';
+    background-color: rgb(201, 95, 201);
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.spotify-info-panel {
+    display: inline-block;
+    margin-left: 20px;
+    vertical-align: top;
+    width: 48%;
+}
+
+.top-tracks {
+    display: block;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    height: 100%;
+}
+
+.spotify-info-panel h4 {
+    display: block;
+    /* background-color: rgb(30, 215, 96); */
+    background-color: rgb(255, 255, 255);
+
+    width: 52%;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    margin-left: 23%;
+    margin-bottom: 10px;
+    margin-right: 5%;
+}
+
+.top-tracks-list {
+    display: block;
+    margin-top: 10px;
+    margin-left: 5%;
+    font-family: 'Consolas';
+    width: 100%;
+}
+
+.bandi-box {
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    background-color: white;
+    font-family: 'Consolas';
+    
+}
+.bandi-box.top-tracks-container {
+    background-color: rgb(184, 131, 248);
+}
+
+.top-tracks-list .bandi-box{
+    margin-top: 5px;
+    padding-left:5px;
+    padding-right:5px;
+    width: 80%;
+    background-color: rgb(229, 208, 255);
+}
+
+.bandi-box#visibility-status {
+    display: inline-block;
+    padding-top: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    width: 35%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(240, 200, 234);
+    background-color: rgb(184, 131, 248);
+    
+}
+
+.bandi-button.dashboard#set-top-tracks-visibility {
+    display: inline;
+    margin-left: 10%;
+    margin-bottom: 10px;
+    margin-right: 2%;
+}
+
+.react-tabs {
+    border: 3px;
+    border-color: black;
+    height: 75%;
+}
+
+.react-tabs__tab {
+    border-color: black;
+    border-style: solid;
+    border-width: 2px;
+    border-bottom-width: 3px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    background-color: rgb(218, 189, 223);
+}
+
+.react-tabs__tab--selected {
+    background-color: white;
+    border-style: solid;
+    
+}
+
+/* This might be the same as 'outer' */
+.react-tabs__tab-panel {
+    margin: 25px 20% 20%;
+    padding: 75px;
+    background-color: aqua;
+}
+
+.react-tabs__tab-panel--selected {
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    padding: 25px;
+    background-clip: padding-box;
+    border-radius: 10px;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    border-bottom-width: 7px;
+    background-color: lightsalmon;
+    background-color: rgb(207, 127, 207);
+}
+
+.react-tabs__tab-list {
+    font-family: "Consolas";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 30px 0 0;
+    border-bottom: 0px;
+    
+}
+
+.friend-panel h3 {
+    /* margin-left: auto;
+    margin-right: auto; */
+    font-size: 1rem;
+    padding-left: 5px;
+    padding: 5px;
+    margin-bottom: 15px;
+    width: 125px;
+    border-radius: 5px;
+    border-width: 2px;
+    border-style: solid;
+    border-bottom-width: 5px;
+    border-left-width: 2px;
+    background-color: rgb(222, 191, 224);
+    font-family: "Consolas";
+}
+
+.friend-container {
+    display: flex;
+    justify-content: left;
+}
+
+.friend-panel li {
+    font-family: "Consolas";
+    border-radius: 5px;
+    border-width: 1px;
+    border-style: solid;
+
+    border-left-width: 2px;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    background-color: rgb(171, 250, 243);
+    display: inline-block;
+    margin: 5px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.friend-panel li.friends {
+    /* background-color: rgb(190, 235, 198); */
+    background-color: rgb(205, 190, 235);
+}
+
+.friend-panel li.incoming {
+    /* background-color: rgb(205, 190, 235); */
+    background-color: rgb(223, 235, 190);
+}
+
+.friend-panel li.pending {
+    background-color: rgb(176, 148, 233);
+}
+
+
+#friend-label-1 {
+    width: 140px;
+}
+
+#friend-label-2 {
+    width: 185px;
+}
+
+#friend-label-3 {
+    width: 275px;
+}
+
+
+.bandi-button.accept-button {
+    font-size: 0.7rem;
+    margin-left: 20px;
+    margin-right: 5px;
+    border-color: black;
+    border-left-width: 2px;
+    border-bottom-width: 3px;
+    background-color: green;
+}
+
+.bandi-button.decline-button {
+    font-size: 0.7rem;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-color: black;
+    border-left-width: 2px;
+    border-bottom-width: 3px;
+    background-color: red;
+
+
+}
+
+.user-band-container {
+    display: flex;
+    margin-bottom: 25px;
+}
+
+.user-band-container > .band-card {
+    display: inline-block;
+    width: 20%;
+    background-color: rgb(218, 189, 223);
+}
+
+.band-card .card-title {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.band-card .card-subtitle {
+    margin: 15px;
+    background-color: rgb(205, 190, 235);
+}
+
+.band-card .card-text {
+    margin: 15px;
+    background-color: rgb(205, 190, 235);
+}
+
+.bandi-button#user-band-view-more {
+    display: block;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+    background-color: rgb(201, 95, 201);
+}
+.bandi-button#create-band {
+    display: block;
+    width: 15%;
+    margin-left: 3%;
+    margin-bottom: 15px;
+}
+.cometchat .message__txt__wrapper {
+}
+.cometchat .message__txt {
+    padding-left: 0px !important;
+    background-color: transparent !important;
+    border-style: none !important;
+}
+.cometchat .css-uz1pgz-ReactDOMBlockingRoot {
+    padding-left: 0px !important;
+    background-color: transparent !important;
+    border-style: none !important;
+}
+.cometchat .group__name {
+    padding-left: 0px !important;
+    background-color: transparent !important;
+    border-style: none !important;
+}
+.cometchat .user__name {
+    padding-left: 0px !important;
+    background-color: transparent !important;
+    border-style: none !important;
+}

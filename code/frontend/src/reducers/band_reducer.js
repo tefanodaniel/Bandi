@@ -1,8 +1,8 @@
-import { LOAD_BANDS_FOR_MUSICIAN } from './types';
+import { LOAD_USER_BANDS } from '../actions/types';
 
 export default function bandReducer (state = {}, action) {
     switch (action.type) {
-        case LOAD_BANDS_FOR_MUSICIAN:
+        case LOAD_USER_BANDS:
             return {
                 ...state,
                 bands: action.payload,

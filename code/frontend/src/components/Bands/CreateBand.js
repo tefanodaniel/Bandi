@@ -139,12 +139,6 @@ class CreateBand extends React.Component {
         else {
             return (
                 <div>
-                    <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Create a new Band!
-                        </Navbar.Brand>
-                    </Navbar>
                     <h1>Loading...</h1>
                 </div>
             )

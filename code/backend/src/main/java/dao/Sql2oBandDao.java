@@ -70,7 +70,11 @@ public class Sql2oBandDao implements BandDao {
                 + "WHERE R.uBID=:id";
         try (Connection conn = sql2o.open()) {
             List<Map<String, Object>> queryResults = conn.createQuery(sql).addParameter("id", id).executeAndFetchTable().asList();
+
             // Extract non-list attributes
+            if (queryResults.size() == 0) {
+                return null;
+            }
             String bandId = (String) queryResults.get(0).get("id");
             String name = (String) queryResults.get(0).get("name");
             int capacity = (int) queryResults.get(0).get("capacity");
