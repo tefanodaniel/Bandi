@@ -148,9 +148,7 @@ const MusicianSearchResults = () => {
                     const ref = React.createRef();
                     return (
                         <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                            <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} name={user.name} 
-                                instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} distance={user.distance} 
-                                links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
+                            <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} musician={user} />
                         </Col>
                     );
                 });
