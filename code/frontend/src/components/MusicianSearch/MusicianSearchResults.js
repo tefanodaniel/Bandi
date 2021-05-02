@@ -94,7 +94,7 @@ const MusicianSearchResults = () => {
 
         return (
             <Container>
-                <h5 style={{marginTop:"50px", marginLeft:"50px"}}> Loading some of our featured musicians</h5>
+                <h5 style={{marginTop:"100px", marginLeft:"50px"}}> Loading some of our featured musicians</h5>
                 <Spinner style={{marginTop:"50px", marginLeft:"200px"}} animation="grow" variant="info" />
             </Container>
         )
