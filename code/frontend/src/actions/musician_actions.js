@@ -9,7 +9,6 @@ import MusicianApi from "../utils/MusicianApiService";
 
 // the action creators below are thunk functions.
 export async function fetchMusicians(dispatch, getState) {
-    //console.log("Inside fetchMusicians action");
     const response = await MusicianApi.getAll();
     dispatch({
         type : LOAD_MUSICIANS_INITIAL,

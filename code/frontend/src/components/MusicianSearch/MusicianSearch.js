@@ -18,7 +18,7 @@ class MusicianSearch extends Component {
     render() {
         if(true) {
             return (
-                <div style={bandi_styles.discover_background}>
+                <div class="outer-musician-search">
                     <Header/>
                     <SubHeader text={"Find your musical soulmate here!"}/>
                     <Container className="mx-auto" fluid>

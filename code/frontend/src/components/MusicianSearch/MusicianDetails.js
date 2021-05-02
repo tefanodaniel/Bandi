@@ -1,13 +1,10 @@
 import React from 'react';
-import axios from "axios";
-import {getBackendURL, getFrontendURL} from "../../utils/api";
 import 'react-tabs/style/react-tabs.css';
 import Button from "react-bootstrap/Button";
 import Cookies from "js-cookie";
-import {TabPanel} from "react-tabs";
 import Header from "../Header/Header";
-import {Container, Navbar} from "react-bootstrap";
-import FriendApiService from '../../utils/FriendApiService';
+import {Navbar} from "react-bootstrap";
+import RequestApiService from '../../utils/RequestApiService';
 import MusicianApi from "../../utils/MusicianApiService";
 
 import '../../styles/musiciandetails.css';
@@ -53,9 +50,12 @@ class MusicianDetails extends React.Component {
                         showtoptracks: response.data.showtoptracks
                     }); console.log(response.data)
             });
+    }
 
-        console.log(this.state.view_id);
-        console.log(this.state.name);
+    addFriend = () => {
+        RequestApiService.sendFriendRequest(this.state.my_id, this.state.us_id).then((response) =>
+            alert("A request to connect was sent to " + this.state.name + ".")
+        );
     }
 
     tracks() {
@@ -69,34 +69,27 @@ class MusicianDetails extends React.Component {
     }
 
     render() {
-
             return (
                 <div class ="fullDiv">
                     <Header/>
-                    <Navbar expand="lg" variant="light" bg="light" className="mx-auto">
-                        <Navbar.Brand className="mx-auto">
-                            Learn more about fellow Musicians!
-                        </Navbar.Brand>
-                    </Navbar>
+                    <div class="bandi-text-fields musicianInfo">
 
-                    <div class="musicianInfo">
+                        <h2>{this.state.name}</h2>
+                        <h4>Location: {this.state.location}</h4>
+                        <h4>Experience: {this.state.experience}</h4>
+                        <div>
+                            <h4>Instruments: {this.state.instruments.join(", ")}</h4>
+                        </div>
+                        <div>
+                            <h4>Genres: {this.state.genres.join(", ")}</h4>
+                        </div>
+                        <div>
+                            <h4>Links: </h4>{this.state.links.map((link, i) => <li><a href={link}>{link}</a></li>)}
+                        </div>
 
-                    <h2>Name: {this.state.name}</h2>
-                    <h4>Location: {this.state.location}</h4>
-                    <h4>Experience: {this.state.experience}</h4>
-                    <div>
-                        <h4>Instruments: {this.state.instruments.join(", ")}</h4>
-                    </div>
-                    <div>
-                        <h4>Genres: {this.state.genres.join(", ")}</h4>
-                    </div>
-                    <div>
-                        <h4>Links: </h4>{this.state.links.map((link, i) => <li><a href={link}>{link}</a></li>)}
-                    </div>
-
-                    <div>
-                        <h4>Top Spotify Tracks: </h4>{this.tracks()}
-                    </div>
+                        <div>
+                            <h4>Top Spotify Tracks: </h4>{this.tracks()}
+                        </div>
 
                     </div>
 

@@ -86,92 +86,82 @@ const SotwSearchControls = () => {
     };
 
     return (
-        <Container>
-            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-4" style={{marginTop:"20px"}}>
-                    <b>Pick a Week:</b>
-                </Col>
-                <Col className="col-sm-7">
-                <div className="CalendarWeekPicker">
-                <DayPicker
-                    selectedDays={selectedDays}
-                    showWeekNumbers
-                    showOutsideDays
-                    modifiers={modifiers}
-                    onDayClick={handleDayChange}
-                    onDayMouseEnter={handleDayEnter}
-                    onDayMouseLeave={handleDayLeave}
-                    onWeekClick={handleWeekClick}
-                />
-                <Helmet>
-                    <style>{`
-                    .CalendarWeekPicker .DayPicker-Month {
-                        border-collapse: separate;
-                    }
-                    .CalendarWeekPicker .DayPicker-WeekNumber {
-                        outline: none;
-                    }
-                    .CalendarWeekPicker .DayPicker-Day {
-                        outline: none;
-                        border: 1px solid transparent;
-                    }
-                    .CalendarWeekPicker .DayPicker-Day--hoverRange {
-                        background-color: #EFEFEF !important;
-                    }
+            <div class="sotw-controller">
+                <div class="sotw-calendar-controller">
+                    <h4>Event search</h4>
+                    <div class="CalendarWeekPicker">
+                        <DayPicker className="sotw-daypicker"
+                            selectedDays={selectedDays}
+                            showWeekNumbers
+                            showOutsideDays
+                            modifiers={modifiers}
+                            onDayClick={handleDayChange}
+                            onDayMouseEnter={handleDayEnter}
+                            onDayMouseLeave={handleDayLeave}
+                            onWeekClick={handleWeekClick}
+                        />  
+                        <Helmet>
+                            <style>{`
+                            .CalendarWeekPicker .DayPicker-Month {
+                                border-collapse: separate;
+                            }
+                            .CalendarWeekPicker .DayPicker-WeekNumber {
+                                outline: none;
+                            }
+                            .CalendarWeekPicker .DayPicker-Day {
+                                outline: none;
+                                background-color: #ffffff;
+                                padding: 2px;
+                                margin: 5px;
+                                border: 1px solid black;
+                            }
+                            .CalendarWeekPicker .DayPicker-Day--hoverRange {
+                                background-color: #EFEFEF !important;
+                            }
 
-                    .CalendarWeekPicker .DayPicker-Day--selectedRange {
-                        background-color: #fff7ba !important;
-                        border-top-color: #FFEB3B;
-                        border-bottom-color: #FFEB3B;
-                        border-left-color: #fff7ba;
-                        border-right-color: #fff7ba;
-                    }
+                            .CalendarWeekPicker .DayPicker-Day--selectedRange {
+                                background-color: #fff7ba !important;
+                                border-top-color: #FFEB3B;
+                                border-bottom-color: #FFEB3B;
+                                border-left-color: #fff7ba;
+                                border-right-color: #fff7ba;
+                            }
 
-                    .CalendarWeekPicker .DayPicker-Day--selectedRangeStart {
-                        background-color: #FFEB3B !important;
-                        border-left: 1px solid #FFEB3B;
-                    }
+                            .CalendarWeekPicker .DayPicker-Day--selectedRangeStart {
+                                background-color: #FFEB3B !important;
+                                border-left: 1px solid #FFEB3B;
+                            }
 
-                    .CalendarWeekPicker .DayPicker-Day--selectedRangeEnd {
-                        background-color: #FFEB3B !important;
-                        border-right: 1px solid #FFEB3B;
-                    }
+                            .CalendarWeekPicker .DayPicker-Day--selectedRangeEnd {
+                                background-color: #FFEB3B !important;
+                                border-right: 1px solid #FFEB3B;
+                            }
 
-                    .CalendarWeekPicker .DayPicker-Day--selectedRange:not(.DayPicker-Day--outside).DayPicker-Day--selected,
-                    .CalendarWeekPicker .DayPicker-Day--hoverRange:not(.DayPicker-Day--outside).DayPicker-Day--selected {
-                        border-radius: 0 !important;
-                        color: black !important;
-                    }
-                    .CalendarWeekPicker .DayPicker-Day--hoverRange:hover {
-                        border-radius: 0 !important;
-                    }
-                    `}</style>
-                </Helmet>
+                            .CalendarWeekPicker .DayPicker-Day--selectedRange:not(.DayPicker-Day--outside).DayPicker-Day--selected,
+                            .CalendarWeekPicker .DayPicker-Day--hoverRange:not(.DayPicker-Day--outside).DayPicker-Day--selected {
+                                border-radius: 0 !important;
+                                color: black !important;
+                            }
+                            .CalendarWeekPicker .DayPicker-Day--hoverRange:hover {
+                                border-radius: 0 !important;
+                            }
+                            `}</style>
+                        </Helmet>
+                    </div>
                 </div>
-                </Col>
-            </Row>
-            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-5">
-                    <b>Genre:</b>
-                </Col>
-                <Form className="col-sm-7" style={{textAlign:"center"}}>
-                    <Form.Group controlId="exampleForm.SelectCustom">
-                        <Form.Control as="select" onChange={addgenrequery} custom>
-                            {createGenreSelectItems()}
-                        </Form.Control>
-                    </Form.Group>
-                </Form>
-            </Row>
-            <Row className="justify-content-sm-left" style={{ marginTop:"20px"}}>
-                <Col className="col-sm-5">
-                </Col>
-                <div className="col-sm-7" style={{textAlign:"center"}}>
-                    <Button variant="primary" onClick={SubmitEventQuery} >See Event!</Button>
+                <div class="genre-form-container">
+                    <Form className="bandi-box genre-form" style={{textAlign:"center"}}>
+                        <Form.Group controlId="genre-form.SelectGenre">
+                            <Form.Control as="select" onChange={addgenrequery} custom>
+                                {createGenreSelectItems()}
+                            </Form.Control>
+                        </Form.Group>
+                    </Form>
                 </div>
-            </Row>
-
-
-        </Container>
+                <div class="submit-button-container">
+                        <button id="see-events" class="bandi-button" onClick={SubmitEventQuery} >See Events!</button>
+                </div>
+            </div>
     )
 }
 

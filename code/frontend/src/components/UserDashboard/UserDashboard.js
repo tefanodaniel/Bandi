@@ -1,19 +1,20 @@
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import Button from "react-bootstrap/Button";
+import Button from "react-bootstrap/button";
 import Cookies from "js-cookie";
 
 import Header from "../Header/Header";
 import SubHeader from "../Header/SubHeader";
 
-import FriendApiService from '../../utils/FriendApiService';
+import '../../styles/user_dashboard.css';
 import ChatApi from "../../utils/ChatApiService";
-import { bandi_styles } from "../../styles/bandi_styles";
 import MusicianApi from "../../utils/MusicianApiService";
 
 import { connect } from 'react-redux';
-import { getIncomingFriendRequests, getUserFriends } from '../../actions/friend_actions';
+import { getIncomingFriendRequests, getUserFriends, takeActionOnFriendRequest } from '../../actions/friend_actions';
+import EditUserInfo from './EditUserInfo';
+import CreateBand from '../Bands/CreateBand';
 
 class UserDashboard extends React.Component {
     constructor(props) {
@@ -22,13 +23,13 @@ class UserDashboard extends React.Component {
         // Define the state for this component
         this.state = {
             id: Cookies.get('id'),
+            editing: false, // tracks whether user is currently editing their profile
+            creating: false // tracks whether user is in the process of creating a band
         }
     }
 
     async takeActionOnFriendRequest(request, action) {
-        const response = await FriendApiService.respondToFriendRequest(request.senderID, request.recipientID, action);
-        this.props.fetchFriends(this.props.userInfo.id)
-        this.props.fetchIncoming(this.props.userInfo.id)
+        this.props.respondToFriendRequest(request.senderID, request.recipientID, action);
         if (action === "accept") {
             await ChatApi.addChatFriend(this.props.userInfo.id, request.senderID);
             alert("You accepted " + request.senderName + "'s friend request! You can now chat with each other.");
@@ -40,10 +41,10 @@ class UserDashboard extends React.Component {
     renderFriendListForMusician(friends) {
         if (friends && friends.length > 0) {
             const listItems = friends.map((friend) =>
-            <li key={friend["id"]}>{friend["name"]}</li>
+            <li class="friends" key={friend["id"]}>{friend["name"]}</li>
             );
             return (
-                <ul>{listItems}</ul>
+                <ul class="friend-container">{listItems}</ul>
             );
         } else {
             return <ul/>
@@ -54,12 +55,12 @@ class UserDashboard extends React.Component {
         if (incoming && incoming.length > 0) {
             const listItems = incoming.map((request) =>
             <div>
-                <li>{request.senderName}<Button onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</Button>
-                <Button onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</Button></li>
+                <li class="incoming">{request.senderName}<button class="bandi-button accept-button" onClick={() => this.takeActionOnFriendRequest(request, 'accept')}>Accept</button>
+                <button class= "bandi-button decline-button" onClick={() => this.takeActionOnFriendRequest(request, 'decline')}>Decline</button></li>
             </div>
             );
             return (
-                <ul>{listItems}</ul>
+                <ul class="friend-container">{listItems}</ul>
             );
         } else {
             return <ul/>
@@ -69,10 +70,10 @@ class UserDashboard extends React.Component {
     renderOutgoingRequestList(outgoing) {
         if (outgoing && outgoing.length > 0) {
             const listItems = outgoing.map((request) =>
-            <li>{request.recipientName}</li>
+            <li class="pending">{request.recipientName}</li>
             );
             return (
-                <ul>{listItems}</ul>
+                <ul class="friend-container">{listItems}</ul>
             );
         } else {
             return <ul/>
@@ -82,14 +83,12 @@ class UserDashboard extends React.Component {
     renderBandList(bands) {
         if (bands && bands.length > 0) {
             var bandsList = bands.map((band) =>
-            <div key={band.id} className="card">
-                <div className="card-body">
-                    <h5 className="card-title">{band.name}</h5>
-                    <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
-                    <p className="card-text"></p>
-                    <Button onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</Button>
-                </div>
-            </div>);
+            <div key={band.id} className="bandi-box band-card">
+                <h5 className="card-title">{band.name}</h5>
+                <h6 className="card-subtitle">{band.genres.join(", ")}</h6>
+                <p className="card-text"></p>
+                <button id="user-band-view-more" class="bandi-button" onClick={() => { this.props.history.push('/band?view=' + band.id);}}>View More</button>
+            </div>)
             return bandsList;
         } else {
             return <div/>
@@ -111,63 +110,107 @@ class UserDashboard extends React.Component {
         const outgoing = this.props.outgoing_friend_requests;
         const bands = this.props.userInfo.bands;
 
+        let spotify_info_view;
+        spotify_info_view = 
+            <div class="spotify-info-panel">
+                    <h4>Spotify Top Tracks</h4>
+                    {userInfo?.topTracks ? <button id="set-top-tracks-visibility" class="bandi-button dashboard" onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Make private" : "Make publicly visible"}</button>
+                            : " Loading..."}
+                    <div id="visibility-status" class="bandi-box">
+                        {userInfo?.topTracks ? (userInfo?.showtoptracks ? "Currently visible" : "Currently private") : ""}
+                    </div>
+                    <div class="bandi-box top-tracks-container">
+                        <ol class="top-tracks-list">
+                        {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li class="bandi-box">{track}</li>) : ""}
+                        </ol>
+                    </div>
+            </div>;
+
+        let profile_view;
+        if (this.state.editing) {
+            profile_view = 
+                <div class="bandi-text-fields inner-panel">
+                    <EditUserInfo/>
+                    <button id="edit-profile" class="bandi-button dashboard"  onClick={() => {this.setState({editing: false})}}>Go back</button>
+                </div>
+        } else { // render user profile
+            profile_view = 
+                <div class="bandi-text-fields inner-panel">
+                    <h2 class="name">{userInfo.name}</h2>
+                    <h4 class="label" id="location"><span class="label-text">Location: </span>{userInfo.location === "NULL" ? "" : userInfo.location}</h4>
+                    <h4 class="label"><span class="label-text">Experience: </span>{userInfo.experience === "NULL" ? "" : userInfo.experience}</h4>
+                    <div>
+                        <h4 class="label"><span class="label-text">Instruments: </span>{userInfo.instruments ? userInfo.instruments.join(", ") : ""}</h4>
+                    </div>
+                    <div>
+                        <h4 class="label"><span class="label-text">Genres: </span>{userInfo.genres ? userInfo.genres.join(", ") : ""}</h4>
+                    </div>
+                    <div>
+                        <h4 class="label"><span class="label-text">Links: </span>{userInfo.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
+                    </div>
+                    <div class="edit-profile-button-div">
+                    <button id="edit-profile" class="bandi-button dashboard" onClick={() => {this.setState({editing: true})}}>Edit Profile</button>
+                    </div>
+                </div>;
+        }
+
+        let band_view;
+        if (this.state.creating) {
+            band_view = 
+            <div>
+                <button class="bandi-button dashboard" onClick={() => this.setState({creating: false})}>Go back</button>
+                <CreateBand/>
+            </div>
+        } else {
+            band_view = 
+            <div class="band-view">
+                <div class="user-band-container">
+                    {this.renderBandList(bands)}
+                </div>
+                <button id="create-band" class="bandi-button dashboard" onClick={() => this.setState({creating: true})}>Create band</button>
+            </div>
+        }
+
+
+        
         if (userInfo) {
             return (
-                <div style={bandi_styles.discover_background}>
+                <div class="outer-dashboard">
                     <Header/>
-                    <SubHeader text="Customize your profile"/>
-                    <Tabs>
-                        <TabList>
-                            <Tab>My Profile</Tab>
-                            <Tab>My Bands</Tab>
-                            <Tab>My Friends</Tab>
-                        </TabList>
+                    <div>
+                        <div class="tabs-container">
+                            <Tabs class="child">
+                                <TabList>
+                                    <Tab>My Profile</Tab>
+                                    <Tab>My Bands</Tab>
+                                    <Tab>My Friends</Tab>
+                                </TabList>
 
-                        <TabPanel>
-                            <h2>Name: {userInfo?.name}</h2>
-                            <h4>Location: {userInfo?.location === "NULL" ? "" : userInfo?.location}</h4>
-                            <h4>Experience: {userInfo?.experience === "NULL" ? "" : userInfo?.experience}</h4>
-                            <div>
-                                <h4>Instruments: {userInfo?.instruments ? userInfo.instruments.join(", ") : ""}</h4>
-                            </div>
-                            <div>
-                                <h4>Genres: {userInfo?.genres ? userInfo.genres.join(", ") : ""}</h4>
-                            </div>
-                            <div>
-                                <h4>Links: {userInfo?.links ? userInfo.links.map((link, i) => <a href={link}>{link}</a>) : ""}</h4>
-                            </div>
+                                <TabPanel className="profile-panel">
+                                {profile_view}
+                                {spotify_info_view}
+                                </TabPanel>
 
-                            <div>
-                                <h4>Spotify Top Tracks:</h4>
-
-                                {userInfo?.topTracks ? (userInfo?.showtoptracks ? "(visible to others)" : "(not visible to others)") : ""}
-
-                                {userInfo?.topTracks ? userInfo.topTracks.map((track, i) => <li>{track}</li>) : ""}
-
-                                {userInfo?.topTracks ? <Button onClick={() => {this.spotifyButton(userInfo?.showtoptracks);}}>{userInfo?.showtoptracks ? "Hide top tracks from others" : "Show top tracks to others"}</Button>
-                                        : " Loading..."}
-                            </div>
-
-                            <Button onClick={() => { this.props.history.push('/edit-user-info');}}>Edit Profile</Button>
-                        </TabPanel>
-
-                        <TabPanel>
-                            {this.renderBandList(bands)}
-                            <Button onClick={() => this.props.history.push('/createband')}>Create Band</Button>
-                        </TabPanel>
+                                <TabPanel>
+                                {band_view}
+                                </TabPanel>
 
 
-                        <TabPanel>
-                            <h3>My friends ({friends?.length})</h3>
-                            {this.renderFriendListForMusician(friends)}
-                            <h3>Friend requests ({incoming?.length})</h3>
-                            {this.renderIncomingRequestList(incoming)}
-                            <h3>Pending friend requests ({outgoing?.length})</h3>
-                            {this.renderOutgoingRequestList(outgoing)}
+                                <TabPanel>
+                                    <div class="friend-panel">
+                                        <h3 id="friend-label-1">My friends ({friends?.length})</h3>
+                                        {this.renderFriendListForMusician(friends)}
+                                        <h3 id="friend-label-2">Friend requests ({incoming?.length})</h3>
+                                        {this.renderIncomingRequestList(incoming)}
+                                        <h3 id="friend-label-3">Pending friend requests ({outgoing?.length})</h3>
+                                        {this.renderOutgoingRequestList(outgoing)}
+                                    </div>
 
-                        </TabPanel>
+                                </TabPanel>
 
-                    </Tabs>
+                            </Tabs>
+                        </div>
+                    </div>
                 </div>
             );
         } else {
@@ -207,6 +250,9 @@ function mapDispatchToProps(dispatch) {
     return {
         fetchFriends: (id) => dispatch(getUserFriends(id)),
         fetchIncoming: (id) => dispatch(getIncomingFriendRequests(id)),
+        respondToFriendRequest: (senderID, recipientID, action) => {
+            dispatch(takeActionOnFriendRequest(senderID, recipientID, action))
+        }
     }
 }
 

@@ -10,11 +10,11 @@ import { connect } from 'react-redux';
 
 const SubmissionItem = ( entry ) => {
     return (
-        <Card style={bandi_styles.submission_card} className="rounded shadow-sm border-0">
+        <Card className="bandi-card submission-item">
             <Card.Body>
                 <Card.Title><b>{entry.name}</b></Card.Title>
-                <Card.Text className="small font-italic" style={{color:"white"}}>Instruments: {entry.instruments.join(', ')}</Card.Text>
-                <Card.Text className="small font-italic"> <a href={entry.avLink} style={{color:"white"}}>View Submission</a></Card.Text>
+                <Card.Text className="small font-italic">Instruments: {entry.instruments.join(', ')}</Card.Text>
+                <Card.Text className="small font-italic"> <a href={entry.avLink}>View Submission</a></Card.Text>
             </Card.Body>
         </Card>
     )
@@ -40,9 +40,12 @@ const SotwSubmissionList = () => {
     if(submissions === -1)
     {
         return (
-            <Container style={{marginTop:"250px", marginLeft:"600px"}} className="justify-content-md-center">
-                <h4> </h4>
-            </Container>
+            <div class="sotw-submission-list-placeholder">
+            <p id="sotw-submission-list-placeholder-text">
+                Here's where you'll see other Bandi members' submissions for the currently
+                selected Song of the Week!
+            </p>
+        </div>
         )
     }
     else {
@@ -51,19 +54,17 @@ const SotwSubmissionList = () => {
         const rows = submissions_chunk.map((sub_chunk, index) => {
             const cols = sub_chunk.map((entry, index) => {
                 return (
-                    <Col key={index} style={{height: "180px" , columnWidth: "250px"}}>
+                    <Col key={index}>
                         <SubmissionItem id={entry.submission_id} name={entry.musician_name} instruments={entry.instruments}  avLink={entry.avSubmission}/>
                     </Col>
                 );
             });
-            return <Row key={index} style={{width: "1000px",marginTop:"50px", height: "250px"}} >{cols}</Row>
+            return <Row key={index}>{cols}</Row>
             });
         return (
-            <div style={{marginTop:"50px", marginLeft:"100px", height: "1000px"}}>
-            <Container fluid>
+            <Container className="sotw-submission-list-items" fluid>
                 {rows}
             </Container>
-            </div>
         )
     }
 }
