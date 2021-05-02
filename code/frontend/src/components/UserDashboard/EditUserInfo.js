@@ -182,9 +182,11 @@ class EditUserInfo extends React.Component {
                     <option>Classical</option>
                   </Form.Control>
               </FormGroup>
-
+              <Form.Group controlId="profileForm.links">
+                  <Form.Label>Links:</Form.Label>
+                  <Form.Control name="links" type="input" placeholder="Links" value={this.state.links} onChange={this.handleChange} />
+              </Form.Group>
             <button id="edit-profile-submit" class="bandi-button dashboard" type="submit">Save</button>
-
           </Form>
         </div>
 

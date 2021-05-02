@@ -72,8 +72,8 @@ class Discover extends React.Component {
   		<div class="outer-discover">
         	<Header />
 			<img id="logo" src="../bandi-logo.png"></img>
-        	<div>
-        	<Container >
+        <div>
+        <Container >
 				<Row>
 					<Col style={bandi_styles.discover_row_col}>
 						<Jumbotron className="rounded text-white">
