@@ -1,15 +1,14 @@
 import React from 'react';
-import {bandi_styles} from "../../styles/bandi_styles";
 import Header from "../Header/Header";
-import SubHeader from "../Header/SubHeader";
 import Cookies from "js-cookie";
 
 import { connect } from 'react-redux';
-import { fetchSDEvents } from '../../actions/sd_event_actions';
 import SDEventApi from "../../utils/SDEventApiService";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Jumbotron from "react-bootstrap/Jumbotron";
+import Modal from "react-bootstrap/Modal";
+import Card from "react-bootstrap/Card";
+import '../../styles/speed_dating.css';
 
 class SpeedDate extends React.Component {
     constructor(props) {
@@ -22,7 +21,10 @@ class SpeedDate extends React.Component {
             name: '',
             link: '',
             date: '',
-            minusers: 1
+            minusers: 1,
+            showModal: false,
+            modalEvent: 0,
+            isParticipant: false
         }
 
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -40,18 +42,17 @@ class SpeedDate extends React.Component {
 
     handleSubmit(event) {
         SDEventApi.create({
-            name: this.state.name,
-            link: this.state.link,
-            date: this.state.date,
-            minusers: this.state.minusers
+                id: "709870", // backend will generate new value for this
+                name: this.state.name,
+                link: this.state.link,
+                date: this.state.date,
+                minusers: this.state.minusers
+        }).then(res => {
+            console.log(`statusCode: ${res.statusCode}`)
+            console.log(res)
+        }).catch(error => {
+            console.error(error)
         })
-            .then(res => {
-                console.log(`statusCode: ${res.statusCode}`)
-                console.log(res)
-            })
-            .catch(error => {
-                console.error(error)
-            })
     }
 
     componentDidMount() {
@@ -62,7 +63,7 @@ class SpeedDate extends React.Component {
 
     func(arr) {
         var size;
-        if (arr[0] == null) {
+        if (arr == undefined) {
             size = 0;
         }
         else{
@@ -71,78 +72,153 @@ class SpeedDate extends React.Component {
         return size;
     }
 
-    render() {
-        console.log(this.state.sdEvents);
+    register_leave() {
+        if (!this.state.isParticipant) {
+            // add participant to event
+            SDEventApi.addParticipant(this.state.eventId, this.state.id)
+                .then((response) => console.log(response.data));
+        }
+        else {
+            // remove participant from event
+            SDEventApi.deleteParticipant(this.state.eventId, this.state.id)
+                .then((response) => console.log(response.data));
+        }
 
+        this.setState({isParticipant : !(this.state.isParticipant)});
+        this.buttonText();
+    }
+
+    render_event_button() {
+        if (this.state.isParticipant) {
+            return <button class="bandi-button register" onClick={() => this.register_leave()}>Leave event</button> 
+        } else {
+            return <button class="bandi-button register" onClick={() => this.register_leave()}>Register for event</button> 
+        }
+    }
+
+    render() {
         const userInfo = this.props.store.user_reducer;
         const isAdmin = userInfo?.admin;
-        console.log('here here', userInfo);
 
+        const handleClose = () => this.setState({showModal: false});
+        const handleShow = (event) => { 
+            this.setState(
+                { showModal: true,
+                    modalEvent: event,
+                    isParticipant: (event.participants).indexOf(this.state.id) > -1
+                }) 
+        };
+        
         var eventList = this.state.sdEvents.map((event) =>
 
-            <div className="card">
-                <Jumbotron className="rounded text-white" style={bandi_styles.jumbo_sdate}>
-                <div className="card-body">
+                <Jumbotron className="bandi-card dating-event">
+                <div className="bandi-text-fields dating-event">
                     <h5 className="card-title">{event.name}</h5>
-                    <h6 className="card-subtitle">{event.date}</h6>
-                    <h6 className="card-subtitle"><a href={event.link}>{event.link}</a></h6>
+                    <h6 className="card-text">{event.date}</h6>
+                    <h6 className="card-text"><a href={event.link}>{event.link}</a></h6>
                     <p className="card-text">Minimum number of participants: {event.minusers}</p>
                     <p className="card-text">Registered participants: {this.func(event.participants)}</p>
-                    <Button className="small font-italic" onClick={() => {this.props.history.push('/speeddateevent?view=' + event.id);}}>View More</Button>
+                    <button className="bandi-button view-sd" onClick={() => {handleShow(event)}}>View More</button>
                 </div>
                 </Jumbotron>
-            </div>
-
         );
 
         if (isAdmin) {
             return(
-                <div className="bg-transparent" style={bandi_styles.discover_background}>
+                <div class="speed-dating-outer">
                     <Header/>
-                    <SubHeader text={"Register for speed-dating events here!"}/>
+                    <Card className="bandi-card dating-information">
+                        <p>
+                            Bandi speed-dating events are a great way to meet a lot of local musicians in your area, fast!
+                        </p>
+                        <p id="how-it-works">
+                            How it works: Every 5 minutes, you get paired (virtually) with a Bandi musician we think might be
+                            a good fit for you (based of similar music interests, location, etc.). We'll do a couple of these rounds &mdash;
+                            each time matching you up with a different Bandi musician. Afterwards, you'll all go back to a main room where you can
+                            mingle for a bit before the event wraps up.
+                        </p>
+                    </Card>
+                    <div class="dating-container">
+                        {eventList}
+                        <Jumbotron className="bandi-card dating-event">
+                        <h5 class="bandi-card">Create Event: (Admin)</h5>
+                        <Form className="bandi-form event" onSubmit={this.handleSubmit}>
+                            <Form.Group controlId="eventForm.name">
+                                <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} />
+                            </Form.Group>
 
-                    <h1>Speed-Dating Events:</h1>
-                    {eventList}
+                            <Form.Group controlId="eventForm.link">
+                                <Form.Control name="link" type="input"  placeholder="Link" value={this.state.link} onChange={this.handleChange} />
+                            </Form.Group>
 
-                    <h1>Create Event: (Admin)</h1>
+                            <Form.Group controlId="eventForm.date">
+                                <Form.Control name="date" type="input"  placeholder="Date" value={this.state.date} onChange={this.handleChange} />
+                            </Form.Group>
 
-                    <Form onSubmit={this.handleSubmit}>
+                            <Form.Group controlId="eventForm.minusers">
+                                <Form.Control name="minusers" type="number"  placeholder="Min participants" value={this.state.minusers} onChange={this.handleChange} />
+                            </Form.Group>
+                            <button class="bandi-button view-sd" type="submit">Create Event</button>
+                        </Form>
 
-                        <Form.Group controlId="profileForm.name">
-                            <Form.Label>Name:</Form.Label>
-                            <Form.Control name="name" type="input"  placeholder="Name" value={this.state.name} onChange={this.handleChange} />
-                        </Form.Group>
+                        </Jumbotron>
+                    </div>
 
-                        <Form.Group controlId="profileForm.link">
-                            <Form.Label>Link:</Form.Label>
-                            <Form.Control name="link" type="input"  placeholder="Link" value={this.state.link} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <Form.Group controlId="profileForm.date">
-                            <Form.Label>Date:</Form.Label>
-                            <Form.Control name="date" type="input"  placeholder="Date" value={this.state.date} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <Form.Group controlId="profileForm.minusers">
-                            <Form.Label>Minimum Number of Participants:</Form.Label>
-                            <Form.Control name="minusers" type="number"  placeholder="1" value={this.state.minusers} onChange={this.handleChange} />
-                        </Form.Group>
-
-                        <Button type="submit">Create Event</Button>
-
-                    </Form>
-
+                    <Modal className="bandi-modal speed-dating"show={this.state.showModal} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalEvent.name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h5>{this.state.modalEvent.date}</h5>
+                            <h5><a href={this.state.modalEvent.link}>{this.state.modalEvent.link}</a></h5>
+                            <h5>Minimum number of participants: {this.state.modalEvent.minusers}</h5>
+                            <h5>Registered participants: {this.func(this.state.modalEvent.participants)}</h5>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {this.render_event_button()}
+                            <button id="close" class="bandi-button" onClick={handleClose}>
+                                Close
+                            </button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             )
         }
         else { // not an admin
             return (
-                <div className="bg-transparent" style={bandi_styles.discover_background}>
+                <div class="speed-dating-outer">
                     <Header/>
-                    <SubHeader text={"Register for speed-dating events here!"}/>
-
-                    <h1>Speed-Dating Events:</h1>
-                    {eventList}
+                    <Card className="bandi-card dating-information">
+                        <p>
+                            Bandi speed-dating events are a great way to meet a lot of local musicians in your area, fast!
+                        </p>
+                        <p id="how-it-works">
+                            How it works: Every 5 minutes, you get paired (virtually) with a Bandi musician we think might be
+                            a good fit for you (based of similar music interests, location, etc.). We'll do a couple of these rounds &mdash;
+                            each time matching you up with a different Bandi musician. Afterwards, you'll all go back to a main room where you can
+                            mingle for a bit before the event wraps up.
+                        </p>
+                    </Card>
+                    <div class="dating-container">
+                        {eventList}
+                    </div>
+                    <Modal className="bandi-modal speed-dating"show={this.state.showModal} onHide={handleClose}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>{this.state.modalEvent.name}</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <h5>{this.state.modalEvent.date}</h5>
+                            <h5><a href={this.state.modalEvent.link}>{this.state.modalEvent.link}</a></h5>
+                            <h5>Minimum number of participants: {this.state.modalEvent.minusers}</h5>
+                            <h5>Registered participants: {this.func(this.state.modalEvent.participants)}</h5>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            {this.render_event_button()}
+                            <button id="close" class="bandi-button" onClick={handleClose}>
+                                Close
+                            </button>
+                        </Modal.Footer>
+                    </Modal>
                 </div>
             )
         }

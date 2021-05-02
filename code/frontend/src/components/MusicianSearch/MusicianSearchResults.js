@@ -1,50 +1,75 @@
 import React from 'react';
 import { useState } from 'react';
 import {useSelector, shallowEqual, useDispatch} from "react-redux";
-import {Container, Row, Col, Card, Modal, Button } from "react-bootstrap";
+import {Container, Row, Col, Card, Modal, Button, Spinner } from "react-bootstrap";
 import { bandi_styles } from "../../styles/bandi_styles";
 import {allMusiciansQuery} from "../../actions/musician_actions";
-import FriendApiService from "../../utils/FriendApiService";
+import { sendFriendRequest } from "../../actions/friend_actions";
 import {selectFilteredMusicians} from "../../selectors/musician_selector";
 import {chunk} from "../../utils/miscellaneous";
-import {getLoggedInUser} from "../../selectors/user_selector";
+import {getFrontendURL} from "../../utils/api";
 
-async function addFriend (temp) {
-    const response = await FriendApiService.sendFriendRequest(temp.logged_id, temp.id);
-    if(response) {
-        alert("A request to connect was sent to " + temp.name + ".")
+async function handleConnect(senderID, recipientID, recipientName, dispatch) {
+    if (senderID && recipientID && recipientName) {
+        const response = dispatch(sendFriendRequest(senderID, recipientID));
+        if(response) {
+            alert("Friend request sent to " + recipientName + "!")
+        }
+    } else {
+        alert("Unable to send friend request.")
     }
 }
 
-const RenderConnectButton = (temp) => {
-    // remove question mark once pending_outgoing_requests confirmed to exist
-    /*
-    if (this.state.pending_outgoing_requests?.indexOf(this.state.userId) == -1) {
-        return <Button variant="success" onClick={this.addFriend}>Connect!</Button>
-    } else { return <Button disabled>Pending...</Button> };*/
-    //if (true) {
-        return <Button variant="primary" onClick={temp => addFriend(temp)}>Connect!</Button>
-    //} else { return <Button disabled>Pending...</Button> };
+const RenderConnectButton = (props) => {
+    const senderID = props.logged_id;
+    const recipientID = props.id;
+    const recipientName = props.name;
+    const dispatch = props.dispatch;
+    
+    let friend_reducer = useSelector((state) => state.friend_reducer, shallowEqual);
+
+    // Check if user already friends with this person
+    let friend_info = friend_reducer.friend_info;
+    let already_friends = false;
+    friend_info?.forEach((friend) => {
+        if (friend.id === recipientID) {
+            already_friends = true;
+        }
+    })
+    // Check if user has already sent a friend request to this person
+    let outgoing = friend_reducer.outgoing_friend_requests;
+    let already_requested = false;
+    outgoing?.forEach((req) => {
+        if (req.recipientID === recipientID) {
+            already_requested = true;
+        }
+    })
+
+    // Conditionally render button depending on friend status
+    if (already_friends) {
+        return <button id="friends-badge" class="bandi-button" onClick={() => {alert("You and " + recipientName + " are friends!")}}>Friends!</button>;
+    } else if (!already_requested) {
+        return <button id="connect" class="bandi-button" onClick={() => handleConnect(senderID, recipientID, recipientName, dispatch)}>Connect!</button>
+    } else { return <button id="pending" class="bandi-button" disabled>Pending...</button> };
 }
 
-const FilteredMusicianItem = React.forwardRef((musician, ref) => {
+const FilteredMusicianItem = React.forwardRef((props, ref) => {
+    const logged_id = props.logged_id;
+    const musician = props.musician;
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     //<Card.Text className="small font-italic"> <a href={getFrontendURL() + "/#/musiciandetails?view=" + musician.id} style={{color:"white"}}>View More</a></Card.Text>
     //
     return (
-            <Card style={bandi_styles.musician_card} className="rounded border-0">
+            <Card className="bandi-card musician">
                 <Card.Body>
-                    <Card.Title><b>{musician.name}</b></Card.Title>
-                    <Card.Text className="small font-italic" style={{textColor:"white"}}>Genres: {musician.genres.join(', ')}</Card.Text>
-                    <Card.Text className="small font-italic" style={{color:"white"}}>Instruments: {musician.instruments.join(', ')}</Card.Text>
-                    <Card.Text> <Button variant="primary" style={{width: "170px",
-                        height: "30x", marginBottom:"10px"}} onClick={handleShow}>
+                    <Card.Title style={{color:"black"}}><b>{musician.name}</b></Card.Title>
+                    <Card.Text className="small font-italic">Genres: {musician.genres.join(', ')}</Card.Text>
+                    <Card.Text className="small font-italic">Instruments: {musician.instruments.join(', ')}</Card.Text>
+                    <button class="bandi-button view-more" onClick={handleShow}>
                         View More
-                    </Button>
-                    </Card.Text>
+                    </button>
                     <Modal key={musician.name} show={show} onHide={handleClose}>
                         <Modal.Header closeButton>
                             <Modal.Title>{musician.name}</Modal.Title>
@@ -59,14 +84,18 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
                                 <h5>Genres: {musician.genres.join(", ")}</h5>
                             </div>
                             <div>
-                                <h5>Links: {musician.links}</h5>
+                                <h5>Links: {musician.profileLinks.map((link, i) => <a key={i} href={link}>{link}</a>)}</h5>
                             </div>
+
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="secondary" onClick={handleClose}>
+                            <button id="go-to-profile" class="bandi-button musician-search" onClick={() => {window.location = getFrontendURL() + '/#/musiciandetails?view=' + musician.id;}}>
+                                Go to profile
+                            </button>
+                            <button id="close" class="bandi-button musician-search" onClick={handleClose}>
                                 Close
-                            </Button>
-                            <RenderConnectButton logged_id = {musician.logged_id} id = {musician.id} name={musician.name}/>
+                            </button>
+                            <RenderConnectButton logged_id = {logged_id} id = {musician.id} name={musician.name} dispatch={props.dispatch}/>
                         </Modal.Footer>
                     </Modal>
                 </Card.Body>
@@ -78,8 +107,8 @@ const FilteredMusicianItem = React.forwardRef((musician, ref) => {
 const MusicianSearchResults = () => {
     const dispatch = useDispatch();
     const fil_musicians = useSelector(selectFilteredMusicians, shallowEqual)
-    let logged_user = useSelector(getLoggedInUser, shallowEqual);
-
+    let logged_user = useSelector((state) => state.user_reducer, shallowEqual);
+    
     if(fil_musicians === -1)
     {
         let queryparams = {};
@@ -88,7 +117,8 @@ const MusicianSearchResults = () => {
 
         return (
             <Container>
-                <h5 style={{marginTop:"50px", marginLeft:"50px"}}> Loading some of our featured musicians!</h5>
+                <h5 style={{marginTop:"100px", marginLeft:"50px"}}> Loading some of our featured musicians</h5>
+                <Spinner style={{marginTop:"50px", marginLeft:"200px"}} animation="grow" variant="info" />
             </Container>
         )
     }
@@ -100,25 +130,38 @@ const MusicianSearchResults = () => {
                 return user
             }
         });
+
+        // return empty result message
         if ((index !== null) && index !== -1) fil_musicians_mod.splice(index, 1);
-        const fil_musicians_chunk = chunk(fil_musicians_mod,3)
-        const rows = fil_musicians_chunk.map((user_chunk, index) => {
-            const fil_musicians_cols = user_chunk.map((user, index) => {
-                const ref = React.createRef();
-                return (
-                    <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
-                        <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} name={user.name} instruments={user.instruments}  genres={user.genres} location={user.location} experience={user.experience} links={user.profileLinks.map((link, i) => <a href={link}>{link}</a>)}/>
-                    </Col>
-                );
+        if (fil_musicians.length === 0) {
+            return (
+                <Container>
+                    <h5 style={{marginTop:"100px", marginLeft:"50px"}}> Sorry, no musicians found. Try again!</h5>
+                </Container>
+            )
+        }
+
+        else {
+            const fil_musicians_chunk = chunk(fil_musicians_mod,3)
+            const rows = fil_musicians_chunk.map((user_chunk, index) => {
+                const fil_musicians_cols = user_chunk.map((user, index) => {
+                    const ref = React.createRef();
+                    return (
+                        <Col key={index} style={{height: "230px" , columnWidth: "500px"}}>
+                            <FilteredMusicianItem key={index} ref={ref} logged_id = {logged_user?.id} id={user.id} musician={user} />
+                        </Col>
+                    );
+                });
+                return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
             });
-            return <Row key={index} style={{width: "1000px",marginTop:"50px"}}>{fil_musicians_cols}</Row>
-        });
-        return (
-            <Container key="musiciansearchresults">
-                {rows}
-            </Container>
-        )
+            return (
+                <Container key="musiciansearchresults">
+                    {rows}
+                </Container>
+            )
+        }
     }
 }
+
 
 export default MusicianSearchResults;

@@ -1,12 +1,18 @@
 package api;
 
 import com.wrapper.spotify.model_objects.credentials.AuthorizationCodeCredentials;
+import com.wrapper.spotify.model_objects.specification.Paging;
+import com.wrapper.spotify.model_objects.specification.Track;
 import com.wrapper.spotify.model_objects.specification.User;
 import com.wrapper.spotify.requests.authorization.authorization_code.AuthorizationCodeRequest;
+import com.wrapper.spotify.requests.data.personalization.simplified.GetUsersTopTracksRequest;
 import com.wrapper.spotify.requests.data.users_profile.GetCurrentUsersProfileRequest;
 import model.Musician;
 import spark.Route;
 import java.net.URI;
+import java.util.HashSet;
+import java.util.Set;
+
 import static api.ApiServer.*;
 
 public class SpotifyController {
@@ -47,6 +53,23 @@ public class SpotifyController {
         String name = user.getDisplayName();
         String id = user.getId();
 
+        // get user's top tracks
+        GetUsersTopTracksRequest trackReq = spotifyApi.getUsersTopTracks()
+                .limit(10)
+                .offset(0)
+                .time_range("short_term")
+                .build();
+        Paging<Track> pagingOfTracks = trackReq.execute();
+        Set<String> topTracks = new HashSet<>();
+        String trackName;
+        for (Track track : pagingOfTracks.getItems()) {
+            trackName = track.getName();
+            System.out.println(trackName);
+            if (trackName.length() <= 100) {
+                topTracks.add(track.getName());
+            }
+        }
+
         res.redirect(frontend_url + "/?id=" + id);
 
         // Create user in database if not already existent
@@ -54,6 +77,9 @@ public class SpotifyController {
         if (musician == null) { // user has not been added to database yet
             musicianDao.create(id, name);
         }
+        // update user's Spotify top tracks every time they log in
+        musicianDao.updateTopTracks(id, topTracks);
+
         return null;
     };
 }

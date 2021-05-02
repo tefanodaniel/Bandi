@@ -1,0 +1,101 @@
+.speed-dating-outer {
+    height: 150vh;
+    background: 
+        linear-gradient(
+            rgba(251, 253, 130, 0.5),
+            rgba(251, 253, 130, 0.5)
+        ),
+        url(../images/discover_bg.jpg);
+}
+
+.dating-container {
+    display: inline-flex;
+    flex-direction: row;
+    margin-top: 10px;
+}
+
+.bandi-card.dating-event.jumbotron{
+    width: 30%;
+    display: inline-block;
+    margin-left: 100px;
+    background-color: rgb(230, 230, 76); 
+}
+
+.bandi-text-fields h5, h6, p {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Consolas";
+    padding: 2px 10px 2px 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: rgba(170, 249, 255, 0.815);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.bandi-text-fields.dating-event h5, h6, p {
+    background-color: rgb(255, 255, 255);
+}
+
+.bandi-text-fields.dating-event .card-title, bandi-card {
+    background-color: rgb(255, 248, 157);
+}
+
+.bandi-button.view-sd {
+    background-color: rgb(248, 152, 9);
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.bandi-button.register {
+    background-color: rgb(248, 152, 9);
+}
+
+.bandi-modal.speed-dating h5 {
+    width: 100%;
+}
+
+.bandi-modal.speed-dating .modal-content {
+    background-color: rgb(247, 247, 108);
+}
+
+.bandi-modal.speed-dating h5 {
+    background-color: rgb(255, 255, 255);
+}
+
+.bandi-button#close {
+    background-color: rgb(247, 231, 7);
+}
+
+.bandi-card.dating-information {
+    border-style: none;
+    background-color: transparent;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.bandi-card.dating-information p {
+    display: inline-block;
+    width: 40%;
+}
+
+.bandi-form .form-control {
+    margin-left: auto;
+    margin-right: auto;
+    font-family: "Consolas";
+    padding: 2px 10px 2px 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.bandi-form.event .form-control {
+    background-color: rgb(255, 255, 255);
+}

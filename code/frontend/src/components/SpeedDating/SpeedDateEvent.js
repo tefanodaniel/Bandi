@@ -40,8 +40,7 @@ class SpeedDateEvent extends React.Component {
     }
 
     eventInfo() {
-        const params = new URLSearchParams(this.props.location.search);
-        let eventId = params.get("view");
+        let eventId = this.props.eventID;
 
         SDEventApi.get(eventId)
             .then((response) =>
@@ -119,31 +118,25 @@ class SpeedDateEvent extends React.Component {
 
         if (!isAdmin) { // non admin view
             return(
-                <div className="bg-transparent" style={bandi_styles.discover_background}>
-                    <Header/>
-
+                <div>
                     <h1>{this.state.name} (Admin)</h1>
                     <h2>{this.state.date}</h2>
                     <h2><a href={this.state.link}>{this.state.link}</a></h2>
                     <h2>Minimum number of participants: {this.state.minusers}</h2>
                     <h2>Registered participants: {size}</h2>
-
                     <Button onClick={() => {this.register_leave()}}>{this.state.buttonText}</Button>
-
                 </div>
             )
         }
         else { // is admin
             return (
-                <div className="bg-transparent" style={bandi_styles.discover_background}>
-                    <Header/>
+                <div class="bandi-card">
 
                     <h1>{this.state.name} (Admin)</h1>
                     <h2>{this.state.date}</h2>
                     <h2><a href={this.state.link}>{this.state.link}</a></h2>
                     <h2>Minimum number of participants: {this.state.minusers}</h2>
                     <h2>Registered participants: {size}</h2>
-
                     <Button onClick={() => {this.register_leave()}}>{this.state.buttonText}</Button>
 
                 </div>

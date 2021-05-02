@@ -19,6 +19,8 @@ public class Musician extends Client {
     private double distance;
     private Set<String> friends;
     private boolean admin;
+    private boolean showtoptracks;
+    private Set<String> topTracks;
 
     public Musician(String id, String name, Set<String> genres) {
         super(id);
@@ -27,6 +29,9 @@ public class Musician extends Client {
 
         // false by default
         admin = false;
+        // true by default
+        showtoptracks = true;
+        topTracks = new HashSet<>();
     }
 
     public Musician(String id, String name, Set<String> genres, Set<String> instruments,
@@ -44,6 +49,9 @@ public class Musician extends Client {
         this.distance = 9999;
         this.friends = friends;
         this.admin = isAdmin;
+        // true by default
+        showtoptracks = true;
+        topTracks = new HashSet<>();
     }
 
     public Musician(String id, String name, Set<String> genres, Set<String> instruments,
@@ -61,6 +69,9 @@ public class Musician extends Client {
         this.distance = distance;
         this.friends = friends;
         this.admin = isAdmin;
+        // true by default
+        showtoptracks = true;
+        topTracks = new HashSet<>();
     }
 
     private void setLatitudeLongitude(String zipCode) {
@@ -80,6 +91,27 @@ public class Musician extends Client {
             this.longitude = fields.getDouble("longitude");
         }
     }
+
+    public Set<String> getTopTracks() {
+        return topTracks;
+    }
+
+    public void setTopTracks(Set<String> tracks) {
+        this.topTracks = tracks;
+    }
+
+    public void addTopTrack(String track) {
+        this.topTracks.add(track);
+    }
+
+    public boolean getShowtoptracks() {
+        return showtoptracks;
+    }
+
+    public void setShowtoptracks(boolean show) {
+        this.showtoptracks = show;
+    }
+
 
     public boolean getAdmin() {
         return this.admin;

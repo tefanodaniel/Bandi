@@ -1,0 +1,259 @@
+.sotw-outer {
+    height: 350vh;
+    background: 
+        linear-gradient(
+            rgba(111, 255, 188, 0.300),
+            rgba(111, 255, 188, 0.300)
+        ),
+        url(../images/discover_bg.jpg);
+}
+
+.sotw-view {
+    display: grid;
+    grid-template-columns: 35% 60%;
+    grid-template-rows: 595px 32% 40%;
+    padding-top: 20px;
+
+}
+
+.sotw-intro {
+    display: block;
+    margin: 45px auto 0px auto;
+    width: 30%;
+}
+#sotw-intro-text {
+    border-style: none;
+}
+
+.sotw-calendar-controller h4 {
+    padding-left: 5px;
+    margin-bottom: 15px;
+    width: 50%;
+    border-radius: 10px;
+    border-style: solid; 
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.bandi-box.sotw-controller-container {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    margin: 30px;
+    padding-left: 6%;
+    padding-right: 6%;
+    height: 500px;
+    background-color: rgb(167, 241, 148);
+    background-color:rgb(102, 238, 192);
+}
+
+.bandi-box.right-of-calendar {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    margin: 30px auto 20px auto;
+    display: block;
+    width: 85%;
+    height: 250px;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months {
+    font-family: "Consolas";
+    padding: 2px 10px 2px 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    background-color:rgb(102, 238, 192);
+
+    
+    padding-bottom: 15px;
+}
+
+.DayPicker.sotw-daypicker {
+    display: block;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months abbr {
+    color:black;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months .DayPicker-WeekNumber {
+    color: transparent;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months .DayPicker-Caption {
+    font-family: "Consolas";
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    width: 55%;
+    background-color: white;
+}
+
+.DayPicker.sotw-daypicker .DayPicker-Months .DayPicker-Day {
+    border-radius: 0%;
+    border-width: 1px;
+}
+
+.DayPicker-Day.DayPicker-Day--selected {
+    background-color: black;
+}
+
+.sotw-calendar-controller {
+    display: block;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sotw-calendar-controller h4 {
+    display: block;
+    text-align: center;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: aquamarine;
+    background-color:  rgb(102, 238, 192);
+    
+}
+
+.bandi-box.genre-form {
+    display: block;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 15px;
+}
+
+.bandi-button#see-events {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    background-color:  rgb(102, 238, 192);
+    margin-bottom: 10px;
+}
+
+.sotw-event-description-container {
+    display: inline-block;
+    vertical-align: top;
+    margin: 30px;
+    height: 192px;
+    width: 30%;
+    background-color: aquamarine;
+    background-color:rgb(102, 238, 192);
+}
+
+.bandi-box.sotw-event-description-container .sotw-loading-event.card{
+    background-color:rgb(102, 238, 192);
+    height: 180px;
+}
+
+.sotw-loading-event.card .card-text {
+}
+
+
+
+.sotw-event-card .card-body {
+    background-color:rgb(102, 238, 192);
+    height: 185px;
+}
+
+.bandi-box.sotw-user-submission-container {
+    display: inline-block;
+    height: 190px;
+    margin-top: 3%;
+    width: 60%;
+    background-color:rgb(102, 238, 192);
+    position: relative;
+}
+
+
+.sotw-user-submission-card {
+    background-color:rgb(102, 238, 192);
+}
+
+.sotw-user-submission-card .card-title.h5 {
+    font-family: "Consolas";
+    margin: 25px auto auto auto;
+    padding: 2px 10px 2px 10px;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    border-color: black;
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+    background-color:rgb(255, 255, 255);
+    width: 37%;
+
+}
+
+
+#sotw-user-submission-placeholder-text {
+    display: block;
+    position: absolute;
+    top: 20%;
+    width: 50%;
+    margin-left: 24%;
+}
+
+.sotw-submission-list-placeholder {
+    display: inline-block;
+    height: 100px;
+}
+
+#sotw-submission-list-placeholder-text {
+    display: block;
+    position: absolute;
+    top: 15%;
+    width: 40%;
+    margin-left:24%;
+}
+
+.bandi-box.sotw-submission-list-container {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 1;
+    display: flex;
+    margin: 30px;
+    background-color:rgb(102, 238, 192);
+    position: relative;
+    height: auto;
+    padding: 25px;
+}
+
+.sotw-submission-list-items {
+    height: 100%;
+}
+
+.bandi-card.submission-item.card {
+    background-color:rgb(183, 240, 221);
+    
+}
+
+.bandi-card.submission-item.card .small.font-italic.card-text {
+    background-color:rgb(255, 255, 255);
+}
+
+#submissions-closed-button {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

@@ -8,14 +8,17 @@ export const CLEAR_MUSICIANS_QUERY = 'musicians/clearquery';
 export const LOAD_USER_FRIENDS = 'user/friends';
 export const LOAD_INCOMING_FRIEND_REQUESTS = 'requests/friend/in';
 export const LOAD_OUTGOING_FRIEND_REQUESTS = 'requests/friend/out';
+export const TAKE_ACTION_ON_FRIEND_REQUEST = 'requests/friend/action';
+export const SEND_FRIEND_REQUEST = 'request/friend'
 
 // Band API action types
-export const LOAD_BANDS_FOR_MUSICIAN = '/bands/loadmusicianbands';
 
 // User action types
 export const USER_LOGIN = 'user/login';
 export const USER_LOGOUT = 'user/logout';
 export const UPDATE_USER_PROFILE = 'user/updateprofile';
+export const LOAD_USER_BANDS = '/user/loadbands';
+
 
 // sd event action types
 export const LOAD_SD_EVENTS = '/events/loadsdevents';

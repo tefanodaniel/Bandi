@@ -118,6 +118,8 @@ public class ApiServer {
         delete("/musicians/:id", MusicianController.deleteMusician);
         get("/adminstatus/:id", MusicianController.getAdminStatus);
         put("/adminstatus/:id", MusicianController.putAdminStatus);
+        get("/showtoptracks/:id", MusicianController.getShowTopTracks);
+        put("/showtoptracks/:id", MusicianController.putShowTopTracks);
 
         get("/friends/:id", RequestController.getMusicianFriends);
         // (Friend, Band) request routes

@@ -1,0 +1,62 @@
+.musicianInfo h4, h2 {
+    font-family: "Consolas";
+    padding-left: 0px;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    width: 35%;
+    border-style: solid;
+    border-radius: 10px;
+    border-width: 2px;
+    background-color: rgba(255, 255, 255, 0.815);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+
+    text-align: center;
+    margin: 0 auto;
+}
+
+.musicianInfo h2 {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    width: 50%;
+    background-color: rgb(163, 142, 195);
+}
+
+.musicianInfo h4 {
+    padding-left: 5px;
+    margin-bottom: 15px;
+    width: 50%;
+    border-radius: 10px;
+    border-width: 1px;
+    background-color: rgb(222, 191, 224);
+    border-top-width: 2px;
+    border-bottom-width: 4px;
+    border-left-width: 3px;
+}
+
+.musicianInfo li {
+    display: block;
+    margin: auto;
+    text-align: center;
+    font-family: 'Consolas';
+    font-size: larger;
+    font-weight: bold;
+}
+
+div.musicianInfo {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+    display: block;
+}
+
+div.fullDiv {
+    height: 100vh;
+    background:
+            linear-gradient(
+                    rgba(218, 189, 223, .5),
+                    rgba(218, 189, 223, .5)
+            ),
+            url(../images/discover_bg.jpg);
+}
