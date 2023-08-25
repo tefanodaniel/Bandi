@@ -34,7 +34,7 @@ public class ApiServer {
     public static String backend_url;
 
     // client id for Spotify
-    private static final String client_id= "ae87181e126a4fd9ac434b67cf6f6f14";
+    private static final String client_id= "75bf47e1a9ab493b9910401e6dad93af";
     // Client Secret for using Spotify API (should never push to VCS)
     private static final String client_secret = System.getenv("client_secret");
     // Redirect uri after Spotify dialog
@@ -85,11 +85,13 @@ public class ApiServer {
         // Initialize Spotify variables
         redirect_uri =
                 SpotifyHttpManager.makeUri(backend_url + "/callback");
+
         spotifyApi = new SpotifyApi.Builder()
                 .setClientId(client_id)
                 .setClientSecret(client_secret)
                 .setRedirectUri(redirect_uri)
                 .build();
+
         auth_code_uri_req =
                 spotifyApi.authorizationCodeUri()
                         .scope("user-read-email,user-read-private,user-top-read")

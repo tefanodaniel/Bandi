@@ -23,8 +23,7 @@ dependencies {
     implementation 'com.sparkjava:spark-template-handlebars:2.7.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.0.1'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.9.10'
-
-    compile 'se.michaelthelin.spotify:spotify-web-api-java:6.5.2'
+    implementation 'se.michaelthelin.spotify:spotify-web-api-java:6.5.2'
 }
 
 test {
@@ -32,6 +31,7 @@ test {
 }
 
 jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Main-Class' : 'api.ApiServer'
     }
@@ -47,7 +47,7 @@ heroku {
 }
 
 task stage(type: Copy, dependsOn: ['clean', 'build']) {
-    from jar.archivePath
+    from jar.archiveFile
     into project.rootDir
     rename {
         'backend-1.0.jar'

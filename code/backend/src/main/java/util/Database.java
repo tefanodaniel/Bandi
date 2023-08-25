@@ -488,6 +488,7 @@ public final class Database {
 
     // Get either the test or the production Database URL
     private static String getDatabaseUrl() throws URISyntaxException {
+
         if (USE_TEST_DATABASE == false) {
             return System.getenv("DATABASE_URL");
         } else {

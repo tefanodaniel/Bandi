@@ -75,7 +75,8 @@ public class Musician extends Client {
     }
 
     private void setLatitudeLongitude(String zipCode) {
-        if(zipCode == null || zipCode.equals("NULL")) {
+        /* TODO: This API no longer exists... Need to find replacement */
+        /* if(zipCode == null || zipCode.equals("NULL")) {
             this.latitude = 0;
             this.longitude = 0;
         } else {
@@ -89,7 +90,9 @@ public class Musician extends Client {
                     .getJSONObject("fields");
             this.latitude = fields.getDouble("latitude");
             this.longitude = fields.getDouble("longitude");
-        }
+        } */
+        this.latitude = 0.0;
+        this.longitude = 0.0;
     }
 
     public Set<String> getTopTracks() {

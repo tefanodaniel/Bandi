@@ -36,10 +36,8 @@ public class SpotifyController {
 
         // Use authorization code to get access token and refresh token
         String code = req.queryParams("code");
-        AuthorizationCodeRequest auth_code_req =
-                spotifyApi.authorizationCode(code).build();
-        AuthorizationCodeCredentials auth_code_credentials =
-                auth_code_req.execute();
+        AuthorizationCodeRequest auth_code_req = spotifyApi.authorizationCode(code).build();
+        AuthorizationCodeCredentials auth_code_credentials = auth_code_req.execute();
 
         // Set tokens in Spotify API Object
         spotifyApi.setAccessToken(auth_code_credentials.getAccessToken());
