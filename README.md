@@ -9,7 +9,7 @@ Try it out! - [Bandi](https://bandiscover.herokuapp.com/)
 ![Bandi profile screen](https://github.com/tefanodaniel/Bandi/blob/main/bandi%201a.png)
 ![Bandi user search](https://github.com/tefanodaniel/Bandi/blob/main/bandi%202.png)
 ![Bandi events](https://github.com/tefanodaniel/Bandi/blob/main/bandi%203.png)
-![Bandi challenges](https://github.com/tefanodaniel/Bandi/blob/main/bandi%204.png)
+![Bandi challenges](https://github.com/tefanodaniel/Bandi/blob/main/bandi4.png)
 
 **Advisors** 
 
