@@ -5,8 +5,9 @@ A social networking application for musicians to meet other musicians, start a b
 Try it out! - [Bandi](https://bandiscover.herokuapp.com/)
 
 # Screenshots
-
-![Bandi profile screen](https://github.com/tefanodaniel/Bandi/blob/main/bandi%201a.png)
+![Bandi home](https://github.com/tefanodaniel/Bandi/blob/main/bandi%20home.png)
+![Bandi profile](https://github.com/tefanodaniel/Bandi/blob/main/bandi%201a.png)
+![Bandi profile friends](https://github.com/tefanodaniel/Bandi/blob/main/bandi%201b.png)
 ![Bandi user search](https://github.com/tefanodaniel/Bandi/blob/main/bandi%202.png)
 ![Bandi events](https://github.com/tefanodaniel/Bandi/blob/main/bandi%203.png)
 ![Bandi challenges](https://github.com/tefanodaniel/Bandi/blob/main/bandi4.png)
